@@ -1,0 +1,70 @@
+version: "3.9"
+
+services:
+  nodejsapp:
+    container_name: nodejsapp
+    restart: always
+    build: ./backend
+    ports: 
+      - "5001:5001"
+    volumes:
+      - ./backend:/usr/src/app/backend
+      - /usr/src/app/node_modules
+
+  reactjsapp:
+    container_name: reactjsapp
+    stdin_open: true
+    tty: true
+    restart: always
+    build: ./frontend
+    ports: 
+      - "5000:3000"
+    volumes: 
+      - ./frontend:/usr/src/app/frontend
+    links:
+      - nodejsapp
+
+  nginx:
+    container_name: nginx
+    build: ./nginx
+    ports:
+      - "8080:80"
+      - "443:443"
+    links:
+      - nodejsapp
+      - reactjsapp
+      - nginx-proxy
+      - letsencrypt
+    environment:
+      - VIRTUAL_HOST=gestion.gdosconstrucciones.com, gestion.gdosconstrucciones.com.ar
+      - LETSENCRYPT_HOST=gestion.gdosconstrucciones.com, gestion.gdosconstrucciones.com.ar
+    restart: always
+
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+        - /var/run/docker.sock:/tmp/docker.sock:ro
+        - certs:/etc/nginx/certs:ro
+        - vhostd:/etc/nginx/vhost.d
+        - html:/usr/share/nginx/html
+    labels:
+        - com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy
+
+  letsencrypt:
+      image: jrcs/letsencrypt-nginx-proxy-companion
+      restart: always
+      environment:
+          - NGINX_PROXY_CONTAINER=nginx-proxy
+      volumes:
+        - certs:/etc/nginx/certs:rw
+        - /var/run/docker.sock:/var/run/docker.sock:ro
+        - vhostd:/etc/nginx/vhost.d
+        - html:/usr/share/nginx/html
+volumes:
+  certs:
+  html:
+  vhostd:

@@ -1,0 +1,36 @@
+/*Formulario*/
+.card-form-ingreso
+{
+    position: relative;
+    top: 5%;
+    border: 1px ;
+    border-style: hidden;
+    border-radius: 10px;
+}
+
+@media only screen and (hover: none) and (pointer: coarse){
+    .mobile-form-ingreso{
+        width: 340px !important;
+    }
+}
+
+/*Vista*/
+.acordion{
+    margin-top: 30px !important;
+}
+
+.acordion-title{
+    font-size: 13px;
+}
+
+.acordion-title-number{
+    font-size: 12px;
+}
+
+.titulo-ingresos-vista{
+    font-size: 17px;
+    margin-left: 10px;
+    margin-top: 15px !important;
+    margin-bottom: -15px;
+    font-weight: bold;
+}

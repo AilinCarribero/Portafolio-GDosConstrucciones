@@ -1,0 +1,58 @@
+/*Formulario*/
+.card-form-egreso
+{
+    position: relative;
+    top: 5%;
+    width: 400px !important;
+    border: 1px ;
+    border-style: hidden;
+    border-radius: 10px;
+    margin: 5px;
+}
+
+@media only screen and (hover: none) and (pointer: coarse){
+    .mobile-form-egreso{
+        width: 340px !important;
+    }
+}
+
+.title-form {
+    font-weight: bold;
+    font-size: 20px;
+    padding-top: 14px;
+    padding-bottom: 14px;
+}
+
+.check {
+    margin-bottom: 13px;
+}
+
+.label-title {
+    font-size: 17px;
+    font-weight: bold;
+}
+
+.button-submit{
+    width: 100%;
+}
+
+/*Vista*/
+.acordion{
+    margin-top: 5px !important;
+}
+
+.acordion-title{
+    font-size: 13px;
+}
+
+.acordion-title-number{
+    font-size: 12px;
+}
+
+.titulo-egresos-vista{
+    font-size: 17px;
+    margin-left: 10px;
+    margin-top: 15px !important;
+    margin-bottom: -15px;
+    font-weight: bold;
+}

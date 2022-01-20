@@ -1,0 +1,51 @@
+.botton-sesion {
+    color: azure;
+}
+
+.text-color{
+    color: azure;
+}
+
+.text-nombre{
+    color: aliceblue;
+    align-items: right;
+    text-align: right;
+    align-content: right;
+    font-size: 15px;
+}
+
+.navbar {
+    width: 100vw !important;
+    background-color: black !important;
+    align-items: center;
+}
+
+.icon-filtros{
+    color: white;
+}
+
+.icon-filtros:hover{
+    color: gray;
+}
+
+.filtros{
+    margin: 0 5%;
+}
+
+.icon-salida{
+    color: white;
+}
+
+.icon-salida:hover{
+    color: gray;
+}
+
+.img{
+    width: 30px ;
+    margin-left: -2%;
+    height: 50px;
+}
+
+.img:hover{
+    color: grey;
+}
