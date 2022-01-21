@@ -12,10 +12,10 @@ COPY [".", "/app/frontend/"]
 
 EXPOSE 3000
 
-RUN CI= npm run build
+#RUN CI= npm run build
 
-CMD [ "react-scripts", "build" ]
-#CMD ["npm", "start"]
+#CMD [ "react-scripts", "build" ]
+CMD ["npm", "start"]
 
 #CMD ["npm", "run", "build"]
 
