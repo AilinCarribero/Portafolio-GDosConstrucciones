@@ -4,7 +4,7 @@ WORKDIR /app/frontend/
 
 COPY ["package.json", "package-lock.json", "/app/frontend/"]
 
-ENV REACT_APP_REST=http://localhost:5001/api/
+ENV REACT_APP_REST=https://gestion.gdosconstrucciones.com.ar/api/
 
 RUN npm install
  
