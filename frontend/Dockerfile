@@ -2,7 +2,7 @@ FROM node:14
 
 WORKDIR /app/frontend/
 
-COPY ["package.json", "package-lock.json", "/app/frontend/"]
+COPY ["package.json", "/app/frontend/"]
 
 ENV REACT_APP_REST=https://gestion.gdosconstrucciones.com.ar/api/
 
