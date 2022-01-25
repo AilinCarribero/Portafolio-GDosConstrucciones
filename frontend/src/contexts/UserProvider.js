@@ -1,10 +1,13 @@
 import React,{ createContext, useState } from "react";
+import { useHistory } from 'react-router-dom';
 import { configToken } from "../services/apiServices";
 import Cookies from 'js-cookie';
 
 export const UserContext = createContext();
 
 const UserProvider = ({children}) => {
+    const history = useHistory();
+
     const stateValue = () => {
         const cookiesUser = Cookies.get('loggedAppUser');
         console.log(cookiesUser)
@@ -42,6 +45,7 @@ const UserProvider = ({children}) => {
             window.localStorage.removeItem('loggedAppUser');
             document.cookie = 'loggedAppUser=existo; expires=Fri, 31 Dec 2000 23:59:59 GMT"';
             setUser([]);
+            //history.push("/");
         }
     }
 
