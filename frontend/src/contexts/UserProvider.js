@@ -45,7 +45,6 @@ const UserProvider = ({children}) => {
             window.localStorage.removeItem('loggedAppUser');
             document.cookie = 'loggedAppUser=existo; expires=Fri, 31 Dec 2000 23:59:59 GMT"';
             setUser([]);
-            //history.push("/");
         }
     }
 

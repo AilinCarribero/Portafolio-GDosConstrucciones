@@ -25,7 +25,7 @@ const ValidacionIngreso = ({ mostrar, datos, cobro, setShow, setSubmit, usd }) =
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        {datos.length > 1 ? datos.map((dato, i) => (
+        {datos.length >= 1 ? datos.map((dato, i) => (
           <Row key={i}>
             {
               i == 0 && (<>

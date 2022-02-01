@@ -49,6 +49,10 @@ const FormEgresos = () => {
         centro_costo: ''
     });
 
+    //Variables con informacion
+    const [cantCheque, setCantCheque] = useState(0);
+    const [cheques, setCheques] = useState();
+
     //Envio para modal de validacion
     const [datosValidacion, setDatosValidacion] = useState([]);
     const [auxEgresos, setAuxEgresos] = useState([]);
@@ -63,6 +67,8 @@ const FormEgresos = () => {
     const [showDAC, setShowDAC] = useState(false);
     const [showCuotas, setShowCuotas] = useState(false);
     const [showFechaDif, setShowFechaDif] = useState(false);
+    const [showCheque, setShowCheque] = useState(false);
+    const [showDataCheques, setShowDataCheques] = useState(false);
     const [showModal, setShowModal] = useState(false);
 
     //Variables para validacion
@@ -76,7 +82,15 @@ const FormEgresos = () => {
 
         //console.log(targetName + ' - ' + targetValue + ' - ' + targetType + ' - ' + targetCheck)
 
-        if (targetCheck) {
+        if (targetName == 'cantCheque') {
+            setCantCheque(targetValue);
+            setShowDataCheques(true);
+        } else if (targetName.indexOf('fechaD') > -1 || targetName.indexOf('monto') > -1) {
+            setCheques(prevCheques => ({
+                ...prevCheques,
+                [targetName]: targetValue
+            }))
+        } else if (targetCheck) {
             if (targetName == 'moneda') {
                 setCheckUSD(targetValue);
                 setEgreso(prevEgreso => ({
@@ -123,7 +137,13 @@ const FormEgresos = () => {
                 if (formaPago.id_forma_pago == targetValue) {
                     /* La forma de pago mediante tarjeta de credito se maneja diferente al resto */
                     setShowCuotas(formaPago.forma_pago === 'Tarjeta de Credito' ? true : false) //... es tarjeta de credito se debe mostrar la seleccion de cuotas
-                    setShowFechaDif(formaPago.requiere_f_pago === 1 && formaPago.forma_pago !== 'Tarjeta de Credito' ? true : false) //... requiere una fecha diferente a la actual mostrar otro campo de fecha
+                    setShowCheque(formaPago.forma_pago === 'E-Cheq' || formaPago.forma_pago === 'C.P.D. - Cheque de Pago Diferido' ? true : false);//... si es un cheque debe mostrar un campo para ingresar la cantidad de cheques
+                    setShowDataCheques(false);
+                    setShowFechaDif(formaPago.requiere_f_pago === 1 
+                        && formaPago.forma_pago !== 'Tarjeta de Credito' 
+                        && formaPago.forma_pago !== 'E-Cheq'
+                        && formaPago.forma_pago !== 'C.P.D. - Cheque de Pago Diferido' 
+                        ? true : false) //... requiere una fecha diferente a la actual mostrar otro campo de fecha
                 }
             })
         }
@@ -162,6 +182,22 @@ const FormEgresos = () => {
                             valor_pago: valorCuota,
                             fecha_diferido_pago: new Date(año, mesD, dia).toISOString().slice(0, 10)
                         }
+                    }
+                }
+                setAuxEgresos(auxEgreso);
+                setDatosValidacion(auxEgreso);
+                setShowModal(true);
+            }else if (cheques && cantCheque > 0) {
+                /*Si existen cheques entonces guardar en una variable aux los datos de ingreso + los datos del cheque*/
+                for (let i = 0; i < cantCheque; i++) {
+                    const auxChequeFD = cheques['fechaD' + i];
+                    const auxChequeM = cheques['monto' + i];
+
+                    auxEgreso[i] = {
+                        ...egreso,
+                        valor_pago: auxChequeM,
+                        fecha_diferido_pago: auxChequeFD,
+                        cheque: i
                     }
                 }
                 setAuxEgresos(auxEgreso);
@@ -213,6 +249,7 @@ const FormEgresos = () => {
             showDAC && setShowDAC(false);
             showAC && setShowDAC(false);
             showProyecto && setShowProyecto(false);
+            showDataCheques && setShowDataCheques(false);
 
             //Los campos se vacian 
             setEgreso({
@@ -233,8 +270,33 @@ const FormEgresos = () => {
             setAuxEgresos([]);
             setCheckUSD(0);
             setCheckComprobante();
+            setCheques('');
         } else {
             ToastComponent('error');
+        }
+    }
+
+    const dataChequeForm = () => {
+        if (showDataCheques == true) {
+            let rows = [];
+            for (let i = 0; i < cantCheque; i++) {
+                rows.push(
+                    <Row key={i}>
+                        <Col xs={6} sm={6}>
+                            <FloatingLabel controlId="floatingInputGrid" label="Fecha Del Cheque">
+                                <Form.Control onChange={handleChangeForm} name={"fechaD" + i} type="date" required />
+                            </FloatingLabel>
+                        </Col>
+                        <Col xs={6} sm={6}>
+                            <FloatingLabel controlId="floatingInputGrid" label="Monto del Cheque">
+                                <NumberFormat customInput={Form.Control} decimalSeparator={","} thousandSeparator={"."}
+                                    onChange={handleChangeForm} name={"monto" + i} required />
+                            </FloatingLabel>
+                        </Col>
+                    </Row>
+                )
+            }
+            return rows
         }
     }
 
@@ -337,10 +399,12 @@ const FormEgresos = () => {
                                         <Form.Check inline onChange={handleChangeForm} label="USD$" name="moneda" value="1" type="radio" checked={checkUSD == '1'} />
                                     </Col>
                                 </Row>
+                            {!showCheque &&
                                 <FloatingLabel label="Importe">
                                     <NumberFormat customInput={Form.Control} decimalSeparator={","} thousandSeparator={"."}
                                         onChange={handleChangeForm} name={checkUSD == 0 ? "valor_pago" : "valor_usd"} value={checkUSD == 0 ? egreso.valor_pago : egreso.valor_usd} required />
                                 </FloatingLabel>
+                            }
                             </Form.Group>
                             {showCuotas &&
                                 <Form.Group className="mb-3" >
@@ -358,6 +422,18 @@ const FormEgresos = () => {
                                             <option value={30}>30 Cuotas</option>
                                         </Form.Select>
                                     </FloatingLabel>
+                                </Form.Group>
+                            }
+                            {showCheque &&
+                                <Form.Group className="mb-3">
+                                    <FloatingLabel label="Cantidad de Cheques">
+                                        <Form.Control onChange={handleChangeForm} name="cantCheque" type="number" value={cantCheque} required />
+                                    </FloatingLabel>
+                                </Form.Group>
+                            }
+                            {showDataCheques &&
+                                <Form.Group className="mb-3">
+                                    {dataChequeForm()}
                                 </Form.Group>
                             }
                             {showFechaDif &&

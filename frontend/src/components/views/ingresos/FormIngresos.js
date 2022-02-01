@@ -107,12 +107,12 @@ const FormIngresos = () => {
                 if (formaCobro.id_forma_cobro == targetValue) {
                     /* La forma de cobro mediante tarjeta de credito o cheques se maneja diferente al resto */
                     setShowCuotas(formaCobro.forma_cobro === 'Tarjeta de Credito' ? true : false) //... es tarjeta de credito se debe mostrar la seleccion de cuotas
-                    setShowCheque(formaCobro.forma_cobro === 'E-Cheq' || formaCobro.forma_cobro === 'C.P.D.' ? true : false);//... si es un cheque debe mostrar un campo para ingresar la cantidad de cheques
+                    setShowCheque(formaCobro.forma_cobro === 'E-Cheq' || formaCobro.forma_cobro === 'C.P.D. - Cheque de Pago Diferido' ? true : false);//... si es un cheque debe mostrar un campo para ingresar la cantidad de cheques
                     setShowDataCheques(false);
                     setShowFechaDif(formaCobro.requiere_f_cobro === 1
                         && formaCobro.forma_cobro !== 'Tarjeta de Credito'
                         && formaCobro.forma_cobro !== 'E-Cheq'
-                        && formaCobro.forma_cobro !== 'C.P.D.'
+                        && formaCobro.forma_cobro !== 'C.P.D. - Cheque de Pago Diferido'
                         ? true : false) //... requiere una fecha diferente a la actual mostrar otro campo de fecha
                     /*setShowDetalle(formaCobro.requiere_d_cobro === 1
                         && formaCobro.forma_cobro !== 'Tarjeta de Credito'

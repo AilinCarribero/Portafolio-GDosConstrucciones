@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Route } from 'react-router-dom';
+import { BrowserRouter, Redirect, Route } from 'react-router-dom';
 import { Container } from 'react-bootstrap';
 
 //Views Components
@@ -38,7 +38,7 @@ const Routers = () => {
                     }} />
 
                     {
-                        user.rango == 'admin' &&
+                        user.rango == 'admin' ?
                         <>
                             <Route exact path="/ingresar/egreso" component={FormEgresos} />
                             <Route exact path="/ingresar/ingreso" component={FormIngresos} />
@@ -48,15 +48,19 @@ const Routers = () => {
                             <Route exact path="/egresos/:id" component={Egresos} />
                             <Route exact path="/ingresos/:id" component={Ingresos} />
                         </>
+                        :
+                        <Redirect to="/" />
                     }
                     {
-                        user.rango == 'moderador' &&
+                        user.rango == 'moderador' ?
                         <>
                             <Route exact path="/ingresar/egreso" component={FormEgresos} />
                             <Route exact path="/ingresar/ingreso" component={FormIngresos} />
                             <Route exact path="/egresos/:id" component={Egresos} />
                             <Route exact path="/ingresos/:id" component={Ingresos} />
                         </>
+                        :
+                        <Redirect to="/" />
                     }
                 </Container>
         </BrowserRouter>

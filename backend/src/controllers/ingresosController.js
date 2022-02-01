@@ -10,7 +10,7 @@ exports.insertIngreso = async (req, res) => {
         //Inserta el nuevo ingreso
         datos.forEach(async (dato, i) => {
             if (!dato.fecha_diferido_cobro) {
-                dato.fecha_diferido_cobro = '0-0-0';
+                dato.fecha_diferido_cobro = '0000-00-00';
             }
             if (!dato.cuota) {
                 dato.cuota = 0;
