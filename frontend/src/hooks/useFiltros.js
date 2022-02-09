@@ -12,11 +12,7 @@ export const useFiltros = () => {
         fecha_cobro_hasta: new Date('3000-12-30').toISOString(),
         fecha_cobro_desde: '0000-00-00',
         fecha_pago_hasta: new Date('3000-12-30').toISOString(),
-        fecha_pago_desde: '0000-00-00',
-        fecha_diferida_cobro_hasta: new Date('3000-12-30').toISOString(),
-        fecha_diferida_cobro_desde: '0000-00-00',
-        fecha_diferida_pago_hasta: new Date('3000-12-30').toISOString(),
-        fecha_diferida_pago_desde: '0000-00-00'
+        fecha_pago_desde: '0000-00-00'
     });
 
     //Valores de los filtros por default
@@ -24,11 +20,7 @@ export const useFiltros = () => {
         fecha_cobro_hasta: new Date('3000-12-30').toISOString(),
         fecha_cobro_desde: '0000-00-00',
         fecha_pago_hasta: new Date('3000-12-30').toISOString(),
-        fecha_pago_desde: '0000-00-00',
-        fecha_diferida_cobro_hasta: new Date('3000-12-30').toISOString(),
-        fecha_diferida_cobro_desde: '0000-00-00',
-        fecha_diferida_pago_hasta: new Date('3000-12-30').toISOString(),
-        fecha_diferida_pago_desde: '0000-00-00'
+        fecha_pago_desde: '0000-00-00'
     }
 
     //Si los proyectos se modifican 
@@ -67,21 +59,12 @@ export const useFiltros = () => {
                 if (filtros.fecha_cobro_hasta != valueFiltrosdefault.fecha_cobro_hasta 
                     || filtros.fecha_cobro_desde != valueFiltrosdefault.fecha_cobro_desde) {
                     for (let i = 0; i < proyecto.ingresos.length; i++) {
-                        if (proyecto.ingresos[i].fecha_cobro >= filtros.fecha_cobro_desde
-                            && proyecto.ingresos[i].fecha_cobro <= filtros.fecha_cobro_hasta) {
+                        if ((proyecto.ingresos[i].fecha_cobro >= filtros.fecha_cobro_desde 
+                            && proyecto.ingresos[i].fecha_cobro <= filtros.fecha_cobro_hasta) 
+                            ||
+                            (proyecto.ingresos[i].fecha_diferido_cobro >= filtros.fecha_cobro_desde
+                                && proyecto.ingresos[i].fecha_diferido_cobro <= filtros.fecha_cobro_hasta)) {
                             return proyecto //cobro 
-                        }
-                    }
-                } else {
-                    return proyecto
-                }
-            }).filter(proyecto => {
-                if (filtros.fecha_diferida_cobro_hasta != valueFiltrosdefault.fecha_diferida_cobro_hasta 
-                    || filtros.fecha_diferida_cobro_desde != valueFiltrosdefault.fecha_diferida_cobro_desde) {
-                    for (let i = 0; i < proyecto.ingresos.length; i++) {
-                        if (proyecto.ingresos[i].fecha_diferido_cobro >= filtros.fecha_diferida_cobro_desde
-                            && proyecto.ingresos[i].fecha_diferido_cobro <= filtros.fecha_diferida_cobro_hasta) {
-                            return proyecto //cobro diferido 
                         }
                     }
                 } else {
@@ -91,27 +74,18 @@ export const useFiltros = () => {
                 if (filtros.fecha_pago_hasta != valueFiltrosdefault.fecha_pago_hasta 
                     || filtros.fecha_pago_desde != valueFiltrosdefault.fecha_pago_desde) {
                     for (let i = 0; i < proyecto.egresos.length; i++) {
-                        if (proyecto.egresos[i].fecha_pago >= filtros.fecha_pago_desde
-                            && proyecto.egresos[i].fecha_pago <= filtros.fecha_pago_hasta) {
+                        if ((proyecto.egresos[i].fecha_pago >= filtros.fecha_pago_desde
+                            && proyecto.egresos[i].fecha_pago <= filtros.fecha_pago_hasta)
+                            ||
+                            (proyecto.egresos[i].fecha_diferido_pago >= filtros.fecha_pago_desde
+                            && proyecto.egresos[i].fecha_diferido_pago <= filtros.fecha_pago_hasta)) {
                             return proyecto //pago 
                         }
                     }
                 } else {
                     return proyecto
                 }
-            }).filter(proyecto => {
-                if (filtros.fecha_diferida_pago_hasta != valueFiltrosdefault.fecha_diferida_pago_hasta 
-                    || filtros.fecha_diferida_pago_desde != valueFiltrosdefault.fecha_diferida_pago_desde) {
-                    for (let i = 0; i < proyecto.egresos.length; i++) {
-                        if (proyecto.egresos[i].fecha_diferido_pago >= filtros.fecha_diferida_pago_desde
-                            && proyecto.egresos[i].fecha_diferido_pago <= filtros.fecha_diferida_pago_hasta) {
-                            return proyecto //pago diferido 
-                        }
-                    }
-                } else {
-                    return proyecto
-                }
-            })
+            });
         } else {
             /*Si los filtros son iguales a los defautl debera reiniciar los proyectos que se muestran */
             setProyectosContext(proyectos);
