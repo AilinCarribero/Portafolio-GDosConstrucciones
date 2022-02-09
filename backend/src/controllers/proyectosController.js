@@ -3,7 +3,7 @@ const sql = require('../sql/proyectosQuery');
 const sqlUnidadNegocio = require('../sql/unidadNegocioQuery');
 const sqlCentroCosto = require('../sql/centroCostoQuery');
 
-//listar todos los formas de pago disponibles
+//listar todos los proyectos existentes
 exports.listProyectos = async (req, res) => {
     try {
         bd.query(sql.listProyectos(), async (err, response) => {

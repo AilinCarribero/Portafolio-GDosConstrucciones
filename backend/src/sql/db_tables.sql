@@ -149,3 +149,31 @@ create table ingreso (id_ingreso int auto_increment primary key, id_proyecto var
 
 /* Insert new value so we can test the methods */
 /*insert into ingreso () value (""); /*id = 1*/
+
+/*-------------------------------------------------------------------------------------------------------------------------*/
+/* Create new table */
+create table modulo (id_modulo int auto_increment primary key, nombre_modulo varchar(100), costo double, venta double, fecha_venta date, fecha_creacion date, estado varchar(20));
+
+/* Insert new value so we can test the methods */
+/*insert into modulo () value (""); /*id = 1*/
+
+/*-------------------------------------------------------------------------------------------------------------------------*/
+/* Create new table */
+create table alquiler (id_alquiler int auto_increment primary key, id_modulo int, id_proyecto int, valor double, fecha_d_alquiler date, fecha_h_alquiler date);
+
+/* Insert new value so we can test the methods */
+/*insert into alquiler () value (""); /*id = 1*/
+
+/*-------------------------------------------------------------------------------------------------------------------------*/
+/* Create new table */
+create table indice (id_indice int auto_increment primary key, nombre_indice varchar(100), valor double, tipo_valor varchar(3), fecha_mod date);
+
+/* Insert new value so we can test the methods */
+/*insert into indice () value (""); /*id = 1*/
+
+/*-------------------------------------------------------------------------------------------------------------------------*/
+/* Create new table */
+create table stock (id_stock int auto_increment primary key, nombre_stock varchar(100), tipo varchar(60), valor double, restante_valor double);
+
+/* Insert new value so we can test the methods */
+/*insert into stock () value (""); /*id = 1*/

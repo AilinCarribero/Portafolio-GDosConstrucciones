@@ -13,6 +13,8 @@ import FormUsuarios from './components/views/usuarios/FormUsuarios';
 import Usuarios from './components/views/usuarios/Usuarios';
 import Egresos from './components/views/egresos/Egresos';
 import Ingresos from './components/views/ingresos/Ingresos';
+import FormModulos from './components/views/modulos/FormModulos';
+import Modulos from './components/views/modulos/Modulos';
 
 //Hooks
 import { useUser } from './hooks/useUser';
@@ -44,9 +46,12 @@ const Routers = () => {
                             <Route exact path="/ingresar/ingreso" component={FormIngresos} />
                             <Route exact path="/ingresar/proyecto" component={FormProyectos} />
                             <Route exact path="/ingresar/usuario" component={FormUsuarios} />
+                            <Route exact path="/ingresar/modulos" component={FormModulos} />
                             <Route exact path="/usuarios" component={Usuarios} />
+                            <Route exact path="/modulos" component={Modulos} />
                             <Route exact path="/egresos/:id" component={Egresos} />
                             <Route exact path="/ingresos/:id" component={Ingresos} />
+                            <Route exact path="/modulos/:id" component={Modulos} />
                         </>
                         :
                         <Redirect to="/" />
