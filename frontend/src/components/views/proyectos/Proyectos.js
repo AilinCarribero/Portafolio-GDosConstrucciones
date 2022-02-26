@@ -40,7 +40,8 @@ const Proyectos = () => {
         egresosUSD: 0,
         ingresosUSD: 0,
         costos: 0,
-        ventas: 0
+        ventas: 0,
+        alquiler: 0
     });
 
     const [totalesUN, setTotalesUN] = useState({
@@ -105,6 +106,7 @@ const Proyectos = () => {
     const resumenContableProyectos = () => {
         let auxTotalCosto = 0;
         let auxTotalVenta = 0;
+        let auxTotalAlquiler = 0;
         let auxTotalEgresos = 0;
         let auxTotalIngresos = 0;
         let auxTotalUSDE = 0;
@@ -127,6 +129,8 @@ const Proyectos = () => {
                 if (proyecto.id_centro_costo == '2') {
                     auxTotalCosto += parseFloat(proyecto.costo);
                     auxTotalVenta += parseFloat(proyecto.venta);
+                    auxTotalAlquiler += parseFloat(proyecto.alquiler_total ? proyecto.alquiler_total : 0);
+
                     if (proyecto.id_unidad_negocio == '1') {
                         proyecto.egresos.map(egreso => {
                             if (egreso.id_proyecto == proyecto.id_proyecto) {
@@ -251,15 +255,18 @@ const Proyectos = () => {
             if (proyectosContext) {
                 auxTotalCosto = proyectosContext.costo || 0;
                 auxTotalVenta = proyectosContext.venta || 0;
+                auxTotalAlquiler = proyectosContext.alquiler_total || 0;
             } else {
                 auxTotalCosto = 0;
                 auxTotalVenta = 0;
+                auxTotalAlquiler = 0;
             }
         }
 
         setTotales({
             costos: auxTotalCosto,
             ventas: auxTotalVenta,
+            alquiler: auxTotalAlquiler,
             egresos: auxTotalEgresos,
             ingresos: auxTotalIngresos,
             egresosUSD: auxTotalUSDE,
@@ -290,7 +297,7 @@ const Proyectos = () => {
             <Row className="resumenTotales">
                 <Col xs={12} md={5}>
                     <Row>
-                        <Col xs={6} md={6} className="resumenTotal border-right border-mobile-bot">
+                        <Col xs={4} md={4} className="resumenTotal border-right border-mobile-bot">
                             <Row>
                                 <Col xs={12} md={12} className="title-resumen-totales">
                                     Costos:
@@ -300,13 +307,23 @@ const Proyectos = () => {
                                 </Col>
                             </Row>
                         </Col>
-                        <Col xs={6} md={6} className="resumenTotal border-right border-mobile-right border-mobile-bot">
+                        <Col xs={4} md={4} className="resumenTotal border-right border-mobile-bot">
                             <Row>
                                 <Col xs={12} md={12} className="title-resumen-totales">
                                     Venta:
                                 </Col>
                                 <Col xs={12} md={12} className="text-resumen-totales">
                                     ${formatNumber(totales.ventas)}
+                                </Col>
+                            </Row>
+                        </Col>
+                        <Col xs={4} md={4} className="resumenTotal border-right border-mobile-right border-mobile-bot">
+                            <Row>
+                                <Col xs={12} md={12} className="title-resumen-totales">
+                                    Alquileres:
+                                </Col>
+                                <Col xs={12} md={12} className="text-resumen-totales">
+                                    ${formatNumber(totales.alquiler)}
                                 </Col>
                             </Row>
                         </Col>
