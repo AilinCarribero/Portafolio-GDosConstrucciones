@@ -50,6 +50,13 @@ const Rango = RangoModel( sequelize, Sequelize );
 const Stock = StockModel( sequelize, Sequelize );
 const UnidadNegocio = UnidadNegocioModel( sequelize, Sequelize );
 
+//Conecto con la base de datos, verifico que esten los modelos creados, si no lo estan los crea
+sequelize.sync({ force: false}).then( () => {
+    console.log('La sincronizacion con la base de datos '+process.env.DB_NAME+' fue un exito');
+}).catch( err => {
+    console.error(err)
+})
+
 //Relaciones
 Auth.belongsTo(Rango, {foreignKey: 'id_rango', targetKey: 'id_rango'});
 Alquiler.belongsTo(Modulo, {foreignKey: 'id_modulo', targetKey: 'id_modulo'});
@@ -60,13 +67,6 @@ Proyecto.hasMany(Egreso, {foreignKey: 'id_proyecto', targetKey: 'id_proyecto'});
 Proyecto.hasMany(Ingreso, {foreignKey: 'id_proyecto', targetKey: 'id_proyecto'});
 Egreso.belongsTo(Proyecto, {foreignKey: 'id_proyecto', targetKey: 'id_proyecto'});
 Ingreso.belongsTo(Proyecto, {foreignKey: 'id_proyecto', targetKey: 'id_proyecto'});
-
-//Conecto con la base de datos, verifico que esten los modelos creados, si no lo estan los crea
-sequelize.sync({ force: false}).then( () => {
-    console.log('La sincronizacion con la base de datos '+process.env.DB_NAME+' fue un exito');
-}).catch( err => {
-    console.error(err)
-})
 
 module.exports = {
     Alquiler, AnalisisCosto, Auth, CentroCosto, ComprobantePago, DetalleAC, Egreso, Estado, FormaCobro, FormaPago, 
