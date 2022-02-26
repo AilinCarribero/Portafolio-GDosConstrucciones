@@ -11,6 +11,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 require("dotenv").config();
 
+require('./db');
+
 // routes
 app.use('/api/auth', require('./src/router/authRoute'));
 app.use('/api/egresos', require('./src/router/egresosRoute'));
@@ -23,6 +25,7 @@ app.use('/api/comprobante-pago', require('./src/router/comprobantePagoRoute'));
 app.use('/api/centro-costo', require('./src/router/centroCostoRoute'));
 app.use('/api/unidad-negocio', require('./src/router/unidadNegocioRoute'));
 app.use('/api/modulos', require('./src/router/moduloRoute'));
+app.use('/api/alquiler', require('./src/router/alquilerRoute'));
 
 // port
 const port = process.env.PORT || 5030 ;

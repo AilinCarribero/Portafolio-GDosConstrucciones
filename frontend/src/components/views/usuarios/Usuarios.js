@@ -10,6 +10,7 @@ import * as Icons from 'react-bootstrap-icons';
 
 const Usuarios = () => {
     const { user } = useGetUser();
+    console.log(user)
     
     return (<>
         <Row>
@@ -28,7 +29,7 @@ const Usuarios = () => {
                             <tr key={usuario.id_user} >
                                 <td>{usuario.nombre_apellido}</td>
                                 <td>{usuario.correo}</td>
-                                <td>{usuario.rango}</td>
+                                <td>{usuario.rango.rango}</td>
                                 <td>
                                     <Row>
                                         <Col xs={6} md={6}>

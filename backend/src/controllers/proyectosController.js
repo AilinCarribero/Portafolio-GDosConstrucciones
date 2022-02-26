@@ -1,83 +1,108 @@
-const bd = require('../../pool');
-const sql = require('../sql/proyectosQuery');
-const sqlUnidadNegocio = require('../sql/unidadNegocioQuery');
-const sqlCentroCosto = require('../sql/centroCostoQuery');
+const { CentroCosto, UnidadNegocio, Alquiler, Proyecto, Modulo, Egreso, Ingreso } = require('../../db');
 
 //listar todos los proyectos existentes
 exports.listProyectos = async (req, res) => {
-    try {
-        bd.query(sql.listProyectos(), async (err, response) => {
-            if (err) {
-                res.json(err);
-            }
-            if (response) {
-                response.statusText = "Ok";
-                response.status = 200;
-                res.json(response);
-            }
-            res.end();
-        })
-    } catch (error) {
-        return res.json(error);
-    }
+    Proyecto.findAll({
+        include: [{
+            model: Alquiler,
+            include: [{
+                model: Modulo
+            }]
+        },{
+            model: Egreso
+        },{
+            model: Ingreso
+        }]
+    }).then( response => {
+        res.json(response);
+    }).catch( error => {
+        res.json(error);
+    });
 }
 
 //Insertar un proyecto nuevo
 exports.insertProyecto = async (req, res) => {
-    if(!req.body.costo){
+    let id_proyecto = '';
+    const countAlquileres = (req.body.alquileres).length;
+
+    if (!req.body.costo) {
         req.body.costo = 0;
     }
-    if(!req.body.venta){
+    if (!req.body.venta) {
         req.body.venta = 0;
     }
-    /*if(!req.body.fecha_f_proyecto){
-        req.body.fecha_f_proyecto = NULL;
-    }*/
+    if (!req.body.alquiler_total) {
+        req.body.venta = 0;
+    }
+    if(!req.body.fecha_f_proyecto){
+        req.body.fecha_f_proyecto='1000-01-01';
+    }
 
     try {
-        bd.query(sqlCentroCosto.busquedaIdCentroCosto(req.body.id_centro_costo), async (err, response) => {
-            if (err) {
-                res.json(err);
-            }
-            if (response) {
-                req.centroCosto = await response[0].siglas_cc;
+        const centro_costo = req.body.id_centro_costo ? await CentroCosto.findAll({
+            where: {
+                id_centro_costo: req.body.id_centro_costo
+            },
+            raw: true
+        }) : '';
 
-                //buscamos la unidad de negocio
-                bd.query(sqlUnidadNegocio.busquedaIdUnidadNegocio(req.body.id_unidad_negocio), async (err, response) => {
-                    if (err) {
-                        res.json(err);
-                    }
-                    if (response) {
-                        req.unidadNegocio = await response[0].siglas_uc;
-                        
-                        if (req.centroCosto && req.unidadNegocio) {
-                            //armamos el id del proyecto
-                            if(req.body.cliente){
-                                req.body.id_proyecto = req.centroCosto + '-' + req.unidadNegocio + '-' + req.body.cliente;
-                            } else {
-                                req.body.id_proyecto = req.centroCosto + '-' + req.unidadNegocio;
-                            }
-                            //insertamos en la base de datos la informacion
-                            bd.query(sql.insertProyecto(req.body), async (err, response) => {
-                                if (err) {
-                                    res.json(err);
-                                }
-                                if (response) {
-                                    response.todoOk = "Ok";
-                                    
-                                    res.json(response);
-                                }
-                                res.end();
-                            })
-                        } else {
-                            res.json('error, un elemento esta vacio');
+        const unidad_negocio = req.body.id_unidad_negocio ? await UnidadNegocio.findAll({
+            where: {
+                id_unidad_negocio: req.body.id_unidad_negocio
+            },
+            raw: true
+        }) : '';
+
+        if (centro_costo[0].siglas_cc) {
+            id_proyecto = centro_costo[0].siglas_cc;
+
+            if (unidad_negocio[0].siglas_uc) {
+                id_proyecto = id_proyecto + '-' + unidad_negocio[0].siglas_uc;
+
+                if (req.body.cliente) {
+                    id_proyecto = id_proyecto + '-' + req.body.cliente
+                }
+            }
+        } else {
+            return res.json('No se encontro el centro de costos');
+        }
+
+        req.body.id_proyecto= id_proyecto;
+
+        Proyecto.create(req.body).then(result => {
+            req.body.alquileres.forEach((alquiler,i) => {
+                alquiler.id_proyecto = id_proyecto;
+
+                //Una vez guardado el proyecto guardamos los alquileres relacionados con el proyecto
+                Alquiler.create(alquiler).then(result => {
+                    /*Si el alquiler se guardo como corresponde el estado del modulo correspondiente al alquiler pasa a tener 
+                    un estado de ocupado*/
+                    Modulo.update({ estado: 1 }, {
+                        where: {
+                          id_modulo: alquiler.id_modulo
                         }
-
-                    }
-                })
-            }
-        })
+                    }).then( result => {
+                        /*Si hasta aqui no hay errores se fija si es el ultimo alquiler que se guardo. De ser asi responde que todo
+                        esta bien */
+                        if(i==(countAlquileres-1)){
+                            result.todoOk = "Ok";
+                            res.json(result);
+                        }
+                    }).catch(error => {
+                        console.error(error);
+                        return res.json(error);
+                    });
+                }).catch(error => {
+                    console.error(error);
+                    return res.json(error);
+                });
+            });
+        }).catch(error => {
+            console.error(error);
+            return res.json(error);
+        });
     } catch (error) {
+        console.error(error);
         return res.json(error);
     }
 }

@@ -4,22 +4,35 @@ const jwt = require('jsonwebtoken');
 //Base de Datos
 const bd = require('../../pool');
 const sql = require('../sql/authQuery');
+const { Auth, Rango } = require('../../db');
 
 //Busca los usuarios registrados
 exports.getUser = async (req, res) => {
     try {
-        bd.query(sql.selectUsers(), (err, response) => {
+        await Auth.findAll({ 
+            include: [{
+                model: Rango
+            }] 
+        }).then( response => {
+            res.json(response);
+        }).catch( error => {
+            res.json(error);
+        });
+
+        res.end();
+        /*bd.query(sql.selectUsers(), (err, response) => {
             if(err){
                 res.json(err);
             }
             if(response){
+                console.log(response)
                 response.todoOk = "Ok";
                 response.status = 200;
 
                 res.json(response);
             } 
             res.end();
-        })   
+        })  */
     } catch (error) {
         return res.json(error);
     }

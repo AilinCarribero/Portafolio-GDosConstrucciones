@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { Accordion, Row, Col, OverlayTrigger, Tooltip, Spinner } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import React from 'react';
+import { Accordion, Row, Col } from 'react-bootstrap';
 
 //Hooks
 import { formatNumber } from '../../../hooks/useUtils';
@@ -9,12 +8,12 @@ import { useGetModulos } from '../../../hooks/useModulos';
 
 //Css
 import './Modulos.css';
-import * as Icons from 'react-bootstrap-icons';
+//import * as Icons from 'react-bootstrap-icons';
 //import SpinnerC from '../../utils/spinner/SpinnerC';
 
 const Modulos = () => {
     const { modulos } = useGetModulos();
-
+    
     return (<>
         <div>
             <Row>
@@ -33,7 +32,7 @@ const Modulos = () => {
                                                     <Col xs={11} md={11}><p> Costo: ${formatNumber(modulo.costo)}</p></Col>
                                                 </Row>
                                             </Col>
-                                            {modulo.fecha_venta != '0000-00-00' &&
+                                            {modulo.fecha_venta != '0000-00-00 00:00:00' && modulo.fecha_venta &&
                                                 <Col xs={12} md={6}>
                                                     <Row>
                                                         <Col xs={1} md={1}></Col>
@@ -47,7 +46,7 @@ const Modulos = () => {
                                                     <Col xs={11} md={11}><p> Fecha de creación: {new Date(modulo.fecha_creacion).toISOString().slice(0, 10)}</p></Col>
                                                 </Row>
                                             </Col>
-                                            {modulo.fecha_venta != '0000-00-00' &&
+                                            {modulo.fecha_venta != '0000-00-00 00:00:00' && modulo.fecha_venta &&
                                                 <Col xs={12} md={6}>
                                                     <Row>
                                                         <Col xs={1} md={1}></Col>

@@ -20,7 +20,7 @@ import { useGetProyectos } from '../../../hooks/useProyectos';
 const Proyectos = () => {
     const { proyectosContext, setProyectosContext } = useContext(ProyectoContext);
     const { proyectos } = useGetProyectos();
-    
+    console.log(proyectos);
     useEffect(() => {
         setProyectosContext(proyectos);
     }, [proyectos])
@@ -398,13 +398,27 @@ const Proyectos = () => {
                                                         <Col xs={11} md={11}><p> Venta: ${formatNumber(proyecto.venta)}</p></Col>
                                                     </Row>
                                                 </Col>
-                                                <Col xs={12} md={6}>
-                                                    <Row>
-                                                        <Col xs={1} md={1}></Col>
-                                                        <Col xs={11} md={11}><p> Costo: ${formatNumber(proyecto.costo)}</p></Col>
-                                                    </Row>
-                                                </Col>
+                                                {proyecto.costo > 0 &&
+                                                    <Col xs={12} md={6}>
+                                                        <Row>
+                                                            <Col xs={1} md={1}></Col>
+                                                            <Col xs={11} md={11}><p> Costo: ${formatNumber(proyecto.costo)}</p></Col>
+                                                        </Row>
+                                                    </Col>
+                                                }
+                                                {proyecto.alquiler_total > 0 &&
+                                                    <Col xs={12} md={6}>
+                                                        <Row>
+                                                            <Col xs={1} md={1}>
+                                                                <Link to={`/egresos/${proyecto.id_proyecto}`}> <Icons.ArchiveFill className="icon-detalle" /> </Link>
+                                                            </Col>
+                                                            <Col xs={11} md={11}><p> Total por Alquileres: ${formatNumber(proyecto.alquiler_total)}</p></Col>
+                                                        </Row>
+                                                    </Col>
+                                                }
                                             </>}
+                                        </Row>
+                                        <Row>
                                             <Col xs={12} md={6}>
                                                 <Row>
                                                     <Col xs={1} md={1}>
