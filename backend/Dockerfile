@@ -15,7 +15,6 @@ ENV JWT_TIME_EXPIRED=7d
 ENV JWT_COOKIE_EXPIRED=90
 ENV PORT=5001
 
-RUN npm install -g mysql2
 RUN npm install --save
 
 COPY [".", "/app/backend/"]

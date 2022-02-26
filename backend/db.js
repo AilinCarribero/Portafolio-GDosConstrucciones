@@ -62,8 +62,10 @@ Egreso.belongsTo(Proyecto, {foreignKey: 'id_proyecto', targetKey: 'id_proyecto'}
 Ingreso.belongsTo(Proyecto, {foreignKey: 'id_proyecto', targetKey: 'id_proyecto'});
 
 //Conecto con la base de datos, verifico que esten los modelos creados, si no lo estan los crea
-sequelize.sync({ force: false, logging: false }).then( () => {
+sequelize.sync({ force: false}).then( () => {
     console.log('La sincronizacion con la base de datos '+process.env.DB_NAME+' fue un exito');
+}).catch( err => {
+    console.error(err)
 })
 
 module.exports = {
