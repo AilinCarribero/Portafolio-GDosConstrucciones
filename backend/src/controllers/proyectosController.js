@@ -23,7 +23,7 @@ exports.listProyectos = async (req, res) => {
 //Insertar un proyecto nuevo
 exports.insertProyecto = async (req, res) => {
     let id_proyecto = '';
-    const countAlquileres = (req.body.alquileres).length;
+    const countAlquileres = req.body.alquileres ? (req.body.alquileres).length : '';
 
     if (!req.body.costo) {
         req.body.costo = 0;
