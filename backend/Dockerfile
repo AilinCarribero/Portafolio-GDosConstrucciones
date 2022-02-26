@@ -1,6 +1,6 @@
 FROM node:14
 
-COPY ["package.json", "package-lock.json", "/app/backend/"]
+COPY ["package.json", "/app/backend/"]
 
 WORKDIR /app/backend/
 
