@@ -20,7 +20,7 @@ const StockModel = require('./src/models/stockModel');
 const UnidadNegocioModel = require('./src/models/unidadNegocioModel');
 
 //Declaro la base de datos
-const sequelize = new Sequelize(process.env.DB_NAME , process.env.DB_USER , process.env.DB_PASSWORD, {
+const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASSWORD, {
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
     dialect: 'mysql',
@@ -32,43 +32,43 @@ const sequelize = new Sequelize(process.env.DB_NAME , process.env.DB_USER , proc
 });
 
 //Utilizo los modelos
-const Alquiler = AlquilerModel( sequelize, Sequelize );
-const AnalisisCosto = AnalisisCostoModel( sequelize, Sequelize );
-const Auth = AuthModel( sequelize, Sequelize );
-const CentroCosto = CentroCostoModel( sequelize, Sequelize );
-const ComprobantePago = ComprobantePagoModel( sequelize, Sequelize );
-const DetalleAC = DetalleACModel( sequelize, Sequelize );
-const Egreso = EgresoModel( sequelize, Sequelize );
-const Estado = EstadoModel( sequelize, Sequelize );
-const FormaCobro = FormaCobroModel( sequelize, Sequelize );
-const FormaPago = FormaPagoModel( sequelize, Sequelize );
-const Indice = IndiceModel( sequelize, Sequelize );
-const Ingreso = IngresoModel( sequelize, Sequelize );
-const Modulo = ModuloModel( sequelize, Sequelize );
-const Proyecto = ProyectoModel( sequelize, Sequelize );
-const Rango = RangoModel( sequelize, Sequelize );
-const Stock = StockModel( sequelize, Sequelize );
-const UnidadNegocio = UnidadNegocioModel( sequelize, Sequelize );
+const Alquiler = AlquilerModel(sequelize, Sequelize);
+const AnalisisCosto = AnalisisCostoModel(sequelize, Sequelize);
+const Auth = AuthModel(sequelize, Sequelize);
+const CentroCosto = CentroCostoModel(sequelize, Sequelize);
+const ComprobantePago = ComprobantePagoModel(sequelize, Sequelize);
+const DetalleAC = DetalleACModel(sequelize, Sequelize);
+const Egreso = EgresoModel(sequelize, Sequelize);
+const Estado = EstadoModel(sequelize, Sequelize);
+const FormaCobro = FormaCobroModel(sequelize, Sequelize);
+const FormaPago = FormaPagoModel(sequelize, Sequelize);
+const Indice = IndiceModel(sequelize, Sequelize);
+const Ingreso = IngresoModel(sequelize, Sequelize);
+const Modulo = ModuloModel(sequelize, Sequelize);
+const Proyecto = ProyectoModel(sequelize, Sequelize);
+const Rango = RangoModel(sequelize, Sequelize);
+const Stock = StockModel(sequelize, Sequelize);
+const UnidadNegocio = UnidadNegocioModel(sequelize, Sequelize);
 
 //Conecto con la base de datos, verifico que esten los modelos creados, si no lo estan los crea
-sequelize.sync({ force: false}).then( () => {
-    console.log('La sincronizacion con la base de datos '+process.env.DB_NAME+' fue un exito');
-}).catch( err => {
+sequelize.sync({ force: false }).then(() => {
+    //Relaciones
+    Auth.belongsTo(Rango, { foreignKey: 'id_rango', targetKey: 'id_rango' });
+    Alquiler.belongsTo(Modulo, { foreignKey: 'id_modulo', targetKey: 'id_modulo' });
+    Alquiler.belongsTo(Proyecto, { foreignKey: 'id_proyecto', targetKey: 'id_proyecto' });
+    Modulo.hasMany(Alquiler, { foreignKey: 'id_modulo', targetKey: 'id_modulo' });
+    Proyecto.hasMany(Alquiler, { foreignKey: 'id_proyecto', targetKey: 'id_proyecto' });
+    Proyecto.hasMany(Egreso, { foreignKey: 'id_proyecto', targetKey: 'id_proyecto' });
+    Proyecto.hasMany(Ingreso, { foreignKey: 'id_proyecto', targetKey: 'id_proyecto' });
+    Egreso.belongsTo(Proyecto, { foreignKey: 'id_proyecto', targetKey: 'id_proyecto' });
+    Ingreso.belongsTo(Proyecto, { foreignKey: 'id_proyecto', targetKey: 'id_proyecto' });
+    
+    console.log('La sincronizacion con la base de datos ' + process.env.DB_NAME + ' fue un exito');
+}).catch(err => {
     console.error(err)
 })
 
-//Relaciones
-Auth.belongsTo(Rango, {foreignKey: 'id_rango', targetKey: 'id_rango'});
-Alquiler.belongsTo(Modulo, {foreignKey: 'id_modulo', targetKey: 'id_modulo'});
-Alquiler.belongsTo(Proyecto, {foreignKey: 'id_proyecto', targetKey: 'id_proyecto'});
-Modulo.hasMany(Alquiler, {foreignKey: 'id_modulo', targetKey: 'id_modulo'});
-Proyecto.hasMany(Alquiler, {foreignKey: 'id_proyecto', targetKey: 'id_proyecto'});
-Proyecto.hasMany(Egreso, {foreignKey: 'id_proyecto', targetKey: 'id_proyecto'});
-Proyecto.hasMany(Ingreso, {foreignKey: 'id_proyecto', targetKey: 'id_proyecto'});
-Egreso.belongsTo(Proyecto, {foreignKey: 'id_proyecto', targetKey: 'id_proyecto'});
-Ingreso.belongsTo(Proyecto, {foreignKey: 'id_proyecto', targetKey: 'id_proyecto'});
-
 module.exports = {
-    Alquiler, AnalisisCosto, Auth, CentroCosto, ComprobantePago, DetalleAC, Egreso, Estado, FormaCobro, FormaPago, 
+    Alquiler, AnalisisCosto, Auth, CentroCosto, ComprobantePago, DetalleAC, Egreso, Estado, FormaCobro, FormaPago,
     Indice, Ingreso, Modulo, Proyecto, Rango, Stock, UnidadNegocio
 }
