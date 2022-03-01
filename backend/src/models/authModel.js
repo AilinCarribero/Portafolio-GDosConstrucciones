@@ -8,7 +8,6 @@ module.exports = ( sequelize, type ) => {
         nombre_apellido: type.STRING(60),
         correo: {
             type: type.STRING(100),
-            unique: true,
             validator: {
                 isEmail: true
             }
