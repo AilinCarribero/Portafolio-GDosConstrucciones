@@ -2,8 +2,7 @@ module.exports = ( sequelize, type ) => {
     return sequelize.define('proyecto', {
         id_proyecto: {
             type: type.STRING(1000),
-            primaryKey: true,
-            unique: true
+            primaryKey: true
         },
         id_unidad_negocio: {
             type: type.INTEGER,

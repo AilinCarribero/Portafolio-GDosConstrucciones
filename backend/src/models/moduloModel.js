@@ -6,8 +6,7 @@ module.exports = ( sequelize, type ) => {
             autoIncrement: true
         },
         nombre_modulo: {
-            type: type.STRING(100), 
-            unique: true
+            type: type.STRING(100)
         },
         costo: {
             type:type.DOUBLE,
