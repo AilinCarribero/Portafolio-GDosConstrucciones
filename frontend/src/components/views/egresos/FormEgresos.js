@@ -126,7 +126,17 @@ const FormEgresos = () => {
         if (targetName === 'id_analisis_costo') {
             analisisCostos.forEach((analisisCosto) => {
                 if (analisisCosto.id_analisis_costo == targetValue) {
-                    setShowDAC(analisisCosto.id_centro_costo === 1 ? true : false);//... pertence a un AC de CCC entonces mostrara para elegir el detalle del AC de CCC
+                    setShowDAC(analisisCosto.id_centro_costo == 1 && targetValue != 6 ? true : false);//... pertence a un AC de CCC entonces mostrara para elegir el detalle del AC de CCC
+
+                    if (targetValue == 6) {
+                        detalleAC.map((detalleac) => (
+                            detalleac.detalle_ac == egreso.id_proyecto.slice(4, 9) 
+                                && setEgreso(prevEgreso => ({
+                                    ...prevEgreso,
+                                    id_detalle_ac: detalleac.id_detalle_ac
+                                }))
+                        ))
+                    }
                 }
             })
         }
@@ -139,10 +149,10 @@ const FormEgresos = () => {
                     setShowCuotas(formaPago.forma_pago === 'Tarjeta de Credito' ? true : false) //... es tarjeta de credito se debe mostrar la seleccion de cuotas
                     setShowCheque(formaPago.forma_pago === 'E-Cheq' || formaPago.forma_pago === 'C.P.D. - Cheque de Pago Diferido' ? true : false);//... si es un cheque debe mostrar un campo para ingresar la cantidad de cheques
                     setShowDataCheques(false);
-                    setShowFechaDif(formaPago.requiere_f_pago === 1 
-                        && formaPago.forma_pago !== 'Tarjeta de Credito' 
+                    setShowFechaDif(formaPago.requiere_f_pago === 1
+                        && formaPago.forma_pago !== 'Tarjeta de Credito'
                         && formaPago.forma_pago !== 'E-Cheq'
-                        && formaPago.forma_pago !== 'C.P.D. - Cheque de Pago Diferido' 
+                        && formaPago.forma_pago !== 'C.P.D. - Cheque de Pago Diferido'
                         ? true : false) //... requiere una fecha diferente a la actual mostrar otro campo de fecha
                 }
             })
@@ -187,7 +197,7 @@ const FormEgresos = () => {
                 setAuxEgresos(auxEgreso);
                 setDatosValidacion(auxEgreso);
                 setShowModal(true);
-            }else if (cheques && cantCheque > 0) {
+            } else if (cheques && cantCheque > 0) {
                 /*Si existen cheques entonces guardar en una variable aux los datos de ingreso + los datos del cheque*/
                 for (let i = 0; i < cantCheque; i++) {
                     const auxChequeFD = cheques['fechaD' + i];
@@ -399,12 +409,12 @@ const FormEgresos = () => {
                                         <Form.Check inline onChange={handleChangeForm} label="USD$" name="moneda" value="1" type="radio" checked={checkUSD == '1'} />
                                     </Col>
                                 </Row>
-                            {!showCheque &&
-                                <FloatingLabel label="Importe">
-                                    <NumberFormat customInput={Form.Control} decimalSeparator={","} thousandSeparator={"."}
-                                        onChange={handleChangeForm} name={checkUSD == 0 ? "valor_pago" : "valor_usd"} value={checkUSD == 0 ? egreso.valor_pago : egreso.valor_usd} required />
-                                </FloatingLabel>
-                            }
+                                {!showCheque &&
+                                    <FloatingLabel label="Importe">
+                                        <NumberFormat customInput={Form.Control} decimalSeparator={","} thousandSeparator={"."}
+                                            onChange={handleChangeForm} name={checkUSD == 0 ? "valor_pago" : "valor_usd"} value={checkUSD == 0 ? egreso.valor_pago : egreso.valor_usd} required />
+                                    </FloatingLabel>
+                                }
                             </Form.Group>
                             {showCuotas &&
                                 <Form.Group className="mb-3" >

@@ -49,14 +49,6 @@ const FormModulos = () => {
         setValidated(true);
 
         if (form.checkValidity() === true) {
-            /*if (!modulo.fecha_creacion) {
-                auxModulo = {
-                    ...modulo,
-                    fecha_creacion: new Date(3000, mes, dia).toISOString().slice(0, 10)
-                }
-            } else {
-                auxModulo = { ...modulo }
-            }*/
             auxModulo = { ...modulo }
 
             try {
@@ -118,11 +110,6 @@ const FormModulos = () => {
                                     <option value="Vendido"> Vendido </option>
                                 </Form.Select>
                             </FloatingLabel>*/}
-                            <Form.Group className="mb-3">
-                                <FloatingLabel controlId="floatingInputGrid" label="Fecha de Venta del Modulo">
-                                    <Form.Control onChange={handleChangeForm} name="fecha_venta" type="date" value={modulo.fecha_venta} />
-                                </FloatingLabel>
-                            </Form.Group>
                             <Button className="button-submit" variant="primary" type="submit">
                                 Guardar
                             </Button>

@@ -4,12 +4,12 @@ import { API, servisTokenConfig } from './apiServices';
 
 export const login = async (user) => {
     const response = await axios.post(API+'auth/login', user);
-    return response.data;
+    return response;
 }
 
 export const insertUser = async (user) => {
     const response = await axios.post(API+'auth/registro', user , servisTokenConfig);
-    return response.data;
+    return response;
 }
 
 export const getUser = async () => {

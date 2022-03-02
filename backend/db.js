@@ -26,7 +26,7 @@ const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, proces
     dialect: 'mysql',
     define: {
         freezeTableName: true,
-        alter: true,
+        alter: false, // cuando se realice un cambio en algun modelo pasar a true
         modelName: 'singularName'
     },
 });
@@ -50,8 +50,9 @@ const Rango = RangoModel(sequelize, Sequelize);
 const Stock = StockModel(sequelize, Sequelize);
 const UnidadNegocio = UnidadNegocioModel(sequelize, Sequelize);
 
-//Conecto con la base de datos, verifico que esten los modelos creados, si no lo estan los crea
-sequelize.sync({ force: false }).then(() => {
+/*Conecto con la base de datos, verifico que esten los modelos creados, si no lo estan los crea 
+ logging tiene que pasar a true cuando se mande a produccion */
+sequelize.sync({ force: false, logging: false }).then(() => {
     //Relaciones
     Auth.belongsTo(Rango, { foreignKey: 'id_rango', targetKey: 'id_rango' });
     Alquiler.belongsTo(Modulo, { foreignKey: 'id_modulo', targetKey: 'id_modulo' });

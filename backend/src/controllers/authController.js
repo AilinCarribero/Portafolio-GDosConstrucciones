@@ -2,8 +2,6 @@ const bcryptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 //Base de Datos
-const bd = require('../../pool');
-const sql = require('../sql/authQuery');
 const { Auth, Rango } = require('../../db');
 
 //Busca los usuarios registrados
@@ -20,19 +18,6 @@ exports.getUser = async (req, res) => {
         });
 
         res.end();
-        /*bd.query(sql.selectUsers(), (err, response) => {
-            if(err){
-                res.json(err);
-            }
-            if(response){
-                console.log(response)
-                response.todoOk = "Ok";
-                response.status = 200;
-
-                res.json(response);
-            } 
-            res.end();
-        })  */
     } catch (error) {
         return res.json(error);
     }
@@ -45,39 +30,44 @@ exports.login = async (req, res) => {
 
     if(correo && password){
         try {
-            bd.query(sql.login(correo), async (err, response) => {
-                if(err){
-                    res.send('Correo incorrecto');
-                    res.json(err);
-                }
-                if(response){
-                     if(await bcryptjs.compare(password, response[0].contrasegna)) {
-                        const rango = response[0].rango;
-                        const id = response[0].id_user;
-                        const nombre_apellido = response[0].nombre_apellido;
+            Auth.findAll({
+                where: {
+                    correo : correo
+                },
+                include: [{
+                    model: Rango
+                }],
+                raw: true
+            }).then(async response => {
+                if(await bcryptjs.compare(password, response[0].contrasegna)) {
+                    const rango = response[0]['rango.rango'];
+                    const id = response[0].id_user;
+                    const nombre_apellido = response[0].nombre_apellido;
 
-                        const token = jwt.sign({id: id , rango: rango}, process.env.JWT_SECRET, {
-                            expiresIn: process.env.JWT_TIME_EXPIRED
-                        })
-                        
-                        res.json({
-                            id: id,
-                            rango: rango,
-                            token: token,
-                            nombre_apellido: nombre_apellido
-                        });
-                    } else {
-                        res.send('Contraseña incorrecta')
-                    }
+                    const token = jwt.sign({id: id , rango: rango, nombre_apellido: nombre_apellido}, process.env.JWT_SECRET, {
+                        expiresIn: process.env.JWT_TIME_EXPIRED
+                    });
+
+                    res.json({
+                        id: id,
+                        rango: rango,
+                        token: token,
+                        nombre_apellido: nombre_apellido
+                    });
                 } else {
-                    res.send('Correo incorrecto');
+                    res.send('Contraseña incorrecta')
                 }
-                res.end();
-            })   
+            }).catch( err => {
+                console.error(err);
+                res.send('Hubo un error desconocido');
+                return res.json(err);
+            }) 
         } catch (error) {
             res.send('Correo incorrecto');
             return res.json(error);
         }
+    } else {
+        res.send('Por favor ingrese los datos solicitados');
     }
 }
 
@@ -88,25 +78,24 @@ exports.registrar = async (req, res) => {
     const correo = req.body.correo;
     const rango = req.body.id_rango;
 
-    let passwordHash =await bcryptjs.hash(password , 10);
+    let contrasegna =await bcryptjs.hash(password , 10);
+
+    const data = {
+        nombre_apellido: user,
+        correo: correo,
+        id_rango: rango,
+        contrasegna: contrasegna
+    }
 
     try{
-        bd.query(`INSERT INTO usuario(nombre_apellido, correo, contrasegna, id_rango) VALUES(
-            '${user}',
-            '${correo}',
-            '${passwordHash}',
-            '${rango}'
-        )`, (err, response) => {
-            if(err){
-                res.json(err);
-            }
-            if(response){
-                response.todoOk = "Ok";
-                
-                res.json(response);
-            }
+        Auth.create(data).then( response => {
+            response.todoOk = "Ok";
+            res.json(response);
             res.end();
-        });
+        }).catch( err => {
+            console.error(err);
+            return res.json(err);
+        })
     } catch(error){
         return res.json(error);
     }

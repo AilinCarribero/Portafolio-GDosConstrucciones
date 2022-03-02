@@ -34,15 +34,15 @@ const Home = () => {
 
             const segCookie = 60*60*24*6;
             
-            if (userResponse.token) {
-                window.localStorage.setItem('loggedAppUser', JSON.stringify(userResponse));
+            if (userResponse.data.token) {
+                window.localStorage.setItem('loggedAppUser', JSON.stringify(userResponse.data));
                 document.cookie= 'loggedAppUser=existo; max-age='+segCookie+';';
 
-                loginContext(userResponse);
+                loginContext(userResponse.data);
 
                 history.push("/");
             } else {
-                ToastComponent('error',userResponse);
+                ToastComponent('error',userResponse.data);
                 console.log('Error');
             }
         } catch (error) {
