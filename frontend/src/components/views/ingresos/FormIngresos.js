@@ -198,12 +198,7 @@ const FormIngresos = () => {
             }
         } else {
             try {
-                if (ingreso.fecha_diferido_cobro) {
-                    resIngreso = await insertIngreso(ingreso);
-                } else {
-                    ingreso.fecha_diferido_cobro = '0000-00-00';
-                    resIngreso = await insertIngreso(ingreso);
-                }
+                resIngreso = await insertIngreso(ingreso);
             } catch (error) {
                 console.log(error);
                 ToastComponent('error');
