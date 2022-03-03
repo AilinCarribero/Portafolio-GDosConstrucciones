@@ -205,7 +205,7 @@ const FormIngresos = () => {
             }
         }
 
-        if (resIngreso.data.todoOk == 'Ok') {
+        if (resIngreso.data.todoOk == 'Ok' || resIngreso.statusText == 'OK') {
             ToastComponent('success');
 
             //En caso de tener algun elemento extra mostrandose se vuelve a ocular
