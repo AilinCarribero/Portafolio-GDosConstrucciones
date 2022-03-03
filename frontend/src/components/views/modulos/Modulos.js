@@ -13,7 +13,7 @@ import './Modulos.css';
 
 const Modulos = () => {
     const { modulos } = useGetModulos();
-    
+    console.log(modulos)
     return (<>
         <div>
             <Row>

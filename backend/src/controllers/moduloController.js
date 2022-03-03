@@ -1,4 +1,5 @@
 const { Modulo, Alquiler } = require('../../db');
+
 //Insertar un modulo nuevo
 exports.insertModulo = (req, res) => {
     if (!req.body.fecha_venta) {
@@ -36,15 +37,14 @@ exports.listModulos = (req, res) => {
         Modulo.findAll({
             include: [{
                 model: Alquiler
-            }] 
+            }]
         }).then( response => {
+            console.log(response)
             res.json(response);
         }).catch( error => {
             console.error(error)
             res.json(error);
         });
-
-        res.end();
     } catch (error) {
         return res.json(error);
     }
