@@ -1,5 +1,3 @@
-const bd = require('../../pool');
-const sql = require('../sql/ingresosQuery');
 const { Ingreso, FormaCobro, Auth } = require('../../db');
 
 //Agregar ingreso
