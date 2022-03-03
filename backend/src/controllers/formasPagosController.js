@@ -1,21 +1,13 @@
-const bd = require('../../pool');
-const sql = require('../sql/formasPagoQuery');
+const { FormaPago } = require('../../db');
 
 //listar todos los formas de pago disponibles
 exports.listFormasPago = async (req, res) => {
-    try {
-        bd.query(sql.listFormaPago(), async (err, response) => {
-            if(err){
-                res.json(err);
-            }
-            if(response){
-                response.statusText = "Ok";
-                response.status = 200;
-                res.json(response);
-            }
-            res.end();
-        })
-    } catch (error) {
-        return res.json(error);
-    }  
+    FormaPago.findAll().then(response => {
+        response.statusText = "Ok";
+        response.status = 200;
+        res.json(response);
+    }).catch(err => {
+        console.error(err);
+        return res.json(err);
+    });
 }

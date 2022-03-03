@@ -1,10 +1,7 @@
 const jwt = require('jsonwebtoken');
-const promisify = require('util.promisify/implementation');
 
 //Base de datos
-const bd = require('../../pool');
-const sqlUser = require('../sql/authQuery');
-const sqlRango = require('../sql/rangoQuery');
+const { Auth } = require('../../db');
 
 exports.verifyToken = async (req, res, next) => {
     try {
@@ -16,7 +13,14 @@ exports.verifyToken = async (req, res, next) => {
             const token = authorization.substring(7);
 
             const decoded = jwt.verify(token,process.env.JWT_SECRET);
-            const user = await bd.query(sqlUser.busquedaIdUser(decoded.id)); //Si esto no funciona crear una busqueda que solo devuelva el id
+            //const user = await bd.query(sqlUser.busquedaIdUser(decoded.id)); //Si esto no funciona crear una busqueda que solo devuelva el id
+            const user = await Auth.findAll({
+                where: {
+                    id_user: decoded.id
+                },
+                raw: true
+            });
+            console.log(user)
             req.userId = user[0].id_user;
             req.userRango = user[0].id_rango;
 
@@ -34,7 +38,8 @@ exports.verifyToken = async (req, res, next) => {
 exports.verifyAdmin = async (req, res, next) => {
     //console.log(req.userId);
     //console.log(req.userRango);
-    const userRango = await bd.query(sqlRango.busquedaRango(req.userRango));
+    /* ESTO NO SE ESTA USANDO */
+    //const userRango = await bd.query(sqlRango.busquedaRango(req.userRango));
 
     if(userRango == 'admin') {
         next()

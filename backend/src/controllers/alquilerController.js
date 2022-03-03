@@ -1,6 +1,6 @@
 const { Alquiler, Modulo, Proyecto } = require("../../db")
 
-exports.insertAlquiler = async (req, res) => {
+exports.insertAlquiler = (req, res) => {
     try {
         Alquiler.create(req.body)
             .then( response => {
@@ -16,7 +16,7 @@ exports.insertAlquiler = async (req, res) => {
     }
 }
 
-exports.getAlquileres = async (req, res) => {
+exports.getAlquileres = (req, res) => {
     try {
         Alquiler.findAll({
             include:{

@@ -1,7 +1,7 @@
 const { CentroCosto, UnidadNegocio, Alquiler, Proyecto, Modulo, Egreso, Ingreso } = require('../../db');
 
 //listar todos los proyectos existentes
-exports.listProyectos = async (req, res) => {
+exports.listProyectos = (req, res) => {
     Proyecto.findAll({
         include: [{
             model: Alquiler,

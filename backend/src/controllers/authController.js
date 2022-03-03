@@ -78,7 +78,7 @@ exports.registrar = async (req, res) => {
     const correo = req.body.correo;
     const rango = req.body.id_rango;
 
-    let contrasegna =await bcryptjs.hash(password , 10);
+    let contrasegna = await bcryptjs.hash(password , 10);
 
     const data = {
         nombre_apellido: user,

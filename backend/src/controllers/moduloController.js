@@ -1,6 +1,6 @@
 const { Modulo, Alquiler } = require('../../db');
 //Insertar un modulo nuevo
-exports.insertModulo = async (req, res) => {
+exports.insertModulo = (req, res) => {
     if (!req.body.fecha_venta) {
         req.body.fecha_venta = '1000-01-01';
     }
@@ -12,11 +12,9 @@ exports.insertModulo = async (req, res) => {
     }
     if(!req.body.estado) {
         req.body.estado = 0;
-        /*
-            0 => Libre
+        /*  0 => Libre
             1 => Alquilado
-            3 => Vendido
-        */
+            3 => Vendido */
     }
 
     try {
@@ -33,9 +31,9 @@ exports.insertModulo = async (req, res) => {
 }
 
 //listar todos los modulos existentes
-exports.listModulos = async (req, res) => {
+exports.listModulos = (req, res) => {
     try {
-        await Modulo.findAll({
+        Modulo.findAll({
             include: [{
                 model: Alquiler
             }] 
