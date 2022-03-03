@@ -242,7 +242,7 @@ const FormEgresos = () => {
                 ToastComponent('error');
             }
         }
-
+console.log(resEgreso)
         if (resEgreso.data.todoOk == 'Ok' || resEgreso.statusText == 'OK') {
             ToastComponent('success');
 
