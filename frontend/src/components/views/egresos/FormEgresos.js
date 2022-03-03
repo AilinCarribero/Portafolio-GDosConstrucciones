@@ -243,7 +243,7 @@ const FormEgresos = () => {
             }
         }
 console.log(resEgreso)
-        if (resEgreso.data.todoOk == 'Ok' || resEgreso.statusText == 'OK') {
+        if (resEgreso.data.todoOk == 'Ok' || resEgreso.statusText == 'OK' || resEgreso.status == 200) {
             ToastComponent('success');
 
             //En caso de tener algun elemento extra mostrandose se vuelve a ocular

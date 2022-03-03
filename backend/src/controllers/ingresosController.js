@@ -28,6 +28,7 @@ exports.insertIngreso = async (req, res) => {
             
             Ingreso.create(dato).then( response => {
                 response.todoOk = "Ok";
+                response.statusText = "Ok";
 
                 console.log(datos.length - 1 + ' - ' + i)
                 if (datos.length - 1 == i) {

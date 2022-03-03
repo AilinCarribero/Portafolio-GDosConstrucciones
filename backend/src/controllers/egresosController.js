@@ -44,6 +44,8 @@ exports.insertEgreso = async (req, res) => {
 
             Egreso.create(dato).then( response => {
                 response.todoOk = "Ok";
+                response.statusText = "Ok";
+
 
                 console.log(datos.length - 1 + ' - ' + i)
                 if (datos.length - 1 == i) {
