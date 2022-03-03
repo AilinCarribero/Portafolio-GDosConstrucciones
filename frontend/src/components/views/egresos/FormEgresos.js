@@ -236,21 +236,14 @@ const FormEgresos = () => {
                 if (!egreso.id_comprobante_pago) {
                     egreso.id_comprobante_pago = 6;
                 }
-
-                if (egreso.fecha_diferido_pago) {
-                    resEgreso = await insertEgreso(egreso);
-                } else {
-                    egreso.fecha_diferido_pago = '0000-00-00';
-
-                    resEgreso = await insertEgreso(egreso);
-                }
+                resEgreso = await insertEgreso(egreso);
             } catch (error) {
                 console.log(error);
                 ToastComponent('error');
             }
         }
 
-        if (resEgreso.data.todoOk == 'Ok') {
+        if (resEgreso.data.todoOk == 'Ok' || resEgreso.statusText == 'OK') {
             ToastComponent('success');
 
             //En caso de tener algun elemento extra mostrandose se vuelve a ocular

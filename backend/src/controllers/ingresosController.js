@@ -1,6 +1,6 @@
-const { response } = require('express');
 const bd = require('../../pool');
 const sql = require('../sql/ingresosQuery');
+const { Ingreso, FormaCobro, Auth } = require('../../db');
 
 //Agregar ingreso
 exports.insertIngreso = async (req, res) => {
@@ -10,7 +10,7 @@ exports.insertIngreso = async (req, res) => {
         //Inserta el nuevo ingreso
         datos.forEach(async (dato, i) => {
             if (!dato.fecha_diferido_cobro) {
-                dato.fecha_diferido_cobro = '0000-00-00';
+                dato.fecha_diferido_cobro = '1000-01-01';
             }
             if (!dato.cuota) {
                 dato.cuota = 0;
@@ -27,62 +27,63 @@ exports.insertIngreso = async (req, res) => {
                 dato.valor_cobro = dato.valor_cobro.replace(/\,/g, '.');
                 dato.valor_cobro = parseFloat(dato.valor_cobro);
             }
+            
+            Ingreso.create(dato).then( response => {
+                response.todoOk = "Ok";
 
-            bd.query(sql.insertIngreso(dato), (err, response) => {
-                if (err) {
-                    err.todoMal = "Error";
-
-                    res.json(err)
-                    throw err;
-                } 
-                if (response) {
-                    response.todoOk = "Ok";
-                    
-                    if(datos.length-1 == i){
-                        res.json(response);
-                    }   
+                console.log(datos.length - 1 + ' - ' + i)
+                if (datos.length - 1 == i) {
+                    res.json(response);
                 }
+            }).catch( err => {
+                err.todoMal = "Error";
+
+                console.error(err);
+                res.json(err);
+                throw err;
             })
         })
     } catch (error) {
+        console.error(error);
         return res.json(error);
     }
 }
 
 //Listar ingresos
 exports.listIngresos = async (req, res) => {
-    try {
-        bd.query(sql.listIngresos(), (err, response) => {
-            if (err) {
-                res.json(err);
-            }
-            if (response) {
-                response.statusText = "Ok";
-                response.status = 200;
-                res.json(response);
-            }
-            res.end();
-        })
-    } catch (error) {
-        return res.json(error);
-    }
+    Ingreso.findAll({
+        include: [{
+            model: FormaCobro
+        },{
+            model: Auth
+        }]
+    }).then( response => {
+        response.statusText = "Ok";
+        response.status = 200;
+        res.json(response);
+    }).catch( error => {
+        console.error(error);
+        res.json(error);
+    });
 }
 
 //Listar ingresos por id de proyecto
 exports.listIngresosId = async (req, res) => {
-    try {
-        bd.query(sql.listIngresosId(req.params.id), (err, response) => {
-            if (err) {
-                res.json(err);
-            }
-            if (response) {
-                response.statusText = "Ok";
-                response.status = 200;
-                res.json(response);
-            }
-            res.end();
-        })
-    } catch (error) {
-        return res.json(error);
-    }
+    Ingreso.findAll({
+        include: [{
+            model: FormaCobro
+        },{
+            model: Auth
+        }],
+        where: {
+            id_proyecto: req.params.id
+        }
+    }).then( response => {
+        response.statusText = "Ok";
+        response.status = 200;
+        res.json(response);
+    }).catch( error => {
+        console.error(error);
+        res.json(error);
+    });
 }

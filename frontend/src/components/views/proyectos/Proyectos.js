@@ -266,11 +266,11 @@ const Proyectos = () => {
         setTotales({
             costos: auxTotalCosto,
             ventas: auxTotalVenta,
-            alquiler: auxTotalAlquiler,
             egresos: auxTotalEgresos,
-            ingresos: auxTotalIngresos,
+            ingresos: auxTotalIngresos + auxTotalAlquiler,
             egresosUSD: auxTotalUSDE,
-            ingresosUSD: auxTotalUSDI
+            ingresosUSD: auxTotalUSDI,
+            alquiler: auxTotalAlquiler
         })
         setTotalesUN({
             PPEgreso: auxPPE,
@@ -282,7 +282,7 @@ const Proyectos = () => {
             CCCEgreso: auxCCCE,
             CCCIngreso: auxCCCI,
             CCEEgreso: auxCCEE,
-            CCEIngreso: auxCCEI
+            CCEIngreso: auxCCEI,
         })
         setSpinner(false);
     }
@@ -295,9 +295,9 @@ const Proyectos = () => {
     return (<>
         <div>
             <Row className="resumenTotales">
-                <Col xs={12} md={5}>
+                <Col xs={12} md={4}>
                     <Row>
-                        <Col xs={4} md={4} className="resumenTotal border-right border-mobile-bot">
+                        <Col xs={6} md={6} className="resumenTotal border-right border-mobile-bot">
                             <Row>
                                 <Col xs={12} md={12} className="title-resumen-totales">
                                     Costos:
@@ -307,7 +307,7 @@ const Proyectos = () => {
                                 </Col>
                             </Row>
                         </Col>
-                        <Col xs={4} md={4} className="resumenTotal border-right border-mobile-bot">
+                        <Col xs={6} md={6} className="resumenTotal border-right border-mobile-right border-mobile-bot">
                             <Row>
                                 <Col xs={12} md={12} className="title-resumen-totales">
                                     Venta:
@@ -317,19 +317,9 @@ const Proyectos = () => {
                                 </Col>
                             </Row>
                         </Col>
-                        <Col xs={4} md={4} className="resumenTotal border-right border-mobile-right border-mobile-bot">
-                            <Row>
-                                <Col xs={12} md={12} className="title-resumen-totales">
-                                    Alquileres:
-                                </Col>
-                                <Col xs={12} md={12} className="text-resumen-totales">
-                                    ${formatNumber(totales.alquiler)}
-                                </Col>
-                            </Row>
-                        </Col>
                     </Row>
                 </Col>
-                <Col xs={12} md={7}>
+                <Col xs={12} md={8}>
                     <Row>
                         <OverlayTrigger placement="bottom" overlay={
                             <Tooltip>
@@ -338,6 +328,7 @@ const Proyectos = () => {
                                 <p>M: ${formatNumber(totalesUN.MIngreso)}</p>
                                 <p>CCC: ${formatNumber(totalesUN.CCCIngreso)}</p>
                                 <p>CCE: ${formatNumber(totalesUN.CCEIngreso)}</p>
+                                <p>Alquileres: ${formatNumber(totales.alquiler)}</p>
                             </Tooltip>
                         }>
                             <Col xs={6} md={6} className="resumenTotal border-right">

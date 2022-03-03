@@ -25,7 +25,7 @@ const Ingresos = () => {
                             <Col key={ingreso.id_ingreso}>
                                 <Accordion.Item eventKey={ingreso.id_ingreso}>
                                     <Accordion.Header>
-                                        <Col className="acordion-title" xs={4} md={4}><b>{ingreso.forma_cobro}</b> </Col>
+                                        <Col className="acordion-title" xs={4} md={4}><b>{ingreso.forma_cobro.forma_cobro}</b> </Col>
                                         <Col className="acordion-title" xs={4} md={4}><b>{ingreso.observaciones}</b> </Col>
                                         <Col className="acordion-title-number" xs={3} md={3}><b> {ingreso.valor_cobro > 0? '$'+formatNumber(ingreso.valor_cobro) : 'USD$'+formatNumber(ingreso.valor_usd)}</b> </Col>
                                     </Accordion.Header>
@@ -40,7 +40,7 @@ const Ingresos = () => {
                                             {ingreso.observaciones && 
                                                 <Col xs={12} md={12}>Observaciones<b>:</b> {ingreso.observaciones}</Col>
                                             }
-                                            <Col xs={12} md={12}>Nombre de quien cargo el comprobante<b>:</b> {ingreso.nombre_apellido}</Col>
+                                            <Col xs={12} md={12}>Nombre de quien cargo el comprobante<b>:</b> {ingreso.usuario.nombre_apellido}</Col>
                                         </Row>
                                     </Accordion.Body>
                                 </Accordion.Item>

@@ -26,7 +26,7 @@ const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, proces
     dialect: 'mysql',
     define: {
         freezeTableName: true,
-        alter: false, // cuando se realice un cambio en algun modelo pasar a true
+        alter: true, // cuando se realice un cambio en algun modelo o relacion pasar a true
         modelName: 'singularName'
     },
 });
@@ -55,12 +55,18 @@ const UnidadNegocio = UnidadNegocioModel(sequelize, Sequelize);
 sequelize.sync({ force: false, logging: false }).then(() => {
     //Relaciones
     Auth.belongsTo(Rango, { foreignKey: 'id_rango', targetKey: 'id_rango' });
-    Alquiler.belongsTo(Modulo, { foreignKey: 'id_modulo', targetKey: 'id_modulo' });
+    Alquiler.hasMany(Modulo, { foreignKey: 'id_modulo', targetKey: 'id_modulo' });
     Alquiler.belongsTo(Proyecto, { foreignKey: 'id_proyecto', targetKey: 'id_proyecto' });
     Modulo.hasMany(Alquiler, { foreignKey: 'id_modulo', targetKey: 'id_modulo' });
     Proyecto.hasMany(Alquiler, { foreignKey: 'id_proyecto', targetKey: 'id_proyecto' });
     Proyecto.hasMany(Egreso, { foreignKey: 'id_proyecto', targetKey: 'id_proyecto' });
     Proyecto.hasMany(Ingreso, { foreignKey: 'id_proyecto', targetKey: 'id_proyecto' });
+    Egreso.belongsTo(FormaPago, { foreignKey: 'id_forma_pago', targetKey: 'id_forma_pago' });
+    Egreso.belongsTo(Auth, { foreignKey: 'id_user', targetKey: 'id_user' });
+    Egreso.belongsTo(AnalisisCosto, { foreignKey: 'id_analisis_costo', targetKey: 'id_analisis_costo' });
+    Egreso.belongsTo(ComprobantePago, { foreignKey: 'id_comprobante_pago', targetKey: 'id_comprobante_pago' });
+    Ingreso.belongsTo(FormaCobro, { foreignKey: 'id_forma_cobro', targetKey: 'id_forma_cobro' });
+    Ingreso.belongsTo(Auth, { foreignKey: 'id_user', targetKey: 'id_user' });
     
     console.log('La sincronizacion con la base de datos ' + process.env.DB_NAME + ' fue un exito');
 }).catch(err => {

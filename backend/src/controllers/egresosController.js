@@ -1,5 +1,4 @@
-const bd = require('../../pool');
-const sql = require('../sql/egresosQuery');
+const { Egreso, FormaPago, Auth, AnalisisCosto, ComprobantePago } = require('../../db');
 
 //Agregar egreso
 exports.insertEgreso = async (req, res) => {
@@ -9,7 +8,7 @@ exports.insertEgreso = async (req, res) => {
         //Inserta el nuevo egreso
         datos.forEach((dato, i) => {
             if (!dato.fecha_diferido_pago) {
-                dato.fecha_diferido_pago = '0000-00-00';
+                dato.fecha_diferido_pago = '1000-01-01';
             }
 
             if (!dato.cuota) {
@@ -42,21 +41,19 @@ exports.insertEgreso = async (req, res) => {
                 dato.valor_pago = dato.valor_pago.replace(/\,/g, '.');
                 dato.valor_pago = parseFloat(dato.valor_pago);
             }
-            bd.query(sql.insertEgreso(dato), (err, response) => {
-                if (err) {
-                    err.todoMal = "Error";
 
-                    res.json(err);
-                    throw err;
-                }
-                if (response) {
-                    response.todoOk = "Ok";
+            Egreso.create(dato).then( response => {
+                response.todoOk = "Ok";
 
-                    console.log(datos.length - 1 + ' - ' + i)
-                    if (datos.length - 1 == i) {
-                        res.json(response);
-                    }
+                console.log(datos.length - 1 + ' - ' + i)
+                if (datos.length - 1 == i) {
+                    res.json(response);
                 }
+            }).catch( err => {
+                err.todoMal = "Error";
+                console.error(err);
+                res.json(err);
+                throw err;
             })
         });
     } catch (error) {
@@ -66,38 +63,47 @@ exports.insertEgreso = async (req, res) => {
 
 //Listar egresos
 exports.listEgresos = async (req, res) => {
-    try {
-        bd.query(sql.listEgresos(), (err, response) => {
-            if (err) {
-                res.json(err);
-            }
-            if (response) {
-                response.statusText = "Ok";
-                response.status = 200;
-                res.json(response);
-            }
-            res.end();
-        })
-    } catch (error) {
-        return res.json(error);
-    }
+    Egreso.findAll({
+        include: [{
+            model: FormaPago
+        },{
+            model: Auth
+        },{
+            model: AnalisisCosto
+        },{
+            model: ComprobantePago
+        }]
+    }).then( response => {
+        response.statusText = "Ok";
+        response.status = 200;
+        res.json(response);
+    }).catch( error => {
+        console.error(error);
+        res.json(error);
+    });
 }
 
 //Listar egresos por id de proyecto
 exports.listEgresosId = async (req, res) => {
-    try {
-        bd.query(sql.listEgresosId(req.params.id), (err, response) => {
-            if (err) {
-                res.json(err);
-            }
-            if (response) {
-                response.statusText = "Ok";
-                response.status = 200;
-                res.json(response);
-            }
-            res.end();
-        })
-    } catch (error) {
-        return res.json(error);
-    }
+    Egreso.findAll({
+        include: [{
+            model: FormaPago
+        },{
+            model: Auth
+        },{
+            model: AnalisisCosto
+        },{
+            model: ComprobantePago
+        }],
+        where: {
+            id_proyecto: req.params.id
+        }
+    }).then( response => {
+        response.statusText = "Ok";
+        response.status = 200;
+        res.json(response);
+    }).catch( error => {
+        console.error(error);
+        res.json(error);
+    });
 }

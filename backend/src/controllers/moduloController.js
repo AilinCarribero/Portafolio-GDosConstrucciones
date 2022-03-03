@@ -1,7 +1,4 @@
 const { Modulo, Alquiler } = require('../../db');
-const bd = require('../../pool');
-const sql = require('../sql/moduloQuery');
-
 //Insertar un modulo nuevo
 exports.insertModulo = async (req, res) => {
     if (!req.body.fecha_venta) {
