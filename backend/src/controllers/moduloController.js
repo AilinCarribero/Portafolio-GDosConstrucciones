@@ -39,7 +39,6 @@ exports.listModulos = (req, res) => {
                 model: Alquiler
             }]
         }).then( response => {
-            console.log(response)
             res.json(response);
         }).catch( error => {
             console.error(error)
