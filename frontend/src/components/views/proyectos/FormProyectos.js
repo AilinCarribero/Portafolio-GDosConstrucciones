@@ -138,7 +138,7 @@ const FormProyectos = () => {
             try {
                 const resProyecto = await insertProyecto(auxProyecto);
 
-                if (resProyecto.data.todoOk == 'Ok' || resProyecto.statusText == 'OK') {
+                if (resProyecto.data.todoOk == 'Ok' || resProyecto.statusText == 'OK' || resProyecto.status == 200) {
                     ToastComponent('success');
 
                     setProyecto({

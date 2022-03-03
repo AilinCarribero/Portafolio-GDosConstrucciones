@@ -44,7 +44,7 @@ const FormUsuarios = () => {
             try {
                 const resNewUser = await insertUser(newUser);
 
-                if (resNewUser.todoOk == 'Ok' || resNewUser.statusText == 'OK') {
+                if (resNewUser.todoOk == 'Ok' || resNewUser.statusText == 'OK' || resNewUser.status == 200) {
                     ToastComponent('success');
 
                     setNewUser({

@@ -54,7 +54,7 @@ const FormModulos = () => {
             try {
                 const resModulo = await insertModulos(auxModulo);
 
-                if (resModulo.data.todoOk == 'Ok') {
+                if (resModulo.data.todoOk == 'Ok' || resModulo.statusText == 'OK' || resModulo.status == 200) {
                     ToastComponent('success');
 
                     setModulo({
