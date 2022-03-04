@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Accordion, Row, Col, OverlayTrigger, Tooltip, Spinner } from 'react-bootstrap';
+import { Accordion, Row, Col, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 //Hooks
 import { formatNumber } from '../../../hooks/useUtils';
-//import { useFiltros } from '../../../hooks/useFiltros';
 
 //Contexts 
 import { ProyectoContext } from '../../../contexts/ProyectosProvider';
@@ -14,13 +13,12 @@ import './Proyectos.css';
 import * as Icons from 'react-bootstrap-icons';
 import { useGetProyectos } from '../../../hooks/useProyectos';
 //import SpinnerC from '../../utils/spinner/SpinnerC';
-//import { useGetEgresos } from '../../../hooks/useEgresos';
-//import { useGetIngresos } from '../../../hooks/useIngresos';
 
 const Proyectos = () => {
     const { proyectosContext, setProyectosContext } = useContext(ProyectoContext);
     const { proyectos } = useGetProyectos();
     console.log(proyectos);
+
     useEffect(() => {
         setProyectosContext(proyectos);
     }, [proyectos])
@@ -388,7 +386,7 @@ const Proyectos = () => {
                     </Row>
                 </Col>
             </Row>
-            {spinner && <Spinner animation="border" variant="dark" />}
+            {/*spinner && <Spinner animation="border" variant="dark" />*/}
             <Row>
                 <Accordion>
                     {
