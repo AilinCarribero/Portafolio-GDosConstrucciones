@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Card, Button, Row, FloatingLabel, Form, Col } from 'react-bootstrap';
 import NumberFormat from 'react-number-format';
+import Decimal from 'decimal.js-light';
 
 //Servicios
 import { insertProyecto } from '../../../services/apiProyectos';
@@ -110,14 +111,19 @@ const FormProyectos = () => {
                     const auxAlquilerFI = dataAlquiler['fechaI'+i];
                     const auxAlquilerFV = dataAlquiler['fechaV'+i];
                     const auxAlquilerIdM = dataAlquiler['id_modulo-'+i];
-                    const auxAlquilerMonto = dataAlquiler['monto'+i];
+                    let auxAlquilerMonto = dataAlquiler['monto'+i];
 
                     const mesFI = auxAlquilerFI.slice(5,7);
                     const mesFV = auxAlquilerFV.slice(5,7);
                     const cantMeses = mesFV - mesFI;
 
-                    auxAlquilerTotal = auxAlquilerTotal + (auxAlquilerMonto*cantMeses);
+                    auxAlquilerMonto = auxAlquilerMonto.toString();
+                    auxAlquilerMonto = auxAlquilerMonto.replace(/\./g, '');
+                    auxAlquilerMonto = auxAlquilerMonto.replace(/\,/g, '.');
+                    auxAlquilerMonto = new Decimal(auxAlquilerMonto);
 
+                    auxAlquilerTotal = auxAlquilerMonto.mul(cantMeses).sum(auxAlquilerTotal).toNumber();
+                    
                     auxAlquileres[i] = {
                         id_modulo: auxAlquilerIdM,
                         valor: auxAlquilerMonto,
