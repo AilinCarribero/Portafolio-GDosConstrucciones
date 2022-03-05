@@ -416,7 +416,7 @@ const Proyectos = () => {
                                                     <Col xs={12} md={6}>
                                                         <Row>
                                                             <Col xs={1} md={1}>
-                                                                <Link to={`/egresos/${proyecto.id_proyecto}`}> <Icons.ArchiveFill className="icon-detalle" /> </Link>
+                                                                <Link to={`/alquileres/${proyecto.id_proyecto}`}> <Icons.ArchiveFill className="icon-detalle" /> </Link>
                                                             </Col>
                                                             <Col xs={11} md={11}><p> Total por Alquileres: ${formatNumber(proyecto.alquiler_total)}</p></Col>
                                                         </Row>

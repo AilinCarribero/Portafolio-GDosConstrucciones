@@ -18,6 +18,7 @@ import Modulos from './components/views/modulos/Modulos';
 
 //Hooks
 import { useUser } from './hooks/useUser';
+import Alquileres from './components/views/alquiler/Alquileres';
 
 //Contexts
 //import ProyectoProvider from './contexts/ProyectosProvider';
@@ -52,6 +53,7 @@ const Routers = () => {
                             <Route exact path="/egresos/:id" component={Egresos} />
                             <Route exact path="/ingresos/:id" component={Ingresos} />
                             <Route exact path="/modulos/:id" component={Modulos} />
+                            <Route exact path="/alquileres/:id" component={Alquileres} />
                         </>
                         :
                         <Redirect to="/" />

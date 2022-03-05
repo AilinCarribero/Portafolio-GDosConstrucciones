@@ -87,6 +87,8 @@ exports.listEgresos = async (req, res) => {
 
 //Listar egresos por id de proyecto
 exports.listEgresosId = async (req, res) => {
+    const idProyecto = req.params.id.toString().replace(/\%20/g, ' ');
+
     Egreso.findAll({
         include: [{
             model: FormaPago
@@ -98,7 +100,7 @@ exports.listEgresosId = async (req, res) => {
             model: ComprobantePago
         }],
         where: {
-            id_proyecto: req.params.id
+            id_proyecto: idProyecto
         }
     }).then( response => {
         response.statusText = "Ok";

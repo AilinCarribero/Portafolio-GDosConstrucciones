@@ -54,8 +54,8 @@ const UnidadNegocio = UnidadNegocioModel(sequelize, Sequelize);
  logging tiene que pasar a true cuando se mande a produccion */
 sequelize.sync({ force: false, logging: false }).then(() => {
     //Relaciones
-    Auth.belongsTo(Rango, { foreignKey: 'id_rango', targetKey: 'id_rango' });
-    Alquiler.hasMany(Modulo, { foreignKey: 'id_modulo', targetKey: 'id_modulo' });
+    Auth.hasOne(Rango, { foreignKey: 'id_rango', targetKey: 'id_rango' });
+    Alquiler.belongsTo(Modulo, { foreignKey: 'id_modulo', targetKey: 'id_modulo' });
     Alquiler.belongsTo(Proyecto, { foreignKey: 'id_proyecto', targetKey: 'id_proyecto' });
     Modulo.hasMany(Alquiler, { foreignKey: 'id_modulo', targetKey: 'id_modulo' });
     Proyecto.hasMany(Alquiler, { foreignKey: 'id_proyecto', targetKey: 'id_proyecto' });

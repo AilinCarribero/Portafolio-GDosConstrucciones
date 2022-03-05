@@ -27,3 +27,26 @@ exports.getAlquileres = (req, res) => {
         return res.json(error);
     }
 }
+
+//Listar alquileres por id de proyecto
+exports.getAlquileresId = async (req, res) => {
+    const idProyecto = req.params.id.toString().replace(/\%20/g, ' ');
+
+    Alquiler.findAll({
+        include: [{
+            model: Modulo
+        },{
+            model: Proyecto
+        }],
+        where: {
+            id_proyecto: idProyecto
+        }
+    }).then( response => {
+        response.statusText = "Ok";
+        response.status = 200;
+        res.json(response);
+    }).catch( error => {
+        console.error(error);
+        res.json(error);
+    });
+}

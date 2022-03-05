@@ -68,6 +68,8 @@ exports.listIngresos = async (req, res) => {
 
 //Listar ingresos por id de proyecto
 exports.listIngresosId = async (req, res) => {
+    const idProyecto = req.params.id.toString().replace(/\%20/g, ' ');
+
     Ingreso.findAll({
         include: [{
             model: FormaCobro
@@ -75,7 +77,7 @@ exports.listIngresosId = async (req, res) => {
             model: Auth
         }],
         where: {
-            id_proyecto: req.params.id
+            id_proyecto: idProyecto
         }
     }).then( response => {
         response.statusText = "Ok";
