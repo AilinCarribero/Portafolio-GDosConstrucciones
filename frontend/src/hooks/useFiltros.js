@@ -33,7 +33,7 @@ export const useFiltros = () => {
         let targetValue = e.target.value;
         let resultadoFiltroProyecto = [];
 
-        //console.log(targetName + ' - ' + targetValue);
+        console.log(targetName + ' - ' + targetValue);
         /*En caso de que el valor de target venga vacio se resetea el filtro al valor por defecto*/
         if (!targetValue) {
             if (targetName.includes('cobro')) {

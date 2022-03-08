@@ -1,22 +1,27 @@
 import React, { useState, useEffect, useContext } from 'react';
+
+//Componentes
 import { Accordion, Row, Col, OverlayTrigger, Tooltip } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import CentrosCostos from './CentrosCostos';
+import Modulos from '../modulos/Modulos';
 
 //Hooks
 import { formatNumber } from '../../../hooks/useUtils';
+import { useGetProyectos } from '../../../hooks/useProyectos';
 
 //Contexts 
 import { ProyectoContext } from '../../../contexts/ProyectosProvider';
 
 //Css
 import './Proyectos.css';
-import * as Icons from 'react-bootstrap-icons';
-import { useGetProyectos } from '../../../hooks/useProyectos';
+
+//Img-Incons
 //import SpinnerC from '../../utils/spinner/SpinnerC';
 
 const Proyectos = () => {
     const { proyectosContext, setProyectosContext } = useContext(ProyectoContext);
     const { proyectos } = useGetProyectos();
+
     console.log(proyectos);
 
     useEffect(() => {
@@ -31,6 +36,7 @@ const Proyectos = () => {
     }, [filtrosProyectosContext]);*/
 
     const [spinner, setSpinner] = useState(true);
+    const [menu, setMenu] = useState('ccc-cce');
 
     const [totales, setTotales] = useState({
         egresos: 0,
@@ -54,50 +60,6 @@ const Proyectos = () => {
         CCEIngreso: 0,
         CCEEgreso: 0
     })
-
-    //Egresos totales de un proyecto determinado
-    const egresosProyecto = (PEgresos) => {
-        let auxEgresosProyecto = 0;
-
-        PEgresos.map(egreso => {
-            auxEgresosProyecto += parseFloat(egreso.valor_pago);
-        })
-
-        return (auxEgresosProyecto)
-    }
-
-    //Egresos totales de un proyecto determinado en dolares
-    const egresosUSDProyecto = (PUSDEgresos) => {
-        let auxEgresosProyecto = 0;
-
-        PUSDEgresos.map(egreso => {
-            auxEgresosProyecto += parseFloat(egreso.valor_usd);
-        })
-
-        return (auxEgresosProyecto)
-    }
-
-    //Ingresos totales de un proyecto determinado
-    const ingresosProyecto = (PIngresos) => {
-        let auxIngresosProyecto = 0;
-
-        PIngresos.map(ingreso => {
-            auxIngresosProyecto += parseFloat(ingreso.valor_cobro);
-        })
-
-        return (auxIngresosProyecto)
-    }
-
-    //Ingresos totales de un proyecto determinado en dolares
-    const ingresosUSDProyecto = (PUSDIngresos) => {
-        let auxIngresosProyecto = 0;
-
-        PUSDIngresos.map(ingreso => {
-            auxIngresosProyecto += parseFloat(ingreso.valor_usd);
-        })
-
-        return (auxIngresosProyecto)
-    }
 
     /*Setea y calcula el total de ventas, costos, ingresos (todo, por unidad), egresos(todo, por unidad) 
     y la diferencia entre egresos e ingresos */
@@ -288,7 +250,16 @@ const Proyectos = () => {
     //Si existe alguna modificacion en los proyectos se debe recalcular todo
     useEffect(() => {
         resumenContableProyectos();
-    }, [proyectosContext])
+    }, [proyectosContext]);
+
+    const handleButton = (e) => {
+        const targetName = e.target.name;
+        const targetValue = e.target.value;
+        const targetCheck = e.target.checked;
+
+        console.log(targetName, targetValue, targetCheck);
+        setMenu(targetName);
+    }
 
     return (<>
         <div>
@@ -387,74 +358,27 @@ const Proyectos = () => {
                 </Col>
             </Row>
             {/*spinner && <Spinner animation="border" variant="dark" />*/}
+            <Row className="menu-inicio">
+                <Col>
+                    <button className={menu == 'ccc-cce' ?'menu-inicio-button-active' : 'menu-inicio-button-off'} onClick={handleButton} name="ccc-cce">CCC y CCE</button>
+                </Col>
+                <Col>
+                    <button className={menu == 'proyectos' ?'menu-inicio-button-active' : 'menu-inicio-button-off'} onClick={handleButton} name="proyectos">Proyectos</button>
+                </Col>
+                <Col>
+                    <button className={menu == 'alquileres' ?'menu-inicio-button-active' : 'menu-inicio-button-off'} onClick={handleButton} name="alquileres">Alquileres</button>
+                </Col>
+                <Col>
+                    <button className={menu == 'modulos' ?'menu-inicio-button-active' : 'menu-inicio-button-off'} onClick={handleButton} name="modulos">Modulos</button>
+                </Col>
+            </Row>
             <Row>
-                <Accordion>
-                    {
-                        proyectosContext && proyectosContext.length > 0 &&
-                        proyectosContext.map(proyecto => (
-                            <Col key={proyecto.id_proyecto}>
-                                <Accordion.Item eventKey={proyecto.id_proyecto} className={proyecto.id_centro_costo == 1 || proyecto.id_centro_costo == 3 ? 'accordionCC' : ''}>
-                                    <Accordion.Header> {proyecto.id_proyecto} </Accordion.Header>
-                                    <Accordion.Body>
-                                        <Row>
-                                            {proyecto.id_centro_costo == 2 && <>
-                                                <Col xs={12} md={6}>
-                                                    <Row>
-                                                        <Col xs={1} md={1}></Col>
-                                                        <Col xs={11} md={11}><p> Venta: ${formatNumber(proyecto.venta)}</p></Col>
-                                                    </Row>
-                                                </Col>
-                                                {proyecto.costo > 0 &&
-                                                    <Col xs={12} md={6}>
-                                                        <Row>
-                                                            <Col xs={1} md={1}></Col>
-                                                            <Col xs={11} md={11}><p> Costo: ${formatNumber(proyecto.costo)}</p></Col>
-                                                        </Row>
-                                                    </Col>
-                                                }
-                                                {proyecto.alquiler_total > 0 &&
-                                                    <Col xs={12} md={6}>
-                                                        <Row>
-                                                            <Col xs={1} md={1}>
-                                                                <Link to={`/alquileres/${proyecto.id_proyecto}`}> <Icons.ArchiveFill className="icon-detalle" /> </Link>
-                                                            </Col>
-                                                            <Col xs={11} md={11}><p> Total por Alquileres: ${formatNumber(proyecto.alquiler_total)}</p></Col>
-                                                        </Row>
-                                                    </Col>
-                                                }
-                                            </>}
-                                        </Row>
-                                        <Row>
-                                            <Col xs={12} md={6}>
-                                                <Row>
-                                                    <Col xs={1} md={1}>
-                                                        <Link to={`/egresos/${proyecto.id_proyecto}`}> <Icons.ArchiveFill className="icon-detalle" /> </Link>
-                                                    </Col>
-                                                    <Col xs={11} md={11}><p> Egresos:</p>
-                                                        <Col xs={6} md={6}><p>${formatNumber(egresosProyecto(proyecto.egresos))} </p></Col>
-                                                        <Col xs={5} md={5}><p>USD${formatNumber(egresosUSDProyecto(proyecto.egresos))} </p></Col>
-                                                    </Col>
-                                                </Row>
-                                            </Col>
-                                            <Col xs={12} md={6}>
-                                                <Row>
-                                                    <Col xs={1} md={1}>
-                                                        <Link to={`/ingresos/${proyecto.id_proyecto}`}> <Icons.ArchiveFill className="icon-detalle" /> </Link>
-                                                    </Col>
-                                                    <Col xs={11} md={11}><p> Ingresos:</p>
-                                                        <Col xs={6} md={6}><p>${formatNumber(ingresosProyecto(proyecto.ingresos))} </p></Col>
-                                                        <Col xs={5} md={5}><p>USD${formatNumber(ingresosUSDProyecto(proyecto.ingresos))} </p></Col>
-                                                    </Col>
-                                                </Row>
-                                            </Col>
-                                        </Row>
-                                    </Accordion.Body>
-                                </Accordion.Item>
-                            </Col>
-                        ))
-
-                    }
-                </Accordion>
+                {
+                    menu != 'modulos' ?
+                        <CentrosCostos proyectos={proyectosContext} mostrar={menu} />
+                        :
+                        <Modulos />
+                }
             </Row>
         </div >
     </>)
