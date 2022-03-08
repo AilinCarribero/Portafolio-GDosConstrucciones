@@ -20,7 +20,7 @@ exports.verifyToken = async (req, res, next) => {
                 },
                 raw: true
             });
-            console.log(user)
+            
             req.userId = user[0].id_user;
             req.userRango = user[0].id_rango;
 
