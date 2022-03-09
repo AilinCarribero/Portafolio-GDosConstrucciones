@@ -122,7 +122,7 @@ const FormProyectos = () => {
                     auxAlquilerMonto = auxAlquilerMonto.replace(/\,/g, '.');
                     auxAlquilerMonto = new Decimal(auxAlquilerMonto);
 
-                    auxAlquilerTotal = auxAlquilerMonto.mul(cantMeses).sum(auxAlquilerTotal).toNumber();
+                    auxAlquilerTotal = auxAlquilerMonto.sum(auxAlquilerTotal).toNumber();
                     
                     auxAlquileres[i] = {
                         id_modulo: auxAlquilerIdM,
@@ -189,7 +189,6 @@ const FormProyectos = () => {
                                         <option value=""> </option>
                                         {modulos.length > 0 ? 
                                             modulos.map((modulo) => (
-                                                modulo.estado == 0 &&
                                                 <option key={modulo.id_modulo} value={modulo.id_modulo}>
                                                     {modulo.nombre_modulo}
                                                 </option>

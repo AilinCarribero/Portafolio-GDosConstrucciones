@@ -31,12 +31,12 @@ exports.login = async (req, res) => {
     if(correo && password){
         try {
             Auth.findAll({
-                where: {
-                    correo : correo
-                },
                 include: [{
                     model: Rango
                 }],
+                where: {
+                    correo: correo
+                },
                 raw: true
             }).then(async response => {
                 if(await bcryptjs.compare(password, response[0].contrasegna)) {
@@ -64,6 +64,7 @@ exports.login = async (req, res) => {
             }) 
         } catch (error) {
             res.send('Correo incorrecto');
+            console.error(error)
             return res.json(error);
         }
     } else {
