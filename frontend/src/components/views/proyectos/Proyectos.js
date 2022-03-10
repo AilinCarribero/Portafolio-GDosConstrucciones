@@ -8,6 +8,7 @@ import Modulos from '../modulos/Modulos';
 //Hooks
 import { formatNumber } from '../../../hooks/useUtils';
 import { useGetProyectos } from '../../../hooks/useProyectos';
+import { useUser } from '../../../hooks/useUser';
 
 //Contexts 
 import { ProyectoContext } from '../../../contexts/ProyectosProvider';
@@ -19,10 +20,11 @@ import './Proyectos.css';
 //import SpinnerC from '../../utils/spinner/SpinnerC';
 
 const Proyectos = () => {
+    const { user } = useUser();
     const { proyectosContext, setProyectosContext } = useContext(ProyectoContext);
     const { proyectos } = useGetProyectos();
 
-    console.log(proyectos);
+    //console.log(proyectos);
 
     useEffect(() => {
         setProyectosContext(proyectos);
@@ -257,7 +259,7 @@ const Proyectos = () => {
         const targetValue = e.target.value;
         const targetCheck = e.target.checked;
 
-        console.log(targetName, targetValue, targetCheck);
+        //console.log(targetName, targetValue, targetCheck);
         setMenu(targetName);
     }
 
@@ -368,9 +370,11 @@ const Proyectos = () => {
                 <Col>
                     <button className={menu == 'alquileres' ?'menu-inicio-button-active' : 'menu-inicio-button-off'} onClick={handleButton} name="alquileres">Alquileres</button>
                 </Col>
-                <Col>
-                    <button className={menu == 'modulos' ?'menu-inicio-button-active' : 'menu-inicio-button-off'} onClick={handleButton} name="modulos">Modulos</button>
-                </Col>
+                {user.rango == 'admin' &&
+                    <Col>
+                        <button className={menu == 'modulos' ?'menu-inicio-button-active' : 'menu-inicio-button-off'} onClick={handleButton} name="modulos">Modulos</button>
+                    </Col>
+                }
             </Row>
             <Row>
                 {

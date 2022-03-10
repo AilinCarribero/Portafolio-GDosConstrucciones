@@ -10,24 +10,23 @@ import * as Icons from 'react-bootstrap-icons';
 
 const CentrosCostos = ({ proyectos, mostrar }) => {
     const [proyectosMostrar, setProyectosMostrar] = useState([]);
-    console.log(proyectos, mostrar)
-    if (proyectos) {
-        if (mostrar == 'proyectos') {
-            proyectos.forEach(proyecto => {
-                proyecto.id_proyecto.includes('CCP') && setProyectosMostrar(prevProyectosMostrar => ({
-                    ...prevProyectosMostrar,
-                    proyecto
-                }));
-            });
-        } else {
-            proyectos.forEach(proyecto => {
-                (proyecto.id_proyecto.includes('CCC') || proyecto.id_proyecto.includes('CCE')) && setProyectosMostrar(prevProyectosMostrar => ({
-                    ...prevProyectosMostrar,
-                    proyecto
-                }));
-            });
+    
+    useEffect(() => {
+        if (proyectos) {
+            setProyectosMostrar(
+                proyectos.filter(proyecto => {
+                    if (mostrar == 'proyectos' && proyecto.id_proyecto.includes('CCP') && proyecto.alquiler_total <= 0) {
+                        return proyecto
+                    } else if (mostrar == 'alquileres' && proyecto.id_proyecto.includes('CCP') && proyecto.alquiler_total > 0) {
+                        return proyecto
+                    } else if (mostrar == 'ccc-cce' && (proyecto.id_proyecto.includes('CCC') || proyecto.id_proyecto.includes('CCE'))) {
+                        return proyecto
+                    }
+                })
+            );
         }
-    }
+    }, [proyectos, mostrar]);
+
     //Egresos totales de un proyecto determinado
     const egresosProyecto = (PEgresos) => {
         let auxEgresosProyecto = 0;
@@ -75,8 +74,8 @@ const CentrosCostos = ({ proyectos, mostrar }) => {
     return (<>
         <Accordion>
             {
-                proyectosMostrar && proyectosMostrar.length > 0 &&
-                proyectosMostrar.map(proyecto => (
+                proyectosMostrar &&
+                proyectosMostrar.map(proyecto => (<>
                     <Col key={proyecto.id_proyecto}>
                         <Accordion.Item eventKey={proyecto.id_proyecto} className={proyecto.id_centro_costo == 1 || proyecto.id_centro_costo == 3 ? 'accordionCC' : ''}>
                             <Accordion.Header> {proyecto.id_proyecto} </Accordion.Header>
@@ -136,8 +135,7 @@ const CentrosCostos = ({ proyectos, mostrar }) => {
                             </Accordion.Body>
                         </Accordion.Item>
                     </Col>
-                ))
-
+                </>))
             }
         </Accordion>
     </>)

@@ -28,7 +28,7 @@ const Routers = () => {
 
     return (
         <BrowserRouter>
-                <NavbarComponent />
+                <NavbarComponent path={window.location.pathname} />
                 <Container fluid>
                     <Route exact path="/" render={() => {
                         return (user.token

@@ -38,7 +38,6 @@ const Sidenav = () => {
           <Link className="text-link fondo-link" to="/" onClick={handleClose} >Inicio</Link>
           {/*<Link className="text-link fondo-link" to="/" onClick={handleClose} >Indices</Link>*/}
           {user.rango == 'admin' && <Link className="text-link fondo-link" to="/usuarios" onClick={handleClose} >Usuarios</Link>}
-          {user.rango == 'admin' && <Link className="text-link fondo-link" to="/modulos" onClick={handleClose} >Modulos</Link>}
           {user.rango == 'admin' && <Link className="text-link fondo-link" to="/ingresar/proyecto" onClick={handleClose} >Nuevo Proyecto</Link>}
           <Link className="text-link fondo-link" to="/ingresar/egreso" onClick={handleClose} >Nuevo Egreso</Link>
           <Link className="text-link fondo-link" to="/ingresar/ingreso" onClick={handleClose} >Nuevo Ingreso</Link>

@@ -55,7 +55,7 @@ const NavbarComponent = () => {
                 {renderLogaut()}
             </Container>
         </Navbar>
-        <FiltrosProyectos show={show} />
+        {window.location.pathname == "/" && (user.rango == 'admin' || user.rango == 'moderador') && <FiltrosProyectos show={show} />}
     </>)
 }
 export default NavbarComponent;
