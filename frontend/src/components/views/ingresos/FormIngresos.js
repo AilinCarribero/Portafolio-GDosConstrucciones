@@ -267,7 +267,7 @@ const FormIngresos = () => {
         <Row className="justify-content-center">
             <Col xs="auto" sm="auto" md="auto" lg="auto" xl="auto" xxl="auto" >
                 <Card className="text-center card-form-ingreso mobile-form-ingreso">
-                    <Card.Header className="title-form" >Registre el ingreso</Card.Header>
+                    <Card.Header className="title-form" >Ingreso</Card.Header>
                     <Card.Body>
                         <Form noValidate validated={validated} onSubmit={handleValidacion} >
                             <Form.Group className="mb-3" >

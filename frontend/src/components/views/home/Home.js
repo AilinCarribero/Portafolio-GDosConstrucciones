@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { Card, Button, Row, FloatingLabel, Form, Col } from 'react-bootstrap';
+import { Card, Button, Row, FloatingLabel, Form, Col, FormGroup } from 'react-bootstrap';
 
 import { useUser } from '../../../hooks/useUser';
 import { login } from '../../../services/apiAuth';
@@ -24,49 +24,55 @@ const Home = () => {
             ...prevData,
             [targetName]: targetValue
         });
-        
+
         setData(loginInfo);
     }
 
     const loginPost = async (e) => {
+        e.preventDefault();
+        
         try {
             const userResponse = await login(data);
 
-            const segCookie = 60*60*24*6;
-            
+            const segCookie = 60 * 60 * 24 * 6;
+
             if (userResponse.data.token) {
                 window.localStorage.setItem('loggedAppUser', JSON.stringify(userResponse.data));
-                document.cookie= 'loggedAppUser=existo; max-age='+segCookie+';';
+                document.cookie = 'loggedAppUser=existo; max-age=' + segCookie + ';';
 
                 loginContext(userResponse.data);
 
                 history.push("/");
             } else {
-                ToastComponent('error',userResponse.data);
+                ToastComponent('error', userResponse.data);
                 console.log('Error');
             }
         } catch (error) {
-            ToastComponent('error','Error al intentar ingresar');
+            ToastComponent('error', 'Error al intentar ingresar');
             console.log(error);
         }
     }
-    
+
     return (
         <Row className="justify-content-center">
             <Col xs="auto" sm="auto" md="auto" lg="auto" xl="auto" xxl="auto" >
                 <Card className="text-center card">
                     <Card.Header className="title-form">Ingrese su E-Mail y Contraseña</Card.Header>
                     <Card.Body>
-                        <FloatingLabel controlId="floatingInput" label="E-mail" className="mb-3">
-                            <Form.Control onChange={handleChange} name="correo" type="email" value={data.correo} placeholder="nombre@gmail.com" />
-                        </FloatingLabel>
-                        <FloatingLabel controlId="floatingPassword" label="Contraseña">
-                            <Form.Control onChange={handleChange} name="password" type="password" value={data.password} placeholder="Password" />
-                        </FloatingLabel>
+                        <Form onSubmit={loginPost}>
+                            <FormGroup className="mb-3">
+                                <FloatingLabel controlId="floatingInput" label="E-mail" className="mb-3">
+                                    <Form.Control onChange={handleChange} name="correo" type="email" value={data.correo} placeholder="nombre@gmail.com" />
+                                </FloatingLabel>
+                            </FormGroup>
+                            <FormGroup className="mb-3">
+                                <FloatingLabel controlId="floatingPassword" label="Contraseña">
+                                    <Form.Control onChange={handleChange} name="password" type="password" value={data.password} placeholder="Password" />
+                                </FloatingLabel>
+                            </FormGroup>
+                            <Button className="button-submit" variant='dark' type="submit" > Ingresar </Button>
+                        </Form>
                     </Card.Body>
-                    <Card.Footer className="text-muted">
-                        <Button type="submit" onClick={loginPost}> Ingresar </Button>
-                    </Card.Footer>
                 </Card>
             </Col>
         </Row>

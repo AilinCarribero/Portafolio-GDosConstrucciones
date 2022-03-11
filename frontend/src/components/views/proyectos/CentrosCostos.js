@@ -10,7 +10,7 @@ import * as Icons from 'react-bootstrap-icons';
 
 const CentrosCostos = ({ proyectos, mostrar }) => {
     const [proyectosMostrar, setProyectosMostrar] = useState([]);
-    
+
     useEffect(() => {
         if (proyectos) {
             setProyectosMostrar(
@@ -75,8 +75,8 @@ const CentrosCostos = ({ proyectos, mostrar }) => {
         <Accordion>
             {
                 proyectosMostrar &&
-                proyectosMostrar.map(proyecto => (<>
-                    <Col key={proyecto.id_proyecto}>
+                proyectosMostrar.map(proyecto => (
+                    <Col key={proyecto.id_proyecto} >
                         <Accordion.Item eventKey={proyecto.id_proyecto} className={proyecto.id_centro_costo == 1 || proyecto.id_centro_costo == 3 ? 'accordionCC' : ''}>
                             <Accordion.Header> {proyecto.id_proyecto} </Accordion.Header>
                             <Accordion.Body>
@@ -135,7 +135,7 @@ const CentrosCostos = ({ proyectos, mostrar }) => {
                             </Accordion.Body>
                         </Accordion.Item>
                     </Col>
-                </>))
+                ))
             }
         </Accordion>
     </>)

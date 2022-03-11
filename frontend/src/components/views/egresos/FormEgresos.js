@@ -242,7 +242,7 @@ const FormEgresos = () => {
                 ToastComponent('error');
             }
         }
-console.log(resEgreso)
+
         if (resEgreso.data.todoOk == 'Ok' || resEgreso.statusText == 'OK' || resEgreso.status == 200) {
             ToastComponent('success');
 
@@ -307,7 +307,7 @@ console.log(resEgreso)
         <Row className="justify-content-center">
             <Col xs="auto" sm="auto" md="auto" lg="auto" xl="auto" xxl="auto" >
                 <Card className="text-center card-form-egreso mobile-form-egreso">
-                    <Card.Header className="title-form" >Registre el gasto realizado</Card.Header>
+                    <Card.Header className="title-form" >Gasto/Egreso</Card.Header>
                     <Card.Body>
                         <Form noValidate validated={validated} onSubmit={handleValidacion} >
                             <Form.Group className="mb-3" >
