@@ -10,6 +10,8 @@ import { useUser } from '../../../hooks/useUser';
 import { useGetComprobantesPago } from '../../../hooks/useComprobantePago';
 import { ToastComponent } from '../../../hooks/useUtils';
 import { useGetCentroCosto } from '../../../hooks/useCentroCosto';
+import { useGetStock } from "../../../hooks/useStock";
+import { formatNumber } from "../../../hooks/useUtils";
 
 //Servicios
 import { insertEgreso } from '../../../services/apiEgresos';
@@ -33,6 +35,7 @@ const FormEgresos = () => {
     const { comprobantePago } = useGetComprobantesPago();
     const { detalleAC } = useDetalleAnalisisCosto();
     const { centroCosto } = useGetCentroCosto();
+    const { stock } = useGetStock();
 
     //Datos a enviarse a la api para ingresar/modificar egresos
     const [egreso, setEgreso] = useState({
@@ -46,7 +49,8 @@ const FormEgresos = () => {
         observaciones: '',
         id_comprobante_pago: '',
         numero_comprobante: '',
-        centro_costo: ''
+        centro_costo: '',
+        id_stock: ''
     });
 
     //Variables con informacion
@@ -70,13 +74,14 @@ const FormEgresos = () => {
     const [showCheque, setShowCheque] = useState(false);
     const [showDataCheques, setShowDataCheques] = useState(false);
     const [showModal, setShowModal] = useState(false);
+    const [showStock, setShowStock] = useState(false);
 
     //Variables para validacion
     const [validated, setValidated] = useState(false);
 
     const handleChangeForm = (e) => {
-        const targetName = e.target.name
-        const targetValue = e.target.value
+        const targetName = e.target.name;
+        const targetValue = e.target.value;
         //const targetType = e.target.type;
         const targetCheck = e.target.checked;
 
@@ -127,14 +132,15 @@ const FormEgresos = () => {
             analisisCostos.forEach((analisisCosto) => {
                 if (analisisCosto.id_analisis_costo == targetValue) {
                     setShowDAC(analisisCosto.id_centro_costo == 1 && targetValue != 6 ? true : false);//... pertence a un AC de CCC entonces mostrara para elegir el detalle del AC de CCC
-
+                    setShowStock(analisisCosto.id_centro_costo == 1 && targetValue == 6 ? true : false);//... pertence a un AC de CCC entonces y es Desacopio de materiales entonces mostrara para elegir un material
+                    setShowStock(analisisCosto.id_centro_costo == 2 && targetValue == 1 ? true : false);//... pertence a un AC de CCP entonces y es materiales entonces mostrara para elegir un material
                     if (targetValue == 6) {
                         detalleAC.map((detalleac) => (
-                            detalleac.detalle_ac == egreso.id_proyecto.slice(4, 9) 
-                                && setEgreso(prevEgreso => ({
-                                    ...prevEgreso,
-                                    id_detalle_ac: detalleac.id_detalle_ac
-                                }))
+                            detalleac.detalle_ac == egreso.id_proyecto.slice(4, 9)
+                            && setEgreso(prevEgreso => ({
+                                ...prevEgreso,
+                                id_detalle_ac: detalleac.id_detalle_ac
+                            }))
                         ))
                     }
                 }
@@ -266,7 +272,8 @@ const FormEgresos = () => {
                 observaciones: '',
                 id_comprobante_pago: egreso.id_comprobante_pago,
                 numero_comprobante: '',
-                centro_costo: ''
+                centro_costo: '',
+                id_stock: ''
             })
             setValidated(false);
             setDatosValidacion([]);
@@ -375,6 +382,31 @@ const FormEgresos = () => {
                                         </Form.Select>
                                     </FloatingLabel>
                                 </Form.Group>
+                            }
+                            {showStock &&
+                                <Row>
+                                    <Col xs={6} sm={6}>
+                                        <Form.Group className="mb-3" >
+                                            <FloatingLabel label="Material">
+                                                <Form.Select onChange={handleChangeForm} name="id_stock" value={egreso.id_stock} required>
+                                                    <option value=""></option>
+                                                    {stock.map((material) => (
+                                                        <option key={material.id_stock} value={material.id_stock}>
+                                                            {material.nombre_stock} ${formatNumber(material.restante_valor)}
+                                                        </option>
+                                                    ))}
+                                                </Form.Select>
+                                            </FloatingLabel>
+                                        </Form.Group>
+                                    </Col>
+                                    <Col xs={6} sm={6}>
+                                        <FloatingLabel controlId="floatingInputGrid" label="Usar">
+                                            <NumberFormat customInput={Form.Control} decimalSeparator={","} thousandSeparator={"."}
+                                                onChange={handleChangeForm} name={"valor_pago"} value={egreso.valor_pago} required />
+                                        </FloatingLabel>
+                                    </Col>
+                                </Row>
+
                             }
                             <Form.Group className="mb-3" >
                                 <FloatingLabel label="Forma en que se realizo el pago">

@@ -122,7 +122,7 @@ const FormProyectos = () => {
                     auxAlquilerMonto = auxAlquilerMonto.replace(/\,/g, '.');
                     auxAlquilerMonto = new Decimal(auxAlquilerMonto);
 
-                    auxAlquilerTotal = auxAlquilerMonto.sum(auxAlquilerTotal).toNumber();
+                    auxAlquilerTotal = auxAlquilerMonto.add(auxAlquilerTotal).toNumber();
                     
                     auxAlquileres[i] = {
                         id_modulo: auxAlquilerIdM,

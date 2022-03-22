@@ -4,16 +4,13 @@ import { Accordion, Row, Col } from 'react-bootstrap';
 //Hooks
 import { formatNumber } from '../../../hooks/useUtils';
 import { useGetModulos } from '../../../hooks/useModulos';
-//import { useFiltros } from '../../../hooks/useFiltros';
 
 //Css
 import './Modulos.css';
-//import * as Icons from 'react-bootstrap-icons';
-//import SpinnerC from '../../utils/spinner/SpinnerC';
 
 const Modulos = () => {
     const { modulos } = useGetModulos();
-    console.log(modulos)
+
     return (<>
         <div>
             <Row>

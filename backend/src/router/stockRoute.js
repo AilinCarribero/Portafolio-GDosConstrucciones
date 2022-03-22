@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
 
-const {  } = require('../controllers/');
+const { insertStock, listStock, updateStockRestante } = require('../controllers/stockController');
 const { verifyToken } = require('../middlewares/authVerify');
 
-router.get('/', verifyToken, );
-router.get('/', verifyToken, );
+router.post('/insert', verifyToken, insertStock);
+router.post('/update', verifyToken, updateStockRestante);
+router.get('/', verifyToken, listStock);
 
 module.exports = router;

@@ -4,6 +4,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Accordion, Row, Col, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import CentrosCostos from './CentrosCostos';
 import Modulos from '../modulos/Modulos';
+import Materiales from '../material/Materiales';
 
 //Hooks
 import { formatNumber } from '../../../hooks/useUtils';
@@ -370,18 +371,23 @@ const Proyectos = () => {
                 <Col>
                     <button className={menu == 'alquileres' ?'menu-inicio-button-active' : 'menu-inicio-button-off'} onClick={handleButton} name="alquileres">Alquileres</button>
                 </Col>
-                {user.rango == 'admin' &&
+                {user.rango == 'admin' &&<>
                     <Col>
                         <button className={menu == 'modulos' ?'menu-inicio-button-active' : 'menu-inicio-button-off'} onClick={handleButton} name="modulos">Modulos</button>
                     </Col>
-                }
+                    <Col>
+                        <button className={menu == 'materiales' ?'menu-inicio-button-active' : 'menu-inicio-button-off'} onClick={handleButton} name="materiales">Materiales</button>
+                    </Col>
+                </>}
             </Row>
             <Row>
                 {
+                    /*Si no es modulo ni materiales es centro de costo. Si no es modulo es materiales. Si es modulo*/
                     menu != 'modulos' ?
-                        <CentrosCostos proyectos={proyectosContext} mostrar={menu} />
-                        :
-                        <Modulos />
+                        menu != 'materiales' ?
+                            <CentrosCostos proyectos={proyectosContext} mostrar={menu} />
+                                : <Materiales />
+                        : <Modulos />
                 }
             </Row>
         </div >

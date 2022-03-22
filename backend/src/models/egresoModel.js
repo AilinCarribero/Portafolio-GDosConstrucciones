@@ -45,6 +45,10 @@ module.exports = ( sequelize, type ) => {
             type: type.INTEGER,
             isNumeric: true
         },
+        id_stock: {
+            type: type.INTEGER,
+            isNumeric: true
+        },
         valor_usd: type.DOUBLE,
     });
 }

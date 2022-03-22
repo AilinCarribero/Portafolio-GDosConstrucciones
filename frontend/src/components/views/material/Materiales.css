@@ -1,0 +1,21 @@
+/*------------------------------------------------------FormMateriales----------------------------------------------*/
+.form-center{
+    position: relative;
+    top: 5px;
+    bottom: 15px;
+}
+
+.icon-sum{
+    border: transparent;
+    background-color: transparent;
+    margin-top: -5px;
+}
+
+.icon-sum:hover{
+    color: grey;
+}
+
+/*------------------------------------------------------ModRestante----------------------------------------------*/
+.mod-restante-input{
+    margin-bottom: 10px;
+}
