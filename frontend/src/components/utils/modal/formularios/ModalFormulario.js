@@ -7,7 +7,7 @@ import FormMateriales from "../../../views/material/FormMateriales";
 //Css
 import "./Modal.css";
 
-const ModalFormulario = ({ formulario, show, setShow }) => {
+const ModalFormulario = ({ formulario, show, setShow, setStock, countMat }) => {
     const handleClose = () => setShow(false);
 
     return(<>
@@ -18,7 +18,7 @@ const ModalFormulario = ({ formulario, show, setShow }) => {
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body className="modal-content">
-                {formulario == 'materiales' && <FormMateriales close={handleClose} />}
+                {formulario == 'materiales' && <FormMateriales close={handleClose} setStock={setStock} />}
             </Modal.Body>
         </Modal>
     </>)

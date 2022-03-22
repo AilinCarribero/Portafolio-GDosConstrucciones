@@ -14,7 +14,7 @@ import * as Icons from 'react-bootstrap-icons';
 
 const Materiales = () => {
     const { stock, setStock } = useGetStock();
-    
+    console.log(stock);
     const [showForm, setShowForm] = useState(false);
     const [showModRestante, setShowModRestante] = useState(false);
     const [paramMaterial, setParamMaterial] = useState([]);
@@ -26,7 +26,7 @@ const Materiales = () => {
 
     return (<>
         <Button onClick={() => setShowForm(!showForm)} variant="dark" >Agregar material</Button>
-        <ModalFormulario formulario={'materiales'} show={showForm} setShow={setShowForm} />
+        <ModalFormulario formulario={'materiales'} show={showForm} setShow={setShowForm} setStock={setStock} />
         {showModRestante && <ModRestante show={showModRestante} stock={paramMaterial} setShow={setShowModRestante} setStock={setStock}/>}
 
         <Accordion>

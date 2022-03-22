@@ -13,10 +13,18 @@ exports.insertStock = async (req, res) => {
     try {
         //Inserta el nuevo material
         Stock.create(req.body).then(response => {
-            response.todoOk = "Ok";
-            response.statusText = "Ok";
-
-            res.json(response);
+            Stock.findAll({
+                include: [{
+                    model: Auth
+                }]
+            }).then(response => {
+                response.statusText = "Ok";
+                response.status = 200;
+                res.json(response);
+            }).catch(error => {
+                console.error(error);
+                res.json(error);
+            });
         }).catch(err => {
             err.todoMal = "Error";
 

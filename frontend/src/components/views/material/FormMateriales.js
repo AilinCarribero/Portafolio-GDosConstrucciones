@@ -12,7 +12,7 @@ import { insertStock } from "../../../services/apiStock";
 //Css
 import "./Materiales.css";
 
-const FormMateriales = ({ close }) => {
+const FormMateriales = ({ close, setStock }) => {
     const { user } = useUser();
 
     const [newMaterial, setNewMaterial] = useState({
@@ -53,6 +53,8 @@ const FormMateriales = ({ close }) => {
 
                 if (resNewMaterial.todoOk == 'Ok' || resNewMaterial.statusText == 'OK' || resNewMaterial.status == 200) {
                     ToastComponent('success');
+
+                    setStock(resNewMaterial.data);
 
                     setNewMaterial({
                         nombre_stock: '',
