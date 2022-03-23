@@ -388,7 +388,7 @@ const FormEgresos = () => {
                                     <Col xs={6} sm={6}>
                                         <Form.Group className="mb-3" >
                                             <FloatingLabel label="Material">
-                                                <Form.Select onChange={handleChangeForm} name="id_stock" value={egreso.id_stock} required>
+                                                <Form.Select onChange={handleChangeForm} name="id_stock" value={egreso.id_stock}>
                                                     <option value=""></option>
                                                     {stock.map((material) => (
                                                         <option key={material.id_stock} value={material.id_stock}>
@@ -402,7 +402,7 @@ const FormEgresos = () => {
                                     <Col xs={6} sm={6}>
                                         <FloatingLabel controlId="floatingInputGrid" label="Usar">
                                             <NumberFormat customInput={Form.Control} decimalSeparator={","} thousandSeparator={"."}
-                                                onChange={handleChangeForm} name={"valor_pago"} value={egreso.valor_pago} required />
+                                                onChange={handleChangeForm} name={"valor_pago"} value={egreso.valor_pago} />
                                         </FloatingLabel>
                                     </Col>
                                 </Row>
