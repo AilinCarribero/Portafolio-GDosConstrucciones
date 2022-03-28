@@ -15,7 +15,32 @@
     color: grey;
 }
 
+.text-total{
+    margin-top: -15px !important;
+    margin-left: 5px;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+.text-small{
+    font-size: 12px !important;
+    margin-left: 5px;
+}
+
 /*------------------------------------------------------ModRestante----------------------------------------------*/
 .mod-restante-input{
     margin-bottom: 10px;
+}
+
+/*------------------------------------------------------Materiales----------------------------------------------*/
+.title-actions{
+    font-size: 15px;
+    font-weight: bold;
+    margin-bottom: 3px;
+}
+
+.border-top{
+    border-top: 5px solid #000000 !important;
+    padding-top: 5px;
+    margin-top: 5px !important;
 }

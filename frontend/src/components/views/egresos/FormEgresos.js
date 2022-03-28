@@ -11,7 +11,7 @@ import { useGetComprobantesPago } from '../../../hooks/useComprobantePago';
 import { ToastComponent } from '../../../hooks/useUtils';
 import { useGetCentroCosto } from '../../../hooks/useCentroCosto';
 import { useGetStock } from "../../../hooks/useStock";
-import { formatNumber } from "../../../hooks/useUtils";
+import { formatNumber, desformatNumber } from "../../../hooks/useUtils";
 
 //Servicios
 import { insertEgreso } from '../../../services/apiEgresos';
@@ -24,6 +24,8 @@ import './Egresos.css';
 
 const FormEgresos = () => {
     const { user } = useUser();
+
+    /*Declaracion de variables de fecha*/
     const newDate = new Date();
     const año = newDate.getFullYear();
     const dia = newDate.getDate();
@@ -50,7 +52,8 @@ const FormEgresos = () => {
         id_comprobante_pago: '',
         numero_comprobante: '',
         centro_costo: '',
-        id_stock: ''
+        id_stock: '',
+        cantidad: 0
     });
 
     //Variables con informacion
@@ -79,13 +82,21 @@ const FormEgresos = () => {
     //Variables para validacion
     const [validated, setValidated] = useState(false);
 
+    const filtarMaterial = () => {
+        if (egreso.id_stock) {
+            return stock.find(material => egreso.id_stock == material.id_stock)
+        } else {
+            return '0'
+        }
+    }
+
     const handleChangeForm = (e) => {
         const targetName = e.target.name;
-        const targetValue = e.target.value;
+        let targetValue = e.target.value;
         //const targetType = e.target.type;
         const targetCheck = e.target.checked;
 
-        //console.log(targetName + ' - ' + targetValue + ' - ' + targetType + ' - ' + targetCheck)
+        //console.log(targetName + ' - ' + targetValue + ' - ' + targetCheck)
 
         if (targetName == 'cantCheque') {
             setCantCheque(targetValue);
@@ -110,6 +121,20 @@ const FormEgresos = () => {
                     [targetName]: targetValue
                 }))
             }
+        } else if (targetName == "cantidad") {
+            const material = filtarMaterial();
+            targetValue = targetValue > material.cantidad ? material.cantidad : targetValue;
+            const auxNumero = desformatNumber(targetValue);
+
+            /* Si lo que se esta ingresando es un valor de unidad entonces se debe multiplicar por la cantidad que esta guardado, 
+            en caso de que se este ingresando la cantidad entonces el valor unitario que esta guardado debe multiplicarse por la 
+            cantidad que se esta ingresando */
+            const auxValorPago = material.valor_unidad * auxNumero;
+            setEgreso(prevEgreso => ({
+                ...prevEgreso,
+                [targetName]: targetValue,
+                valor_pago: auxValorPago
+            }))
         } else {
             setEgreso(prevEgreso => ({
                 ...prevEgreso,
@@ -131,10 +156,9 @@ const FormEgresos = () => {
         if (targetName === 'id_analisis_costo') {
             analisisCostos.forEach((analisisCosto) => {
                 if (analisisCosto.id_analisis_costo == targetValue) {
-                    setShowDAC(analisisCosto.id_centro_costo == 1 && targetValue != 6 ? true : false);//... pertence a un AC de CCC entonces mostrara para elegir el detalle del AC de CCC
-                    setShowStock(analisisCosto.id_centro_costo == 1 && targetValue == 6 ? true : false);//... pertence a un AC de CCC entonces y es Desacopio de materiales entonces mostrara para elegir un material
-                    setShowStock(analisisCosto.id_centro_costo == 2 && targetValue == 1 ? true : false);//... pertence a un AC de CCP entonces y es materiales entonces mostrara para elegir un material
-                    if (targetValue == 6) {
+                    setShowDAC(analisisCosto.id_centro_costo == 1 && targetValue != 6 && targetValue != 12 && targetValue != 11 ? true : false);//... pertence a un AC de CCC entonces mostrara para elegir el detalle del AC de CCC
+                    setShowStock(targetValue == 12 || targetValue == 11 ? true : false);//... es Desacopio de materiales entonces mostrara para elegir un material
+                    if (targetValue == 6 || targetValue == 12 || targetValue == 11) {
                         detalleAC.map((detalleac) => (
                             detalleac.detalle_ac == egreso.id_proyecto.slice(4, 9)
                             && setEgreso(prevEgreso => ({
@@ -181,10 +205,7 @@ const FormEgresos = () => {
             /*En caso de tener cuotas el valor del importe debe dividirse en partes iguales acorde a la cantidad de cuotas 
             seleccionadas y se debera diferir cada cuota a 30 dias despues de la siguiente */
             if (egreso.cuota > 0) {
-                let auxCuotaValor = egreso.valor_pago.toString();
-                auxCuotaValor = auxCuotaValor.replace(/\./g, '');
-                auxCuotaValor = auxCuotaValor.replace(/\,/g, '.');
-                auxCuotaValor = parseFloat(auxCuotaValor);
+                let auxCuotaValor = desformatNumber(egreso.valor_pago);
 
                 const valorCuota = egreso.valor_pago ? auxCuotaValor / egreso.cuota : 0;
 
@@ -207,7 +228,7 @@ const FormEgresos = () => {
                 /*Si existen cheques entonces guardar en una variable aux los datos de ingreso + los datos del cheque*/
                 for (let i = 0; i < cantCheque; i++) {
                     const auxChequeFD = cheques['fechaD' + i];
-                    const auxChequeM = cheques['monto' + i];
+                    const auxChequeM = desformatNumber(cheques['monto' + i]);
 
                     auxEgreso[i] = {
                         ...egreso,
@@ -248,8 +269,8 @@ const FormEgresos = () => {
                 ToastComponent('error');
             }
         }
-
-        if (resEgreso.data.todoOk == 'Ok' || resEgreso.statusText == 'OK' || resEgreso.status == 200) {
+        
+        if ((resEgreso.data.todoOk == 'Ok' || resEgreso.statusText == 'OK' || resEgreso.status == 200) && !resEgreso.data.todoMal) {
             ToastComponent('success');
 
             //En caso de tener algun elemento extra mostrandose se vuelve a ocular
@@ -385,28 +406,34 @@ const FormEgresos = () => {
                             }
                             {showStock &&
                                 <Row>
-                                    <Col xs={6} sm={6}>
+                                    <Col xs={12} sm={12}>
                                         <Form.Group className="mb-3" >
                                             <FloatingLabel label="Material">
                                                 <Form.Select onChange={handleChangeForm} name="id_stock" value={egreso.id_stock} required>
                                                     <option value=""></option>
                                                     {stock.map((material) => (
                                                         <option key={material.id_stock} value={material.id_stock}>
-                                                            {material.nombre_stock} ${formatNumber(material.restante_valor)}
+                                                            {material.nombre_stock} | {material.cantidad}{material.medida == 'm2' && 'm2'} | ${formatNumber(material.restante_valor)}
                                                         </option>
                                                     ))}
                                                 </Form.Select>
                                             </FloatingLabel>
                                         </Form.Group>
                                     </Col>
-                                    <Col xs={6} sm={6}>
-                                        <FloatingLabel controlId="floatingInputGrid" label="Usar">
+                                    <Col xs={12} sm={12}>
+                                        <FloatingLabel controlId="floatingInputGrid" label="Cantidad">
                                             <NumberFormat customInput={Form.Control} decimalSeparator={","} thousandSeparator={"."}
-                                                onChange={handleChangeForm} name={"valor_pago"} value={egreso.valor_pago} required />
+                                                onChange={handleChangeForm} name={"cantidad"} value={egreso.cantidad} required />
                                         </FloatingLabel>
                                     </Col>
+                                    <Col xs={12} sm={12} className="text-total-stock-egreso">
+                                        <Form.Text>
+                                            Valor Unitario (${formatNumber(egreso.id_stock ? filtarMaterial().valor_unidad : 0)})
+                                            x Cantidad ({formatNumber(egreso.cantidad)})
+                                            = ${formatNumber(egreso.valor_pago)}
+                                        </Form.Text>
+                                    </Col>
                                 </Row>
-
                             }
                             <Form.Group className="mb-3" >
                                 <FloatingLabel label="Forma en que se realizo el pago">
@@ -425,22 +452,24 @@ const FormEgresos = () => {
                                     <Form.Control onChange={handleChangeForm} name="fecha_pago" type="date" value={egreso.fecha_pago} required />
                                 </FloatingLabel>
                             </Form.Group>
-                            <Form.Group className="mb-3">
-                                <Row key={`inline-radio`} className="check">
-                                    <Col xs={4} sm={4} >
-                                        <Form.Check inline onChange={handleChangeForm} label="ARG$" name="moneda" value="0" type="radio" checked={checkUSD == '0'} />
-                                    </Col>
-                                    <Col xs={8} sm={8} >
-                                        <Form.Check inline onChange={handleChangeForm} label="USD$" name="moneda" value="1" type="radio" checked={checkUSD == '1'} />
-                                    </Col>
-                                </Row>
-                                {!showCheque &&
-                                    <FloatingLabel label="Importe">
-                                        <NumberFormat customInput={Form.Control} decimalSeparator={","} thousandSeparator={"."}
-                                            onChange={handleChangeForm} name={checkUSD == 0 ? "valor_pago" : "valor_usd"} value={checkUSD == 0 ? egreso.valor_pago : egreso.valor_usd} required />
-                                    </FloatingLabel>
-                                }
-                            </Form.Group>
+                            {!showStock &&
+                                <Form.Group className="mb-3">
+                                    <Row key={`inline-radio`} className="check">
+                                        <Col xs={4} sm={4} >
+                                            <Form.Check inline onChange={handleChangeForm} label="ARG$" name="moneda" value="0" type="radio" checked={checkUSD == '0'} />
+                                        </Col>
+                                        <Col xs={8} sm={8} >
+                                            <Form.Check inline onChange={handleChangeForm} label="USD$" name="moneda" value="1" type="radio" checked={checkUSD == '1'} />
+                                        </Col>
+                                    </Row>
+                                    {!showCheque &&
+                                        <FloatingLabel label="Importe">
+                                            <NumberFormat customInput={Form.Control} decimalSeparator={","} thousandSeparator={"."}
+                                                onChange={handleChangeForm} name={checkUSD == 0 ? "valor_pago" : "valor_usd"} value={checkUSD == 0 ? egreso.valor_pago : egreso.valor_usd} required />
+                                        </FloatingLabel>
+                                    }
+                                </Form.Group>
+                            }
                             {showCuotas &&
                                 <Form.Group className="mb-3" >
                                     <FloatingLabel label="Cantidad de cuotas">

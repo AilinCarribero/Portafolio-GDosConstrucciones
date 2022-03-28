@@ -36,6 +36,12 @@
     width: 100%;
 }
 
+.text-total-stock-egreso{
+    margin-left: -60px;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
 /*Vista*/
 .acordion{
     margin-top: 5px !important;

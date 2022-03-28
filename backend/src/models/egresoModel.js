@@ -38,6 +38,7 @@ module.exports = ( sequelize, type ) => {
         },
         id_comprobante_pago: {
             type: type.INTEGER,
+            defaultValue: '6',
             isNumeric: true
         },
         numero_comprobante: type.STRING(100),

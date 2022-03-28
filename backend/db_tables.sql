@@ -76,6 +76,8 @@ INSERT INTO analisis_costo (analisis_costo, requiere_detalle, id_centro_costo) V
 INSERT INTO analisis_costo (analisis_costo, requiere_detalle, id_centro_costo) VALUES ('Gasto Operativo', '1', '3');
 INSERT INTO analisis_costo (analisis_costo, requiere_detalle, id_centro_costo) VALUES ('Alquiler', '1', '3');
 INSERT INTO analisis_costo (analisis_costo, requiere_detalle, id_centro_costo) VALUES ('Otro', '1', '3');
+INSERT INTO analisis_costo (analisis_costo, requiere_detalle, id_centro_costo) VALUES ('Desacopio de Materiales', '0', '2');
+INSERT INTO analisis_costo (analisis_costo, requiere_detalle, id_centro_costo) VALUES ('Desacopio de Materiales', '1', '1');
 
 /* Create new table */
 create table detalle_analisis_costo (id_detalle_ac int auto_increment primary key, id_analisis_costo int, detalle_ac varchar(100));

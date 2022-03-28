@@ -1,12 +1,23 @@
 import { toast } from 'react-toastify';
 
-//Formatea el numero que se le pasa en formato moneda con no mas de 2 decimales
+//Formatea el numero que se le pasa en formato moneda con no mas de 2 decimales para ser mostrados
 export const formatNumber = (numero) => {
+    const numValido = numero ? numero : 0;
     return new Intl.NumberFormat("ES-AR", {
         style: "decimal",
         minimumFractionDigits: 1,
         maximumFractionDigits: 2
-    }).format(numero)
+    }).format(numValido)
+}
+
+/* Desformatea el numero para ser enviado en un formato que el sistema entienda */
+export const desformatNumber = (number) => {
+    let newNumber = number.toString();
+    newNumber = newNumber.replace(/\./g, '');
+    newNumber = newNumber.replace(/\,/g, '.');
+    newNumber = parseFloat(newNumber);
+    
+    return newNumber;
 }
 
 //Activa un toast acorde al estado que se le pasa. Se le puede asignar un mensaje o usar el predeterminado.
@@ -26,14 +37,3 @@ export const ToastComponent = (estado, mensaje) => {
         { theme: "dark", autoClose: 5000, toastId: customId }
     );
 }
-
-/*export const ValidacionAlert = (tipo, datos) => {
-    const [ show, setShow ] = useState(true);
-
-    if(!datos){
-        ToastComponent('warn','No existen los datos para validar')
-    } else if(tipo == 'ingresos'){
-        return ()
-        //if(tipo == 'egresos')
-    }
-}*/

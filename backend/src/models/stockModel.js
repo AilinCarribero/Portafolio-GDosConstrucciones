@@ -6,8 +6,26 @@ module.exports = ( sequelize, type ) => {
             autoIncrement: true
         },
         nombre_stock: type.STRING(100),
-        valor: type.DOUBLE,
-        restante_valor: type.DOUBLE,
+        valor: {
+            type: type.DOUBLE,
+            defaultValue: 0
+        },
+        valor_unidad: {
+            type: type.DOUBLE,
+            defaultValue: 0
+        },
+        cantidad: {
+            type: type.DOUBLE,
+            defaultValue: 0
+        },
+        medida: {
+            type: type.STRING(20),
+            defaultValue: "unidad"
+        },
+        restante_valor: {
+            type: type.DOUBLE,
+            defaultValue: 0
+        },
         salida: { 
             type: type.DATE,
             defaultValue: type.NOW

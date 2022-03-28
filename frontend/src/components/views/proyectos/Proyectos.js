@@ -96,7 +96,7 @@ const Proyectos = () => {
 
                     if (proyecto.id_unidad_negocio == '1') {
                         proyecto.egresos.map(egreso => {
-                            if (egreso.id_proyecto == proyecto.id_proyecto) {
+                            if (egreso.id_proyecto == proyecto.id_proyecto && egreso.id_analisis_costo != 11) {
                                 auxPPE += parseFloat(egreso.valor_pago);
                                 auxTotalEgresos += parseFloat(egreso.valor_pago);
                                 auxTotalUSDE += parseFloat(egreso.valor_usd);
@@ -112,7 +112,7 @@ const Proyectos = () => {
                     }
                     if (proyecto.id_unidad_negocio == '2') {
                         proyecto.egresos.map(egreso => {
-                            if (egreso.id_proyecto == proyecto.id_proyecto) {
+                            if (egreso.id_proyecto == proyecto.id_proyecto && egreso.id_analisis_costo != 11) {
                                 auxDE += parseFloat(egreso.valor_pago);
                                 auxTotalEgresos += parseFloat(egreso.valor_pago);
                                 auxTotalUSDE += parseFloat(egreso.valor_usd);
@@ -128,7 +128,7 @@ const Proyectos = () => {
                     }
                     if (proyecto.id_unidad_negocio == '3') {
                         proyecto.egresos.map(egreso => {
-                            if (egreso.id_proyecto == proyecto.id_proyecto) {
+                            if (egreso.id_proyecto == proyecto.id_proyecto && egreso.id_analisis_costo != 11) {
                                 auxME += parseFloat(egreso.valor_pago);
                                 auxTotalEgresos += parseFloat(egreso.valor_pago);
                                 auxTotalUSDE += parseFloat(egreso.valor_usd);
@@ -144,7 +144,8 @@ const Proyectos = () => {
                     }
                 } else if (proyecto.id_centro_costo == '1') {
                     proyecto.egresos.map(egreso => {
-                        if (egreso.id_proyecto == proyecto.id_proyecto) {
+                        console.log(egreso);
+                        if (egreso.id_proyecto == proyecto.id_proyecto && egreso.id_analisis_costo != 12) {
                             /*if (egreso.analisis_costo == 'Bienes de Uso' || egreso.analisis_costo == 'Gastos de Empresa') {
                                 const partesIguales = parseFloat(egreso.valor_pago) / 3;
                                 auxDE += parseFloat(partesIguales);

@@ -1,4 +1,4 @@
-/*Global*/
+/*--------Global------*/
 .button-validacion{
     width: 100%;
     align-items: center;
@@ -21,6 +21,10 @@
 
 .texto{
     margin-bottom: 10px;
+}
+
+.fondo-desenfocado{
+    background-color: rgba(0,0,0,0.7);
 }
 /*Egreso*/
 

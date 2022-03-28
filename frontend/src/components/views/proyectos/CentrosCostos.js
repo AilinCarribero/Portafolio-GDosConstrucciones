@@ -31,10 +31,11 @@ const CentrosCostos = ({ proyectos, mostrar }) => {
     const egresosProyecto = (PEgresos) => {
         let auxEgresosProyecto = 0;
 
-        PEgresos.map(egreso => {
-            auxEgresosProyecto += parseFloat(egreso.valor_pago);
-        })
-
+        if (PEgresos) {
+            PEgresos.map(egreso => {
+                auxEgresosProyecto += parseFloat(egreso.valor_pago);
+            })
+        }
         return (auxEgresosProyecto)
     }
 
@@ -42,10 +43,11 @@ const CentrosCostos = ({ proyectos, mostrar }) => {
     const egresosUSDProyecto = (PUSDEgresos) => {
         let auxEgresosProyecto = 0;
 
-        PUSDEgresos.map(egreso => {
-            auxEgresosProyecto += parseFloat(egreso.valor_usd);
-        })
-
+        if (PUSDEgresos) {
+            PUSDEgresos.map(egreso => {
+                auxEgresosProyecto += parseFloat(egreso.valor_usd);
+            })
+        }
         return (auxEgresosProyecto)
     }
 
@@ -53,10 +55,11 @@ const CentrosCostos = ({ proyectos, mostrar }) => {
     const ingresosProyecto = (PIngresos) => {
         let auxIngresosProyecto = 0;
 
-        PIngresos.map(ingreso => {
-            auxIngresosProyecto += parseFloat(ingreso.valor_cobro);
-        })
-
+        if (PIngresos) {
+            PIngresos.map(ingreso => {
+                auxIngresosProyecto += parseFloat(ingreso.valor_cobro);
+            })
+        }
         return (auxIngresosProyecto)
     }
 
@@ -64,10 +67,11 @@ const CentrosCostos = ({ proyectos, mostrar }) => {
     const ingresosUSDProyecto = (PUSDIngresos) => {
         let auxIngresosProyecto = 0;
 
-        PUSDIngresos.map(ingreso => {
-            auxIngresosProyecto += parseFloat(ingreso.valor_usd);
-        })
-
+        if (PUSDIngresos) {
+            PUSDIngresos.map(ingreso => {
+                auxIngresosProyecto += parseFloat(ingreso.valor_usd);
+            })
+        }
         return (auxIngresosProyecto)
     }
 
