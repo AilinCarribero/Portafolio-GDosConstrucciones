@@ -409,7 +409,7 @@ const FormEgresos = () => {
                                     <Col xs={12} sm={12}>
                                         <Form.Group className="mb-3" >
                                             <FloatingLabel label="Material">
-                                                <Form.Select onChange={handleChangeForm} name="id_stock" value={egreso.id_stock} required>
+                                                <Form.Select onChange={handleChangeForm} name="id_stock" value={egreso.id_stock}>
                                                     <option value=""></option>
                                                     {stock.map((material) => (
                                                         <option key={material.id_stock} value={material.id_stock}>
