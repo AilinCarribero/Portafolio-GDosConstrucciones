@@ -144,7 +144,6 @@ const Proyectos = () => {
                     }
                 } else if (proyecto.id_centro_costo == '1') {
                     proyecto.egresos.map(egreso => {
-                        console.log(egreso);
                         if (egreso.id_proyecto == proyecto.id_proyecto && egreso.id_analisis_costo != 12) {
                             /*if (egreso.analisis_costo == 'Bienes de Uso' || egreso.analisis_costo == 'Gastos de Empresa') {
                                 const partesIguales = parseFloat(egreso.valor_pago) / 3;
