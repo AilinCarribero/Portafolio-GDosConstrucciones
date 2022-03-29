@@ -18,6 +18,7 @@ exports.insertEgreso = async (req, res) => {
             dato.id_detalle_ac = !dato.id_detalle_ac ? 0 : dato.id_detalle_ac;
             dato.id_comprobante_pago = !dato.id_comprobante_pago ? 6 : dato.id_comprobante_pago;
             dato.numero_comprobante = !dato.numero_comprobante ? 0 : dato.numero_comprobante;
+            dato.id_stock = !dato.id_stock ? 0 : dato.id_stock;
 
             console.log(dato);
             Egreso.create(dato).then(response => {
