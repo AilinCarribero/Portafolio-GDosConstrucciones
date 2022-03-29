@@ -135,6 +135,11 @@ const FormEgresos = () => {
                 [targetName]: targetValue,
                 valor_pago: auxValorPago
             }))
+        } else if(targetName == "valor_pago"){
+            setEgreso(prevEgreso => ({
+                ...prevEgreso,
+                [targetName]: desformatNumber(targetValue)
+            }))
         } else {
             setEgreso(prevEgreso => ({
                 ...prevEgreso,
