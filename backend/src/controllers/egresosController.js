@@ -20,6 +20,7 @@ exports.insertEgreso = async (req, res) => {
             dato.numero_comprobante = !dato.numero_comprobante ? 0 : dato.numero_comprobante;
 
             Egreso.create(dato).then(response => {
+                console.log(dato);
                 //Si tiene un id_stock significa que va a manejar material en stock
                 if (dato.id_stock) {
                     //Buscamos el material que va a utilizar
