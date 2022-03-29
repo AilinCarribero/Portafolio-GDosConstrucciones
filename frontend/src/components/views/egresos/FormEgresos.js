@@ -263,6 +263,7 @@ const FormEgresos = () => {
                 if (!egreso.id_comprobante_pago) {
                     egreso.id_comprobante_pago = 6;
                 }
+                console.log(egreso);
                 resEgreso = await insertEgreso(egreso);
             } catch (error) {
                 console.log(error);
