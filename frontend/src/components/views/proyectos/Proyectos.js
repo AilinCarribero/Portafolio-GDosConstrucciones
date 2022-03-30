@@ -31,13 +31,6 @@ const Proyectos = () => {
         setProyectosContext(proyectos);
     }, [proyectos])
 
-    //Si los filtros son modificados se deben modificar los proyectos y mostrar los proyectos filtrados
-    /*useEffect(() => {
-        if (filtrosProyectosContext) {
-            setProyectos(filtrosProyectosContext);
-        }
-    }, [filtrosProyectosContext]);*/
-
     const [spinner, setSpinner] = useState(true);
     const [menu, setMenu] = useState('ccc-cce');
 

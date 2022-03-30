@@ -345,7 +345,7 @@ const FormEgresos = () => {
                     <Card.Body>
                         <Form noValidate validated={validated} onSubmit={handleValidacion} >
                             <Form.Group className="mb-3" >
-                                <FloatingLabel label="Eligue el tipo de Centro de Costo">
+                                <FloatingLabel label="Tipo de Centro de Costo">
                                     <Form.Select onChange={handleChangeForm} name="centro_costo" value={egreso.centro_costo} required >
                                         <option value=""> </option>
                                         {
@@ -360,7 +360,7 @@ const FormEgresos = () => {
                             </Form.Group>
                             {showProyecto &&
                                 <Form.Group className="mb-3" >
-                                    <FloatingLabel label="Eligue el proyecto">
+                                    <FloatingLabel label="Proyecto">
                                         <Form.Select onChange={handleChangeForm} name="id_proyecto" value={egreso.id_proyecto} required >
                                             <option value=""> </option>
                                             {
