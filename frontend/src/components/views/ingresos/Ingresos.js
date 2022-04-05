@@ -35,7 +35,7 @@ const Ingresos = () => {
         <Row>
             <Col md={6} className="titulo-ingresos-vista">Ingresos de {id} </Col>
             <Col xs={5} md={2} className="titulo-ingresos-vista">${SumatoriaIngresos()}</Col>
-            <Col xs={5} md={2} className="titulo-ingresos-vista">$USD:{SumatoriaIngresosUSD()}</Col>
+            <Col xs={5} md={2} className="titulo-ingresos-vista">USD${SumatoriaIngresosUSD()}</Col>
         </Row>
         <Row className="acordion">
             <Accordion>

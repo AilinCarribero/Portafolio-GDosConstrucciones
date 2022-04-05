@@ -36,7 +36,7 @@ const Egresos = () => {
         <Row>
             <Col md={6} className="titulo-egresos-vista">Egresos de {id} </Col>
             <Col xs={5} md={2} className="titulo-egresos-vista">${SumatoriaEgresos()}</Col>
-            <Col xs={5} md={2} className="titulo-egresos-vista">$USD:{SumatoriaEgresosUSD()}</Col>
+            <Col xs={5} md={2} className="titulo-egresos-vista">USD${SumatoriaEgresosUSD()}</Col>
         </Row>
         <Row className="acordion">
             <Accordion>
