@@ -14,10 +14,29 @@ const Egresos = () => {
     const { id } = useParams();
     const { user } = useUser();
     const { egresos } = useGetEgresosId(id);
-console.log(egresos);
+
+    const SumatoriaEgresos = () => {
+        let sumaEgreso = 0;
+        egresos.map(egreso => {
+            sumaEgreso += egreso.valor_pago;
+        });
+
+        return formatNumber(sumaEgreso);
+    }
+
+    const SumatoriaEgresosUSD = () => {
+        let sumaEgreso = 0;
+        egresos.map(egreso => {
+            sumaEgreso += egreso.valor_usd;
+        })
+
+        return formatNumber(sumaEgreso);
+    }
     return (<>
         <Row>
-            <Col className="titulo-egresos-vista">{id}</Col>
+            <Col md={6} className="titulo-egresos-vista">Egresos de {id} </Col>
+            <Col xs={5} md={2} className="titulo-egresos-vista">${SumatoriaEgresos()}</Col>
+            <Col xs={5} md={2} className="titulo-egresos-vista">$USD:{SumatoriaEgresosUSD()}</Col>
         </Row>
         <Row className="acordion">
             <Accordion>

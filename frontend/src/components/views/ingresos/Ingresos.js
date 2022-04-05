@@ -13,9 +13,29 @@ const Ingresos = () => {
     const { id } = useParams();
     const { ingresos } = useGetIngresosId(id);
 
+    const SumatoriaIngresos = () => {
+        let sumaIngreso = 0;
+        ingresos.map(ingreso => {
+            sumaIngreso += ingreso.valor_cobro;
+        });
+
+        return formatNumber(sumaIngreso);
+    }
+
+    const SumatoriaIngresosUSD = () => {
+        let sumaIngreso = 0;
+        ingresos.map(ingreso => {
+            sumaIngreso += ingreso.valor_usd;
+        })
+
+        return formatNumber(sumaIngreso);
+    }
+
     return (<>
         <Row>
-            <Col className="titulo-ingresos-vista">{id}</Col>
+            <Col md={6} className="titulo-ingresos-vista">Ingresos de {id} </Col>
+            <Col xs={5} md={2} className="titulo-ingresos-vista">${SumatoriaIngresos()}</Col>
+            <Col xs={5} md={2} className="titulo-ingresos-vista">$USD:{SumatoriaIngresosUSD()}</Col>
         </Row>
         <Row className="acordion">
             <Accordion>
