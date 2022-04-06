@@ -210,10 +210,10 @@ const FormEgresos = () => {
             /*En caso de tener cuotas el valor del importe debe dividirse en partes iguales acorde a la cantidad de cuotas 
             seleccionadas y se debera diferir cada cuota a 30 dias despues de la siguiente */
             if (egreso.cuota > 0) {
-                let auxCuotaValor = desformatNumber(egreso.valor_pago);
-
+                let auxCuotaValor = egreso.valor_pago;
+console.log(auxCuotaValor, egreso.valor_pago)
                 const valorCuota = egreso.valor_pago ? auxCuotaValor / egreso.cuota : 0;
-
+console.log(valorCuota)
                 if (valorCuota !== 0) {
                     for (let i = 0; i < egreso.cuota; i++) {
                         const mesD = newDate.getMonth() + i + 1;
