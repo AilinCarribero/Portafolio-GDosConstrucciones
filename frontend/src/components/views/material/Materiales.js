@@ -20,13 +20,13 @@ const Materiales = () => {
     const [paramMaterial, setParamMaterial] = useState([]);
 
     const updateRestanteValor = (material) => {
-        setParamMaterial(material);
-        setShowModRestante(true);
+        setParamMaterial(material); //Material que se pasa al modal de modificar
+        setShowModRestante(true);//Abre el modal
     }
 
     return (<>
         <Button onClick={() => setShowForm(!showForm)} variant="dark" >Agregar material</Button>
-        <ModalFormulario formulario={'materiales'} show={showForm} setShow={setShowForm} setStock={setStock} />
+        <ModalFormulario formulario={'materiales'} show={showForm} setShow={setShowForm} updateNew={setStock} />
         {showModRestante && <ModRestante show={showModRestante} stock={paramMaterial} setShow={setShowModRestante} setStock={setStock} />}
 
         <Accordion>

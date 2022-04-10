@@ -1,6 +1,5 @@
 const { Egreso, FormaPago, Auth, AnalisisCosto, ComprobantePago, Stock } = require('../../db');
 const Decimal = require('decimal.js-light');
-const { desformatNumber } = require('../utils/numbers');
 
 //Agregar egreso
 exports.insertEgreso = async (req, res) => {
@@ -38,7 +37,7 @@ exports.insertEgreso = async (req, res) => {
                         if (datos.length - 1 == i) {
                             cantidad = new Decimal(stock.cantidad); //Esto viene de la base de datos
                             const front_cantidad = new Decimal(dato.cantidad); //Esto viene del front
-                            cantidad =  cantidad.minus(front_cantidad).toNumber();
+                            cantidad = cantidad.minus(front_cantidad).toNumber();
                         } else {
                             cantidad = stock.cantidad;
                         }
@@ -100,6 +99,8 @@ exports.listEgresos = async (req, res) => {
             model: AnalisisCosto
         }, {
             model: ComprobantePago
+        }, {
+            model: Stock
         }]
     }).then(response => {
         response.statusText = "Ok";
@@ -136,4 +137,56 @@ exports.listEgresosId = async (req, res) => {
         console.error(error);
         res.json(error);
     });
+}
+
+//Modificar egreso
+exports.updateEgreso = async (req, res) => {
+    const egreso = req.body;
+
+    egreso.fecha_diferido_pago = !egreso.fecha_diferido_pago ? '1000-01-01' : egreso.fecha_diferido_pago;
+    egreso.cuota = !egreso.cuota ? 0 : egreso.cuota;
+    egreso.cuotaNumero = !egreso.cuotaNumero ? 0 : egreso.cuotaNumero;
+    egreso.observaciones = !egreso.observaciones ? '' : egreso.observaciones;
+    egreso.id_detalle_ac = !egreso.id_detalle_ac ? 0 : egreso.id_detalle_ac;
+    egreso.id_comprobante_pago = !egreso.id_comprobante_pago ? 6 : egreso.id_comprobante_pago;
+    egreso.numero_comprobante = !egreso.numero_comprobante ? 0 : egreso.numero_comprobante;
+    egreso.id_stock = !egreso.id_stock ? 0 : egreso.id_stock;
+
+    Egreso.update(egreso, {
+        where: {
+            id_egreso: egreso.id_egreso
+        }
+    }).then(response => {
+        Egreso.findAll({
+            include: [{
+                model: FormaPago
+            }, {
+                model: Auth
+            }, {
+                model: AnalisisCosto
+            }, {
+                model: ComprobantePago
+            }, {
+                model: Stock
+            }],
+            where: {
+                id_proyecto: egreso.id_proyecto
+            }
+        }).then(response => {
+            response.statusText = "Ok";
+            response.status = 200;
+
+            res.json(response);
+        }).catch(err => {
+            err.todoMal = "Error al actualizar el egreso";
+            console.error(err);
+            res.json(err);
+            throw err;
+        });
+    }).catch(err => {
+        err.todoMal = "Error al actualizar el egreso";
+        console.error(err);
+        res.json(err);
+        throw err;
+    })
 }

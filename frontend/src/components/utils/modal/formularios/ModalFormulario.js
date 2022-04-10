@@ -1,13 +1,14 @@
 import React from "react";
 
 //Components
-import { Modal, Row, Col } from "react-bootstrap";
+import { Modal } from "react-bootstrap";
+import FormEgresos from "../../../views/egresos/FormEgresos";
 import FormMateriales from "../../../views/material/FormMateriales";
 
 //Css
 import "./Modal.css";
 
-const ModalFormulario = ({ formulario, show, setShow, setStock, countMat }) => {
+const ModalFormulario = ({ formulario, show, setShow, updateNew, informacion }) => {
     const handleClose = () => setShow(false);
 
     return(<>
@@ -18,7 +19,9 @@ const ModalFormulario = ({ formulario, show, setShow, setStock, countMat }) => {
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body className="modal-content">
-                {formulario == 'materiales' && <FormMateriales close={handleClose} setStock={setStock} />}
+                {formulario == 'materiales' && <FormMateriales close={handleClose} setStock={updateNew} />}
+                {formulario == 'egreso' && <FormEgresos close={handleClose} updateEgreso={informacion} setUpdateEgresos={updateNew} />}
+                {formulario == 'ingreso' && <FormMateriales close={handleClose} updateIngreso={informacion} setUpdateIngresos={updateNew} />}
             </Modal.Body>
         </Modal>
     </>)

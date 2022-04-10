@@ -14,7 +14,7 @@ import { useGetStock } from "../../../hooks/useStock";
 import { formatNumber, desformatNumber } from "../../../hooks/useUtils";
 
 //Servicios
-import { insertEgreso } from '../../../services/apiEgresos';
+import { insertEgreso, setUpdateEgreso } from '../../../services/apiEgresos';
 
 //Componentes
 import ValidacionEgreso from '../../utils/modal/validacion/ValidacionEgreso';
@@ -22,7 +22,7 @@ import ValidacionEgreso from '../../utils/modal/validacion/ValidacionEgreso';
 //Css
 import './Egresos.css';
 
-const FormEgresos = () => {
+const FormEgresos = ({ close, updateEgreso, setUpdateEgresos }) => {
     const { user } = useUser();
 
     /*Declaracion de variables de fecha*/
@@ -42,18 +42,19 @@ const FormEgresos = () => {
     //Datos a enviarse a la api para ingresar/modificar egresos
     const [egreso, setEgreso] = useState({
         id_user: user.id,
-        fecha_pago: new Date().toISOString().slice(0, 10),
-        id_proyecto: '',
-        valor_pago: 0,
-        valor_usd: 0,
-        id_forma_pago: '',
-        fecha_diferido_pago: '',
-        observaciones: '',
-        id_comprobante_pago: '',
-        numero_comprobante: '',
-        centro_costo: '',
-        id_stock: '',
-        cantidad: 0
+        fecha_pago: updateEgreso && updateEgreso.fecha_pago ? new Date(updateEgreso.fecha_pago).toISOString().slice(0, 10) : new Date().toISOString().slice(0, 10),
+        id_proyecto: updateEgreso && updateEgreso.id_proyecto ? updateEgreso.id_proyecto : '',
+        id_analisis_costo: updateEgreso && updateEgreso.analisis_costo ? updateEgreso.analisis_costo.id_analisis_costo : '',
+        valor_pago: updateEgreso && updateEgreso.valor_pago ? updateEgreso.valor_pago : 0,
+        valor_usd: updateEgreso && updateEgreso.valor_usd ? updateEgreso.valor_usd : 0,
+        id_forma_pago: updateEgreso && updateEgreso.forma_pago ? updateEgreso.forma_pago.id_forma_pago : '',
+        fecha_diferido_pago: updateEgreso && updateEgreso.fecha_diferido_pago ? new Date(updateEgreso.fecha_diferido_pago).toISOString().slice(0, 10) : '',
+        observaciones: updateEgreso && updateEgreso.observaciones ? updateEgreso.observaciones : '',
+        id_comprobante_pago: updateEgreso && updateEgreso.comprobante_pago.id_comprobante_pago ? updateEgreso.comprobante_pago.id_comprobante_pago : '',
+        numero_comprobante: updateEgreso && updateEgreso.numero_comprobante ? updateEgreso.numero_comprobante : '',
+        centro_costo: updateEgreso && updateEgreso.centro_costo ? updateEgreso.centro_costo.id_centro_costo : '',
+        id_stock: updateEgreso && updateEgreso.id_stock ? updateEgreso.id_stock : '',
+        cantidad: updateEgreso && updateEgreso.cantidad ? updateEgreso.cantidad : 0
     });
 
     //Variables con informacion
@@ -65,15 +66,15 @@ const FormEgresos = () => {
     const [auxEgresos, setAuxEgresos] = useState([]);
 
     //Checks
-    const [checkUSD, setCheckUSD] = useState(0);
+    const [checkUSD, setCheckUSD] = useState(updateEgreso && updateEgreso.valor_usd ? 1 : 0);
     const [checkComprobante, setCheckComprobante] = useState();
 
     //Eventos para mostrar partes del formulario
-    const [showProyecto, setShowProyecto] = useState(false);
-    const [showAC, setShowAC] = useState(false);
-    const [showDAC, setShowDAC] = useState(false);
+    const [showProyecto, setShowProyecto] = useState(updateEgreso && updateEgreso.id_proyecto ? true : false);
+    const [showAC, setShowAC] = useState(updateEgreso && updateEgreso.analisis_costo ? true : false); //analisis de costo
+    const [showDAC, setShowDAC] = useState(false); //detalle de analisis de costo
     const [showCuotas, setShowCuotas] = useState(false);
-    const [showFechaDif, setShowFechaDif] = useState(false);
+    const [showFechaDif, setShowFechaDif] = useState(updateEgreso && updateEgreso.fecha_diferido_pago > updateEgreso.fecha_pago ? true : false);
     const [showCheque, setShowCheque] = useState(false);
     const [showDataCheques, setShowDataCheques] = useState(false);
     const [showModal, setShowModal] = useState(false);
@@ -135,7 +136,7 @@ const FormEgresos = () => {
                 [targetName]: targetValue,
                 valor_pago: auxValorPago
             }))
-        } else if(targetName == "valor_pago"){
+        } else if (targetName == "valor_pago") {
             setEgreso(prevEgreso => ({
                 ...prevEgreso,
                 [targetName]: desformatNumber(targetValue)
@@ -211,9 +212,9 @@ const FormEgresos = () => {
             seleccionadas y se debera diferir cada cuota a 30 dias despues de la siguiente */
             if (egreso.cuota > 0) {
                 let auxCuotaValor = egreso.valor_pago;
-console.log(auxCuotaValor, egreso.valor_pago)
+                console.log(auxCuotaValor, egreso.valor_pago)
                 const valorCuota = egreso.valor_pago ? auxCuotaValor / egreso.cuota : 0;
-console.log(valorCuota)
+                console.log(valorCuota)
                 if (valorCuota !== 0) {
                     for (let i = 0; i < egreso.cuota; i++) {
                         const mesD = newDate.getMonth() + i + 1;
@@ -256,28 +257,43 @@ console.log(valorCuota)
     const handleSubmit = async () => {
         let resEgreso = [];
 
-        if (auxEgresos.length > 0) {
+        if (updateEgreso) {
             try {
-                resEgreso = await insertEgreso(auxEgresos);
+                egreso.id_egreso = updateEgreso.id_egreso;
+
+                resEgreso = await setUpdateEgreso(egreso);
             } catch (error) {
                 console.log(error);
                 ToastComponent('error');
             }
         } else {
-            try {
-                if (!egreso.id_comprobante_pago) {
-                    egreso.id_comprobante_pago = 6;
+            if (auxEgresos.length > 0) {
+                try {
+                    resEgreso = await insertEgreso(auxEgresos);
+                } catch (error) {
+                    console.log(error);
+                    ToastComponent('error');
                 }
-                console.log(egreso);
-                resEgreso = await insertEgreso(egreso);
-            } catch (error) {
-                console.log(error);
-                ToastComponent('error');
+            } else {
+                try {
+                    if (!egreso.id_comprobante_pago) {
+                        egreso.id_comprobante_pago = 6;
+                    }
+                    resEgreso = await insertEgreso(egreso);
+                } catch (error) {
+                    console.log(error);
+                    ToastComponent('error');
+                }
             }
         }
-        
-        if ((resEgreso.data.todoOk == 'Ok' || resEgreso.statusText == 'OK' || resEgreso.status == 200) && !resEgreso.data.todoMal) {
+
+        if ((resEgreso.statusText == 'OK' || resEgreso.status == 200) || resEgreso.data.todoOk == 'Ok' && !resEgreso.data.todoMal) {
             ToastComponent('success');
+            
+            if(updateEgreso){
+                close();
+                setUpdateEgresos(resEgreso.data);
+            }
 
             //En caso de tener algun elemento extra mostrandose se vuelve a ocular
             showCuotas && setShowCuotas(false);
@@ -344,7 +360,7 @@ console.log(valorCuota)
                     <Card.Header className="title-form" >Gasto/Egreso</Card.Header>
                     <Card.Body>
                         <Form noValidate validated={validated} onSubmit={handleValidacion} >
-                            <Form.Group className="mb-3" >
+                            {!egreso.id_proyecto && <Form.Group className="mb-3" >
                                 <FloatingLabel label="Tipo de Centro de Costo">
                                     <Form.Select onChange={handleChangeForm} name="centro_costo" value={egreso.centro_costo} required >
                                         <option value=""> </option>
@@ -357,19 +373,18 @@ console.log(valorCuota)
                                         }
                                     </Form.Select>
                                 </FloatingLabel>
-                            </Form.Group>
+                            </Form.Group>}
                             {showProyecto &&
                                 <Form.Group className="mb-3" >
                                     <FloatingLabel label="Proyecto">
                                         <Form.Select onChange={handleChangeForm} name="id_proyecto" value={egreso.id_proyecto} required >
                                             <option value=""> </option>
-                                            {
-                                                proyectos.filter(filterProyecto => filterProyecto.id_centro_costo == egreso.centro_costo)
-                                                    .map((proyecto) => (
-                                                        <option key={proyecto.id_proyecto} value={proyecto.id_proyecto}>
-                                                            {proyecto.id_proyecto}
-                                                        </option>
-                                                    ))
+                                            {proyectos.filter(filterProyecto => filterProyecto.id_centro_costo == egreso.centro_costo || (updateEgreso && updateEgreso.id_proyecto == filterProyecto.id_proyecto))
+                                                .map((proyecto) => (
+                                                    <option key={proyecto.id_proyecto} value={proyecto.id_proyecto}>
+                                                        {proyecto.id_proyecto}
+                                                    </option>
+                                                ))
                                             }
                                         </Form.Select>
                                     </FloatingLabel>

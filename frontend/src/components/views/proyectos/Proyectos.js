@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 
 //Componentes
-import { Accordion, Row, Col, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Row, Col, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import CentrosCostos from './CentrosCostos';
 import Modulos from '../modulos/Modulos';
 import Materiales from '../material/Materiales';
@@ -92,14 +92,14 @@ const Proyectos = () => {
                             if (egreso.id_proyecto == proyecto.id_proyecto && egreso.id_analisis_costo != 11) {
                                 auxPPE += parseFloat(egreso.valor_pago);
                                 auxTotalEgresos += parseFloat(egreso.valor_pago);
-                                auxTotalUSDE += parseFloat(egreso.valor_usd);
+                                auxTotalUSDE += !egreso.valor_usd ? 0 : parseFloat(egreso.valor_usd);
                             }
                         });
                         proyecto.ingresos.map(ingreso => {
                             if (ingreso.id_proyecto == proyecto.id_proyecto) {
                                 auxPPI += parseFloat(ingreso.valor_cobro);
                                 auxTotalIngresos += parseFloat(ingreso.valor_cobro);
-                                auxTotalUSDI += parseFloat(ingreso.valor_usd);
+                                auxTotalUSDI += !ingreso.valor_usd ? 0 : parseFloat(ingreso.valor_usd);
                             }
                         });
                     }
@@ -108,14 +108,14 @@ const Proyectos = () => {
                             if (egreso.id_proyecto == proyecto.id_proyecto && egreso.id_analisis_costo != 11) {
                                 auxDE += parseFloat(egreso.valor_pago);
                                 auxTotalEgresos += parseFloat(egreso.valor_pago);
-                                auxTotalUSDE += parseFloat(egreso.valor_usd);
+                                auxTotalUSDE += !egreso.valor_usd ? 0 : parseFloat(egreso.valor_usd);
                             }
                         });
                         proyecto.ingresos.map(ingreso => {
                             if (ingreso.id_proyecto == proyecto.id_proyecto) {
                                 auxDI += parseFloat(ingreso.valor_cobro);
                                 auxTotalIngresos += parseFloat(ingreso.valor_cobro);
-                                auxTotalUSDI += parseFloat(ingreso.valor_usd);
+                                auxTotalUSDI += !ingreso.valor_usd ? 0 : parseFloat(ingreso.valor_usd);
                             }
                         });
                     }
@@ -124,14 +124,14 @@ const Proyectos = () => {
                             if (egreso.id_proyecto == proyecto.id_proyecto && egreso.id_analisis_costo != 11) {
                                 auxME += parseFloat(egreso.valor_pago);
                                 auxTotalEgresos += parseFloat(egreso.valor_pago);
-                                auxTotalUSDE += parseFloat(egreso.valor_usd);
+                                auxTotalUSDE += !egreso.valor_usd ? 0 : parseFloat(egreso.valor_usd);
                             }
                         });
                         proyecto.ingresos.map(ingreso => {
                             if (ingreso.id_proyecto == proyecto.id_proyecto) {
                                 auxMI += parseFloat(ingreso.valor_cobro);
                                 auxTotalIngresos += parseFloat(ingreso.valor_cobro);
-                                auxTotalUSDI += parseFloat(ingreso.valor_usd);
+                                auxTotalUSDI += !ingreso.valor_usd ? 0 : parseFloat(ingreso.valor_usd);
                             }
                         });
                     }
@@ -150,7 +150,7 @@ const Proyectos = () => {
                             }*/
                             auxCCCE += parseFloat(egreso.valor_pago);
                             auxTotalEgresos += parseFloat(egreso.valor_pago);
-                            auxTotalUSDE += parseFloat(egreso.valor_usd);
+                            auxTotalUSDE += !egreso.valor_usd ? 0 : parseFloat(egreso.valor_usd)
                         }
                     });
 
@@ -158,7 +158,7 @@ const Proyectos = () => {
                         if (ingreso.id_proyecto == proyecto.id_proyecto) {
                             auxCCCI += parseFloat(ingreso.valor_cobro);
                             auxTotalIngresos += parseFloat(ingreso.valor_cobro);
-                            auxTotalUSDI += parseFloat(ingreso.valor_usd);
+                            auxTotalUSDI += !ingreso.valor_usd ? 0 : parseFloat(ingreso.valor_usd);
                         }
                     });
 
@@ -167,7 +167,7 @@ const Proyectos = () => {
                             if (ingreso.id_proyecto == proyecto.id_proyecto) {
                                 auxPPI += parseFloat(ingreso.valor_cobro);
                                 auxTotalIngresos += parseFloat(ingreso.valor_cobro);
-                                auxTotalUSDI += parseFloat(ingreso.valor_usd);
+                                auxTotalUSDI += !ingreso.valor_usd ? 0 : parseFloat(ingreso.valor_usd);
                             }
                         });
                     }
@@ -176,7 +176,7 @@ const Proyectos = () => {
                             if (ingreso.id_proyecto == proyecto.id_proyecto) {
                                 auxDI += parseFloat(ingreso.valor_cobro);
                                 auxTotalIngresos += parseFloat(ingreso.valor_cobro);
-                                auxTotalUSDI += parseFloat(ingreso.valor_usd);
+                                auxTotalUSDI += !ingreso.valor_usd ? 0 : parseFloat(ingreso.valor_usd);
                             }
                         });
                     }
@@ -185,7 +185,7 @@ const Proyectos = () => {
                             if (ingreso.id_proyecto == proyecto.id_proyecto) {
                                 auxMI += parseFloat(ingreso.valor_cobro);
                                 auxTotalIngresos += parseFloat(ingreso.valor_cobro);
-                                auxTotalUSDI += parseFloat(ingreso.valor_usd);
+                                auxTotalUSDI += !ingreso.valor_usd ? 0 : parseFloat(ingreso.valor_usd);
                             }
                         });
                     }*/
@@ -194,7 +194,7 @@ const Proyectos = () => {
                         if (egreso.id_proyecto == proyecto.id_proyecto) {
                             auxCCEE += parseFloat(egreso.valor_pago)
                             auxTotalEgresos += parseFloat(egreso.valor_pago);
-                            auxTotalUSDE += parseFloat(egreso.valor_usd);
+                            auxTotalUSDE += !egreso.valor_usd ? 0 : parseFloat(egreso.valor_usd)
                         }
                     });
 
@@ -202,7 +202,7 @@ const Proyectos = () => {
                         if (ingreso.id_proyecto == proyecto.id_proyecto) {
                             auxCCEI += parseFloat(ingreso.valor_cobro);
                             auxTotalIngresos += parseFloat(ingreso.valor_cobro);
-                            auxTotalUSDI += parseFloat(ingreso.valor_usd);
+                            auxTotalUSDI += !ingreso.valor_usd ? 0 : parseFloat(ingreso.valor_usd);
                         }
                     });
                 }

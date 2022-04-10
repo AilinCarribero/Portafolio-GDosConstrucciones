@@ -2,7 +2,7 @@
 .card-form-egreso
 {
     position: relative;
-    top: 5%;
+    top: 10px;
     width: 400px !important;
     border: 1px ;
     border-style: hidden;
@@ -12,7 +12,7 @@
 
 @media only screen and (hover: none) and (pointer: coarse){
     .mobile-form-egreso{
-        width: 340px !important;
+        width: 80vw !important;
     }
 }
 

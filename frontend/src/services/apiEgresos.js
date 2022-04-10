@@ -16,3 +16,8 @@ export const getEgresosId = async (id) => {
     const response = await axios.get(API+`egresos/${id}`, servisTokenConfig);
     return response.data;
 }
+
+export const setUpdateEgreso = async (egreso) => {
+    const response = await axios.post(API+'egresos/update', egreso, servisTokenConfig);
+    return response;
+}

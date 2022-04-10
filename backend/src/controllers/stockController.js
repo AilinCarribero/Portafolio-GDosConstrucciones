@@ -100,9 +100,7 @@ exports.updateStockRestante = async (req, res) => {
         raw: true
     });
 
-    console.log(analisis_costo)
     datos.forEach((dato, i) => {
-        console.log(dato)
         const egreso = {
             id_proyecto: 'CCE',
             fecha_pago: dato.fecha_pago,
@@ -118,8 +116,6 @@ exports.updateStockRestante = async (req, res) => {
             numero_comprobante: dato.numero_comprobante
         }
 
-
-        console.log(egreso);
         Egreso.create(egreso).then(response => {
             if (datos.length - 1 == i) {
                 const stock = {
