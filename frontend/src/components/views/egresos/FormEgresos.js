@@ -29,7 +29,7 @@ const FormEgresos = ({ close, updateEgreso, setUpdateEgresos }) => {
     const newDate = new Date();
     const año = newDate.getFullYear();
     const dia = newDate.getDate();
-
+console.log(updateEgreso)
     //Datos extraidos desde la api para usarse en el formulario
     const { formasPagos } = useGetFormasPagos();
     const { proyectos } = useGetProyectos();
@@ -44,6 +44,7 @@ const FormEgresos = ({ close, updateEgreso, setUpdateEgresos }) => {
         id_user: user.id,
         fecha_pago: updateEgreso && updateEgreso.fecha_pago ? new Date(updateEgreso.fecha_pago).toISOString().slice(0, 10) : new Date().toISOString().slice(0, 10),
         id_proyecto: updateEgreso && updateEgreso.id_proyecto ? updateEgreso.id_proyecto : '',
+        id_old_proyecto: updateEgreso && updateEgreso.id_proyecto ? updateEgreso.id_proyecto : '',
         id_analisis_costo: updateEgreso && updateEgreso.analisis_costo ? updateEgreso.analisis_costo.id_analisis_costo : '',
         valor_pago: updateEgreso && updateEgreso.valor_pago ? updateEgreso.valor_pago : 0,
         valor_usd: updateEgreso && updateEgreso.valor_usd ? updateEgreso.valor_usd : 0,
@@ -54,7 +55,9 @@ const FormEgresos = ({ close, updateEgreso, setUpdateEgresos }) => {
         numero_comprobante: updateEgreso && updateEgreso.numero_comprobante ? updateEgreso.numero_comprobante : '',
         centro_costo: updateEgreso && updateEgreso.centro_costo ? updateEgreso.centro_costo.id_centro_costo : '',
         id_stock: updateEgreso && updateEgreso.id_stock ? updateEgreso.id_stock : '',
-        cantidad: updateEgreso && updateEgreso.cantidad ? updateEgreso.cantidad : 0
+        cantidad: updateEgreso && updateEgreso.cantidad ? updateEgreso.cantidad : 0,
+        cuotaNumero: updateEgreso && updateEgreso.cuota ? updateEgreso.cuota : 0,
+        cuota: updateEgreso && updateEgreso.cuotas ? updateEgreso.cuotas : 0,
     });
 
     //Variables con informacion
@@ -210,11 +213,10 @@ const FormEgresos = ({ close, updateEgreso, setUpdateEgresos }) => {
         if (form.checkValidity() === true) {
             /*En caso de tener cuotas el valor del importe debe dividirse en partes iguales acorde a la cantidad de cuotas 
             seleccionadas y se debera diferir cada cuota a 30 dias despues de la siguiente */
-            if (egreso.cuota > 0) {
+            if (egreso.cuota > 0 && !updateEgreso) {
                 let auxCuotaValor = egreso.valor_pago;
-                console.log(auxCuotaValor, egreso.valor_pago)
                 const valorCuota = egreso.valor_pago ? auxCuotaValor / egreso.cuota : 0;
-                console.log(valorCuota)
+
                 if (valorCuota !== 0) {
                     for (let i = 0; i < egreso.cuota; i++) {
                         const mesD = newDate.getMonth() + i + 1;
@@ -230,7 +232,7 @@ const FormEgresos = ({ close, updateEgreso, setUpdateEgresos }) => {
                 setAuxEgresos(auxEgreso);
                 setDatosValidacion(auxEgreso);
                 setShowModal(true);
-            } else if (cheques && cantCheque > 0) {
+            } else if (cheques && cantCheque > 0 && !updateEgreso) {
                 /*Si existen cheques entonces guardar en una variable aux los datos de ingreso + los datos del cheque*/
                 for (let i = 0; i < cantCheque; i++) {
                     const auxChequeFD = cheques['fechaD' + i];
@@ -379,7 +381,8 @@ const FormEgresos = ({ close, updateEgreso, setUpdateEgresos }) => {
                                     <FloatingLabel label="Proyecto">
                                         <Form.Select onChange={handleChangeForm} name="id_proyecto" value={egreso.id_proyecto} required >
                                             <option value=""> </option>
-                                            {proyectos.filter(filterProyecto => filterProyecto.id_centro_costo == egreso.centro_costo || (updateEgreso && updateEgreso.id_proyecto == filterProyecto.id_proyecto))
+                                            {proyectos.filter(filterProyecto => filterProyecto.id_centro_costo == egreso.centro_costo 
+                                            || (updateEgreso))
                                                 .map((proyecto) => (
                                                     <option key={proyecto.id_proyecto} value={proyecto.id_proyecto}>
                                                         {proyecto.id_proyecto}
@@ -397,7 +400,8 @@ const FormEgresos = ({ close, updateEgreso, setUpdateEgresos }) => {
                                             <option value=""></option>
                                             {analisisCostos.map((analisisCosto) => (
                                                 proyectos.map((proyecto) => (
-                                                    egreso.id_proyecto === proyecto.id_proyecto && analisisCosto.id_centro_costo === proyecto.id_centro_costo &&
+                                                    egreso.id_proyecto == proyecto.id_proyecto && 
+                                                    (analisisCosto.id_centro_costo == proyecto.id_centro_costo) &&
                                                     <option key={analisisCosto.id_analisis_costo} value={analisisCosto.id_analisis_costo}>
                                                         {analisisCosto.analisis_costo}
                                                     </option>
@@ -458,7 +462,7 @@ const FormEgresos = ({ close, updateEgreso, setUpdateEgresos }) => {
                             }
                             <Form.Group className="mb-3" >
                                 <FloatingLabel label="Forma en que se realizo el pago">
-                                    <Form.Select onChange={handleChangeForm} name="id_forma_pago" value={egreso.id_forma_pago} required>
+                                    <Form.Select onChange={handleChangeForm} name="id_forma_pago" value={egreso.id_forma_pago} required disabled={updateEgreso ? true : false} >
                                         <option value=""></option>
                                         {formasPagos.map((formaPago) => (
                                             <option key={formaPago.id_forma_pago} value={formaPago.id_forma_pago}>

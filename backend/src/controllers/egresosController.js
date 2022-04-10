@@ -19,7 +19,6 @@ exports.insertEgreso = async (req, res) => {
             dato.numero_comprobante = !dato.numero_comprobante ? 0 : dato.numero_comprobante;
             dato.id_stock = !dato.id_stock ? 0 : dato.id_stock;
 
-            console.log(dato);
             Egreso.create(dato).then(response => {
                 //Si tiene un id_stock significa que va a manejar material en stock
                 if (dato.id_stock) {
@@ -170,7 +169,7 @@ exports.updateEgreso = async (req, res) => {
                 model: Stock
             }],
             where: {
-                id_proyecto: egreso.id_proyecto
+                id_proyecto: egreso.id_old_proyecto
             }
         }).then(response => {
             response.statusText = "Ok";

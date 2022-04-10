@@ -7,26 +7,19 @@ exports.insertIngreso = async (req, res) => {
     try {
         //Inserta el nuevo ingreso
         datos.forEach(async (dato, i) => {
-            if (!dato.fecha_diferido_cobro) {
-                dato.fecha_diferido_cobro = '1000-01-01';
-            }
-            if (!dato.cuota) {
-                dato.cuota = 0;
-            }
-            if (!dato.cuotaNumero) {
-                dato.cuotaNumero = 0;
-            }
-            if (!dato.observaciones) {
-                dato.observaciones = '';
-            }
-            if (parseInt(dato.cuota , 10) == 0) {
+            dato.fecha_diferido_cobro = !dato.fecha_diferido_cobro ? '1000-01-01' : dato.fecha_diferido_cobro;
+            dato.cuota = !dato.cuota ? 0 : dato.cuota;
+            dato.cuotaNumero = !dato.cuotaNumero ? 0 : dato.cuotaNumero;
+            dato.observaciones = !dato.observaciones ? '' : dato.observaciones;
+
+            if (parseInt(dato.cuota, 10) == 0) {
                 //Para guardar correctamente el valor de cobro nos aseguramos que este en un formato que la base de datos entienda
                 dato.valor_cobro = dato.valor_cobro.toString().replace(/\./g, '');
                 dato.valor_cobro = dato.valor_cobro.replace(/\,/g, '.');
                 dato.valor_cobro = parseFloat(dato.valor_cobro);
             }
-            
-            Ingreso.create(dato).then( response => {
+
+            Ingreso.create(dato).then(response => {
                 response.todoOk = "Ok";
                 response.statusText = "Ok";
 
@@ -34,7 +27,7 @@ exports.insertIngreso = async (req, res) => {
                 if (datos.length - 1 == i) {
                     res.json(response);
                 }
-            }).catch( err => {
+            }).catch(err => {
                 err.todoMal = "Error";
 
                 console.error(err);
@@ -53,14 +46,14 @@ exports.listIngresos = async (req, res) => {
     Ingreso.findAll({
         include: [{
             model: FormaCobro
-        },{
+        }, {
             model: Auth
         }]
-    }).then( response => {
+    }).then(response => {
         response.statusText = "Ok";
         response.status = 200;
         res.json(response);
-    }).catch( error => {
+    }).catch(error => {
         console.error(error);
         res.json(error);
     });
@@ -73,18 +66,60 @@ exports.listIngresosId = async (req, res) => {
     Ingreso.findAll({
         include: [{
             model: FormaCobro
-        },{
+        }, {
             model: Auth
         }],
         where: {
             id_proyecto: idProyecto
         }
-    }).then( response => {
+    }).then(response => {
         response.statusText = "Ok";
         response.status = 200;
         res.json(response);
-    }).catch( error => {
+    }).catch(error => {
         console.error(error);
         res.json(error);
     });
+}
+
+//Modificar ingreso
+exports.updateIngreso = async (req, res) => {
+    const ingreso = req.body;
+
+    ingreso.fecha_diferido_cobro = !ingreso.fecha_diferido_cobro ? '1000-01-01' : ingreso.fecha_diferido_cobro;
+    ingreso.cuota = !ingreso.cuota ? 0 : ingreso.cuota;
+    ingreso.cuotaNumero = !ingreso.cuotaNumero ? 0 : ingreso.cuotaNumero;
+    ingreso.observaciones = !ingreso.observaciones ? '' : ingreso.observaciones;
+
+    Ingreso.update(ingreso, {
+        where: {
+            id_ingreso: ingreso.id_ingreso
+        }
+    }).then(response => {
+        Ingreso.findAll({
+            include: [{
+                model: FormaCobro
+            }, {
+                model: Auth
+            }],
+            where: {
+                id_proyecto: ingreso.id_proyecto
+            }
+        }).then(response => {
+            response.statusText = "Ok";
+            response.status = 200;
+
+            res.json(response);
+        }).catch(err => {
+            err.todoMal = "Error al actualizar el ingreso";
+            console.error(err);
+            res.json(err);
+            throw err;
+        });
+    }).catch(err => {
+        err.todoMal = "Error al actualizar el ingreso";
+        console.error(err);
+        res.json(err);
+        throw err;
+    })
 }
