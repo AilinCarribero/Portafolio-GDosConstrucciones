@@ -8,14 +8,14 @@ exports.listProyectos = (req, res) => {
             include: [{
                 model: Modulo
             }]
-        },{
+        }, {
             model: Egreso
-        },{
+        }, {
             model: Ingreso
         }]
-    }).then( response => {
+    }).then(response => {
         res.json(response);
-    }).catch( error => {
+    }).catch(error => {
         res.json(error);
     });
 }
@@ -34,8 +34,8 @@ exports.insertProyecto = async (req, res) => {
     if (!req.body.alquiler_total) {
         req.body.venta = 0;
     }
-    if(!req.body.fecha_f_proyecto){
-        req.body.fecha_f_proyecto='1000-01-01';
+    if (!req.body.fecha_f_proyecto) {
+        req.body.fecha_f_proyecto = '1000-01-01';
     }
 
     try {
@@ -67,36 +67,67 @@ exports.insertProyecto = async (req, res) => {
             return res.json('No se encontro el centro de costos');
         }
 
-        req.body.id_proyecto= id_proyecto;
-
+        req.body.id_proyecto = id_proyecto;
+        console.log(req.body)
         Proyecto.create(req.body).then(result => {
-            req.body.alquileres.forEach((alquiler,i) => {
-                alquiler.id_proyecto = id_proyecto;
+            req.body.alquileres ?
+                req.body.alquileres.forEach((alquiler, i) => {
+                    alquiler.id_proyecto = id_proyecto;
 
-                //Una vez guardado el proyecto guardamos los alquileres relacionados con el proyecto
-                Alquiler.create(alquiler).then(result => {
-                    /*Si el alquiler se guardo como corresponde el estado del modulo correspondiente al alquiler pasa a tener 
-                    un estado de ocupado*/
-                    Modulo.update({ estado: 1 }, {
-                        where: {
-                          id_modulo: alquiler.id_modulo
-                        }
-                    }).then( result => {
-                        /*Si hasta aqui no hay errores se fija si es el ultimo alquiler que se guardo. De ser asi responde que todo
-                        esta bien */
-                        if(i==(countAlquileres-1)){
-                            result.todoOk = "Ok";
-                            res.json(result);
-                        }
+                    //Una vez guardado el proyecto guardamos los alquileres relacionados con el proyecto
+                    Alquiler.create(alquiler).then(result => {
+                        /*Si el alquiler se guardo como corresponde el estado del modulo correspondiente al alquiler pasa a tener 
+                        un estado de ocupado*/
+                        Modulo.update({ estado: 1 }, {
+                            where: {
+                                id_modulo: alquiler.id_modulo
+                            }
+                        }).then(result => {
+                            /*Si hasta aqui no hay errores se fija si es el ultimo alquiler que se guardo. De ser asi responde que todo
+                            esta bien */
+                            if (i == (countAlquileres - 1)) {
+                                Proyecto.findAll({
+                                    include: [{
+                                        model: Alquiler,
+                                        include: [{
+                                            model: Modulo
+                                        }]
+                                    }, {
+                                        model: Egreso
+                                    }, {
+                                        model: Ingreso
+                                    }]
+                                }).then(response => {
+                                    res.json(response);
+                                }).catch(error => {
+                                    res.json(error);
+                                });
+                            }
+                        }).catch(error => {
+                            console.error(error);
+                            return res.json(error);
+                        });
                     }).catch(error => {
                         console.error(error);
                         return res.json(error);
                     });
+                })
+                : Proyecto.findAll({
+                    include: [{
+                        model: Alquiler,
+                        include: [{
+                            model: Modulo
+                        }]
+                    }, {
+                        model: Egreso
+                    }, {
+                        model: Ingreso
+                    }]
+                }).then(response => {
+                    res.json(response);
                 }).catch(error => {
-                    console.error(error);
-                    return res.json(error);
+                    res.json(error);
                 });
-            });
         }).catch(error => {
             console.error(error);
             return res.json(error);

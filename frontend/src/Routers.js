@@ -25,51 +25,52 @@ import Alquileres from './components/views/alquiler/Alquileres';
 
 const Routers = () => {
     const { user } = useUser();
-
+    console.log(user);
     return (
         <BrowserRouter>
-                <NavbarComponent path={window.location.pathname} />
-                <Container fluid>
-                    <Route exact path="/" render={() => {
-                        return (user.token
-                            ? (user.rango == 'admin' || user.rango == 'moderador'
-                                ? <> <Proyectos /> </>
-                                : <FormEgresos />)
-                            :
-                            <Home />
-                        )
-                    }} />
-
-                    {
-                        user.rango == 'admin' ?
-                        <>
-                            <Route exact path="/ingresar/egreso" component={FormEgresos} />
-                            <Route exact path="/ingresar/ingreso" component={FormIngresos} />
-                            <Route exact path="/ingresar/proyecto" component={FormProyectos} />
-                            <Route exact path="/ingresar/usuario" component={FormUsuarios} />
-                            <Route exact path="/ingresar/modulos" component={FormModulos} />
-                            <Route exact path="/usuarios" component={Usuarios} />
-                            <Route exact path="/modulos" component={Modulos} />
-                            <Route exact path="/egresos/:id" component={Egresos} />
-                            <Route exact path="/ingresos/:id" component={Ingresos} />
-                            <Route exact path="/modulos/:id" component={Modulos} />
-                            <Route exact path="/alquileres/:id" component={Alquileres} />
-                        </>
-                        :
-                        <Redirect to="/" />
-                    }
-                    {
-                        user.rango == 'moderador' ?
-                        <>
-                            <Route exact path="/ingresar/egreso" component={FormEgresos} />
-                            <Route exact path="/ingresar/ingreso" component={FormIngresos} />
-                            <Route exact path="/egresos/:id" component={Egresos} />
-                            <Route exact path="/ingresos/:id" component={Ingresos} />
-                        </>
-                        :
-                        <Redirect to="/" />
-                    }
-                </Container>
+            <NavbarComponent path={window.location.pathname} />
+            <Container fluid>
+                <Route exact path="/" render={() => {
+                    return (user.token
+                        ? <> <Proyectos /> </> : <Home />
+                    )
+                }} />
+                {user.rango == 'admin' ?
+                    <>
+                        <Route exact path="/ingresar/egreso" component={FormEgresos} />
+                        <Route exact path="/ingresar/ingreso" component={FormIngresos} />
+                        <Route exact path="/ingresar/proyecto" component={FormProyectos} />
+                        <Route exact path="/ingresar/usuario" component={FormUsuarios} />
+                        <Route exact path="/ingresar/modulos" component={FormModulos} />
+                        <Route exact path="/usuarios" component={Usuarios} />
+                        <Route exact path="/modulos" component={Modulos} />
+                        <Route exact path="/egresos/:id" component={Egresos} />
+                        <Route exact path="/ingresos/:id" component={Ingresos} />
+                        <Route exact path="/modulos/:id" component={Modulos} />
+                        <Route exact path="/alquileres/:id" component={Alquileres} />
+                    </>
+                    :
+                    <Redirect to="/" />
+                }
+                {user.rango == 'moderador' ?
+                    <>
+                        <Route exact path="/ingresar/egreso" component={FormEgresos} />
+                        <Route exact path="/ingresar/ingreso" component={FormIngresos} />
+                        <Route exact path="/egresos/:id" component={Egresos} />
+                        <Route exact path="/ingresos/:id" component={Ingresos} />
+                    </>
+                    :
+                    <Redirect to="/" />
+                }
+                {user.rango == 'usuario comun' ?
+                    <>
+                        <Route exact path="/ingresar/egreso" component={FormEgresos} />
+                        <Route exact path="/egresos/:id" component={Egresos} />
+                    </>
+                    :
+                    <Redirect to="/" />
+                }
+            </Container>
         </BrowserRouter>
     )
 }

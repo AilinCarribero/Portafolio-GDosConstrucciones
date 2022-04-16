@@ -15,7 +15,7 @@ import { useGetModulos } from '../../../hooks/useModulos';
 //Css
 import './Proyectos.css'
 
-const FormProyectos = () => {
+const FormProyectos = ({ close, updateProyecto, setUpdateProyecto }) => {
     const newDate = new Date();
     const año = newDate.getFullYear();
     const mes = newDate.getMonth();
@@ -146,6 +146,8 @@ const FormProyectos = () => {
 
                 if (resProyecto.data.todoOk == 'Ok' || resProyecto.statusText == 'OK' || resProyecto.status == 200) {
                     ToastComponent('success');
+console.log(resProyecto)
+                    setUpdateProyecto(resProyecto.data);
 
                     setProyecto({
                         id_centro_costo: '',
@@ -166,6 +168,7 @@ const FormProyectos = () => {
                     setShowVenta(false);
                     setShowAlquiler(false);
                     setShowDataAlquileres(false);
+                    close();
                 } else {
                     ToastComponent('error');
                 }
@@ -227,8 +230,8 @@ const FormProyectos = () => {
     return (<>
         <Row className="justify-content-center">
             <Col xs="auto" sm="auto" md="auto" lg="auto" xl="auto" xxl="auto" >
-                <Card className="text-center card-form-proyectos mobile-form-proyecto">
-                    <Card.Header className="title-form" >Ingrese un Nuevo Proyecto</Card.Header>
+                <Card className="text-center card-form mobile-form">
+                    {!close && <Card.Header className="title-form" >Ingrese un Nuevo Proyecto</Card.Header>}
                     <Card.Body>
                         <Form noValidate validated={validated} onSubmit={handleSubmitForm} >
                             <Form.Group className="mb-3" >

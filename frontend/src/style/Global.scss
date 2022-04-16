@@ -1,0 +1,35 @@
+.conten-buttons-agregar{
+    width: 100vw;
+    padding-left: 14px;
+    padding-bottom: 2px;
+
+    .button-agregar{
+        width: 100%;
+        .icon-button{
+            margin-bottom: 2px;
+            margin-left: -10px;
+            margin-right: 5px;
+        }
+
+        &:hover{
+            color: grey;
+        }
+    }
+}
+
+.card-form
+{
+    position: relative;
+    top: 10px;
+    width: 400px !important;
+    border: 1px ;
+    border-style: hidden;
+    border-radius: 10px;
+    margin: 5px;
+}
+
+@media only screen and (hover: none) and (pointer: coarse){
+    .mobile-form{
+        width: 90vw !important;
+    }
+}

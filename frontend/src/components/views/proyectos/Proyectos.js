@@ -32,7 +32,7 @@ const Proyectos = () => {
     }, [proyectos])
 
     const [spinner, setSpinner] = useState(true);
-    const [menu, setMenu] = useState('ccc-cce');
+    const [menu, setMenu] = useState(user.rango != 'usuario comun' ? 'ccc-cce' : 'proyectos');
 
     const [totales, setTotales] = useState({
         egresos: 0,
@@ -259,127 +259,131 @@ const Proyectos = () => {
 
     return (<>
         <div>
-            <Row className="resumenTotales">
-                <Col xs={12} md={4}>
-                    <Row>
-                        <Col xs={6} md={6} className="resumenTotal border-right border-mobile-bot">
-                            <Row>
-                                <Col xs={12} md={12} className="title-resumen-totales">
-                                    Costos:
-                                </Col>
-                                <Col xs={12} md={12} className="text-resumen-totales">
-                                    ${formatNumber(totales.costos)}
-                                </Col>
-                            </Row>
-                        </Col>
-                        <Col xs={6} md={6} className="resumenTotal border-right border-mobile-right border-mobile-bot">
-                            <Row>
-                                <Col xs={12} md={12} className="title-resumen-totales">
-                                    Venta:
-                                </Col>
-                                <Col xs={12} md={12} className="text-resumen-totales">
-                                    ${formatNumber(totales.ventas)}
-                                </Col>
-                            </Row>
-                        </Col>
-                    </Row>
-                </Col>
-                <Col xs={12} md={8}>
-                    <Row>
-                        <OverlayTrigger placement="bottom" overlay={
-                            <Tooltip>
-                                <p>PP: ${formatNumber(totalesUN.PPIngreso)}</p>
-                                <p>D: ${formatNumber(totalesUN.DIngreso)}</p>
-                                <p>M: ${formatNumber(totalesUN.MIngreso)}</p>
-                                <p>CCC: ${formatNumber(totalesUN.CCCIngreso)}</p>
-                                <p>CCE: ${formatNumber(totalesUN.CCEIngreso)}</p>
-                                <p>Alquileres: ${formatNumber(totales.alquiler)}</p>
-                            </Tooltip>
-                        }>
-                            <Col xs={6} md={6} className="resumenTotal border-right">
+            {user.rango != "usuario comun" &&
+                <Row className="resumenTotales">
+                    <Col xs={12} md={4}>
+                        <Row>
+                            <Col xs={6} md={6} className="resumenTotal border-right border-mobile-bot">
                                 <Row>
                                     <Col xs={12} md={12} className="title-resumen-totales">
-                                        Ingresos:
+                                        Costos:
                                     </Col>
-                                    <Col xs={12} md={6} className="text-resumen-totales">
-                                        ${totales.ingresos ? formatNumber(totales.ingresos) : 0}
-                                    </Col>
-                                    <Col xs={12} md={6} className="text-resumen-totales">
-                                        USD${totales.ingresosUSD ? formatNumber(totales.ingresosUSD) : 0}
+                                    <Col xs={12} md={12} className="text-resumen-totales">
+                                        ${formatNumber(totales.costos)}
                                     </Col>
                                 </Row>
                             </Col>
-                        </OverlayTrigger>
-                        <OverlayTrigger placement="bottom" overlay={
-                            <Tooltip>
-                                <p>PP: ${formatNumber(totalesUN.PPEgreso)}</p>
-                                <p>D: ${formatNumber(totalesUN.DEgreso)}</p>
-                                <p>M: ${formatNumber(totalesUN.MEgreso)}</p>
-                                <p>CCC: ${formatNumber(totalesUN.CCCEgreso)}</p>
-                                <p>CCE: ${formatNumber(totalesUN.CCEEgreso)}</p>
-                            </Tooltip>
-                        }>
-                            <Col xs={6} md={6} className="resumenTotal">
+                            <Col xs={6} md={6} className="resumenTotal border-right border-mobile-right border-mobile-bot">
                                 <Row>
                                     <Col xs={12} md={12} className="title-resumen-totales">
-                                        Egresos:
+                                        Venta:
                                     </Col>
-                                    <Col xs={12} md={6} className="text-resumen-totales">
-                                        ${totales.egresos ? formatNumber(totales.egresos) : 0}
-                                    </Col>
-                                    <Col xs={12} md={6} className="text-resumen-totales">
-                                        USD${totales.egresosUSD ? formatNumber(totales.egresosUSD) : 0}
+                                    <Col xs={12} md={12} className="text-resumen-totales">
+                                        ${formatNumber(totales.ventas)}
                                     </Col>
                                 </Row>
                             </Col>
-                        </OverlayTrigger>
-                    </Row>
-                    <Row>
-                        <Col xs={12} md={12} className="resumenTotal border-top">
-                            <Row>
-                                <Col xs={12} md={12} className="title-resumen-totales">
-                                    Diferencia entre Ingresos y Egresos:
+                        </Row>
+                    </Col>
+                    <Col xs={12} md={8}>
+                        <Row>
+                            <OverlayTrigger placement="bottom" overlay={
+                                <Tooltip>
+                                    <p>PP: ${formatNumber(totalesUN.PPIngreso)}</p>
+                                    <p>D: ${formatNumber(totalesUN.DIngreso)}</p>
+                                    <p>M: ${formatNumber(totalesUN.MIngreso)}</p>
+                                    <p>CCC: ${formatNumber(totalesUN.CCCIngreso)}</p>
+                                    <p>CCE: ${formatNumber(totalesUN.CCEIngreso)}</p>
+                                    <p>Alquileres: ${formatNumber(totales.alquiler)}</p>
+                                </Tooltip>
+                            }>
+                                <Col xs={6} md={6} className="resumenTotal border-right">
+                                    <Row>
+                                        <Col xs={12} md={12} className="title-resumen-totales">
+                                            Ingresos:
+                                        </Col>
+                                        <Col xs={12} md={6} className="text-resumen-totales">
+                                            ${totales.ingresos ? formatNumber(totales.ingresos) : 0}
+                                        </Col>
+                                        <Col xs={12} md={6} className="text-resumen-totales">
+                                            USD${totales.ingresosUSD ? formatNumber(totales.ingresosUSD) : 0}
+                                        </Col>
+                                    </Row>
                                 </Col>
-                                <Col xs={6} md={6} className="text-resumen-totales">
-                                    ${formatNumber(totales.ingresos - totales.egresos)}
+                            </OverlayTrigger>
+                            <OverlayTrigger placement="bottom" overlay={
+                                <Tooltip>
+                                    <p>PP: ${formatNumber(totalesUN.PPEgreso)}</p>
+                                    <p>D: ${formatNumber(totalesUN.DEgreso)}</p>
+                                    <p>M: ${formatNumber(totalesUN.MEgreso)}</p>
+                                    <p>CCC: ${formatNumber(totalesUN.CCCEgreso)}</p>
+                                    <p>CCE: ${formatNumber(totalesUN.CCEEgreso)}</p>
+                                </Tooltip>
+                            }>
+                                <Col xs={6} md={6} className="resumenTotal">
+                                    <Row>
+                                        <Col xs={12} md={12} className="title-resumen-totales">
+                                            Egresos:
+                                        </Col>
+                                        <Col xs={12} md={6} className="text-resumen-totales">
+                                            ${totales.egresos ? formatNumber(totales.egresos) : 0}
+                                        </Col>
+                                        <Col xs={12} md={6} className="text-resumen-totales">
+                                            USD${totales.egresosUSD ? formatNumber(totales.egresosUSD) : 0}
+                                        </Col>
+                                    </Row>
                                 </Col>
-                                <Col xs={6} md={6} className="text-resumen-totales">
-                                    USD${totales.ingresosUSD && totales.egresosUSD ? formatNumber(totales.ingresosUSD - totales.egresosUSD)
-                                        : (totales.ingresosUSD ? formatNumber(totales.ingresosUSD)
-                                            : (totales.egresosUSD ? formatNumber(totales.egresosUSD) : 0))}
-                                </Col>
-                            </Row>
-                        </Col>
-                    </Row>
-                </Col>
-            </Row>
+                            </OverlayTrigger>
+                        </Row>
+                        <Row>
+                            <Col xs={12} md={12} className="resumenTotal border-top">
+                                <Row>
+                                    <Col xs={12} md={12} className="title-resumen-totales">
+                                        Diferencia entre Ingresos y Egresos:
+                                    </Col>
+                                    <Col xs={6} md={6} className="text-resumen-totales">
+                                        ${formatNumber(totales.ingresos - totales.egresos)}
+                                    </Col>
+                                    <Col xs={6} md={6} className="text-resumen-totales">
+                                        USD${totales.ingresosUSD && totales.egresosUSD ? formatNumber(totales.ingresosUSD - totales.egresosUSD)
+                                            : (totales.ingresosUSD ? formatNumber(totales.ingresosUSD)
+                                                : (totales.egresosUSD ? formatNumber(totales.egresosUSD) : 0))}
+                                    </Col>
+                                </Row>
+                            </Col>
+                        </Row>
+                    </Col>
+                </Row>
+            }
             {/*spinner && <Spinner animation="border" variant="dark" />*/}
             <Row className="menu-inicio">
-                <Col>
-                    <button className={menu == 'ccc-cce' ?'menu-inicio-button-active' : 'menu-inicio-button-off'} onClick={handleButton} name="ccc-cce">CCC y CCE</button>
-                </Col>
-                <Col>
-                    <button className={menu == 'proyectos' ?'menu-inicio-button-active' : 'menu-inicio-button-off'} onClick={handleButton} name="proyectos">Proyectos</button>
-                </Col>
-                <Col>
-                    <button className={menu == 'alquileres' ?'menu-inicio-button-active' : 'menu-inicio-button-off'} onClick={handleButton} name="alquileres">Alquileres</button>
-                </Col>
-                {user.rango == 'admin' &&<>
+                {user.rango != "usuario comun" &&
                     <Col>
-                        <button className={menu == 'modulos' ?'menu-inicio-button-active' : 'menu-inicio-button-off'} onClick={handleButton} name="modulos">Modulos</button>
+                        <button className={menu == 'ccc-cce' ? 'menu-inicio-button-active' : 'menu-inicio-button-off'} onClick={handleButton} name="ccc-cce">CCC y CCE</button>
                     </Col>
+                }
+                <Col>
+                    <button className={menu == 'proyectos' ? 'menu-inicio-button-active' : 'menu-inicio-button-off'} onClick={handleButton} name="proyectos">Proyectos</button>
+                </Col>
+                <Col>
+                    <button className={menu == 'alquileres' ? 'menu-inicio-button-active' : 'menu-inicio-button-off'} onClick={handleButton} name="alquileres">Alquileres</button>
+                </Col>
+                {user.rango == 'admin' && <>
                     <Col>
-                        <button className={menu == 'materiales' ?'menu-inicio-button-active' : 'menu-inicio-button-off'} onClick={handleButton} name="materiales">Materiales</button>
+                        <button className={menu == 'modulos' ? 'menu-inicio-button-active' : 'menu-inicio-button-off'} onClick={handleButton} name="modulos">Modulos</button>
                     </Col>
                 </>}
+                    <Col>
+                        <button className={menu == 'materiales' ? 'menu-inicio-button-active' : 'menu-inicio-button-off'} onClick={handleButton} name="materiales">Materiales</button>
+                    </Col>
             </Row>
             <Row>
                 {
                     /*Si no es modulo ni materiales es centro de costo. Si no es modulo es materiales. Si es modulo*/
                     menu != 'modulos' ?
                         menu != 'materiales' ?
-                            <CentrosCostos proyectos={proyectosContext} mostrar={menu} />
-                                : <Materiales />
+                            <CentrosCostos proyectos={proyectosContext} setProyectos={setProyectosContext} mostrar={menu} />
+                            : <Materiales />
                         : <Modulos />
                 }
             </Row>

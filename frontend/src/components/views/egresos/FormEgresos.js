@@ -29,7 +29,7 @@ const FormEgresos = ({ close, updateEgreso, setUpdateEgresos }) => {
     const newDate = new Date();
     const año = newDate.getFullYear();
     const dia = newDate.getDate();
-console.log(updateEgreso)
+
     //Datos extraidos desde la api para usarse en el formulario
     const { formasPagos } = useGetFormasPagos();
     const { proyectos } = useGetProyectos();
@@ -358,11 +358,11 @@ console.log(updateEgreso)
     return (
         <Row className="justify-content-center">
             <Col xs="auto" sm="auto" md="auto" lg="auto" xl="auto" xxl="auto" >
-                <Card className="text-center card-form-egreso mobile-form-egreso">
-                    <Card.Header className="title-form" >Gasto/Egreso</Card.Header>
+                <Card className="text-center card-form mobile-form">
+                    {!close && <Card.Header className="title-form" >Gasto/Egreso</Card.Header>}
                     <Card.Body>
                         <Form noValidate validated={validated} onSubmit={handleValidacion} >
-                            {!egreso.id_proyecto && <Form.Group className="mb-3" >
+                            {!updateEgreso && <Form.Group className="mb-3" >
                                 <FloatingLabel label="Tipo de Centro de Costo">
                                     <Form.Select onChange={handleChangeForm} name="centro_costo" value={egreso.centro_costo} required >
                                         <option value=""> </option>

@@ -18,7 +18,7 @@ import ValidacionIngreso from '../../utils/modal/validacion/ValidacionIngreso';
 //Cass
 import './Ingresos.css';
 
-const FormIngresos = () => {
+const FormIngresos = ({ close, updateIngreso, setUpdateIngreso }) => {
     const { user } = useUser();
     const newDate = new Date();
     const año = newDate.getFullYear();
@@ -234,6 +234,7 @@ const FormIngresos = () => {
             setDatosValidacion([]);
             setValidated(false);
             setCheckUSD(0);
+            close();
         } else {
             ToastComponent('error');
         }
@@ -266,8 +267,8 @@ const FormIngresos = () => {
     return (
         <Row className="justify-content-center">
             <Col xs="auto" sm="auto" md="auto" lg="auto" xl="auto" xxl="auto" >
-                <Card className="text-center card-form-ingreso mobile-form-ingreso">
-                    <Card.Header className="title-form" >Ingreso</Card.Header>
+                <Card className="text-center card-form mobile-form">
+                    {!close && <Card.Header className="title-form" >Ingreso</Card.Header>}
                     <Card.Body>
                         <Form noValidate validated={validated} onSubmit={handleValidacion} >
                             <Form.Group className="mb-3" >

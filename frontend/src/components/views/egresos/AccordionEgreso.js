@@ -6,14 +6,16 @@ import ModalFormulario from '../../utils/modal/formularios/ModalFormulario';
 
 //Hooks
 import { formatNumber } from '../../../hooks/useUtils';
+import { useUser } from '../../../hooks/useUser';
 
 //Img-Icons
 import * as Icons from 'react-bootstrap-icons';
 
 const AccordionEgreso = ({ egreso, setEgresos }) => {
+    const { user } = useUser();
     const [showForm, setShowForm] = useState(false);
 
-    const updateEgreso = (egreso) => {
+    const updateEgreso = () => {
         setShowForm(true);
     }
 
@@ -51,21 +53,25 @@ const AccordionEgreso = ({ egreso, setEgresos }) => {
                         }
                         <Col xs={12} md={12}>Nombre de quien cargo el comprobante<b>:</b> {egreso.usuario.nombre_apellido}</Col>
                     </Row>
-                    <Row className="border-top">
-                        <Col xs={12} md={12}>
-                            <p className="title-actions">Acciones</p>
-                        </Col>
-                        <Col xs={6} md={6}>
-                            <Row>
-                                <Col xs={1} md={1}>
-                                    <button className="icon-sum" onClick={() => updateEgreso(egreso)}><Icons.PlusSquareFill className="icon-sum" size={19} /></button>
-                                </Col>
-                                <Col xs={11} md={11}>
-                                    Modificar
-                                </Col>
-                            </Row>
-                        </Col>
-                    </Row>
+                    {user.rango == 'admin' &&
+                        <Row className="border-top">
+                            <Col xs={12} md={12}>
+                                <p className="title-actions">Acciones</p>
+                            </Col>
+                            <Col xs={6} md={6}>
+                                <button className="icon-sum" onClick={() => updateEgreso()}>
+                                    <Row>
+                                        <Col xs={1} md={1}>
+                                            <Icons.PencilSquare className="icon-sum" size={19} />
+                                        </Col>
+                                        <Col xs={10} md={10}>
+                                            Modificar
+                                        </Col>
+                                    </Row>
+                                </button>
+                            </Col>
+                        </Row>
+                    }
                 </Accordion.Body>
             </Accordion.Item>
         </Col>

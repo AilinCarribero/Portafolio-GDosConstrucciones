@@ -68,8 +68,8 @@ const FormUsuarios = () => {
     return (
         <Row className="justify-content-center">
             <Col xs="auto" sm="auto" md="auto" lg="auto" xl="auto" xxl="auto" >
-                <Card className="text-center card-form-user mobile-form-usuario">
-                    <Card.Header className="title-form" >Nuevo Usuario</Card.Header>
+                <Card className="text-center card-form mobile-form">
+                    {<Card.Header className="title-form" >Nuevo Usuario</Card.Header>}
                     <Card.Body>
                         <Form noValidate validated={validated} onSubmit={handleSubmit} >
                             <Form.Group className="mb-3">

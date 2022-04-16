@@ -14,7 +14,7 @@ import * as Icons from 'react-bootstrap-icons';
 
 const Materiales = () => {
     const { stock, setStock } = useGetStock();
-    console.log(stock);
+
     const [showForm, setShowForm] = useState(false);
     const [showModRestante, setShowModRestante] = useState(false);
     const [paramMaterial, setParamMaterial] = useState([]);
@@ -25,7 +25,14 @@ const Materiales = () => {
     }
 
     return (<>
-        <Button onClick={() => setShowForm(!showForm)} variant="dark" >Agregar material</Button>
+        <Row className="conten-buttons-agregar">
+            <Col xs={6} sm={6} md={4}>
+                <Button className="button-agregar" onClick={() => setShowForm(!showForm)} variant="dark" >
+                    <Icons.Plus className="icon-button" size={19} /> 
+                    Agregar material
+                </Button>
+            </Col>
+        </Row>
         <ModalFormulario formulario={'materiales'} show={showForm} setShow={setShowForm} updateNew={setStock} />
         {showModRestante && <ModRestante show={showModRestante} stock={paramMaterial} setShow={setShowModRestante} setStock={setStock} />}
 
@@ -77,14 +84,16 @@ const Materiales = () => {
                                         <p className="title-actions">Acciones</p>
                                     </Col>
                                     <Col xs={6} md={6}>
-                                        <Row>
-                                            <Col xs={1} md={1}>
-                                                <button className="icon-sum" onClick={() => updateRestanteValor(material)}><Icons.PlusSquareFill className="icon-sum" size={19} /></button>
-                                            </Col>
-                                            <Col xs={11} md={11}>
-                                                Agregar Cantidad
-                                            </Col>
-                                        </Row>
+                                        <button className="icon-sum" onClick={() => updateRestanteValor(material)}>
+                                            <Row>
+                                                <Col xs={1} md={1}>
+                                                    <Icons.PencilSquare className="icon-sum" size={19} />
+                                                </Col>
+                                                <Col xs={10} md={10}>
+                                                    Agregar Cantidad
+                                                </Col>
+                                            </Row>
+                                        </button>
                                     </Col>
                                 </Row>
                             </Accordion.Body>

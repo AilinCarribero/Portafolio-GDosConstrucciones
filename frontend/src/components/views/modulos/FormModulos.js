@@ -10,7 +10,7 @@ import { ToastComponent } from '../../../hooks/useUtils';
 //Css
 import './Modulos.css'
 
-const FormModulos = () => {
+const FormModulos = ({ close, updateModulo, setUpdateModulo }) => {
     const newDate = new Date();
     const año = newDate.getFullYear();
     const mes = newDate.getMonth();
@@ -54,8 +54,10 @@ const FormModulos = () => {
             try {
                 const resModulo = await insertModulos(auxModulo);
 
-                if (resModulo.data.todoOk == 'Ok' || resModulo.statusText == 'OK' || resModulo.status == 200) {
+                if (!resModulo.data.errors || resModulo.data.todoOk == 'Ok' || resModulo.statusText == 'OK' || resModulo.status == 200) {
                     ToastComponent('success');
+
+                    setUpdateModulo(resModulo.data);
 
                     setModulo({
                         nombre_modulo: '',
@@ -66,6 +68,7 @@ const FormModulos = () => {
                         estado: ''
                     });
                     setValidated(false);
+                    close();
                 } else {
                     ToastComponent('error');
                 }
@@ -78,8 +81,8 @@ const FormModulos = () => {
     return (<>
         <Row className="justify-content-center">
             <Col xs="auto" sm="auto" md="auto" lg="auto" xl="auto" xxl="auto" >
-                <Card className="text-center card-form-modulo mobile-form-modulo">
-                    <Card.Header className="title-form" >Ingrese un Nuevo Modulo</Card.Header>
+                <Card className="text-center card-form mobile-form">
+                    {!close && <Card.Header className="title-form" >Ingrese un Nuevo Modulo</Card.Header>}
                     <Card.Body>
                         <Form noValidate validated={validated} onSubmit={handleSubmitForm} >
                             <Form.Group className="mb-3" >

@@ -20,8 +20,20 @@ exports.insertModulo = (req, res) => {
 
     try {
         Modulo.create(req.body).then( response => {
-            response.todoOk = "Ok";
-            res.json(response);
+            Modulo.findAll({
+                include: [{
+                    model: Alquiler
+                }]
+            }).then(response => {
+                response.statusText = "Ok";
+                response.status = 200;
+                res.json(response);
+            }).catch(err => {
+                err.todoMal = "Error al guardar el modulo";
+                console.error(err);
+                res.json(err);
+                throw err;
+            });
         }).catch(err => {
             console.error(err)
             return res.json(err)

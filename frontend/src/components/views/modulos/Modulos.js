@@ -1,5 +1,5 @@
-import React from 'react';
-import { Accordion, Row, Col } from 'react-bootstrap';
+import React, { useState } from 'react';
+import { Accordion, Row, Col, Button } from 'react-bootstrap';
 
 //Hooks
 import { formatNumber } from '../../../hooks/useUtils';
@@ -8,10 +8,25 @@ import { useGetModulos } from '../../../hooks/useModulos';
 //Css
 import './Modulos.css';
 
+//Img-Icons
+import * as Icons from 'react-bootstrap-icons';
+import ModalFormulario from '../../utils/modal/formularios/ModalFormulario';
+
 const Modulos = () => {
-    const { modulos } = useGetModulos();
+    const { modulos, setModulos } = useGetModulos();
+
+    const [showForm, setShowForm] = useState(false);
 
     return (<>
+        <Row className="conten-buttons-agregar">
+            <Col xs={6} sm={6} md={4}>
+                <Button className="button-agregar" onClick={() => setShowForm(!showForm)} variant="dark" >
+                    <Icons.Plus className="icon-button" size={19} />
+                    Agregar modulo
+                </Button>
+            </Col>
+        </Row>
+        <ModalFormulario formulario={'modulo'} show={showForm} setShow={setShowForm} updateNew={setModulos} />
         <div>
             <Row>
                 <Accordion>
