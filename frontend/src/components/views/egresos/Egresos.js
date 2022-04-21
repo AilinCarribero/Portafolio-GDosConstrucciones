@@ -46,7 +46,7 @@ const Egresos = () => {
             <Accordion>
                 {egresos.length > 0 ?
                     egresos.map(egreso => (
-                        egreso.analisis_costo.analisis_costo == "Sueldo" ? user.rango == 'admin' &&
+                        egreso.analisis_costo.analisis_costo == "Retiros de Directorio" ? user.rango == 'admin' &&
                             <AccordionEgreso key={egreso.id_egreso} egreso={egreso} setEgresos={setEgresos} />
                             :
                             <AccordionEgreso key={egreso.id_egreso} egreso={egreso} setEgresos={setEgresos} />

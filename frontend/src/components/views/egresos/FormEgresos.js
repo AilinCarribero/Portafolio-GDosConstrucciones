@@ -291,8 +291,8 @@ const FormEgresos = ({ close, updateEgreso, setUpdateEgresos }) => {
 
         if ((resEgreso.statusText == 'OK' || resEgreso.status == 200) || resEgreso.data.todoOk == 'Ok' && !resEgreso.data.todoMal) {
             ToastComponent('success');
-            
-            if(updateEgreso){
+
+            if (updateEgreso) {
                 close();
                 setUpdateEgresos(resEgreso.data);
             }
@@ -381,8 +381,8 @@ const FormEgresos = ({ close, updateEgreso, setUpdateEgresos }) => {
                                     <FloatingLabel label="Proyecto">
                                         <Form.Select onChange={handleChangeForm} name="id_proyecto" value={egreso.id_proyecto} required >
                                             <option value=""> </option>
-                                            {proyectos.filter(filterProyecto => filterProyecto.id_centro_costo == egreso.centro_costo 
-                                            || (updateEgreso))
+                                            {proyectos.filter(filterProyecto => filterProyecto.id_centro_costo == egreso.centro_costo
+                                                || (updateEgreso))
                                                 .map((proyecto) => (
                                                     <option key={proyecto.id_proyecto} value={proyecto.id_proyecto}>
                                                         {proyecto.id_proyecto}
@@ -400,11 +400,15 @@ const FormEgresos = ({ close, updateEgreso, setUpdateEgresos }) => {
                                             <option value=""></option>
                                             {analisisCostos.map((analisisCosto) => (
                                                 proyectos.map((proyecto) => (
-                                                    egreso.id_proyecto == proyecto.id_proyecto && 
+                                                    egreso.id_proyecto == proyecto.id_proyecto &&
                                                     (analisisCosto.id_centro_costo == proyecto.id_centro_costo) &&
-                                                    <option key={analisisCosto.id_analisis_costo} value={analisisCosto.id_analisis_costo}>
-                                                        {analisisCosto.analisis_costo}
-                                                    </option>
+                                                    (analisisCosto.analisis_costo == "Retiros de Directorio" ? (user.rango == 'admin' &&
+                                                        <option key={analisisCosto.id_analisis_costo} value={analisisCosto.id_analisis_costo}>
+                                                            {analisisCosto.analisis_costo}
+                                                        </option>) :
+                                                        <option key={analisisCosto.id_analisis_costo} value={analisisCosto.id_analisis_costo}>
+                                                            {analisisCosto.analisis_costo}
+                                                        </option>)
                                                 ))
                                             ))}
                                         </Form.Select>
