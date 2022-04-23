@@ -11,7 +11,7 @@ import { formatNumber } from '../../../hooks/useUtils';
 import { useUser } from '../../../hooks/useUser';
 
 //Css
-import './Egresos.css';
+import '../../../style/Egresos.scss';
 
 const Egresos = () => {
     const { id } = useParams();

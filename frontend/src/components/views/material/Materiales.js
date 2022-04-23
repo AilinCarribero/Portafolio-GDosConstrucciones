@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Button, Col, Row, Accordion, Form } from "react-bootstrap";
+import React, { useState } from "react";
+import { Button, Col, Row, Accordion } from "react-bootstrap";
 
 //Component
 import ModalFormulario from "../../utils/modal/formularios/ModalFormulario";
@@ -83,13 +83,13 @@ const Materiales = () => {
                                     <Col xs={12} md={12}>
                                         <p className="title-actions">Acciones</p>
                                     </Col>
-                                    <Col xs={6} md={6}>
-                                        <button className="icon-sum" onClick={() => updateRestanteValor(material)}>
+                                    <Col xs={12} md={6}>
+                                        <button className="button-action" onClick={() => updateRestanteValor(material)}>
                                             <Row>
                                                 <Col xs={1} md={1}>
-                                                    <Icons.PencilSquare className="icon-sum" size={19} />
+                                                    <Icons.PencilSquare size={19} />
                                                 </Col>
-                                                <Col xs={10} md={10}>
+                                                <Col xs={10} md={10} className="text-action">
                                                     Agregar Cantidad
                                                 </Col>
                                             </Row>

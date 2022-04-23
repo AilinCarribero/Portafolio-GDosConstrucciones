@@ -28,7 +28,7 @@ const ValidacionMaterial = ({ mostrar, datos, pago, comprobantes, setShow, setSu
                 {datos.length >= 1 ? datos.map((dato, i) => (
                     <Row key={i}>
                         {i == 0 && (<>
-                            <Col className="texto" xs={12} sm={12}><b>Proyecto: </b>{datos.proyecto ? dato.proyecto[0].id_proyecto : 'CCE'} </Col>
+                            <Col className="texto" xs={12} sm={12}><b>Proyecto: </b>{datos.proyecto ? dato.proyecto : 'CCE'} </Col>
                             <Col className="texto" xs={12} sm={12}><b>Fecha de hoy: </b>{dato.fecha_pago} </Col>
                             {pago.map(forma => (
                                 forma.id_forma_pago == dato.id_forma_pago && <Col className="texto" xs={12} sm={12} key={forma.id_forma_pago}><b>Forma de pago: </b>{forma.forma_pago}</Col>
@@ -57,7 +57,7 @@ const ValidacionMaterial = ({ mostrar, datos, pago, comprobantes, setShow, setSu
                 ))
                     :
                     <Row>
-                        <Col className="texto" xs={12} sm={12}><b>Proyecto: </b>{datos.proyecto ? datos.proyecto[0].id_proyecto : 'CCE'} </Col>
+                        <Col className="texto" xs={12} sm={12}><b>Proyecto: </b>{datos.proyecto ? datos.proyecto : 'CCE'} </Col>
                         <Col className="texto" xs={12} sm={12}><b>Fecha de hoy: </b>{datos.fecha_pago} </Col>
                         {pago.map(forma => (
                             forma.id_forma_pago == datos.id_forma_pago &&

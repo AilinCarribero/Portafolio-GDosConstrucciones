@@ -15,7 +15,7 @@ exports.insertStock = async (req, res) => {
 
     datos.forEach((dato, i) => {
         const egreso = {
-            id_proyecto: dato.proyecto[0].id_proyecto,
+            id_proyecto: dato.proyecto,
             fecha_pago: dato.fecha_pago,
             fecha_diferido_pago: dato.fecha_diferido_pago ? dato.fecha_diferido_pago : '1000-01-01',
             id_forma_pago: dato.id_forma_pago,

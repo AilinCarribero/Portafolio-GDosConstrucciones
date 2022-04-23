@@ -28,6 +28,7 @@ const FormMateriales = ({ close, setStock }) => {
     const newDate = new Date();
     const año = newDate.getFullYear();
     const dia = newDate.getDate();
+    const proyectosCC = proyectos ? proyectos.filter((proyecto) => proyecto.id_proyecto.includes("CCC") || proyecto.id_proyecto.includes("CCE")) : [];
 
     const [newMaterial, setNewMaterial] = useState({
         nombre_stock: '',
@@ -45,7 +46,7 @@ const FormMateriales = ({ close, setStock }) => {
         observaciones: '',
         id_comprobante_pago: '',
         numero_comprobante: '',
-        proyecto: []
+        proyecto: ''
     });
 
     //Variables con informacion
@@ -156,7 +157,6 @@ const FormMateriales = ({ close, setStock }) => {
                             valor: newMaterial.valor_pago,
                             valor_pago: valorCuota,
                             fecha_diferido_pago: new Date(año, mesD, dia).toISOString().slice(0, 10),
-                            proyecto: proyectos.filter(proyecto => proyecto.id_proyecto == "CCE"),
                         }
                     }
                 }
@@ -176,7 +176,6 @@ const FormMateriales = ({ close, setStock }) => {
                         valor: newMaterial.valor_pago,
                         fecha_diferido_pago: auxChequeFD,
                         cheque: i,
-                        proyecto: proyectos.filter(proyecto => proyecto.id_proyecto == "CCE"),
                     }
                 }
                 setAuxNewMaterials(auxNewMaterial);
@@ -188,7 +187,6 @@ const FormMateriales = ({ close, setStock }) => {
                     ...newMaterial,
                     restante_valor: newMaterial.valor_pago,
                     valor: newMaterial.valor_pago,
-                    proyecto: proyectos.filter(proyecto => proyecto.id_proyecto == "CCE"),
                 }
 
                 setDatosValidacion(material);
@@ -247,14 +245,14 @@ const FormMateriales = ({ close, setStock }) => {
                 observaciones: '',
                 id_comprobante_pago: '',
                 numero_comprobante: '',
-                proyecto: [],
+                proyecto: '',
             })
 
             setValidated(false);
             close();
         } else {
-            if(resNewMaterial.data.todoMal){
-                ToastComponent('error',resNewMaterial.data.todoMal);
+            if (resNewMaterial.data.todoMal) {
+                ToastComponent('error', resNewMaterial.data.todoMal);
             } else {
                 ToastComponent('error');
             }
@@ -291,6 +289,20 @@ const FormMateriales = ({ close, setStock }) => {
                 <Card.Header className="title-form"> Material </Card.Header>
                 <Card.Body>
                     <Form noValidate validated={validated} onSubmit={handleValidacion} >
+                        <Form.Group className="mb-3" >
+                            <FloatingLabel label="Centro de Costo">
+                                <Form.Select onChange={handleChangeForm} name="proyecto" value={newMaterial.proyecto} required >
+                                    <option value=""> </option>
+                                    {
+                                        proyectosCC.map((proyecto) => (
+                                            <option key={proyecto.id_proyecto} value={proyecto.id_proyecto}>
+                                                {proyecto.id_proyecto}
+                                            </option>
+                                        ))
+                                    }
+                                </Form.Select>
+                            </FloatingLabel>
+                        </Form.Group>
                         <Form.Group className="mb-3">
                             <FloatingLabel controlId="floatingInput" label="Nombre/Identificador" className="mb-3">
                                 <Form.Control onChange={handleChangeForm} name="nombre_stock" type="text" value={newMaterial.nombre_stock} required />

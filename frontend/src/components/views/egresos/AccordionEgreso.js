@@ -59,12 +59,12 @@ const AccordionEgreso = ({ egreso, setEgresos }) => {
                                 <p className="title-actions">Acciones</p>
                             </Col>
                             <Col xs={6} md={6}>
-                                <button className="icon-sum" onClick={() => updateEgreso()}>
+                                <button className="button-action" onClick={() => updateEgreso()}>
                                     <Row>
-                                        <Col xs={1} md={1}>
-                                            <Icons.PencilSquare className="icon-sum" size={19} />
+                                        <Col xs={1} md={1} className='icon-action'>
+                                            <Icons.PencilSquare size={19} />
                                         </Col>
-                                        <Col xs={10} md={10}>
+                                        <Col xs={10} md={10} className='text-action'>
                                             Modificar
                                         </Col>
                                     </Row>

@@ -20,7 +20,7 @@ import { insertEgreso, setUpdateEgreso } from '../../../services/apiEgresos';
 import ValidacionEgreso from '../../utils/modal/validacion/ValidacionEgreso';
 
 //Css
-import './Egresos.css';
+import '../../../style/Egresos.scss';
 
 const FormEgresos = ({ close, updateEgreso, setUpdateEgresos }) => {
     const { user } = useUser();
@@ -362,20 +362,21 @@ const FormEgresos = ({ close, updateEgreso, setUpdateEgresos }) => {
                     {!close && <Card.Header className="title-form" >Gasto/Egreso</Card.Header>}
                     <Card.Body>
                         <Form noValidate validated={validated} onSubmit={handleValidacion} >
-                            {!updateEgreso && <Form.Group className="mb-3" >
-                                <FloatingLabel label="Tipo de Centro de Costo">
-                                    <Form.Select onChange={handleChangeForm} name="centro_costo" value={egreso.centro_costo} required >
-                                        <option value=""> </option>
-                                        {
-                                            centroCosto.map((centro_costo) => (
-                                                <option key={centro_costo.id_centro_costo} value={centro_costo.id_centro_costo}>
-                                                    {centro_costo.tipo_centro_costo}
-                                                </option>
-                                            ))
-                                        }
-                                    </Form.Select>
-                                </FloatingLabel>
-                            </Form.Group>}
+                            {!updateEgreso &&
+                                <Form.Group className="mb-3" >
+                                    <FloatingLabel label="Tipo de Centro de Costo">
+                                        <Form.Select onChange={handleChangeForm} name="centro_costo" value={egreso.centro_costo} required >
+                                            <option value=""> </option>
+                                            {
+                                                centroCosto.map((centro_costo) => (
+                                                    <option key={centro_costo.id_centro_costo} value={centro_costo.id_centro_costo}>
+                                                        {centro_costo.tipo_centro_costo}
+                                                    </option>
+                                                ))
+                                            }
+                                        </Form.Select>
+                                    </FloatingLabel>
+                                </Form.Group>}
                             {showProyecto &&
                                 <Form.Group className="mb-3" >
                                     <FloatingLabel label="Proyecto">

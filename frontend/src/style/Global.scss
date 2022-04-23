@@ -33,3 +33,20 @@
         width: 90vw !important;
     }
 }
+
+.button-action{
+    border: transparent;
+    background-color: transparent;
+    width: 100%;
+    margin-top: -5px;
+
+    &:hover{
+        color: grey;
+    }
+
+    .text-action{
+        position: relative;
+        top: 2px;
+        text-align: left;
+    }
+}

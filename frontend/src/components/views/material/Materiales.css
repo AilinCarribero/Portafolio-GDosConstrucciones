@@ -5,16 +5,6 @@
     bottom: 15px;
 }
 
-.icon-sum{
-    border: transparent;
-    background-color: transparent;
-    margin-top: -5px;
-}
-
-.icon-sum:hover{
-    color: grey;
-}
-
 .text-total{
     margin-top: -15px !important;
     margin-left: 5px;
