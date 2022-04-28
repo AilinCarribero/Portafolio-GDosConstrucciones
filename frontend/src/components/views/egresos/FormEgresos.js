@@ -58,6 +58,7 @@ const FormEgresos = ({ close, updateEgreso, setUpdateEgresos }) => {
         cantidad: updateEgreso && updateEgreso.cantidad ? updateEgreso.cantidad : 0,
         cuotaNumero: updateEgreso && updateEgreso.cuota ? updateEgreso.cuota : 0,
         cuota: updateEgreso && updateEgreso.cuotas ? updateEgreso.cuotas : 0,
+        proveedor: updateEgreso && updateEgreso.proveedor ? updateEgreso.proveedor : '',
     });
 
     //Variables con informacion
@@ -318,7 +319,8 @@ const FormEgresos = ({ close, updateEgreso, setUpdateEgresos }) => {
                 id_comprobante_pago: egreso.id_comprobante_pago,
                 numero_comprobante: '',
                 centro_costo: '',
-                id_stock: ''
+                id_stock: '',
+                proveedor: ''
             })
             setValidated(false);
             setDatosValidacion([]);
@@ -537,13 +539,19 @@ const FormEgresos = ({ close, updateEgreso, setUpdateEgresos }) => {
                                     </FloatingLabel>
                                 </Form.Group>
                             }
+
                             <Form.Group className="mb-3">
-                                <FloatingLabel controlId="floatingInputGrid" label="Detalle">
-                                    <Form.Control onChange={handleChangeForm} name="observaciones" type="text" value={egreso.observaciones} />
-                                </FloatingLabel>
-                            </Form.Group>
-                            <Form.Group className="mb-3">
-                                <Form.Label className="label-title">Comprobante de Pago</Form.Label>
+                                <Form.Label className="label-title">Detalle</Form.Label>
+                                <Form.Group className="mb-3">
+                                    <FloatingLabel controlId="floatingInputGrid" label="Proveedor">
+                                        <Form.Control onChange={handleChangeForm} name="proveedor" type="text" value={egreso.proveedor} />
+                                    </FloatingLabel>
+                                </Form.Group>
+                                <Form.Group className="mb-3">
+                                    <FloatingLabel controlId="floatingInputGrid" label="Observaciones">
+                                        <Form.Control onChange={handleChangeForm} name="observaciones" type="text" value={egreso.observaciones} />
+                                    </FloatingLabel>
+                                </Form.Group>
                                 <Row key={`inline-radio`} className="check">
                                     <Col xs={4} sm={4} >
                                         <Form.Check inline onChange={handleChangeForm} label="Factura" name="comprobante" value="Factura" type="radio" checked={checkComprobante == 'Factura'} />

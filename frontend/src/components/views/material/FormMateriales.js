@@ -399,12 +399,17 @@ const FormMateriales = ({ close, setStock }) => {
                             </Form.Group>
                         }
                         <Form.Group className="mb-3">
-                            <FloatingLabel controlId="floatingInputGrid" label="Detalle">
-                                <Form.Control onChange={handleChangeForm} name="observaciones" type="text" value={newMaterial.observaciones} />
-                            </FloatingLabel>
-                        </Form.Group>
-                        <Form.Group className="mb-3">
-                            <Form.Label className="label-title">Comprobante de Pago</Form.Label>
+                            <Form.Label className="label-title">Detalle</Form.Label>
+                            <Form.Group className="mb-3">
+                                <FloatingLabel controlId="floatingInputGrid" label="Proveedor">
+                                    <Form.Control onChange={handleChangeForm} name="proveedor" type="text" value={newMaterial.proveedor} />
+                                </FloatingLabel>
+                            </Form.Group>
+                            <Form.Group className="mb-3">
+                                <FloatingLabel controlId="floatingInputGrid" label="Observaciones">
+                                    <Form.Control onChange={handleChangeForm} name="observaciones" type="text" value={newMaterial.observaciones} />
+                                </FloatingLabel>
+                            </Form.Group>
                             <Row key={`inline-radio`} className="check">
                                 <Col xs={4} sm={4} >
                                     <Form.Check inline onChange={handleChangeForm} label="Factura" name="comprobante" value="Factura" type="radio" checked={checkComprobante == 'Factura'} />

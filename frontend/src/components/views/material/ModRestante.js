@@ -11,6 +11,7 @@ import { ToastComponent, formatNumber, desformatNumber } from "../../../hooks/us
 import { useUser } from "../../../hooks/useUser";
 import { useGetFormasPagos } from "../../../hooks/useFormasPagos";
 import { useGetComprobantesPago } from "../../../hooks/useComprobantePago";
+import { useGetProyectos } from "../../../hooks/useProyectos";
 
 //Services
 import { updateStock } from "../../../services/apiStock";
@@ -19,11 +20,13 @@ const ModRestante = ({ show, stock, setShow, setStock }) => {
     const { user } = useUser();
     const { formasPagos } = useGetFormasPagos();
     const { comprobantePago } = useGetComprobantesPago();
+    const { proyectos } = useGetProyectos();
 
     /*Declaracion de variables de fecha*/
     const newDate = new Date();
     const año = newDate.getFullYear();
     const dia = newDate.getDate();
+    const proyectosCC = proyectos ? proyectos.filter((proyecto) => proyecto.id_proyecto.includes("CCC") || proyecto.id_proyecto.includes("CCE")) : [];
 
     const [cambiar, setCambiar] = useState({
         nombre_stock: stock.nombre_stock,
@@ -40,9 +43,10 @@ const ModRestante = ({ show, stock, setShow, setStock }) => {
         observaciones: '',
         id_comprobante_pago: '',
         numero_comprobante: '',
-        id_user: stock.usuario.id_user
+        id_user: stock.usuario.id_user,
+        proyecto: ''
     });
-
+    console.log(stock)
     //Variables con informacion
     const [cantCheque, setCantCheque] = useState(0);
     const [cheques, setCheques] = useState();
@@ -223,7 +227,8 @@ const ModRestante = ({ show, stock, setShow, setStock }) => {
                 observaciones: '',
                 id_comprobante_pago: '',
                 numero_comprobante: '',
-                id_user: ''
+                id_user: '',
+                proyecto: ''
             });
             setShow(false);
         } else {
@@ -265,6 +270,20 @@ const ModRestante = ({ show, stock, setShow, setStock }) => {
             </Modal.Header>
             <Modal.Body className="modal-content">
                 <Form noValidate validated={validated} onSubmit={handleValidacion}>
+                    <Form.Group className="mb-3" >
+                        <FloatingLabel label="Centro de Costo">
+                            <Form.Select onChange={handleChange} name="proyecto" value={cambiar.proyecto} required >
+                                <option value=""> </option>
+                                {
+                                    proyectosCC.map((proyecto) => (
+                                        <option key={proyecto.id_proyecto} value={proyecto.id_proyecto}>
+                                            {proyecto.id_proyecto}
+                                        </option>
+                                    ))
+                                }
+                            </Form.Select>
+                        </FloatingLabel>
+                    </Form.Group>
                     <Row>
                         <Col xs={12} sm={6}>
                             <Form.Group className="mb-3">
@@ -357,12 +376,17 @@ const ModRestante = ({ show, stock, setShow, setStock }) => {
                         </Form.Group>
                     }
                     <Form.Group className="mb-3">
-                        <FloatingLabel controlId="floatingInputGrid" label="Detalle">
-                            <Form.Control onChange={handleChange} name="observaciones" type="text" value={cambiar.observaciones} />
-                        </FloatingLabel>
-                    </Form.Group>
-                    <Form.Group className="mb-3">
-                        <Form.Label className="label-title">Comprobante de Pago</Form.Label>
+                        <Form.Label className="label-title">Detalle</Form.Label>
+                        <Form.Group className="mb-3">
+                            <FloatingLabel controlId="floatingInputGrid" label="Proveedor">
+                                <Form.Control onChange={handleChange} name="proveedor" type="text" value={cambiar.proveedor} />
+                            </FloatingLabel>
+                        </Form.Group>
+                        <Form.Group className="mb-3">
+                            <FloatingLabel controlId="floatingInputGrid" label="Observaciones">
+                                <Form.Control onChange={handleChange} name="observaciones" type="text" value={cambiar.observaciones} />
+                            </FloatingLabel>
+                        </Form.Group>
                         <Row key={`inline-radio`} className="check">
                             <Col xs={4} sm={4} >
                                 <Form.Check inline onChange={handleChange} label="Factura" name="comprobante" value="Factura" type="radio" checked={checkComprobante == 'Factura'} />

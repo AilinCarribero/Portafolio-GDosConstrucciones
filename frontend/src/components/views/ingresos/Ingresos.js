@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { Accordion, Row, Col } from 'react-bootstrap';
 
 //Hooks
-import { formatNumber } from '../../../hooks/useUtils';
+import { formatFecha, formatNumber } from '../../../hooks/useUtils';
 import { useGetIngresosId } from '../../../hooks/useIngresos';
 
 //Css
@@ -51,9 +51,9 @@ const Ingresos = () => {
                                     </Accordion.Header>
                                     <Accordion.Body>
                                         <Row>
-                                            <Col xs={12} md={6}>Fecha del cobro<b>:</b> {new Date(ingreso.fecha_cobro).toISOString().slice(0, 10)}</Col>
-                                            {(new Date(ingreso.fecha_diferido_cobro) > new Date(ingreso.fecha_cobro)) && <>
-                                                <Col xs={12} md={6}>Fecha diferida<b>:</b> {new Date(ingreso.fecha_diferido_cobro).toISOString().slice(0, 10)}</Col>
+                                            <Col xs={12} md={6}>Fecha del cobro<b>:</b> {formatFecha(ingreso.fecha_cobro)}</Col>
+                                            {(formatFecha(ingreso.fecha_diferido_cobro) > formatFecha(ingreso.fecha_cobro)) && <>
+                                                <Col xs={12} md={6}>Fecha diferida<b>:</b> {formatFecha(ingreso.fecha_diferido_cobro)}</Col>
                                             </>}
                                         </Row>
                                         <Row>

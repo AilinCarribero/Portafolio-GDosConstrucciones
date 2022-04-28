@@ -28,6 +28,7 @@ module.exports = ( sequelize, type ) => {
         },
         valor_pago: type.DOUBLE,
         observaciones: type.STRING(100),
+        proveedor: type.STRING(100),
         cuotas: {
             type: type.INTEGER,
             isNumeric: true

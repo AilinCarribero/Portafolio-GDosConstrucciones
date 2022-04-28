@@ -3,7 +3,7 @@ import { Modal, Button, Row, Col } from 'react-bootstrap';
 
 //Icons
 import * as Icons from 'react-bootstrap-icons';
-import { formatNumber } from '../../../../hooks/useUtils';
+import { formatFecha, formatNumber } from '../../../../hooks/useUtils';
 
 //Css
 import './Validacion.css';
@@ -30,7 +30,7 @@ const ValidacionEgreso = ({ mostrar, datos, pago, comprobantes, analisisCostos, 
                         {
                             i == 0 && (<>
                                 <Col className="texto" xs={12} sm={12}><b>Proyecto: </b>{dato.id_proyecto} </Col>
-                                <Col className="texto" xs={12} sm={12}><b>Fecha de hoy: </b>{dato.fecha_pago} </Col>
+                                <Col className="texto" xs={12} sm={12}><b>Fecha de hoy: </b>{formatFecha(dato.fecha_pago)} </Col>
                                 {pago.map(forma => (
                                     forma.id_forma_pago == dato.id_forma_pago && <Col className="texto" xs={12} sm={12} key={forma.id_forma_pago}><b>Forma de pago: </b>{forma.forma_pago}</Col>
                                 ))}
@@ -50,6 +50,7 @@ const ValidacionEgreso = ({ mostrar, datos, pago, comprobantes, analisisCostos, 
                                         <Col className="texto" xs={5} sm={5}><b>N°: </b>{dato.numero_comprobante} </Col>
                                     </Row>))
                                 }
+                                {dato.proveedor && <Col className="texto" xs={12} sm={12}><b>Proveedor: </b>{dato.proveedor}</Col>}
                                 {dato.observaciones && <Col className="texto" xs={12} sm={12}><b>Observaciones: </b>{dato.observaciones}</Col>}
                             </>)
                         }
@@ -58,14 +59,14 @@ const ValidacionEgreso = ({ mostrar, datos, pago, comprobantes, analisisCostos, 
                                 {dato.cuotaNumero == 0 && <Col className="texto" xs={12} sm={12}><b>Cantidad de cuotas: </b>{dato.cuota}</Col>}
                                 <Col className="texto" xs={6} sm={6}><b>Cuota N°: </b>{dato.cuotaNumero + 1}</Col>
                                 <Col className="texto" xs={6} sm={6}><b>Monto: $</b>{formatNumber(dato.valor_pago)}</Col>
-                                <Col className="texto" xs={12} sm={12}><b>Fecha a pagar: </b>{dato.fecha_diferido_pago}</Col>
+                                <Col className="texto" xs={12} sm={12}><b>Fecha a pagar: </b>{formatFecha(dato.fecha_diferido_pago)}</Col>
                             </>)
                         }
                         {
                             dato.cheque >= 0 && (<>
                                 <Col className="texto" xs={3} sm={3}><b>Cheque: </b>{dato.cheque + 1}</Col>
                                 <Col className="texto" xs={6} sm={6}><b>Monto: $</b> {dato.valor_pago}</Col>
-                                <Col className="texto" xs={12} sm={12}><b>Fecha a pagar: </b>{dato.fecha_diferido_pago}</Col>
+                                <Col className="texto" xs={12} sm={12}><b>Fecha a pagar: </b>{formatFecha(dato.fecha_diferido_pago)}</Col>
                             </>)
                         }
                     </Row>
@@ -73,7 +74,7 @@ const ValidacionEgreso = ({ mostrar, datos, pago, comprobantes, analisisCostos, 
                     :
                     <Row>
                         <Col className="texto" xs={12} sm={12}><b>Proyecto: </b>{datos.id_proyecto} </Col>
-                        <Col className="texto" xs={12} sm={12}><b>Fecha de hoy: </b>{datos.fecha_pago} </Col>
+                        <Col className="texto" xs={12} sm={12}><b>Fecha de hoy: </b>{formatFecha(datos.fecha_pago)} </Col>
                         {
                             pago.map(forma => (
                                 forma.id_forma_pago == datos.id_forma_pago && <Col className="texto" xs={12} sm={12} key={forma.id_forma_pago}><b>Forma de pago: </b>{forma.forma_pago}</Col>
@@ -101,6 +102,7 @@ const ValidacionEgreso = ({ mostrar, datos, pago, comprobantes, analisisCostos, 
                                     <Col className="texto" xs={6} sm={6}><b>N°: </b>{datos.numero_comprobante} </Col>
                                 </Row>))
                         }
+                        {datos.proveedor && <Col className="texto" xs={12} sm={12}><b>Proveedor: </b>{datos.proveedor}</Col>}
                         {datos.observaciones && <Col className="texto" xs={12} sm={12}><b>Observaciones: </b>{datos.observaciones}</Col>}
                     </Row>
                 }

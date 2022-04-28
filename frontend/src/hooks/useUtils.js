@@ -33,7 +33,19 @@ export const ToastComponent = (estado, mensaje) => {
         { theme: "dark", autoClose: 5000, toastId: customId }
     );
     estado == 'success' && toast.success(
-        mensaje ? mensaje : "Se envio con exito!",
+        mensaje ? mensaje : "Se envió con éxito!",
         { theme: "dark", autoClose: 5000, toastId: customId }
     );
+}
+
+//Formatea la fecha para mostrarse en el orden dd-mm-aaaa
+export const formatFecha = (fecha) => {
+    const date = new Date(fecha);
+    const año = date.getFullYear();
+    const mes = date.getMonth()+1;
+    const dia = date.getDate()+1;
+
+    const fechaFormat = dia +'/'+ mes +'/'+ año;
+
+    return fechaFormat
 }

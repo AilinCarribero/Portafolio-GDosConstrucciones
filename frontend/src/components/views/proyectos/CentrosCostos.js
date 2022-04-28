@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import ModalFormulario from '../../utils/modal/formularios/ModalFormulario';
 
 //Hooks
-import { formatNumber } from '../../../hooks/useUtils';
+import { formatFecha, formatNumber } from '../../../hooks/useUtils';
 import { useUser } from '../../../hooks/useUser';
 
 //Img-Icons
@@ -21,6 +21,7 @@ const CentrosCostos = ({ proyectos, mostrar,setProyectos }) => {
     const [showForm, setShowForm] = useState(false);
     const [formulario, setFormulario] = useState();
 
+    console.log(proyectosMostrar);
     useEffect(() => {
         if (proyectos) {
             setProyectosMostrar(
@@ -124,7 +125,10 @@ const CentrosCostos = ({ proyectos, mostrar,setProyectos }) => {
                 proyectosMostrar.map(proyecto => (
                     <Col key={proyecto.id_proyecto} >
                         <Accordion.Item eventKey={proyecto.id_proyecto} className={proyecto.id_centro_costo == 1 || proyecto.id_centro_costo == 3 ? 'accordionCC' : ''}>
-                            <Accordion.Header> {proyecto.id_proyecto} </Accordion.Header>
+                            <Accordion.Header> 
+                                <Col xs={12} md={5}>{proyecto.id_proyecto}</Col>
+                                <Col xs={4} md={4}> Resto: ${formatNumber(ingresosProyecto(proyecto.ingresos)-egresosProyecto(proyecto.egresos))} / USD${formatNumber(ingresosUSDProyecto(proyecto.ingresos)-egresosUSDProyecto(proyecto.egresos))}</Col>
+                            </Accordion.Header>
                             <Accordion.Body>
                                 <Row>
                                     {proyecto.id_centro_costo == 2 && user.rango != 'usuario comun' && <>
@@ -176,6 +180,22 @@ const CentrosCostos = ({ proyectos, mostrar,setProyectos }) => {
                                                     <Col xs={6} md={6}><p>${formatNumber(ingresosProyecto(proyecto.ingresos))} </p></Col>
                                                     <Col xs={5} md={5}><p>USD${formatNumber(ingresosUSDProyecto(proyecto.ingresos))} </p></Col>
                                                 </Col>
+                                            </Row>
+                                        </Col>
+                                    }
+                                    {user.rango == "admin" &&
+                                        <Col xs={12} md={6}>
+                                            <Row>
+                                                <Col xs={1} md={1}></Col>
+                                                <Col xs={11} md={11}><p> Fecha de inicio: {formatFecha(proyecto.fecha_i_proyecto)}</p> </Col>
+                                            </Row>
+                                        </Col>
+                                    }
+                                    {user.rango == "admin" && proyecto.fecha_f_proyecto &&
+                                        <Col xs={12} md={6}>
+                                            <Row>
+                                                <Col xs={1} md={1}></Col>
+                                                <Col xs={11} md={11}><p> Fecha de finalizacion: {formatFecha(proyecto.fecha_f_proyecto)}</p> </Col>
                                             </Row>
                                         </Col>
                                     }

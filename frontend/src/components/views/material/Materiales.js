@@ -7,7 +7,7 @@ import ModRestante from "./ModRestante";
 
 //Hooks
 import { useGetStock } from "../../../hooks/useStock";
-import { formatNumber } from "../../../hooks/useUtils";
+import { formatFecha, formatNumber } from "../../../hooks/useUtils";
 
 //Img-Icons
 import * as Icons from 'react-bootstrap-icons';
@@ -61,7 +61,7 @@ const Materiales = () => {
                                                     <Col xs={11} md={11}>Ingresado por {material.usuario.nombre_apellido}</Col>
                                                 </Row>
                                                 <Row>
-                                                    <Col xs={11} md={11}> Creado: {new Date(material.createdAt).toISOString().slice(0, 10)}</Col>
+                                                    <Col xs={11} md={11}> Creado: {formatFecha(material.createdAt)}</Col>
                                                 </Row>
                                             </Col>
                                         </Row>
@@ -73,7 +73,7 @@ const Materiales = () => {
                                                     <Col xs={11} md={11}> Valor Unitario: ${formatNumber(material.valor_unidad)}</Col>
                                                 </Row>
                                                 <Row>
-                                                    <Col xs={11} md={11}>Ultimo Cambio: {new Date(material.updatedAt).toISOString().slice(0, 10)}</Col>
+                                                    <Col xs={11} md={11}>Ultimo Cambio: {formatFecha(material.updatedAt)}</Col>
                                                 </Row>
                                             </Col>
                                         </Row>
