@@ -6,11 +6,11 @@ import NumberFormat from 'react-number-format';
 import { useGetFormasCobro } from '../../../hooks/useFormasCobro';
 import { useGetProyectos } from '../../../hooks/useProyectos';
 import { useUser } from '../../../hooks/useUser';
-import { ToastComponent } from '../../../hooks/useUtils';
+import { formatFecha, ToastComponent } from '../../../hooks/useUtils';
 import { useGetCentroCosto } from '../../../hooks/useCentroCosto';
 
 //Servicios
-import { insertIngreso } from '../../../services/apiIngresos';
+import { insertIngreso, setUpdateIngreso } from '../../../services/apiIngresos';
 
 //Componentes
 import ValidacionIngreso from '../../utils/modal/validacion/ValidacionIngreso';
@@ -18,7 +18,7 @@ import ValidacionIngreso from '../../utils/modal/validacion/ValidacionIngreso';
 //Cass
 import './Ingresos.css';
 
-const FormIngresos = ({ close, updateIngreso, setUpdateIngreso }) => {
+const FormIngresos = ({ close, updateIngreso, setUpdateIngresos }) => {
     const { user } = useUser();
     const newDate = new Date();
     const año = newDate.getFullYear();
@@ -32,13 +32,14 @@ const FormIngresos = ({ close, updateIngreso, setUpdateIngreso }) => {
     //Datos a enviarse a la api para ingresar/modificar ingresos
     const [ingreso, setIngreso] = useState({
         id_user: user.id,
-        fecha_cobro: new Date().toISOString().slice(0, 10),
-        id_proyecto: '',
-        valor_cobro: 0,
-        valor_usd: 0,
-        fecha_diferido_cobro: '',
-        observaciones: '',
-        centro_costo: ''
+        fecha_cobro: updateIngreso ? new Date(updateIngreso.fecha_cobro).toISOString().slice(0, 10) : new Date().toISOString().slice(0, 10),
+        id_proyecto: updateIngreso ? updateIngreso.id_proyecto : '',
+        valor_cobro: updateIngreso ? updateIngreso.valor_cobro : 0,
+        valor_usd: updateIngreso ? updateIngreso.valor_usd : 0,
+        fecha_diferido_cobro: updateIngreso ? new Date(updateIngreso.fecha_diferido_cobro).toISOString().slice(0, 10) : '',
+        observaciones: updateIngreso ? updateIngreso.observaciones : '',
+        centro_costo: updateIngreso ? updateIngreso.forma_cobro.id_centro_costo : '',
+        id_forma_cobro: updateIngreso ? updateIngreso.id_forma_cobro : ''
     })
 
     //Variables con infomacion
@@ -48,14 +49,13 @@ const FormIngresos = ({ close, updateIngreso, setUpdateIngreso }) => {
     const [auxIngresos, setAuxIngresos] = useState([]);
 
     //Checks
-    const [checkUSD, setCheckUSD] = useState(0);
+    const [checkUSD, setCheckUSD] = useState(updateIngreso && updateIngreso.valor_usd ? 1 : 0);
 
     //Eventos para mostrar partes del formulario
-    const [showProyecto, setShowProyecto] = useState(false);
+    const [showProyecto, setShowProyecto] = useState(updateIngreso && updateIngreso.id_proyecto ? true : false);
     const [showFC, setShowFC] = useState(false);
     const [showCuotas, setShowCuotas] = useState(false);
-    const [showFechaDif, setShowFechaDif] = useState(false);
-    //const [showDetalle, setShowDetalle] = useState(false);
+    const [showFechaDif, setShowFechaDif] = useState(updateIngreso && updateIngreso.fecha_diferido_cobro ? true : false);
     const [showCheque, setShowCheque] = useState(false);
     const [showDataCheques, setShowDataCheques] = useState(false);
     const [showModal, setShowModal] = useState(false);
@@ -189,24 +189,39 @@ const FormIngresos = ({ close, updateIngreso, setUpdateIngreso }) => {
     const handleSubmit = async () => {
         let resIngreso = [];
 
-        if (auxIngresos.length > 0) {
+        if (updateIngreso) {
             try {
-                resIngreso = await insertIngreso(auxIngresos);
+                ingreso.id_ingreso = updateIngreso.id_ingreso;
+                resIngreso = await setUpdateIngreso(ingreso);
             } catch (error) {
-                console.log(error);
+                console.error(error);
                 ToastComponent('error');
             }
         } else {
-            try {
-                resIngreso = await insertIngreso(ingreso);
-            } catch (error) {
-                console.log(error);
-                ToastComponent('error');
+            if (auxIngresos.length > 0) {
+                try {
+                    resIngreso = await insertIngreso(auxIngresos);
+                } catch (error) {
+                    console.error(error);
+                    ToastComponent('error');
+                }
+            } else {
+                try {
+                    resIngreso = await insertIngreso(ingreso);
+                } catch (error) {
+                    console.error(error);
+                    ToastComponent('error');
+                }
             }
         }
 
-        if (resIngreso.data.todoOk == 'Ok' || resIngreso.statusText == 'OK' || resIngreso.status == 200) {
+        if ((resIngreso.statusText == 'OK' || resIngreso.status == 200) || resIngreso.data.todoOk == 'Ok' && !resIngreso.data.todoMal) {
             ToastComponent('success');
+
+            if (updateIngreso) {
+                close();
+                setUpdateIngresos(resIngreso.data);
+            }
 
             //En caso de tener algun elemento extra mostrandose se vuelve a ocular
             showCuotas && setShowCuotas(false);
@@ -271,20 +286,22 @@ const FormIngresos = ({ close, updateIngreso, setUpdateIngreso }) => {
                     {!close && <Card.Header className="title-form" >Ingreso</Card.Header>}
                     <Card.Body>
                         <Form noValidate validated={validated} onSubmit={handleValidacion} >
-                            <Form.Group className="mb-3" >
-                                <FloatingLabel label="Eligue el tipo de Centro de Costo">
-                                    <Form.Select onChange={handleChangeForm} name="centro_costo" value={ingreso.centro_costo} required >
-                                        <option value=""> </option>
-                                        {
-                                            centroCosto.map((centro_costo) => (
-                                                <option key={centro_costo.id_centro_costo} value={centro_costo.id_centro_costo}>
-                                                    {centro_costo.tipo_centro_costo}
-                                                </option>
-                                            ))
-                                        }
-                                    </Form.Select>
-                                </FloatingLabel>
-                            </Form.Group>
+                            {!updateIngreso &&
+                                <Form.Group className="mb-3" >
+                                    <FloatingLabel label="Eligue el tipo de Centro de Costo">
+                                        <Form.Select onChange={handleChangeForm} name="centro_costo" value={ingreso.centro_costo} required >
+                                            <option value=""> </option>
+                                            {
+                                                centroCosto.map((centro_costo) => (
+                                                    <option key={centro_costo.id_centro_costo} value={centro_costo.id_centro_costo}>
+                                                        {centro_costo.tipo_centro_costo}
+                                                    </option>
+                                                ))
+                                            }
+                                        </Form.Select>
+                                    </FloatingLabel>
+                                </Form.Group>
+                            }
                             {showProyecto &&
                                 <Form.Group className="mb-3" >
                                     <FloatingLabel label="Eligue el proyecto">
@@ -304,7 +321,7 @@ const FormIngresos = ({ close, updateIngreso, setUpdateIngreso }) => {
                             }
                             <Form.Group className="mb-3" >
                                 <FloatingLabel label="Forma en que se realizo el ingreso">
-                                    <Form.Select onChange={handleChangeForm} name="id_forma_cobro" value={ingreso.id_forma_cobro} required >
+                                    <Form.Select onChange={handleChangeForm} name="id_forma_cobro" value={ingreso.id_forma_cobro} required disabled={updateIngreso ? true : false} >
                                         <option value=""></option>
                                         {formasCobro.map((formaCobro) => (
                                             proyectos.map((proyecto) => (

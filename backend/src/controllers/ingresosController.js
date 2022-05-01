@@ -12,13 +12,6 @@ exports.insertIngreso = async (req, res) => {
             dato.cuotaNumero = !dato.cuotaNumero ? 0 : dato.cuotaNumero;
             dato.observaciones = !dato.observaciones ? '' : dato.observaciones;
 
-            if (parseInt(dato.cuota, 10) == 0) {
-                //Para guardar correctamente el valor de cobro nos aseguramos que este en un formato que la base de datos entienda
-                dato.valor_cobro = dato.valor_cobro.toString().replace(/\./g, '');
-                dato.valor_cobro = dato.valor_cobro.replace(/\,/g, '.');
-                dato.valor_cobro = parseFloat(dato.valor_cobro);
-            }
-
             Ingreso.create(dato).then(response => {
                 response.todoOk = "Ok";
                 response.statusText = "Ok";

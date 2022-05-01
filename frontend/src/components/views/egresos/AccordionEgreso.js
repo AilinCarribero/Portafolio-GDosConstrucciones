@@ -21,6 +21,7 @@ const AccordionEgreso = ({ egreso, setEgresos }) => {
 
     return (<>
         {showForm && <ModalFormulario formulario={'egreso'} informacion={egreso} show={showForm} setShow={setShowForm} updateNew={setEgresos} />}
+        
         <Col>
             <Accordion.Item eventKey={egreso.id_egreso}>
                 <Accordion.Header>

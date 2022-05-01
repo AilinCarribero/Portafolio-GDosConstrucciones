@@ -16,3 +16,8 @@ export const getIngresosId = async (id) => {
     const response = await axios.get(API+`ingresos/${id}`, servisTokenConfig);
     return response.data;
 }
+
+export const setUpdateIngreso = async (ingreso) => {
+    const response = await axios.post(API+'ingresos/update', ingreso, servisTokenConfig);
+    return response;
+}

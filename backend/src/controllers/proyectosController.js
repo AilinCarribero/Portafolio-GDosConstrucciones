@@ -25,18 +25,10 @@ exports.insertProyecto = async (req, res) => {
     let id_proyecto = '';
     const countAlquileres = req.body.alquileres ? (req.body.alquileres).length : '';
 
-    if (!req.body.costo) {
-        req.body.costo = 0;
-    }
-    if (!req.body.venta) {
-        req.body.venta = 0;
-    }
-    if (!req.body.alquiler_total) {
-        req.body.venta = 0;
-    }
-    if (!req.body.fecha_f_proyecto) {
-        req.body.fecha_f_proyecto = '1000-01-01';
-    }
+    req.body.costo = !req.body.costo ? 0 : req.body.costo;
+    req.body.venta = !req.body.venta ? 0 : req.body.venta;
+    req.body.alquiler_total = !req.body.alquiler_total ? 0 : req.body.alquiler_total;
+    req.body.fecha_f_proyecto = !req.body.fecha_f_proyecto ? '1000-01-01' : req.body.fecha_f_proyecto;
 
     try {
         const centro_costo = req.body.id_centro_costo ? await CentroCosto.findAll({
@@ -136,4 +128,49 @@ exports.insertProyecto = async (req, res) => {
         console.error(error);
         return res.json(error);
     }
+}
+
+
+//Modificar proyecto
+exports.updateProyecto = async (req, res) => {
+    const proyecto = req.body;
+
+    proyecto.costo = !proyecto.costo ? 0 : proyecto.costo;
+    proyecto.venta = !proyecto.venta ? 0 : proyecto.venta;
+    proyecto.alquiler_total = !proyecto.alquiler_total ? 0 : proyecto.alquiler_total;
+    proyecto.fecha_f_proyecto = !proyecto.fecha_f_proyecto ? '1000-01-01' : proyecto.fecha_f_proyecto;
+
+    Proyecto.update(proyecto, {
+        where: {
+            id_proyecto: proyecto.id_proyecto
+        }
+    }).then(response => {
+        Proyecto.findAll({
+            include: [{
+                model: Alquiler,
+                include: [{
+                    model: Modulo
+                }]
+            }, {
+                model: Egreso
+            }, {
+                model: Ingreso
+            }]
+        }).then(response => {
+            response.statusText = "Ok";
+            response.status = 200;
+
+            res.json(response);
+        }).catch(err => {
+            err.todoMal = "Error al actualizar el proyecto";
+            console.error(err);
+            res.json(err);
+            throw err;
+        });
+    }).catch(err => {
+        err.todoMal = "Error al actualizar el proyecto";
+        console.error(err);
+        res.json(err);
+        throw err;
+    })
 }

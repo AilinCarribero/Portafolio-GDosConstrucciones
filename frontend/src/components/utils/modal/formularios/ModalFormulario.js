@@ -24,9 +24,9 @@ const ModalFormulario = ({ formulario, show, setShow, updateNew, informacion }) 
             <Modal.Body className="modal-content">
                 {formulario == 'materiales' && <FormMateriales close={handleClose} setStock={updateNew} />}
                 {formulario == 'egreso' && <FormEgresos close={handleClose} updateEgreso={informacion} setUpdateEgresos={updateNew} />}
-                {formulario == 'ingreso' && <FormIngresos close={handleClose} updateIngreso={informacion} setUpdateIngreso={updateNew} />}
+                {formulario == 'ingreso' && <FormIngresos close={handleClose} updateIngreso={informacion} setUpdateIngresos={updateNew} />}
                 {formulario == 'modulo' && <FormModulos close={handleClose} updateModulo={informacion} setUpdateModulo={updateNew} />}
-                {formulario == 'proyecto' && <FormProyectos close={handleClose} updateProyecto={informacion} setUpdateProyecto={updateNew} />}
+                {formulario == 'proyecto' && <FormProyectos close={handleClose} updateProyecto={informacion} setUpdateProyectos={updateNew} />}
             </Modal.Body>
         </Modal>
     </>)
