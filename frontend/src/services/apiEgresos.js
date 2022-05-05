@@ -21,3 +21,8 @@ export const setUpdateEgreso = async (egreso) => {
     const response = await axios.post(API+'egresos/update', egreso, servisTokenConfig);
     return response;
 }
+
+export const setDeleteEgreso = async (id, egreso) => {
+    const response = await axios.post(API+`egresos/delete/${id}`, egreso, servisTokenConfig);
+    return response;
+}

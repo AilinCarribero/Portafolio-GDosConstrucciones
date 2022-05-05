@@ -38,7 +38,7 @@ const Ingresos = () => {
         <Row className="acordion">
             <Accordion>
                 {
-                    ingresos.length > 0 ?
+                    ingresos && ingresos.length > 0 ?
                         ingresos.map(ingreso => (
                             <AccordionIngreso key={ingreso.id_ingreso} ingreso={ingreso} setIngresos={setIngresos} />
                         ))

@@ -116,3 +116,46 @@ exports.updateIngreso = async (req, res) => {
         throw err;
     })
 }
+
+//Eliminar ingreso
+exports.deleteIngreso = async (req, res) => {
+    const idIngreso = req.params.id.toString().replace(/\%20/g, ' ');
+    const ingreso = req.body;
+console.log(idIngreso)
+    Ingreso.destroy({
+        where: {
+            id_ingreso: idIngreso
+        },
+        include: [{
+            model: FormaCobro
+        }, {
+            model: Auth
+        }]
+    }).then(response => {
+        Ingreso.findAll({
+            include: [{
+                model: FormaCobro
+            }, {
+                model: Auth
+            }],
+            where: {
+                id_proyecto: ingreso.id_proyecto
+            }
+        }).then(response => {
+            response.statusText = "Ok";
+            response.status = 200;
+
+            res.json(response);
+        }).catch(err => {
+            err.todoMal = "Error al eliminar el ingreso";
+            console.error(err);
+            res.json(err);
+            throw err;
+        });
+    }).catch(err => {
+        err.todoMal = "Error al eliminar el ingreso";
+        console.error(err);
+        res.json(err);
+        throw err;
+    })
+}

@@ -21,3 +21,8 @@ export const setUpdateIngreso = async (ingreso) => {
     const response = await axios.post(API+'ingresos/update', ingreso, servisTokenConfig);
     return response;
 }
+
+export const setDeleteIngreso = async (id, ingreso) => {
+    const response = await axios.post(API+`ingresos/delete/${id}`, ingreso, servisTokenConfig);
+    return response;
+}

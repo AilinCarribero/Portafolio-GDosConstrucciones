@@ -44,7 +44,7 @@ const Egresos = () => {
         </Row>
         <Row className="acordion">
             <Accordion>
-                {egresos.length > 0 ?
+                {egresos && egresos.length > 0 ?
                     egresos.map(egreso => (
                         egreso.analisis_costo.analisis_costo == "Retiros de Directorio" ? user.rango == 'admin' &&
                             <AccordionEgreso key={egreso.id_egreso} egreso={egreso} setEgresos={setEgresos} />

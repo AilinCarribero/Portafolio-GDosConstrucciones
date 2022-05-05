@@ -189,3 +189,58 @@ exports.updateEgreso = async (req, res) => {
         throw err;
     })
 }
+
+//Eliminar egreso
+exports.deleteEgreso = async (req, res) => {
+    const idEgreso = req.params.id.toString().replace(/\%20/g, ' ');
+    const egreso = req.body;
+
+    Egreso.destroy({
+        where: {
+            id_egreso: idEgreso
+        },
+        include: [{
+            model: FormaPago
+        }, {
+            model: Auth
+        }, {
+            model: AnalisisCosto
+        }, {
+            model: ComprobantePago
+        }, {
+            model: Stock
+        }]
+    }).then(response => {
+        Egreso.findAll({
+            include: [{
+                model: FormaPago
+            }, {
+                model: Auth
+            }, {
+                model: AnalisisCosto
+            }, {
+                model: ComprobantePago
+            }, {
+                model: Stock
+            }],
+            where: {
+                id_proyecto: egreso.id_proyecto
+            }
+        }).then(response => {
+            response.statusText = "Ok";
+            response.status = 200;
+
+            res.json(response);
+        }).catch(err => {
+            err.todoMal = "Error al actualizar el egreso";
+            console.error(err);
+            res.json(err);
+            throw err;
+        });
+    }).catch(error => {
+        err.todoMal = "Error al eliminar el egreso";
+        console.error(error);
+        res.json(error);
+        throw error;
+    });
+}

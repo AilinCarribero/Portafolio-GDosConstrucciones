@@ -25,7 +25,7 @@ import Alquileres from './components/views/alquiler/Alquileres';
 
 const Routers = () => {
     const { user } = useUser();
-    console.log(user);
+    //console.log(user);
     return (
         <BrowserRouter>
             <NavbarComponent path={window.location.pathname} />

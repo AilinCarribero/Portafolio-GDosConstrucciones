@@ -27,7 +27,7 @@ const AccordionCentrosCostos = ({ proyecto, setProyectos }) => {
 
         if (PEgresos) {
             PEgresos.map(egreso => {
-                auxEgresosProyecto += parseFloat(egreso.valor_pago);
+                auxEgresosProyecto += egreso.valor_pago ? parseFloat(egreso.valor_pago) : 0;
             })
         }
         return (auxEgresosProyecto)
@@ -35,11 +35,12 @@ const AccordionCentrosCostos = ({ proyecto, setProyectos }) => {
 
     //Egresos totales de un proyecto determinado en dolares
     const egresosUSDProyecto = (PUSDEgresos) => {
+        console.log(PUSDEgresos)
         let auxEgresosProyecto = 0;
 
         if (PUSDEgresos) {
             PUSDEgresos.map(egreso => {
-                auxEgresosProyecto += parseFloat(egreso.valor_usd);
+                auxEgresosProyecto += egreso.valor_usd ? parseFloat(egreso.valor_usd) : 0;
             })
         }
         return (auxEgresosProyecto)
@@ -51,7 +52,7 @@ const AccordionCentrosCostos = ({ proyecto, setProyectos }) => {
 
         if (PIngresos) {
             PIngresos.map(ingreso => {
-                auxIngresosProyecto += parseFloat(ingreso.valor_cobro);
+                auxIngresosProyecto += ingreso.valor_cobro ? parseFloat(ingreso.valor_cobro) : 0;
             })
         }
         return (auxIngresosProyecto)
@@ -63,7 +64,7 @@ const AccordionCentrosCostos = ({ proyecto, setProyectos }) => {
 
         if (PUSDIngresos) {
             PUSDIngresos.map(ingreso => {
-                auxIngresosProyecto += parseFloat(ingreso.valor_usd);
+                auxIngresosProyecto += ingreso.valor_usd ? parseFloat(ingreso.valor_usd) : 0;
             })
         }
         return (auxIngresosProyecto)

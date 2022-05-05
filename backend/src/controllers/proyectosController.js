@@ -130,7 +130,6 @@ exports.insertProyecto = async (req, res) => {
     }
 }
 
-
 //Modificar proyecto
 exports.updateProyecto = async (req, res) => {
     const proyecto = req.body;
@@ -173,4 +172,9 @@ exports.updateProyecto = async (req, res) => {
         res.json(err);
         throw err;
     })
+}
+
+//Eliminar proyecto
+exports.deleteProyecto = async (req, res) => {
+    const idProyecto = req.params.id.toString().replace(/\%20/g, ' ');
 }

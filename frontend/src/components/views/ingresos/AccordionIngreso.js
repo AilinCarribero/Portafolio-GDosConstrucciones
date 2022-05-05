@@ -5,8 +5,11 @@ import { Accordion, Row, Col } from 'react-bootstrap';
 import ModalFormulario from '../../utils/modal/formularios/ModalFormulario';
 
 //Hooks
-import { formatFecha, formatNumber } from '../../../hooks/useUtils';
+import { formatFecha, formatNumber, ToastComponent } from '../../../hooks/useUtils';
 import { useUser } from '../../../hooks/useUser';
+
+//Service
+import { setDeleteIngreso } from "../../../services/apiIngresos";
 
 //Img-Icons
 import * as Icons from 'react-bootstrap-icons';
@@ -18,6 +21,19 @@ const AccordionIngreso = ({ ingreso, setIngresos }) => {
 
     const updateIngreso = () => {
         setShowForm(true);
+    }
+
+    const deleteIngreso = async (id, ingreso) => {
+        const resIngreso = await setDeleteIngreso(id, ingreso);
+
+        if ((resIngreso.statusText == 'OK' || resIngreso.status == 200 || resIngreso.data.todoOk == 'Ok') && !resIngreso.data.todoMal){
+            ToastComponent('success', 'Se eliminó con éxito');
+
+            setIngresos(resIngreso.data);
+        } else {
+            resIngreso.data.todoMal ? ToastComponent('error', resIngreso.data.todoMal) :  ToastComponent('error');
+            console.log(resIngreso);
+        }
     }
 
     return (<>
@@ -56,6 +72,18 @@ const AccordionIngreso = ({ ingreso, setIngresos }) => {
                                         </Col>
                                         <Col xs={10} md={10} className='text-action'>
                                             Modificar
+                                        </Col>
+                                    </Row>
+                                </button>
+                            </Col> 
+                            <Col xs={6} md={6}>
+                                <button className="button-action" onClick={() => deleteIngreso(ingreso.id_ingreso, ingreso)}>
+                                    <Row>
+                                        <Col xs={1} md={1} className='icon-action'>
+                                            <Icons.TrashFill size={19} />
+                                        </Col>
+                                        <Col xs={10} md={10} className='text-action'>
+                                            Eliminar
                                         </Col>
                                     </Row>
                                 </button>
