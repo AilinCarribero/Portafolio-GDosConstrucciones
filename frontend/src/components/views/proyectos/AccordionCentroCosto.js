@@ -35,7 +35,6 @@ const AccordionCentrosCostos = ({ proyecto, setProyectos }) => {
 
     //Egresos totales de un proyecto determinado en dolares
     const egresosUSDProyecto = (PUSDEgresos) => {
-        console.log(PUSDEgresos)
         let auxEgresosProyecto = 0;
 
         if (PUSDEgresos) {

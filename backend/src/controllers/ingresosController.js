@@ -1,9 +1,10 @@
 const { Ingreso, FormaCobro, Auth } = require('../../db');
+const { desformatNumber } = require('../utils/numbers');
 
 //Agregar ingreso
 exports.insertIngreso = async (req, res) => {
     const datos = !req.body.length ? [req.body] : req.body;
-
+console.log(datos);
     try {
         //Inserta el nuevo ingreso
         datos.forEach(async (dato, i) => {
@@ -11,6 +12,9 @@ exports.insertIngreso = async (req, res) => {
             dato.cuota = !dato.cuota ? 0 : dato.cuota;
             dato.cuotaNumero = !dato.cuotaNumero ? 0 : dato.cuotaNumero;
             dato.observaciones = !dato.observaciones ? '' : dato.observaciones;
+
+            dato.valor_cobro = dato.valor_cobro ? desformatNumber(dato.valor_cobro) : 0;
+            dato.valor_usd = dato.valor_usd ? desformatNumber(dato.valor_usd) : 0;
 
             Ingreso.create(dato).then(response => {
                 response.todoOk = "Ok";
@@ -78,11 +82,14 @@ exports.listIngresosId = async (req, res) => {
 //Modificar ingreso
 exports.updateIngreso = async (req, res) => {
     const ingreso = req.body;
-
+console.log(ingreso);
     ingreso.fecha_diferido_cobro = !ingreso.fecha_diferido_cobro ? '1000-01-01' : ingreso.fecha_diferido_cobro;
     ingreso.cuota = !ingreso.cuota ? 0 : ingreso.cuota;
     ingreso.cuotaNumero = !ingreso.cuotaNumero ? 0 : ingreso.cuotaNumero;
     ingreso.observaciones = !ingreso.observaciones ? '' : ingreso.observaciones;
+    
+    ingreso.valor_cobro = ingreso.valor_cobro ? desformatNumber(ingreso.valor_cobro) : 0;
+    ingreso.valor_usd = ingreso.valor_usd ? desformatNumber(ingreso.valor_usd) : 0;
 
     Ingreso.update(ingreso, {
         where: {
@@ -121,7 +128,7 @@ exports.updateIngreso = async (req, res) => {
 exports.deleteIngreso = async (req, res) => {
     const idIngreso = req.params.id.toString().replace(/\%20/g, ' ');
     const ingreso = req.body;
-console.log(idIngreso)
+
     Ingreso.destroy({
         where: {
             id_ingreso: idIngreso
