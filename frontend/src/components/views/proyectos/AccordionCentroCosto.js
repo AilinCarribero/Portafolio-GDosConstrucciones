@@ -140,7 +140,7 @@ const AccordionCentrosCostos = ({ proyecto, setProyectos }) => {
                                 </Row>
                             </Col>
                         }
-                        {user.rango == "admin" && proyecto.fecha_f_proyecto &&
+                        {user.rango == "admin" && proyecto.fecha_f_proyecto && new Date(proyecto.fecha_f_proyecto) > new Date(proyecto.fecha_i_proyecto) &&
                             <Col xs={12} md={6}>
                                 <Row>
                                     <Col xs={1} md={1}></Col>

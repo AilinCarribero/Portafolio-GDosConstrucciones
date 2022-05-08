@@ -25,28 +25,35 @@ const AccordionEgreso = ({ egreso, setEgresos }) => {
     const deleteEgreso = async (id, egreso) => {
         const resEgreso = await setDeleteEgreso(id, egreso);
 
-        if ((resEgreso.statusText == 'OK' || resEgreso.status == 200 || resEgreso.data.todoOk == 'Ok') && !resEgreso.data.todoMal){
+        if ((resEgreso.statusText == 'OK' || resEgreso.status == 200 || resEgreso.data.todoOk == 'Ok') && !resEgreso.data.todoMal) {
             ToastComponent('success', 'Se eliminó con éxito');
 
             setEgresos(resEgreso.data);
         } else {
-            resEgreso.data.todoMal ? ToastComponent('error', resEgreso.data.todoMal) :  ToastComponent('error');
+            resEgreso.data.todoMal ? ToastComponent('error', resEgreso.data.todoMal) : ToastComponent('error');
             console.log(resEgreso)
         }
     }
 
     return (<>
         {showForm && <ModalFormulario formulario={'egreso'} informacion={egreso} show={showForm} setShow={setShowForm} updateNew={setEgresos} />}
-        
+
         <Col>
             <Accordion.Item eventKey={egreso.id_egreso}>
                 <Accordion.Header>
-                    <Col className="acordion-title" xs={7} md={3}> <b>{egreso.analisis_costo.analisis_costo}</b> </Col>
                     <Col className="acordion-title-number" xs={2} md={2}><b>{egreso.valor_pago > 0 ? '$' + formatNumber(egreso.valor_pago) : 'USD$' + formatNumber(egreso.valor_usd)}</b> </Col>
                     <Col className="acordion-title" xs={5} md={3}><b>{egreso.proveedor}</b> </Col>
+                    {egreso.comprobante_pago.nombre_comprobante && egreso.comprobante_pago.tipo_comprobante &&
+                        <Col className="acordion-title" xs={7} md={3}>
+                             <b>{egreso.comprobante_pago.nombre_comprobante} { egreso.comprobante_pago.nombre_comprobante != 'Comprobante de Pago' && egreso.comprobante_pago.tipo_comprobante} {!egreso.comprobante_pago.numero_comprobante || egreso.comprobante_pago.numero_comprobante == 'undefined' ? '' : ' N°'+egreso.comprobante_pago.numero_comprobante}</b> 
+                        </Col>
+                    }
                     <Col className="acordion-title" xs={6} md={3}><b>{egreso.observaciones}</b> </Col>
                 </Accordion.Header>
                 <Accordion.Body>
+                    <Row>
+                        <Col className="acordion-title" xs={12} md={12}> <b>{egreso.analisis_costo.analisis_costo}</b> </Col>
+                    </Row>
                     <Row>
                         <Col xs={12} md={6}>Fecha del pago<b>:</b> {formatFecha(egreso.fecha_pago)}</Col>
                         <Col xs={12} md={6}>Forma del pago<b>:</b> {egreso.forma_pago.forma_pago}</Col>
@@ -59,7 +66,7 @@ const AccordionEgreso = ({ egreso, setEgresos }) => {
                         </>}
                     </Row>
                     <Row>
-                        {egreso.comprobante_pago.nombre_comprobante && <>
+                        {egreso.comprobante_pago.nombre_comprobante && egreso.comprobante_pago.tipo_comprobante && <>
                             <Col xs={12} md={6}>Comprobante<b>:</b> {egreso.comprobante_pago.nombre_comprobante}</Col>
                             <Col xs={4} md={2}>Tipo<b>:</b> {egreso.comprobante_pago.tipo_comprobante}</Col>
                             <Col xs={6} md={3}>N°<b>:</b> {!egreso.comprobante_pago.numero_comprobante || egreso.comprobante_pago.numero_comprobante == 'undefined' ? '' : egreso.comprobante_pago.numero_comprobante}</Col>

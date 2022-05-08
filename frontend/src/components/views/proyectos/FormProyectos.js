@@ -45,7 +45,7 @@ const FormProyectos = ({ close, updateProyecto, setUpdateProyectos }) => {
         id_unidad_negocio: updateProyecto ? updateProyecto.id_unidad_negocio : '',
         cliente: updateProyecto ? updateProyecto.cliente : '',
         costo: updateProyecto ? updateProyecto.costo : '',
-        venta: updateProyecto ? updateProyecto.venta : 0,
+        venta: updateProyecto ? updateProyecto.venta : '',
         alquiler_total: updateProyecto ? updateProyecto.alquiler_total : 0,
         fecha_i_proyecto: updateProyecto ? new Date(updateProyecto.fecha_i_proyecto).toISOString().slice(0, 10) : new Date().toISOString().slice(0, 10),
         fecha_f_proyecto: updateProyecto && new Date(updateProyecto.fecha_f_proyecto) > new Date(updateProyecto.fecha_i_proyecto) ? new Date(updateProyecto.fecha_f_proyecto).toISOString().slice(0, 10) : '',
@@ -294,7 +294,8 @@ const FormProyectos = ({ close, updateProyecto, setUpdateProyectos }) => {
                             {showCostoVenta && <>
                                 <Form.Group className="mb-3">
                                     <FloatingLabel label="Costo">
-                                        <Form.Control onChange={handleChangeForm} name="costo" type="number" value={proyecto.costo} required />
+                                        <NumberFormat customInput={Form.Control} decimalSeparator={","} thousandSeparator={"."} 
+                                            onChange={handleChangeForm} name="costo" value={proyecto.costo} required />
                                     </FloatingLabel>
                                 </Form.Group>
                                 {!updateProyecto &&
@@ -312,7 +313,8 @@ const FormProyectos = ({ close, updateProyecto, setUpdateProyectos }) => {
                                 {showVenta &&
                                     <Form.Group className="mb-3">
                                         <FloatingLabel label="Venta">
-                                            <Form.Control onChange={handleChangeForm} name="venta" type="number" value={proyecto.venta} required />
+                                            <NumberFormat customInput={Form.Control} decimalSeparator={","} thousandSeparator={"."}
+                                                onChange={handleChangeForm} name="venta" value={proyecto.venta} required />
                                         </FloatingLabel>
                                     </Form.Group>
                                 }
