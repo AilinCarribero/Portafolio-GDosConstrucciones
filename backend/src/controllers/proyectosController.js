@@ -134,7 +134,7 @@ exports.insertProyecto = async (req, res) => {
 //Modificar proyecto
 exports.updateProyecto = async (req, res) => {
     const proyecto = req.body;
-
+console.log(proyecto);
     proyecto.costo = !proyecto.costo ? 0 : desformatNumber(proyecto.costo);
     proyecto.venta = !proyecto.venta ? 0 : desformatNumber(proyecto.venta);
     proyecto.alquiler_total = !proyecto.alquiler_total ? 0 : proyecto.alquiler_total;
