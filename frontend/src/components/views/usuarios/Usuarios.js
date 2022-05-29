@@ -48,7 +48,6 @@ const Usuarios = () => {
                         ))
                         : <tr>
                             <td colSpan="2">No existen usuarios</td>
-                            <td colSpan="2">Agregar icono de alerta</td>
                         </tr>
                     }
                 </tbody>

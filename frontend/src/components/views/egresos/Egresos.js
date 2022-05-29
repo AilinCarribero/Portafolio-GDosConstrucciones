@@ -53,7 +53,6 @@ const Egresos = () => {
                     ))
                     : <Col>
                         <h6>No existen egresos</h6>
-                        <p>Agregar icono de alerta</p>
                     </Col>
                 }
             </Accordion>

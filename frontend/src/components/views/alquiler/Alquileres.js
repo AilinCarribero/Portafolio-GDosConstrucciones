@@ -41,7 +41,6 @@ const Alquileres = () => {
                         ))
                         : <Col>
                             <h6>No existen alquileres</h6>
-                            <p>Agregar icono de alerta</p>
                         </Col>
                 }
             </Accordion>
