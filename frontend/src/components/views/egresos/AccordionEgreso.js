@@ -41,23 +41,23 @@ const AccordionEgreso = ({ egreso, setEgresos }) => {
         <Col>
             <Accordion.Item eventKey={egreso.id_egreso}>
                 <Accordion.Header>
+                    <Col className="acordion-title" xs={3} md={3}><b>{egreso.proveedor}</b> </Col>
+                    <Col className="acordion-title" xs={3} md={3}>
+                        {egreso.comprobante_pago.nombre_comprobante && egreso.comprobante_pago.tipo_comprobante &&
+                            <b>{egreso.comprobante_pago.nombre_comprobante} {egreso.comprobante_pago.nombre_comprobante != 'Comprobante de Pago' && egreso.comprobante_pago.tipo_comprobante} {!egreso.comprobante_pago.numero_comprobante || egreso.comprobante_pago.numero_comprobante == 'undefined' ? '' : ' N°' + egreso.comprobante_pago.numero_comprobante}</b>
+                        }
+                    </Col>
                     <Col className="acordion-title-number" xs={2} md={2}><b>{egreso.valor_pago > 0 ? '$' + formatNumber(egreso.valor_pago) : 'USD$' + formatNumber(egreso.valor_usd)}</b> </Col>
-                    <Col className="acordion-title" xs={5} md={3}><b>{egreso.proveedor}</b> </Col>
-                    {egreso.comprobante_pago.nombre_comprobante && egreso.comprobante_pago.tipo_comprobante &&
-                        <Col className="acordion-title" xs={7} md={3}>
-                             <b>{egreso.comprobante_pago.nombre_comprobante} { egreso.comprobante_pago.nombre_comprobante != 'Comprobante de Pago' && egreso.comprobante_pago.tipo_comprobante} {!egreso.comprobante_pago.numero_comprobante || egreso.comprobante_pago.numero_comprobante == 'undefined' ? '' : ' N°'+egreso.comprobante_pago.numero_comprobante}</b> 
-                        </Col>
-                    }
-                    <Col className="acordion-title" xs={6} md={3}><b>{egreso.observaciones}</b> </Col>
+                    <Col className="acordion-title" xs={3} md={3}><b>{egreso.observaciones}</b> </Col>
                 </Accordion.Header>
                 <Accordion.Body>
                     <Row>
-                        <Col className="acordion-title" xs={12} md={12}> <b>{egreso.analisis_costo.analisis_costo}</b> </Col>
+                        <Col xs={12} md={12}> <b>{egreso.analisis_costo.analisis_costo}</b> </Col>
                     </Row>
                     <Row>
                         <Col xs={12} md={6}>Fecha del pago<b>:</b> {formatFecha(egreso.fecha_pago)}</Col>
                         <Col xs={12} md={6}>Forma del pago<b>:</b> {egreso.forma_pago.forma_pago}</Col>
-                        {(formatFecha(egreso.fecha_diferido_pago) > formatFecha(egreso.fecha_pago)) && <>
+                        {(new Date(egreso.fecha_diferido_pago).toISOString().slice(0, 10) > new Date(egreso.fecha_pago).toISOString().slice(0, 10)) && <>
                             <Col xs={12} md={6}>Fecha diferida<b>:</b> {formatFecha(egreso.fecha_diferido_pago)}</Col>
                             {(egreso.cuotas > 0) && <>
                                 <Col xs={6} md={6}>Cantidad de cuotas<b>:</b> {egreso.cuotas}</Col>

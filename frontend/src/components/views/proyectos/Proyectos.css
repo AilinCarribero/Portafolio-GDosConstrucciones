@@ -39,14 +39,6 @@ button .accordion-button {
     background-color: transparent;
 }
 
-.icon-detalle{
-    color: black;
-}
-
-.icon-detalle:hover{
-    color: grey;
-}
-
 .text_select{
     color: black;
 }

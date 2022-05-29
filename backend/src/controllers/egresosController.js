@@ -1,6 +1,18 @@
 const { Egreso, FormaPago, Auth, AnalisisCosto, ComprobantePago, Stock } = require('../../db');
 const Decimal = require('decimal.js-light');
 
+const includeEgresos = [{
+    model: FormaPago
+}, {
+    model: Auth
+}, {
+    model: AnalisisCosto
+}, {
+    model: ComprobantePago
+}, {
+    model: Stock
+}];
+
 //Agregar egreso
 exports.insertEgreso = async (req, res) => {
     const datos = !req.body.length ? [req.body] : req.body;
@@ -90,17 +102,7 @@ exports.insertEgreso = async (req, res) => {
 //Listar egresos
 exports.listEgresos = async (req, res) => {
     Egreso.findAll({
-        include: [{
-            model: FormaPago
-        }, {
-            model: Auth
-        }, {
-            model: AnalisisCosto
-        }, {
-            model: ComprobantePago
-        }, {
-            model: Stock
-        }]
+        include: includeEgresos
     }).then(response => {
         response.statusText = "Ok";
         response.status = 200;
@@ -116,18 +118,11 @@ exports.listEgresosId = async (req, res) => {
     const idProyecto = req.params.id.toString().replace(/\%20/g, ' ');
 
     Egreso.findAll({
-        include: [{
-            model: FormaPago
-        }, {
-            model: Auth
-        }, {
-            model: AnalisisCosto
-        }, {
-            model: ComprobantePago
-        }],
+        include: includeEgresos,
         where: {
             id_proyecto: idProyecto
-        }
+        },
+        order: [['createdAt', 'DESC']]
     }).then(response => {
         response.statusText = "Ok";
         response.status = 200;
@@ -157,20 +152,11 @@ exports.updateEgreso = async (req, res) => {
         }
     }).then(response => {
         Egreso.findAll({
-            include: [{
-                model: FormaPago
-            }, {
-                model: Auth
-            }, {
-                model: AnalisisCosto
-            }, {
-                model: ComprobantePago
-            }, {
-                model: Stock
-            }],
+            include: includeEgresos,
             where: {
                 id_proyecto: egreso.id_old_proyecto
-            }
+            },
+            order: [['createdAt', 'DESC']]
         }).then(response => {
             response.statusText = "Ok";
             response.status = 200;
@@ -199,33 +185,14 @@ exports.deleteEgreso = async (req, res) => {
         where: {
             id_egreso: idEgreso
         },
-        include: [{
-            model: FormaPago
-        }, {
-            model: Auth
-        }, {
-            model: AnalisisCosto
-        }, {
-            model: ComprobantePago
-        }, {
-            model: Stock
-        }]
+        include: includeEgresos
     }).then(response => {
         Egreso.findAll({
-            include: [{
-                model: FormaPago
-            }, {
-                model: Auth
-            }, {
-                model: AnalisisCosto
-            }, {
-                model: ComprobantePago
-            }, {
-                model: Stock
-            }],
+            include: includeEgresos,
             where: {
                 id_proyecto: egreso.id_proyecto
-            }
+            },
+            order: [['createdAt', 'DESC']]
         }).then(response => {
             response.statusText = "Ok";
             response.status = 200;

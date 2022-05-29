@@ -1,10 +1,16 @@
 const { Ingreso, FormaCobro, Auth } = require('../../db');
 const { desformatNumber } = require('../utils/numbers');
 
+const includeIngresos = [{
+    model: FormaCobro
+}, {
+    model: Auth
+}]
+
 //Agregar ingreso
 exports.insertIngreso = async (req, res) => {
     const datos = !req.body.length ? [req.body] : req.body;
-console.log(datos);
+
     try {
         //Inserta el nuevo ingreso
         datos.forEach(async (dato, i) => {
@@ -61,14 +67,11 @@ exports.listIngresosId = async (req, res) => {
     const idProyecto = req.params.id.toString().replace(/\%20/g, ' ');
 
     Ingreso.findAll({
-        include: [{
-            model: FormaCobro
-        }, {
-            model: Auth
-        }],
+        include: includeIngresos,
         where: {
             id_proyecto: idProyecto
-        }
+        },
+        order: [['createdAt', 'DESC']]
     }).then(response => {
         response.statusText = "Ok";
         response.status = 200;
@@ -82,12 +85,12 @@ exports.listIngresosId = async (req, res) => {
 //Modificar ingreso
 exports.updateIngreso = async (req, res) => {
     const ingreso = req.body;
-console.log(ingreso);
+
     ingreso.fecha_diferido_cobro = !ingreso.fecha_diferido_cobro ? '1000-01-01' : ingreso.fecha_diferido_cobro;
     ingreso.cuota = !ingreso.cuota ? 0 : ingreso.cuota;
     ingreso.cuotaNumero = !ingreso.cuotaNumero ? 0 : ingreso.cuotaNumero;
     ingreso.observaciones = !ingreso.observaciones ? '' : ingreso.observaciones;
-    
+
     ingreso.valor_cobro = ingreso.valor_cobro ? desformatNumber(ingreso.valor_cobro) : 0;
     ingreso.valor_usd = ingreso.valor_usd ? desformatNumber(ingreso.valor_usd) : 0;
 
@@ -97,14 +100,11 @@ console.log(ingreso);
         }
     }).then(response => {
         Ingreso.findAll({
-            include: [{
-                model: FormaCobro
-            }, {
-                model: Auth
-            }],
+            include: includeIngresos,
             where: {
                 id_proyecto: ingreso.id_proyecto
-            }
+            },
+            order: [['createdAt', 'DESC']]
         }).then(response => {
             response.statusText = "Ok";
             response.status = 200;
@@ -133,18 +133,10 @@ exports.deleteIngreso = async (req, res) => {
         where: {
             id_ingreso: idIngreso
         },
-        include: [{
-            model: FormaCobro
-        }, {
-            model: Auth
-        }]
+        include: includeIngresos
     }).then(response => {
         Ingreso.findAll({
-            include: [{
-                model: FormaCobro
-            }, {
-                model: Auth
-            }],
+            include: includeIngresos,
             where: {
                 id_proyecto: ingreso.id_proyecto
             }

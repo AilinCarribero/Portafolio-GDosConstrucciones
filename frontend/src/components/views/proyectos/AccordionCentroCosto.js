@@ -75,8 +75,24 @@ const AccordionCentrosCostos = ({ proyecto, setProyectos }) => {
 
             <Accordion.Item eventKey={proyecto.id_proyecto} className={proyecto.id_centro_costo == 1 || proyecto.id_centro_costo == 3 ? 'accordionCC' : ''}>
                 <Accordion.Header>
-                    <Col xs={12} md={5}>{proyecto.id_proyecto}</Col>
-                    <Col xs={4} md={4}> Resto: ${formatNumber(ingresosProyecto(proyecto.ingresos) - egresosProyecto(proyecto.egresos))} / USD${formatNumber(ingresosUSDProyecto(proyecto.ingresos) - egresosUSDProyecto(proyecto.egresos))}</Col>
+                    {proyecto.fecha_f_proyecto && new Date(proyecto.fecha_f_proyecto).toISOString().slice(0, 10) != new Date('2200-01-01').toISOString().slice(0, 10) ?
+                        new Date() > new Date(proyecto.fecha_f_proyecto) ? //Si es mayor a la fecha de inicio y a la fecha de fin
+                            <Col xs={1} md={1} className="state-finish" > <Icons.Check className='state-icon' /> </Col>
+                            : new Date() < new Date(proyecto.fecha_f_proyecto) && new Date() > new Date(proyecto.fecha_i_proyecto) ? //Si esta entre la fecha de fin y la fecha de inicio
+                                <Col xs={1} md={1} className="state-proceso" ></Col>
+                                : new Date() > new Date(proyecto.fecha_i_proyecto) ? //Si es mayor a la fecha de incio
+                                    <Col xs={1} md={1} className="state-proceso" ></Col>
+                                    : <Col xs={1} md={1} className="state-pendiente" ></Col>
+                        : proyecto.fecha_i_proyecto &&
+                        (new Date() > new Date(proyecto.fecha_i_proyecto) ? //Si es mayor a la fecha de incio
+                            <Col xs={1} md={1} className="state-proceso" ></Col>
+                            : <Col xs={1} md={1} className="state-pendiente" ></Col>
+                        )
+                    }
+                    <Col xs={5} md={5}>{proyecto.id_proyecto}</Col>
+                    {user.rango != "usuario comun" &&
+                        <Col xs={4} md={4}> Resto: ${formatNumber(ingresosProyecto(proyecto.ingresos) - egresosProyecto(proyecto.egresos))} / USD${formatNumber(ingresosUSDProyecto(proyecto.ingresos) - egresosUSDProyecto(proyecto.egresos))}</Col>
+                    }
                 </Accordion.Header>
                 <Accordion.Body>
                     <Row>
@@ -99,7 +115,7 @@ const AccordionCentrosCostos = ({ proyecto, setProyectos }) => {
                                 <Col xs={12} md={6}>
                                     <Row>
                                         <Col xs={1} md={1}>
-                                            <Link to={`/alquileres/${proyecto.id_proyecto}`}> <Icons.ArchiveFill className="icon-detalle" /> </Link>
+                                            <Link to={`/alquileres/${proyecto.id_proyecto}`}> <Icons.BoxArrowInRight className="icon-detalle" /> </Link>
                                         </Col>
                                         <Col xs={11} md={11}><p> Total por Alquileres: ${formatNumber(proyecto.alquiler_total)}</p></Col>
                                     </Row>
@@ -111,7 +127,7 @@ const AccordionCentrosCostos = ({ proyecto, setProyectos }) => {
                         <Col xs={12} md={6}>
                             <Row>
                                 <Col xs={1} md={1}>
-                                    <Link to={`/egresos/${proyecto.id_proyecto}`}> <Icons.ArchiveFill className="icon-detalle" /> </Link>
+                                    <Link to={`/egresos/${proyecto.id_proyecto}`}> <Icons.BoxArrowInRight className="icon-detalle" /> </Link>
                                 </Col>
                                 <Col xs={11} md={11}><p> Egresos:</p>
                                     <Col xs={6} md={6}><p>${formatNumber(egresosProyecto(proyecto.egresos))} </p></Col>
@@ -123,7 +139,7 @@ const AccordionCentrosCostos = ({ proyecto, setProyectos }) => {
                             <Col xs={12} md={6}>
                                 <Row>
                                     <Col xs={1} md={1}>
-                                        <Link to={`/ingresos/${proyecto.id_proyecto}`}> <Icons.ArchiveFill className="icon-detalle" /> </Link>
+                                        <Link to={`/ingresos/${proyecto.id_proyecto}`}> <Icons.BoxArrowInRight className="icon-detalle" /> </Link>
                                     </Col>
                                     <Col xs={11} md={11}><p> Ingresos:</p>
                                         <Col xs={6} md={6}><p>${formatNumber(ingresosProyecto(proyecto.ingresos))} </p></Col>
@@ -132,22 +148,22 @@ const AccordionCentrosCostos = ({ proyecto, setProyectos }) => {
                                 </Row>
                             </Col>
                         }
-                        {user.rango == "admin" &&
+                        {user.rango == "admin" && proyecto.fecha_i_proyecto && <>
                             <Col xs={12} md={6}>
                                 <Row>
                                     <Col xs={1} md={1}></Col>
                                     <Col xs={11} md={11}><p> Fecha de inicio: {formatFecha(proyecto.fecha_i_proyecto)}</p> </Col>
                                 </Row>
                             </Col>
-                        }
-                        {user.rango == "admin" && proyecto.fecha_f_proyecto && new Date(proyecto.fecha_f_proyecto) > new Date(proyecto.fecha_i_proyecto) &&
-                            <Col xs={12} md={6}>
-                                <Row>
-                                    <Col xs={1} md={1}></Col>
-                                    <Col xs={11} md={11}><p> Fecha de finalizacion: {formatFecha(proyecto.fecha_f_proyecto)}</p> </Col>
-                                </Row>
-                            </Col>
-                        }
+                            {proyecto.fecha_f_proyecto && (new Date(proyecto.fecha_f_proyecto).toISOString().slice(0, 10) != new Date('2200-01-01').toISOString().slice(0, 10)) &&
+                                <Col xs={12} md={6}>
+                                    <Row>
+                                        <Col xs={1} md={1}></Col>
+                                        <Col xs={11} md={11}><p> Fecha de finalizacion: {formatFecha(proyecto.fecha_f_proyecto)}</p> </Col>
+                                    </Row>
+                                </Col>
+                            }
+                        </>}
                     </Row>
                     {user.rango == 'admin' &&
                         <Row className="border-top">

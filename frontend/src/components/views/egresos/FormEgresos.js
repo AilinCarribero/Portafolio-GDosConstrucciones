@@ -49,7 +49,7 @@ const FormEgresos = ({ close, updateEgreso, setUpdateEgresos }) => {
         valor_pago: updateEgreso && updateEgreso.valor_pago ? updateEgreso.valor_pago : 0,
         valor_usd: updateEgreso && updateEgreso.valor_usd ? updateEgreso.valor_usd : 0,
         id_forma_pago: updateEgreso && updateEgreso.forma_pago ? updateEgreso.forma_pago.id_forma_pago : '',
-        fecha_diferido_pago: updateEgreso && updateEgreso.fecha_diferido_pago ? new Date(updateEgreso.fecha_diferido_pago).toISOString().slice(0, 10) : '',
+        fecha_diferido_pago: (updateEgreso && new Date(updateEgreso.fecha_diferido_pago).toISOString().slice(0, 10) >  new Date(updateEgreso.fecha_pago).toISOString().slice(0, 10))? new Date(updateEgreso.fecha_diferido_pago).toISOString().slice(0, 10) : '',
         observaciones: updateEgreso && updateEgreso.observaciones ? updateEgreso.observaciones : '',
         id_comprobante_pago: updateEgreso && updateEgreso.comprobante_pago.id_comprobante_pago ? updateEgreso.comprobante_pago.id_comprobante_pago : '',
         numero_comprobante: updateEgreso && updateEgreso.numero_comprobante ? updateEgreso.numero_comprobante : '',
@@ -78,7 +78,7 @@ const FormEgresos = ({ close, updateEgreso, setUpdateEgresos }) => {
     const [showAC, setShowAC] = useState(updateEgreso && updateEgreso.analisis_costo ? true : false); //analisis de costo
     const [showDAC, setShowDAC] = useState(false); //detalle de analisis de costo
     const [showCuotas, setShowCuotas] = useState(false);
-    const [showFechaDif, setShowFechaDif] = useState(updateEgreso && updateEgreso.fecha_diferido_pago > updateEgreso.fecha_pago ? true : false);
+    const [showFechaDif, setShowFechaDif] = useState(updateEgreso && egreso.fecha_diferido_pago ? true : false);
     const [showCheque, setShowCheque] = useState(false);
     const [showDataCheques, setShowDataCheques] = useState(false);
     const [showModal, setShowModal] = useState(false);

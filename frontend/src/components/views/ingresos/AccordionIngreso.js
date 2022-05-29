@@ -49,7 +49,7 @@ const AccordionIngreso = ({ ingreso, setIngresos }) => {
                 <Accordion.Body>
                     <Row>
                         <Col xs={12} md={6}>Fecha del cobro<b>:</b> {formatFecha(ingreso.fecha_cobro)}</Col>
-                        {(formatFecha(ingreso.fecha_diferido_cobro) > formatFecha(ingreso.fecha_cobro)) && <>
+                        {(new Date(ingreso.fecha_diferido_cobro).toISOString().slice(0, 10) >  new Date(ingreso.fecha_cobro).toISOString().slice(0, 10)) && <>
                             <Col xs={12} md={6}>Fecha diferida<b>:</b> {formatFecha(ingreso.fecha_diferido_cobro)}</Col>
                         </>}
                     </Row>

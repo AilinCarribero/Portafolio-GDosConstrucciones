@@ -36,7 +36,7 @@ const FormIngresos = ({ close, updateIngreso, setUpdateIngresos }) => {
         id_proyecto: updateIngreso ? updateIngreso.id_proyecto : '',
         valor_cobro: updateIngreso ? updateIngreso.valor_cobro : 0,
         valor_usd: updateIngreso ? updateIngreso.valor_usd : 0,
-        fecha_diferido_cobro: updateIngreso ? new Date(updateIngreso.fecha_diferido_cobro).toISOString().slice(0, 10) : '',
+        fecha_diferido_cobro: (updateIngreso && new Date(updateIngreso.fecha_diferido_cobro).toISOString().slice(0, 10) >  new Date(updateIngreso.fecha_cobro).toISOString().slice(0, 10)) ? new Date(updateIngreso.fecha_diferido_cobro).toISOString().slice(0, 10) : '',
         observaciones: updateIngreso ? updateIngreso.observaciones : '',
         centro_costo: updateIngreso ? updateIngreso.forma_cobro.id_centro_costo : '',
         id_forma_cobro: updateIngreso ? updateIngreso.id_forma_cobro : ''
@@ -55,7 +55,7 @@ const FormIngresos = ({ close, updateIngreso, setUpdateIngresos }) => {
     const [showProyecto, setShowProyecto] = useState(updateIngreso && updateIngreso.id_proyecto ? true : false);
     const [showFC, setShowFC] = useState(false);
     const [showCuotas, setShowCuotas] = useState(false);
-    const [showFechaDif, setShowFechaDif] = useState(updateIngreso && updateIngreso.fecha_diferido_cobro ? true : false);
+    const [showFechaDif, setShowFechaDif] = useState(updateIngreso && ingreso.fecha_diferido_cobro ? true : false);
     const [showCheque, setShowCheque] = useState(false);
     const [showDataCheques, setShowDataCheques] = useState(false);
     const [showModal, setShowModal] = useState(false);
