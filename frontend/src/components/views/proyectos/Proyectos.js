@@ -35,13 +35,19 @@ const Proyectos = () => {
     const [menu, setMenu] = useState(user.rango != 'usuario comun' ? 'ccc-cce' : 'proyectos');
 
     const [totales, setTotales] = useState({
+        egresosHoy: 0,
+        egresosFuturo: 0,
         egresos: 0,
+        ingresosHoy: 0,
+        ingresosFuturo: 0,
         ingresos: 0,
         egresosUSD: 0,
         ingresosUSD: 0,
         costos: 0,
         ventas: 0,
-        alquiler: 0
+        alquiler: 0,
+        alquilerHoy: 0,
+        alquilerFuturo: 0
     });
 
     const [totalesUN, setTotalesUN] = useState({
@@ -63,8 +69,14 @@ const Proyectos = () => {
         let auxTotalCosto = 0;
         let auxTotalVenta = 0;
         let auxTotalAlquiler = 0;
+        let auxTotalAlquilerHoy = 0;
+        let auxTotalAlquilerFuturo = 0;
         let auxTotalEgresos = 0;
+        let auxTotalEgresosHoy = 0;
+        let auxTotalEgresosFuturo = 0;
         let auxTotalIngresos = 0;
+        let auxTotalIngresosHoy = 0;
+        let auxTotalIngresosFuturo = 0;
         let auxTotalUSDE = 0;
         let auxTotalUSDI = 0;
 
@@ -87,12 +99,28 @@ const Proyectos = () => {
                     auxTotalVenta += parseFloat(proyecto.venta);
                     auxTotalAlquiler += parseFloat(proyecto.alquiler_total ? proyecto.alquiler_total : 0);
 
+                    if (proyecto.alquilers.length > 0) {
+                        proyecto.alquilers.map(alquiler => {
+                            if (new Date(alquiler.fecha_h_alquiler) >= new Date()) {
+                                auxTotalAlquilerFuturo += parseFloat(alquiler.valor);
+                            } else {
+                                auxTotalAlquilerHoy += parseFloat(alquiler.valor);
+                            }
+                        })
+                    }
+
                     if (proyecto.id_unidad_negocio == '1') {
                         proyecto.egresos.map(egreso => {
                             if (egreso.id_proyecto == proyecto.id_proyecto && egreso.id_analisis_costo != 11) {
                                 auxPPE += parseFloat(egreso.valor_pago);
                                 auxTotalEgresos += parseFloat(egreso.valor_pago);
                                 auxTotalUSDE += !egreso.valor_usd ? 0 : parseFloat(egreso.valor_usd);
+
+                                if (new Date(egreso.fecha_diferido_pago) > new Date()) {
+                                    auxTotalEgresosFuturo += parseFloat(egreso.valor_pago);
+                                } else {
+                                    auxTotalEgresosHoy += parseFloat(egreso.valor_pago);
+                                }
                             }
                         });
                         proyecto.ingresos.map(ingreso => {
@@ -100,6 +128,12 @@ const Proyectos = () => {
                                 auxPPI += parseFloat(ingreso.valor_cobro);
                                 auxTotalIngresos += parseFloat(ingreso.valor_cobro);
                                 auxTotalUSDI += !ingreso.valor_usd ? 0 : parseFloat(ingreso.valor_usd);
+
+                                if (new Date(ingreso.fecha_diferido_cobro) > new Date()) {
+                                    auxTotalIngresosFuturo += parseFloat(ingreso.valor_cobro);
+                                } else {
+                                    auxTotalIngresosHoy += parseFloat(ingreso.valor_cobro);
+                                }
                             }
                         });
                     }
@@ -109,6 +143,12 @@ const Proyectos = () => {
                                 auxDE += parseFloat(egreso.valor_pago);
                                 auxTotalEgresos += parseFloat(egreso.valor_pago);
                                 auxTotalUSDE += !egreso.valor_usd ? 0 : parseFloat(egreso.valor_usd);
+
+                                if (new Date(egreso.fecha_diferido_pago) > new Date()) {
+                                    auxTotalEgresosFuturo += parseFloat(egreso.valor_pago);
+                                } else {
+                                    auxTotalEgresosHoy += parseFloat(egreso.valor_pago);
+                                }
                             }
                         });
                         proyecto.ingresos.map(ingreso => {
@@ -116,6 +156,12 @@ const Proyectos = () => {
                                 auxDI += parseFloat(ingreso.valor_cobro);
                                 auxTotalIngresos += parseFloat(ingreso.valor_cobro);
                                 auxTotalUSDI += !ingreso.valor_usd ? 0 : parseFloat(ingreso.valor_usd);
+
+                                if (new Date(ingreso.fecha_diferido_cobro) > new Date()) {
+                                    auxTotalIngresosFuturo += parseFloat(ingreso.valor_cobro);
+                                } else {
+                                    auxTotalIngresosHoy += parseFloat(ingreso.valor_cobro);
+                                }
                             }
                         });
                     }
@@ -125,6 +171,12 @@ const Proyectos = () => {
                                 auxME += parseFloat(egreso.valor_pago);
                                 auxTotalEgresos += parseFloat(egreso.valor_pago);
                                 auxTotalUSDE += !egreso.valor_usd ? 0 : parseFloat(egreso.valor_usd);
+
+                                if (new Date(egreso.fecha_diferido_pago) > new Date()) {
+                                    auxTotalEgresosFuturo += parseFloat(egreso.valor_pago);
+                                } else {
+                                    auxTotalEgresosHoy += parseFloat(egreso.valor_pago);
+                                }
                             }
                         });
                         proyecto.ingresos.map(ingreso => {
@@ -132,6 +184,12 @@ const Proyectos = () => {
                                 auxMI += parseFloat(ingreso.valor_cobro);
                                 auxTotalIngresos += parseFloat(ingreso.valor_cobro);
                                 auxTotalUSDI += !ingreso.valor_usd ? 0 : parseFloat(ingreso.valor_usd);
+
+                                if (new Date(ingreso.fecha_diferido_cobro) > new Date()) {
+                                    auxTotalIngresosFuturo += parseFloat(ingreso.valor_cobro);
+                                } else {
+                                    auxTotalIngresosHoy += parseFloat(ingreso.valor_cobro);
+                                }
                             }
                         });
                     }
@@ -151,6 +209,12 @@ const Proyectos = () => {
                             auxCCCE += parseFloat(egreso.valor_pago);
                             auxTotalEgresos += parseFloat(egreso.valor_pago);
                             auxTotalUSDE += !egreso.valor_usd ? 0 : parseFloat(egreso.valor_usd)
+
+                            if (new Date(egreso.fecha_diferido_pago) > new Date()) {
+                                auxTotalEgresosFuturo += parseFloat(egreso.valor_pago);
+                            } else {
+                                auxTotalEgresosHoy += parseFloat(egreso.valor_pago);
+                            }
                         }
                     });
 
@@ -159,42 +223,26 @@ const Proyectos = () => {
                             auxCCCI += parseFloat(ingreso.valor_cobro);
                             auxTotalIngresos += parseFloat(ingreso.valor_cobro);
                             auxTotalUSDI += !ingreso.valor_usd ? 0 : parseFloat(ingreso.valor_usd);
+
+                            if (new Date(ingreso.fecha_diferido_cobro) > new Date()) {
+                                auxTotalIngresosFuturo += parseFloat(ingreso.valor_cobro);
+                            } else {
+                                auxTotalIngresosHoy += parseFloat(ingreso.valor_cobro);
+                            }
                         }
                     });
-
-                    /*if (proyecto.id_unidad_negocio == '1') {
-                        ingresos.map(ingreso => {
-                            if (ingreso.id_proyecto == proyecto.id_proyecto) {
-                                auxPPI += parseFloat(ingreso.valor_cobro);
-                                auxTotalIngresos += parseFloat(ingreso.valor_cobro);
-                                auxTotalUSDI += !ingreso.valor_usd ? 0 : parseFloat(ingreso.valor_usd);
-                            }
-                        });
-                    }
-                    if (proyecto.id_unidad_negocio == '2') {
-                        ingresos.map(ingreso => {
-                            if (ingreso.id_proyecto == proyecto.id_proyecto) {
-                                auxDI += parseFloat(ingreso.valor_cobro);
-                                auxTotalIngresos += parseFloat(ingreso.valor_cobro);
-                                auxTotalUSDI += !ingreso.valor_usd ? 0 : parseFloat(ingreso.valor_usd);
-                            }
-                        });
-                    }
-                    if (proyecto.id_unidad_negocio == '3') {
-                        ingresos.map(ingreso => {
-                            if (ingreso.id_proyecto == proyecto.id_proyecto) {
-                                auxMI += parseFloat(ingreso.valor_cobro);
-                                auxTotalIngresos += parseFloat(ingreso.valor_cobro);
-                                auxTotalUSDI += !ingreso.valor_usd ? 0 : parseFloat(ingreso.valor_usd);
-                            }
-                        });
-                    }*/
                 } else if (proyecto.id_centro_costo == '3') {
                     proyecto.egresos.map(egreso => {
                         if (egreso.id_proyecto == proyecto.id_proyecto) {
                             auxCCEE += parseFloat(egreso.valor_pago)
                             auxTotalEgresos += parseFloat(egreso.valor_pago);
                             auxTotalUSDE += !egreso.valor_usd ? 0 : parseFloat(egreso.valor_usd)
+
+                            if (new Date(egreso.fecha_diferido_pago) > new Date()) {
+                                auxTotalEgresosFuturo += parseFloat(egreso.valor_pago);
+                            } else {
+                                auxTotalEgresosHoy += parseFloat(egreso.valor_pago);
+                            }
                         }
                     });
 
@@ -203,6 +251,12 @@ const Proyectos = () => {
                             auxCCEI += parseFloat(ingreso.valor_cobro);
                             auxTotalIngresos += parseFloat(ingreso.valor_cobro);
                             auxTotalUSDI += !ingreso.valor_usd ? 0 : parseFloat(ingreso.valor_usd);
+
+                            if (new Date(ingreso.fecha_diferido_cobro) > new Date()) {
+                                auxTotalIngresosFuturo += parseFloat(ingreso.valor_cobro);
+                            } else {
+                                auxTotalIngresosHoy += parseFloat(ingreso.valor_cobro);
+                            }
                         }
                     });
                 }
@@ -223,10 +277,16 @@ const Proyectos = () => {
             costos: auxTotalCosto,
             ventas: auxTotalVenta,
             egresos: auxTotalEgresos,
+            egresosHoy: auxTotalEgresosHoy,
+            egresosFuturo: auxTotalEgresosFuturo,
             ingresos: auxTotalIngresos + auxTotalAlquiler,
+            ingresosHoy: auxTotalIngresosHoy + auxTotalAlquilerHoy,
+            ingresosFuturo: auxTotalIngresosFuturo + auxTotalAlquilerFuturo,
             egresosUSD: auxTotalUSDE,
             ingresosUSD: auxTotalUSDI,
-            alquiler: auxTotalAlquiler
+            alquiler: auxTotalAlquiler,
+            alquilerHoy: auxTotalAlquilerHoy,
+            alquilerFuturo: auxTotalAlquilerFuturo
         })
         setTotalesUN({
             PPEgreso: auxPPE,
@@ -261,7 +321,7 @@ const Proyectos = () => {
         <div>
             {user.rango != "usuario comun" &&
                 <Row className="resumenTotales">
-                    <Col xs={12} md={4}>
+                    <Col xs={12} md={3}>
                         <Row>
                             <Col xs={6} md={6} className="resumenTotal border-right border-mobile-bot">
                                 <Row>
@@ -373,9 +433,9 @@ const Proyectos = () => {
                         <button className={menu == 'modulos' ? 'menu-inicio-button-active' : 'menu-inicio-button-off'} onClick={handleButton} name="modulos">Modulos</button>
                     </Col>
                 </>}
-                    <Col>
-                        <button className={menu == 'materiales' ? 'menu-inicio-button-active' : 'menu-inicio-button-off'} onClick={handleButton} name="materiales">Materiales</button>
-                    </Col>
+                <Col>
+                    <button className={menu == 'materiales' ? 'menu-inicio-button-active' : 'menu-inicio-button-off'} onClick={handleButton} name="materiales">Materiales</button>
+                </Col>
             </Row>
             <Row>
                 {

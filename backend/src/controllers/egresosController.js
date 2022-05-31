@@ -149,7 +149,7 @@ exports.updateEgreso = async (req, res) => {
     Egreso.update(egreso, {
         where: {
             id_egreso: egreso.id_egreso
-        }
+        },
     }).then(response => {
         Egreso.findAll({
             include: includeEgresos,

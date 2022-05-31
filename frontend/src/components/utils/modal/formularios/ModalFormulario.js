@@ -18,7 +18,7 @@ const ModalFormulario = ({ formulario, show, setShow, updateNew, informacion }) 
         <Modal show={show} onHide={handleClose} animation={false}>
             <Modal.Header closeButton>
                 <Modal.Title>
-                    <b>Complete el formulario</b>
+                    <b>Furmulario de {formulario}</b>
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body className="modal-content">

@@ -260,7 +260,7 @@ const FormEgresos = ({ close, updateEgreso, setUpdateEgresos }) => {
     const handleSubmit = async () => {
         let resEgreso = [];
 
-        if (updateEgreso) {
+        if (updateEgreso) { //Para actualizar
             try {
                 egreso.id_egreso = updateEgreso.id_egreso;
 
@@ -269,7 +269,7 @@ const FormEgresos = ({ close, updateEgreso, setUpdateEgresos }) => {
                 console.log(error);
                 ToastComponent('error');
             }
-        } else {
+        } else { //Agrega nuevo 
             if (auxEgresos.length > 0) {
                 try {
                     resEgreso = await insertEgreso(auxEgresos);
