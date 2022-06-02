@@ -42,7 +42,7 @@ export const ToastComponent = (estado, mensaje) => {
 export const formatFecha = (fecha) => {
     const date = new Date(fecha);
     const año = date.getFullYear();
-    const mes = date.getMonth();
+    const mes = date.getMonth()+1;
     const dia = date.getDate();
 
     const fechaFormat = dia +'/'+ mes +'/'+ año;
