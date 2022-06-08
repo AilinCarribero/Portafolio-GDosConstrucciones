@@ -46,7 +46,7 @@ const ModRestante = ({ show, stock, setShow, setStock }) => {
         id_user: stock.usuario.id_user,
         proyecto: ''
     });
-    console.log(stock)
+
     //Variables con informacion
     const [cantCheque, setCantCheque] = useState(0);
     const [cheques, setCheques] = useState();
@@ -97,15 +97,17 @@ const ModRestante = ({ show, stock, setShow, setStock }) => {
             cantidad que se esta ingresando */
             const auxValorPago = targetName == "valor_unidad" ? auxNumero * cambiar.cantidad : cambiar.valor_unidad * auxNumero;
 
-            const auxNewRestante = cambiar.restante_valor && auxValorPago && new Decimal(cambiar.restante_valor).add(auxValorPago).toNumber(); //Valor que va a quedar disponible
-            const auxNewValorTotal = cambiar.valor && auxValorPago && new Decimal(cambiar.valor).add(auxValorPago).toNumber(); //Valor total que se ha ingresado
+            //Valor que va a quedar disponible
+            const auxNewRestante = auxValorPago && new Decimal(stock.restante_valor).add(auxValorPago).toNumber();
+            //Valor total que se ha ingresado
+            const auxNewValorTotal = auxValorPago && new Decimal(stock.valor).add(auxValorPago).toNumber(); 
 
             setCambiar(prevCambiar => ({
                 ...prevCambiar,
                 [targetName]: auxNumero,
                 valor_pago: auxValorPago, //Valor que se esta pagando
                 restante_total: auxNewRestante,
-                new_valor_total: auxNewValorTotal
+                new_valor_total: auxNewValorTotal,
             }));
         } else {
             setCambiar(prevCambiar => ({
@@ -113,6 +115,7 @@ const ModRestante = ({ show, stock, setShow, setStock }) => {
                 [targetName]: targetValue
             }))
         }
+
         //Si se selecciono una forma de pago y...
         if (targetName === 'id_forma_pago') {
             formasPagos.forEach((formaPago) => {
@@ -159,7 +162,8 @@ const ModRestante = ({ show, stock, setShow, setStock }) => {
                             restante_valor: cambiar.valor_pago,
                             valor: cambiar.valor_pago,
                             valor_pago: valorCuota,
-                            fecha_diferido_pago: new Date(año, mesD, dia).toISOString().slice(0, 10)
+                            fecha_diferido_pago: new Date(año, mesD, dia).toISOString().slice(0, 10),
+                            cantidad: stock.cantidad + cambiar.cantidad
                         }
                     }
                 }
@@ -178,7 +182,8 @@ const ModRestante = ({ show, stock, setShow, setStock }) => {
                         restante_valor: cambiar.valor_pago,
                         valor: cambiar.valor_pago,
                         fecha_diferido_pago: auxChequeFD,
-                        cheque: i
+                        cheque: i,
+                        cantidad: stock.cantidad + cambiar.cantidad
                     }
                 }
                 setAuxCambiar(auxValuesCambiar);
@@ -189,7 +194,8 @@ const ModRestante = ({ show, stock, setShow, setStock }) => {
                 const material = {
                     ...cambiar,
                     restante_valor: cambiar.valor_pago,
-                    valor: cambiar.valor_pago
+                    valor: cambiar.valor_pago,
+                    cantidad: stock.cantidad + cambiar.cantidad
                 }
 
                 setDatosValidacion(material);
@@ -311,7 +317,7 @@ const ModRestante = ({ show, stock, setShow, setStock }) => {
                             </Row>
                             <Row>
                                 <Form.Text>
-                                    Disponible (${formatNumber(cambiar.restante_valor)}) + Agregando (${formatNumber(cambiar.valor_pago)}) = ${formatNumber(cambiar.restante_total)} quedará disponible
+                                    Disponible (${formatNumber(cambiar.restante_valor)}) + Agregando (${formatNumber(cambiar.valor_pago)}) = ${formatNumber(cambiar.restante_total+cambiar.valor_pago)} quedará disponible
                                 </Form.Text>
                             </Row>
                         </Col>
