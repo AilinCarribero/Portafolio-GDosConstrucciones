@@ -42,12 +42,12 @@ export const ToastComponent = (estado, mensaje) => {
 export const formatFecha = (fecha) => {
     const date = new Date(fecha);
     const dateUTC = date.toISOString();
-    console.log(dateUTC, date.getFullYear(), date.getMonth(), date.getDate());
+    //console.log(dateUTC, date.getUTCDate(), date.getFullYear(), date.getMonth(), date.getDate());
     const año = date.getFullYear();
-    const mes = date.getMonth()+1;
-    const dia = date.getDate()+1;
+    const dia = date.getUTCDate();
+    const mes = dia == 1 ? (date.getMonth()+2 > 12 ? date.getMonth()+2 - 12 : date.getMonth()+2 ) : (date.getMonth()+1 > 12 ? date.getMonth()+1 - 12 : date.getMonth()+1);
 
     const fechaFormat = dia +'/'+ mes +'/'+ año;
-
+//console.log(dateUTC, fechaFormat)
     return fechaFormat
 }

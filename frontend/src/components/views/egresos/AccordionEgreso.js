@@ -34,7 +34,7 @@ const AccordionEgreso = ({ egreso, setEgresos }) => {
             console.log(resEgreso)
         }
     }
-
+console.log(egreso);
     return (<>
         {showForm && <ModalFormulario formulario={'egreso'} informacion={egreso} show={showForm} setShow={setShowForm} updateNew={setEgresos} />}
 
@@ -55,6 +55,7 @@ const AccordionEgreso = ({ egreso, setEgresos }) => {
                         <Col xs={12} md={12}> <b>{egreso.analisis_costo.analisis_costo}</b> </Col>
                     </Row>
                     <Row>
+                        {egreso.stock && <Col xs={12} md={6}>Material<b>:</b> {egreso.stock.nombre_stock}</Col>}
                         <Col xs={12} md={6}>Fecha del pago<b>:</b> {formatFecha(egreso.fecha_pago)}</Col>
                         <Col xs={12} md={6}>Forma del pago<b>:</b> {egreso.forma_pago.forma_pago}</Col>
                         {(new Date(egreso.fecha_diferido_pago).toISOString().slice(0, 10) > new Date(egreso.fecha_pago).toISOString().slice(0, 10)) && <>
