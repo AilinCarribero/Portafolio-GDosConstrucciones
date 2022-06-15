@@ -90,7 +90,7 @@ const AccordionCentrosCostos = ({ proyecto, setProyectos }) => {
                         )
                     }
                     <Col xs={5} md={5}>{proyecto.id_proyecto}</Col>
-                    {user.rango != "usuario comun" &&
+                    {user.rango != "usuario comun" && !proyecto.id_proyecto.includes('CCC') && !proyecto.id_proyecto.includes('CCE') &&
                         <Col xs={4} md={4}> Resto: ${formatNumber(ingresosProyecto(proyecto.ingresos) - egresosProyecto(proyecto.egresos))} / USD${formatNumber(ingresosUSDProyecto(proyecto.ingresos) - egresosUSDProyecto(proyecto.egresos))}</Col>
                     }
                 </Accordion.Header>
