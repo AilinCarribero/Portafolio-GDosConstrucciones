@@ -25,14 +25,12 @@ const Proyectos = () => {
     const { proyectosContext, setProyectosContext } = useContext(ProyectoContext);
     const { proyectos } = useGetProyectos();
 
-    //console.log(proyectos);
-
     useEffect(() => {
         setProyectosContext(proyectos);
     }, [proyectos])
 
     const [spinner, setSpinner] = useState(true);
-    const [menu, setMenu] = useState(user.rango != 'usuario comun' ? 'ccc-cce' : 'proyectos');
+    const [menu, setMenu] = useState(user.rango != 'usuario comun' ? 'resumen' : 'proyectos');
 
     const [totales, setTotales] = useState({
         egresosHoy: 0,
@@ -42,7 +40,11 @@ const Proyectos = () => {
         ingresosFuturo: 0,
         ingresos: 0,
         egresosUSD: 0,
+        egresosUSDHoy: 0,
+        egresosUSDFuturo: 0,
         ingresosUSD: 0,
+        ingresosUSDHoy: 0,
+        ingresosUSDFuturo: 0,
         costos: 0,
         ventas: 0,
         alquiler: 0,
@@ -78,7 +80,11 @@ const Proyectos = () => {
         let auxTotalIngresosHoy = 0;
         let auxTotalIngresosFuturo = 0;
         let auxTotalUSDE = 0;
+        let auxTotalUSDEHoy = 0;
+        let auxTotalUSDEFuturo = 0;
         let auxTotalUSDI = 0;
+        let auxTotalUSDIHoy = 0;
+        let auxTotalUSDIFuturo = 0;
 
         let auxPPE = 0;
         let auxPPI = 0;
@@ -101,7 +107,7 @@ const Proyectos = () => {
 
                     if (proyecto.alquilers.length > 0) {
                         proyecto.alquilers.map(alquiler => {
-                            if (new Date(alquiler.fecha_h_alquiler) >= new Date()) {
+                            if (new Date(alquiler.fecha_h_alquiler) > new Date()) {
                                 auxTotalAlquilerFuturo += parseFloat(alquiler.valor);
                             } else {
                                 auxTotalAlquilerHoy += parseFloat(alquiler.valor);
@@ -118,8 +124,10 @@ const Proyectos = () => {
 
                                 if (new Date(egreso.fecha_diferido_pago) > new Date()) {
                                     auxTotalEgresosFuturo += parseFloat(egreso.valor_pago);
+                                    auxTotalUSDEFuturo += !egreso.valor_usd ? 0 : parseFloat(egreso.valor_usd);
                                 } else {
                                     auxTotalEgresosHoy += parseFloat(egreso.valor_pago);
+                                    auxTotalUSDEHoy += !egreso.valor_usd ? 0 : parseFloat(egreso.valor_usd);
                                 }
                             }
                         });
@@ -131,8 +139,10 @@ const Proyectos = () => {
 
                                 if (new Date(ingreso.fecha_diferido_cobro) > new Date()) {
                                     auxTotalIngresosFuturo += parseFloat(ingreso.valor_cobro);
+                                    auxTotalUSDIFuturo += !ingreso.valor_usd ? 0 : parseFloat(ingreso.valor_usd);
                                 } else {
                                     auxTotalIngresosHoy += parseFloat(ingreso.valor_cobro);
+                                    auxTotalUSDIHoy += !ingreso.valor_usd ? 0 : parseFloat(ingreso.valor_usd);
                                 }
                             }
                         });
@@ -146,8 +156,10 @@ const Proyectos = () => {
 
                                 if (new Date(egreso.fecha_diferido_pago) > new Date()) {
                                     auxTotalEgresosFuturo += parseFloat(egreso.valor_pago);
+                                    auxTotalUSDEFuturo += !egreso.valor_usd ? 0 : parseFloat(egreso.valor_usd);
                                 } else {
                                     auxTotalEgresosHoy += parseFloat(egreso.valor_pago);
+                                    auxTotalUSDEHoy += !egreso.valor_usd ? 0 : parseFloat(egreso.valor_usd);
                                 }
                             }
                         });
@@ -159,8 +171,10 @@ const Proyectos = () => {
 
                                 if (new Date(ingreso.fecha_diferido_cobro) > new Date()) {
                                     auxTotalIngresosFuturo += parseFloat(ingreso.valor_cobro);
+                                    auxTotalUSDIFuturo += !ingreso.valor_usd ? 0 : parseFloat(ingreso.valor_usd);
                                 } else {
                                     auxTotalIngresosHoy += parseFloat(ingreso.valor_cobro);
+                                    auxTotalUSDIHoy += !ingreso.valor_usd ? 0 : parseFloat(ingreso.valor_usd);
                                 }
                             }
                         });
@@ -174,8 +188,10 @@ const Proyectos = () => {
 
                                 if (new Date(egreso.fecha_diferido_pago) > new Date()) {
                                     auxTotalEgresosFuturo += parseFloat(egreso.valor_pago);
+                                    auxTotalUSDEFuturo += !egreso.valor_usd ? 0 : parseFloat(egreso.valor_usd);
                                 } else {
                                     auxTotalEgresosHoy += parseFloat(egreso.valor_pago);
+                                    auxTotalUSDEHoy += !egreso.valor_usd ? 0 : parseFloat(egreso.valor_usd);
                                 }
                             }
                         });
@@ -187,8 +203,10 @@ const Proyectos = () => {
 
                                 if (new Date(ingreso.fecha_diferido_cobro) > new Date()) {
                                     auxTotalIngresosFuturo += parseFloat(ingreso.valor_cobro);
+                                    auxTotalUSDIFuturo += !ingreso.valor_usd ? 0 : parseFloat(ingreso.valor_usd);
                                 } else {
                                     auxTotalIngresosHoy += parseFloat(ingreso.valor_cobro);
+                                    auxTotalUSDIHoy += !ingreso.valor_usd ? 0 : parseFloat(ingreso.valor_usd);
                                 }
                             }
                         });
@@ -212,8 +230,10 @@ const Proyectos = () => {
 
                             if (new Date(egreso.fecha_diferido_pago) > new Date()) {
                                 auxTotalEgresosFuturo += parseFloat(egreso.valor_pago);
+                                auxTotalUSDEFuturo += !egreso.valor_usd ? 0 : parseFloat(egreso.valor_usd);
                             } else {
                                 auxTotalEgresosHoy += parseFloat(egreso.valor_pago);
+                                auxTotalUSDEHoy += !egreso.valor_usd ? 0 : parseFloat(egreso.valor_usd);
                             }
                         }
                     });
@@ -226,8 +246,10 @@ const Proyectos = () => {
 
                             if (new Date(ingreso.fecha_diferido_cobro) > new Date()) {
                                 auxTotalIngresosFuturo += parseFloat(ingreso.valor_cobro);
+                                auxTotalUSDIFuturo += !ingreso.valor_usd ? 0 : parseFloat(ingreso.valor_usd);
                             } else {
                                 auxTotalIngresosHoy += parseFloat(ingreso.valor_cobro);
+                                auxTotalUSDIHoy += !ingreso.valor_usd ? 0 : parseFloat(ingreso.valor_usd);
                             }
                         }
                     });
@@ -254,8 +276,10 @@ const Proyectos = () => {
 
                             if (new Date(ingreso.fecha_diferido_cobro) > new Date()) {
                                 auxTotalIngresosFuturo += parseFloat(ingreso.valor_cobro);
+                                auxTotalUSDIFuturo += !ingreso.valor_usd ? 0 : parseFloat(ingreso.valor_usd);
                             } else {
                                 auxTotalIngresosHoy += parseFloat(ingreso.valor_cobro);
+                                auxTotalUSDIHoy += !ingreso.valor_usd ? 0 : parseFloat(ingreso.valor_usd);
                             }
                         }
                     });
@@ -279,11 +303,15 @@ const Proyectos = () => {
             egresos: auxTotalEgresos,
             egresosHoy: auxTotalEgresosHoy,
             egresosFuturo: auxTotalEgresosFuturo,
-            ingresos: auxTotalIngresos + auxTotalAlquiler,
-            ingresosHoy: auxTotalIngresosHoy + auxTotalAlquilerHoy,
-            ingresosFuturo: auxTotalIngresosFuturo + auxTotalAlquilerFuturo,
+            ingresos: auxTotalIngresos,
+            ingresosHoy: auxTotalIngresosHoy,
+            ingresosFuturo: auxTotalIngresosFuturo,
             egresosUSD: auxTotalUSDE,
+            egresosUSDHoy: auxTotalUSDEHoy,
+            egresosUSDFuturo: auxTotalUSDEFuturo,
             ingresosUSD: auxTotalUSDI,
+            ingresosUSDHoy: auxTotalUSDIHoy,
+            ingresosUSDFuturo: auxTotalUSDIFuturo,
             alquiler: auxTotalAlquiler,
             alquilerHoy: auxTotalAlquilerHoy,
             alquilerFuturo: auxTotalAlquilerFuturo
@@ -319,109 +347,16 @@ const Proyectos = () => {
 
     return (<>
         <div>
-            {user.rango != "usuario comun" &&
-                <Row className="resumenTotales">
-                    <Col xs={12} md={3}>
-                        <Row>
-                            <Col xs={6} md={6} className="resumenTotal border-right border-mobile-bot">
-                                <Row>
-                                    <Col xs={12} md={12} className="title-resumen-totales">
-                                        Costos:
-                                    </Col>
-                                    <Col xs={12} md={12} className="text-resumen-totales">
-                                        ${formatNumber(totales.costos)}
-                                    </Col>
-                                </Row>
-                            </Col>
-                            <Col xs={6} md={6} className="resumenTotal border-right border-mobile-right border-mobile-bot">
-                                <Row>
-                                    <Col xs={12} md={12} className="title-resumen-totales">
-                                        Venta:
-                                    </Col>
-                                    <Col xs={12} md={12} className="text-resumen-totales">
-                                        ${formatNumber(totales.ventas)}
-                                    </Col>
-                                </Row>
-                            </Col>
-                        </Row>
-                    </Col>
-                    <Col xs={12} md={8}>
-                        <Row>
-                            <OverlayTrigger placement="bottom" overlay={
-                                <Tooltip>
-                                    <p>PP: ${formatNumber(totalesUN.PPIngreso)}</p>
-                                    <p>D: ${formatNumber(totalesUN.DIngreso)}</p>
-                                    <p>M: ${formatNumber(totalesUN.MIngreso)}</p>
-                                    <p>CCC: ${formatNumber(totalesUN.CCCIngreso)}</p>
-                                    <p>CCE: ${formatNumber(totalesUN.CCEIngreso)}</p>
-                                    <p>Alquileres: ${formatNumber(totales.alquiler)}</p>
-                                </Tooltip>
-                            }>
-                                <Col xs={6} md={6} className="resumenTotal border-right">
-                                    <Row>
-                                        <Col xs={12} md={12} className="title-resumen-totales">
-                                            Ingresos:
-                                        </Col>
-                                        <Col xs={12} md={6} className="text-resumen-totales">
-                                            ${totales.ingresos ? formatNumber(totales.ingresos) : 0}
-                                        </Col>
-                                        <Col xs={12} md={6} className="text-resumen-totales">
-                                            USD${totales.ingresosUSD ? formatNumber(totales.ingresosUSD) : 0}
-                                        </Col>
-                                    </Row>
-                                </Col>
-                            </OverlayTrigger>
-                            <OverlayTrigger placement="bottom" overlay={
-                                <Tooltip>
-                                    <p>PP: ${formatNumber(totalesUN.PPEgreso)}</p>
-                                    <p>D: ${formatNumber(totalesUN.DEgreso)}</p>
-                                    <p>M: ${formatNumber(totalesUN.MEgreso)}</p>
-                                    <p>CCC: ${formatNumber(totalesUN.CCCEgreso)}</p>
-                                    <p>CCE: ${formatNumber(totalesUN.CCEEgreso)}</p>
-                                </Tooltip>
-                            }>
-                                <Col xs={6} md={6} className="resumenTotal">
-                                    <Row>
-                                        <Col xs={12} md={12} className="title-resumen-totales">
-                                            Egresos:
-                                        </Col>
-                                        <Col xs={12} md={6} className="text-resumen-totales">
-                                            ${totales.egresos ? formatNumber(totales.egresos) : 0}
-                                        </Col>
-                                        <Col xs={12} md={6} className="text-resumen-totales">
-                                            USD${totales.egresosUSD ? formatNumber(totales.egresosUSD) : 0}
-                                        </Col>
-                                    </Row>
-                                </Col>
-                            </OverlayTrigger>
-                        </Row>
-                        <Row>
-                            <Col xs={12} md={12} className="resumenTotal border-top">
-                                <Row>
-                                    <Col xs={12} md={12} className="title-resumen-totales">
-                                        Diferencia entre Ingresos y Egresos:
-                                    </Col>
-                                    <Col xs={6} md={6} className="text-resumen-totales">
-                                        ${formatNumber(totales.ingresos - totales.egresos)}
-                                    </Col>
-                                    <Col xs={6} md={6} className="text-resumen-totales">
-                                        USD${totales.ingresosUSD && totales.egresosUSD ? formatNumber(totales.ingresosUSD - totales.egresosUSD)
-                                            : (totales.ingresosUSD ? formatNumber(totales.ingresosUSD)
-                                                : (totales.egresosUSD ? formatNumber(totales.egresosUSD) : 0))}
-                                    </Col>
-                                </Row>
-                            </Col>
-                        </Row>
-                    </Col>
-                </Row>
-            }
             {/*spinner && <Spinner animation="border" variant="dark" />*/}
             <Row className="menu-inicio">
-                {user.rango != "usuario comun" &&
+                {user.rango != "usuario comun" && <>
+                    <Col>
+                        <button className={menu == 'resumen' ? 'menu-inicio-button-active' : 'menu-inicio-button-off'} onClick={handleButton} name="resumen">Resumen</button>
+                    </Col>
                     <Col>
                         <button className={menu == 'ccc-cce' ? 'menu-inicio-button-active' : 'menu-inicio-button-off'} onClick={handleButton} name="ccc-cce">CCC y CCE</button>
                     </Col>
-                }
+                </>}
                 <Col>
                     <button className={menu == 'proyectos' ? 'menu-inicio-button-active' : 'menu-inicio-button-off'} onClick={handleButton} name="proyectos">Proyectos</button>
                 </Col>
@@ -440,11 +375,142 @@ const Proyectos = () => {
             <Row>
                 {
                     /*Si no es modulo ni materiales es centro de costo. Si no es modulo es materiales. Si es modulo*/
-                    menu != 'modulos' ?
-                        menu != 'materiales' ?
-                            <CentrosCostos proyectos={proyectosContext} setProyectos={setProyectosContext} mostrar={menu} />
-                            : <Materiales />
-                        : <Modulos />
+                    menu != 'resumen' ?
+                        menu != 'modulos' ?
+                            menu != 'materiales' ?
+                                <CentrosCostos proyectos={proyectosContext} setProyectos={setProyectosContext} mostrar={menu} />
+                                : <Materiales />
+                            : <Modulos />
+                        : user.rango != "usuario comun" &&
+                        <Row className="resumenTotales">
+                            <Col xs={12} md={4}>
+                                <Row>
+                                    <Col xs={6} md={6} className="resumenTotal border-right border-mobile-bot">
+                                        <Row>
+                                            <Col xs={12} md={12} className="title-resumen-totales">
+                                                Costos:
+                                            </Col>
+                                            <Col xs={12} md={12} className="text-resumen-totales">
+                                                ${formatNumber(totales.costos)}
+                                            </Col>
+                                        </Row>
+                                    </Col>
+                                    <Col xs={6} md={6} className="resumenTotal border-right border-mobile-right border-mobile-bot">
+                                        <Row>
+                                            <Col xs={12} md={12} className="title-resumen-totales">
+                                                Venta:
+                                            </Col>
+                                            <Col xs={12} md={12} className="text-resumen-totales">
+                                                ${formatNumber(totales.ventas)}
+                                            </Col>
+                                        </Row>
+                                    </Col>
+                                </Row>
+                            </Col>
+                            <Col xs={12} md={8}>
+                                <Row>
+                                    <OverlayTrigger placement="bottom" overlay={
+                                        <Tooltip>
+                                            <p>PP: ${formatNumber(totalesUN.PPIngreso)}</p>
+                                            <p>D: ${formatNumber(totalesUN.DIngreso)}</p>
+                                            <p>M: ${formatNumber(totalesUN.MIngreso)}</p>
+                                            <p>CCC: ${formatNumber(totalesUN.CCCIngreso)}</p>
+                                            <p>CCE: ${formatNumber(totalesUN.CCEIngreso)}</p>
+                                            <p>Alquileres: ${formatNumber(totales.alquiler)}</p>
+                                        </Tooltip>
+                                    }>
+                                        <Col xs={6} md={6} className="resumenTotal border-right">
+                                            <Row>
+                                                <Col xs={12} md={12} className="title-resumen-totales">
+                                                    Ingresos:
+                                                </Col>
+                                                <Col xs={12} md={6} className="text-resumen-totales">
+                                                    ${totales.ingresos ? formatNumber(totales.ingresos) : 0}
+                                                </Col>
+                                                <Col xs={12} md={6} className="text-resumen-totales">
+                                                    USD${totales.ingresosUSD ? formatNumber(totales.ingresosUSD) : 0}
+                                                </Col>
+                                            </Row>
+                                        </Col>
+                                    </OverlayTrigger>
+                                    <OverlayTrigger placement="bottom" overlay={
+                                        <Tooltip>
+                                            <p>PP: ${formatNumber(totalesUN.PPEgreso)}</p>
+                                            <p>D: ${formatNumber(totalesUN.DEgreso)}</p>
+                                            <p>M: ${formatNumber(totalesUN.MEgreso)}</p>
+                                            <p>CCC: ${formatNumber(totalesUN.CCCEgreso)}</p>
+                                            <p>CCE: ${formatNumber(totalesUN.CCEEgreso)}</p>
+                                        </Tooltip>
+                                    }>
+                                        <Col xs={6} md={6} className="resumenTotal">
+                                            <Row>
+                                                <Col xs={12} md={12} className="title-resumen-totales">
+                                                    Egresos:
+                                                </Col>
+                                                <Col xs={12} md={6} className="text-resumen-totales">
+                                                    ${totales.egresos ? formatNumber(totales.egresos) : 0}
+                                                </Col>
+                                                <Col xs={12} md={6} className="text-resumen-totales">
+                                                    USD${totales.egresosUSD ? formatNumber(totales.egresosUSD) : 0}
+                                                </Col>
+                                            </Row>
+                                        </Col>
+                                    </OverlayTrigger>
+                                </Row>
+                                <Row>
+                                    <Col xs={12} md={12} className="resumenTotal border-top">
+                                        <Row>
+                                            <Col xs={12} md={12} className="title-resumen-totales">
+                                                Diferencia entre Ingresos y Egresos:
+                                            </Col>
+                                            <Col xs={6} md={6} className="text-resumen-totales">
+                                                ${formatNumber(totales.ingresos - totales.egresos)}
+                                            </Col>
+                                            <Col xs={6} md={6} className="text-resumen-totales">
+                                                USD${totales.ingresosUSD && totales.egresosUSD ? formatNumber(totales.ingresosUSD - totales.egresosUSD)
+                                                    : (totales.ingresosUSD ? formatNumber(totales.ingresosUSD)
+                                                        : (totales.egresosUSD ? formatNumber(totales.egresosUSD) : 0))}
+                                            </Col>
+                                        </Row>
+                                    </Col>
+                                </Row>
+                            </Col>
+                            <Col xs={12} md={12} className="resumenTotal border-top">
+                                <Row>
+                                    <Col xs={12} md={12} className="title-resumen-totales">
+                                        Flujo de Caja:
+                                    </Col>
+                                    <Col xs={6} md={6} className="text-resumen-totales">
+                                        <Row>
+                                            <Col xs={12} md={12}> <b>Ingresos a la fecha:</b> ${formatNumber(totales.ingresosHoy)}/USD${formatNumber(totales.ingresosUSDHoy)}</Col>
+                                            <Col xs={12} md={12}> <b>Ingresos por cobrar:</b> ${formatNumber(totales.ingresosFuturo)}/USD${formatNumber(totales.ingresosUSDFuturo)}</Col>
+                                        </Row>
+                                    </Col>
+                                    <Col xs={6} md={6} className="text-resumen-totales">
+                                        <Row>
+                                            <Col xs={12} md={12}> <b>Egresos a la fecha:</b> ${formatNumber(totales.egresosHoy)}/USD${formatNumber(totales.egresosUSDHoy)}</Col>
+                                            <Col xs={12} md={12}> <b>Egresos por pagar:</b> ${formatNumber(totales.egresosFuturo)}/USD${formatNumber(totales.egresosUSDFuturo)}</Col>
+                                        </Row>
+                                    </Col>
+                                </Row>
+                            </Col>
+                            <Col xs={12} md={12} className="resumenTotal border-top">
+                                <Row>
+                                    <Col xs={12} md={12}>
+                                        <Row>
+                                            <Col xs={12} md={6}>
+                                                <Row>
+                                                    <Col xs={12} md={12} className="title-resumen-totales">Alquileres:</Col>
+                                                    <Col xs={12} md={12} className="text-resumen-totales">
+                                                        ${formatNumber(totales.alquiler)}
+                                                    </Col>
+                                                </Row>
+                                            </Col>
+                                        </Row>
+                                    </Col>
+                                </Row>
+                            </Col>
+                        </Row>
                 }
             </Row>
         </div >
