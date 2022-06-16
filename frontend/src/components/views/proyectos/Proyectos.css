@@ -1,22 +1,4 @@
-.resumenTotales{
-    background-color: rgb(32, 32, 32);
-    padding: 5px;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    margin-top: 2%;
-    margin-bottom: 5px;
-    color: beige;
-    align-items: center;
-}
 
-.title-resumen-totales{
-    font-size: 14px;
-    font-weight: bold;
-}
-
-.text-resumen-totales{
-    font-size: 15px;
-}
 
 .acordeonTotales button{
     background-color: rgb(32, 32, 32);
@@ -28,12 +10,6 @@ button .accordion-button {
     color: beige;
 }
 
-.resumenTotal{
-    align-items: center;
-    text-align: center;
-    padding: 8px;
-}
-
 .button-ver-mas{
     border-color: transparent;
     background-color: transparent;
@@ -43,27 +19,12 @@ button .accordion-button {
     color: black;
 }
 
-.border-right{
-    border-right: 1.5px solid white;
-}
-
 .accordionCC{
     border: solid 1px !important;
 }
 
 .border-top{
     border-top: 1.5px solid white;
-}
-
-@media only screen and (hover: none) and (pointer: coarse){
-    .border-mobile-right{
-        border-right: transparent !important;
-    } 
-
-    .border-mobile-bot{
-        padding-bottom: 5px;
-        border-bottom: solid 1.5px white;
-    }
 }
 
 .menu-inicio{

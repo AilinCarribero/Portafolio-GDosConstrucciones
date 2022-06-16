@@ -15,6 +15,7 @@ import { useUser } from '../../../hooks/useUser';
 import { ProyectoContext } from '../../../contexts/ProyectosProvider';
 
 //Css
+import '../../../style/Proyectos.scss';
 import './Proyectos.css';
 
 //Img-Incons
@@ -372,7 +373,7 @@ const Proyectos = () => {
                     <button className={menu == 'materiales' ? 'menu-inicio-button-active' : 'menu-inicio-button-off'} onClick={handleButton} name="materiales">Materiales</button>
                 </Col>
             </Row>
-            <Row>
+            <Row className="content-data">
                 {
                     /*Si no es modulo ni materiales es centro de costo. Si no es modulo es materiales. Si es modulo*/
                     menu != 'resumen' ?
