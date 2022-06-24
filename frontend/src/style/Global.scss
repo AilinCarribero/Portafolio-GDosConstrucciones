@@ -17,8 +17,7 @@
     }
 }
 
-.card-form
-{
+.card-form {
     position: relative;
     top: 10px;
     width: 400px !important;
@@ -61,6 +60,8 @@
     }
 }
 
+
+/*-------------------- Estados -----------------------*/
 .state{
     width: 28px;
     height: 28px;
@@ -109,5 +110,50 @@
         &:hover{
             color: white;
         }
+    }
+}
+
+/*------------------- Resumenes -----------------------*/
+.content-resumen {
+    min-width: 100vw;
+    background-color: #000000;
+    padding-bottom: 5px;
+    margin-left: 0px;
+    color: #ffffff;
+    text-align: center;
+    font-size: 16px;
+
+    .content-section{
+        padding-top: 10px;
+        padding-bottom: 10px;
+
+        .text-bold{
+            font-weight: bold;
+        }
+    }
+
+    .content-sub-section{
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+
+    #costo-venta{
+        padding-top: 45px;
+    }
+
+    .border-bottom{
+        border-bottom: #ffffff solid 1px;
+    }
+
+    .border-top{
+        border-top: #ffffff solid 1px;
+    }
+
+    .border-right{
+        border-right: #ffffff solid 1px;
+    }
+
+    .border-left{
+        border-left: #ffffff solid 1px;
     }
 }
