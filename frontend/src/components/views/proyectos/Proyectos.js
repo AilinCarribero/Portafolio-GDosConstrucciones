@@ -17,6 +17,7 @@ import { ProyectoContext } from '../../../contexts/ProyectosProvider';
 
 //Css
 import './Proyectos.css';
+import '../../../style/CC.scss';
 
 //Img-Incons
 //import SpinnerC from '../../utils/spinner/SpinnerC';

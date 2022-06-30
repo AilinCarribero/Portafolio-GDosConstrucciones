@@ -341,7 +341,7 @@ const FormProyectos = ({ close, updateProyecto, setUpdateProyectos }) => {
                                     <Form.Control onChange={handleChangeForm} name="fecha_f_proyecto" type="date" value={proyecto.fecha_f_proyecto} />
                                 </FloatingLabel>
                             </Form.Group>
-                            <Button className="button-submit" variant="primary" type="submit">
+                            <Button className="button-submit" variant="dark" type="submit">
                                 Guardar
                             </Button>
                         </Form>

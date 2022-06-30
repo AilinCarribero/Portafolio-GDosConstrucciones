@@ -55,7 +55,7 @@ const Home = () => {
 
     return (
         <Row className="justify-content-center">
-            <Col xs="auto" sm="auto" md="auto" lg="auto" xl="auto" xxl="auto" >
+            <Col>
                 <Card className="text-center card">
                     <Card.Header className="title-form">Ingrese su E-Mail y Contraseña</Card.Header>
                     <Card.Body>
