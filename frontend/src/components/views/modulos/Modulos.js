@@ -20,7 +20,7 @@ const Modulos = () => {
     return (<>
         <ModalFormulario formulario={'modulo'} show={showForm} setShow={setShowForm} updateNew={setModulos} />
 
-        <Row className='content-resumen'>
+        <Row className='content-resumen-sec-buttons'>
             <Row className="conten-buttons-agregar">
                 <Col xs={6} sm={6} md={4}>
                     <Button className="button-agregar" onClick={() => setShowForm(!showForm)} variant="dark" >

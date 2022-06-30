@@ -133,7 +133,7 @@ const CentrosCostos = ({ proyectos, mostrar, setProyectos }) => {
     return (<>
         <ModalFormulario formulario={formulario} show={showForm} setShow={setShowForm} updateNew={formulario == 'proyecto' && setProyectos} />
 
-        <Row className='content-resumen'>
+        <Row className='content-resumen-sec-buttons'>
             <Col xs={12} md={user.rango != "usuario comun" ? 6 : 12}>
                 <Row className="conten-buttons-agregar">
                     <Col xs={6} sm={6} md={4}>

@@ -2,11 +2,15 @@ import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Card, Button, Row, FloatingLabel, Form, Col, FormGroup } from 'react-bootstrap';
 
+//Hooks
 import { useUser } from '../../../hooks/useUser';
+import { ToastComponent } from '../../../hooks/useUtils';
+
+//Service
 import { login } from '../../../services/apiAuth';
 
-import './Home.css';
-import { ToastComponent } from '../../../hooks/useUtils';
+//Css
+import '../../../style/Home.scss';
 
 const Home = () => {
     const history = useHistory();
@@ -55,7 +59,7 @@ const Home = () => {
 
     return (
         <Row className="justify-content-center">
-            <Col>
+            <Col xs="auto" sm="auto" md="auto" lg="auto" xl="auto" xxl="auto" >
                 <Card className="text-center card">
                     <Card.Header className="title-form">Ingrese su E-Mail y Contraseña</Card.Header>
                     <Card.Body>

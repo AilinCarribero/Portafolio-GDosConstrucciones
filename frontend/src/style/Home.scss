@@ -1,0 +1,21 @@
+.card
+{
+    position: relative;
+    top: 40%;
+    width: 94vw !important;
+    max-width: 390px;
+    border: 1px ;
+    border-style: hidden;
+    border-radius: 10px;
+
+    .title-form {
+        font-weight: bold;
+        font-size: 18px;
+        padding-top: 14px;
+        padding-bottom: 14px;
+    }
+
+    .button-submit{
+        width: 100%;
+    }
+}

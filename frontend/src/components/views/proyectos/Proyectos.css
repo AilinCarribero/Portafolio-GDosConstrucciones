@@ -63,31 +63,6 @@ button .accordion-button {
     }
 }
 
-.menu-inicio{
-    background-color: whitesmoke;
-    margin-bottom: 2px;
-}
-
-.menu-inicio-button-active {
-    border: transparent;
-    border-bottom: 3px solid black;
-    width: 100%;
-    height: 100%;
-    text-align: center;
-    font-weight: bold;
-    background-color: transparent;
-    padding: 10px 0;
-}
-
-.menu-inicio-button-off {
-    border: transparent;
-    width: 100%;
-    height: 100%;
-    text-align: center;
-    background-color: transparent;
-    padding: 10px 0;
-}
-
 /*Formulario*/
 .card-form-proyectos
 {
