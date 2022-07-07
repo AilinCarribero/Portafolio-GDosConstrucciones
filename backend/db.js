@@ -17,6 +17,7 @@ const ModuloModel = require('./src/models/moduloModel');
 const ProyectoModel = require('./src/models/proyectoModel');
 const RangoModel = require('./src/models/rangoModel');
 const StockModel = require('./src/models/stockModel');
+const StockMovimientoModel = require('./src/models/stockMovimientoModel');
 const UnidadNegocioModel = require('./src/models/unidadNegocioModel');
 
 //Declaro la base de datos
@@ -48,6 +49,7 @@ const Modulo = ModuloModel(sequelize, Sequelize);
 const Proyecto = ProyectoModel(sequelize, Sequelize);
 const Rango = RangoModel(sequelize, Sequelize);
 const Stock = StockModel(sequelize, Sequelize);
+const StockMovimiento = StockMovimientoModel(sequelize, Sequelize);
 const UnidadNegocio = UnidadNegocioModel(sequelize, Sequelize);
 
 /*Conecto con la base de datos, verifico que esten los modelos creados, si no lo estan los crea 
@@ -72,6 +74,8 @@ sequelize.sync({ force: false, logging: false }).then(() => {
     Ingreso.belongsTo(Auth, { foreignKey: 'id_user', targetKey: 'id_user' });
     Stock.hasMany(Egreso, { foreignKey: 'id_stock', targetKey: 'id_stock' });
     Stock.belongsTo(Auth, { foreignKey: 'id_user', targetKey: 'id_user' });
+    Stock.hasMany(StockMovimiento, {foreignKey: 'id_stock', targetKey: 'id_stock'});
+    StockMovimiento.belongsTo(Stock, {foreignKey: 'id_stock', targetKey: 'id_stock'});
     
     console.log('La sincronizacion con la base de datos ' + process.env.DB_NAME + ' fue un exito');
 }).catch(err => {
@@ -80,5 +84,5 @@ sequelize.sync({ force: false, logging: false }).then(() => {
 
 module.exports = {
     Alquiler, AnalisisCosto, Auth, CentroCosto, ComprobantePago, DetalleAC, Egreso, Estado, FormaCobro, FormaPago,
-    Indice, Ingreso, Modulo, Proyecto, Rango, Stock, UnidadNegocio
+    Indice, Ingreso, Modulo, Proyecto, Rango, Stock, StockMovimiento, UnidadNegocio
 }

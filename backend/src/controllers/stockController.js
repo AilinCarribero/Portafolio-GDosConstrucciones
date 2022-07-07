@@ -50,6 +50,8 @@ exports.insertStock = async (req, res) => {
                             model: Auth
                         }]
                     }).then(response => {
+                        console.log(response);
+                        
                         response.statusText = "Ok";
                         response.status = 200;
                         res.json(response);
