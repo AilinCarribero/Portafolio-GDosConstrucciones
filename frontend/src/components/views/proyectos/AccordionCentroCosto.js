@@ -70,10 +70,9 @@ const AccordionCentrosCostos = ({ proyecto, setProyectos }) => {
     }
 
     return (<>
-        <Col >
             {showFormUpdate && <ModalFormulario formulario={'proyecto'} informacion={proyecto} show={showFormUpdate} setShow={setShowFormUpdate} updateNew={setProyectos} />}
 
-            <Accordion.Item eventKey={proyecto.id_proyecto} className={proyecto.id_centro_costo == 1 || proyecto.id_centro_costo == 3 ? 'accordionCC' : ''}>
+            <Accordion.Item eventKey={proyecto.id_proyecto} className={proyecto.id_centro_costo == 1 || proyecto.id_centro_costo == 3 ? 'accordionCC' : 'content-accordion'}>
                 <Accordion.Header>
                     {proyecto.fecha_f_proyecto && new Date(proyecto.fecha_f_proyecto).toISOString().slice(0, 10) != new Date('2200-01-01').toISOString().slice(0, 10) ?
                         new Date() > new Date(proyecto.fecha_f_proyecto) ? //Si es mayor a la fecha de inicio y a la fecha de fin
@@ -91,7 +90,7 @@ const AccordionCentrosCostos = ({ proyecto, setProyectos }) => {
                     }
                     <Col xs={5} md={5}>{proyecto.id_proyecto}</Col>
                     {user.rango != "usuario comun" && !proyecto.id_proyecto.includes('CCC') && !proyecto.id_proyecto.includes('CCE') &&
-                        <Col xs={4} md={4}> Resto: ${formatNumber(ingresosProyecto(proyecto.ingresos) - egresosProyecto(proyecto.egresos))} / USD${formatNumber(ingresosUSDProyecto(proyecto.ingresos) - egresosUSDProyecto(proyecto.egresos))}</Col>
+                        <Col xs={4} md={3}> Resto: ${formatNumber(ingresosProyecto(proyecto.ingresos) - egresosProyecto(proyecto.egresos))} / USD${formatNumber(ingresosUSDProyecto(proyecto.ingresos) - egresosUSDProyecto(proyecto.egresos))}</Col>
                     }
                 </Accordion.Header>
                 <Accordion.Body>
@@ -186,7 +185,6 @@ const AccordionCentrosCostos = ({ proyecto, setProyectos }) => {
                     }
                 </Accordion.Body>
             </Accordion.Item>
-        </Col>
     </>)
 }
 

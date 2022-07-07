@@ -18,15 +18,19 @@ const Modulos = () => {
     const [showForm, setShowForm] = useState(false);
 
     return (<>
-        <Row className="conten-buttons-agregar">
-            <Col xs={6} sm={6} md={4}>
-                <Button className="button-agregar" onClick={() => setShowForm(!showForm)} variant="dark" >
-                    <Icons.Plus className="icon-button" size={19} />
-                    Agregar modulo
-                </Button>
-            </Col>
-        </Row>
         <ModalFormulario formulario={'modulo'} show={showForm} setShow={setShowForm} updateNew={setModulos} />
+
+        <Row className='content-resumen-sec-buttons'>
+            <Row className="conten-buttons-agregar">
+                <Col xs={6} sm={6} md={4}>
+                    <Button className="button-agregar" onClick={() => setShowForm(!showForm)} variant="dark" >
+                        <Icons.Plus className="icon-button" size={19} />
+                        Agregar modulo
+                    </Button>
+                </Col>
+            </Row>
+        </Row>
+
         <div>
             <Row>
                 <Accordion>

@@ -113,7 +113,7 @@ const FormModulos = ({ close, updateModulo, setUpdateModulo }) => {
                                     <option value="Vendido"> Vendido </option>
                                 </Form.Select>
                             </FloatingLabel>*/}
-                            <Button className="button-submit" variant="primary" type="submit">
+                            <Button className="button-submit" variant="dark" type="submit">
                                 Guardar
                             </Button>
                         </Form>

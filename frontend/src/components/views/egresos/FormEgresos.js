@@ -49,7 +49,7 @@ const FormEgresos = ({ close, updateEgreso, setUpdateEgresos }) => {
         valor_pago: updateEgreso && updateEgreso.valor_pago ? updateEgreso.valor_pago : 0,
         valor_usd: updateEgreso && updateEgreso.valor_usd ? updateEgreso.valor_usd : 0,
         id_forma_pago: updateEgreso && updateEgreso.forma_pago ? updateEgreso.forma_pago.id_forma_pago : '',
-        fecha_diferido_pago: (updateEgreso && new Date(updateEgreso.fecha_diferido_pago).toISOString().slice(0, 10) >  new Date(updateEgreso.fecha_pago).toISOString().slice(0, 10))? new Date(updateEgreso.fecha_diferido_pago).toISOString().slice(0, 10) : '',
+        fecha_diferido_pago: (updateEgreso && new Date(updateEgreso.fecha_diferido_pago).toISOString().slice(0, 10) > new Date(updateEgreso.fecha_pago).toISOString().slice(0, 10)) ? new Date(updateEgreso.fecha_diferido_pago).toISOString().slice(0, 10) : '',
         observaciones: updateEgreso && updateEgreso.observaciones ? updateEgreso.observaciones : '',
         id_comprobante_pago: updateEgreso && updateEgreso.comprobante_pago.id_comprobante_pago ? updateEgreso.comprobante_pago.id_comprobante_pago : '',
         numero_comprobante: updateEgreso && updateEgreso.numero_comprobante ? updateEgreso.numero_comprobante : '',
@@ -540,50 +540,52 @@ const FormEgresos = ({ close, updateEgreso, setUpdateEgresos }) => {
                                 </Form.Group>
                             }
 
-                            <Form.Group className="mb-3">
-                                <Form.Label className="label-title">Detalle</Form.Label>
+                            {!showStock &&
                                 <Form.Group className="mb-3">
-                                    <FloatingLabel controlId="floatingInputGrid" label="Proveedor">
-                                        <Form.Control onChange={handleChangeForm} name="proveedor" type="text" value={egreso.proveedor} />
-                                    </FloatingLabel>
-                                </Form.Group>
-                                <Form.Group className="mb-3">
-                                    <FloatingLabel controlId="floatingInputGrid" label="Observaciones">
-                                        <Form.Control onChange={handleChangeForm} name="observaciones" type="text" value={egreso.observaciones} />
-                                    </FloatingLabel>
-                                </Form.Group>
-                                <Row key={`inline-radio`} className="check">
-                                    <Col xs={4} sm={4} >
-                                        <Form.Check inline onChange={handleChangeForm} label="Factura" name="comprobante" value="Factura" type="radio" checked={checkComprobante == 'Factura'} />
-                                    </Col>
-                                    <Col xs={8} sm={8} >
-                                        <Form.Check inline onChange={handleChangeForm} label="Comprobante de Pago" name="comprobante" value="Comprobante de Pago" type="radio" checked={checkComprobante == 'Comprobante de Pago'} />
-                                    </Col>
-                                </Row>
-                                <Row>
-                                    <Col xs={4} sm={4}>
-                                        <FloatingLabel label="Tipo">
-                                            <Form.Select onChange={handleChangeForm} name="id_comprobante_pago" value={egreso.id_comprobante_pago} >
-                                                <option value=""> </option>
-                                                {
-                                                    comprobantePago.map((comprobante) => (
-                                                        egreso.comprobante == comprobante.nombre_comprobante &&
-                                                        <option key={comprobante.id_comprobante_pago} value={comprobante.id_comprobante_pago}>
-                                                            {comprobante.tipo_comprobante}
-                                                        </option>
-                                                    ))
-                                                }
-                                            </Form.Select>
+                                    <Form.Label className="label-title">Detalle</Form.Label>
+                                    <Form.Group className="mb-3">
+                                        <FloatingLabel controlId="floatingInputGrid" label="Proveedor">
+                                            <Form.Control onChange={handleChangeForm} name="proveedor" type="text" value={egreso.proveedor} />
                                         </FloatingLabel>
-                                    </Col>
-                                    <Col xs={8} sm={8}>
-                                        <FloatingLabel controlId="floatingInputGrid" label="N°">
-                                            <Form.Control onChange={handleChangeForm} name="numero_comprobante" type="number" value={egreso.numero_comprobante} />
+                                    </Form.Group>
+                                    <Form.Group className="mb-3">
+                                        <FloatingLabel controlId="floatingInputGrid" label="Observaciones">
+                                            <Form.Control onChange={handleChangeForm} name="observaciones" type="text" value={egreso.observaciones} />
                                         </FloatingLabel>
-                                    </Col>
-                                </Row>
-                            </Form.Group>
-
+                                    </Form.Group>
+                                    <Row key={`inline-radio`} className="check">
+                                        <Col xs={4} sm={4} >
+                                            <Form.Check inline onChange={handleChangeForm} label="Factura" name="comprobante" value="Factura" type="radio" checked={checkComprobante == 'Factura'} />
+                                        </Col>
+                                        <Col xs={8} sm={8} >
+                                            <Form.Check inline onChange={handleChangeForm} label="Comprobante de Pago" name="comprobante" value="Comprobante de Pago" type="radio" checked={checkComprobante == 'Comprobante de Pago'} />
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col xs={4} sm={4}>
+                                            <FloatingLabel label="Tipo">
+                                                <Form.Select onChange={handleChangeForm} name="id_comprobante_pago" value={egreso.id_comprobante_pago} >
+                                                    <option value=""> </option>
+                                                    {
+                                                        comprobantePago.map((comprobante) => (
+                                                            egreso.comprobante == comprobante.nombre_comprobante &&
+                                                            <option key={comprobante.id_comprobante_pago} value={comprobante.id_comprobante_pago}>
+                                                                {comprobante.tipo_comprobante}
+                                                            </option>
+                                                        ))
+                                                    }
+                                                </Form.Select>
+                                            </FloatingLabel>
+                                        </Col>
+                                        <Col xs={8} sm={8}>
+                                            <FloatingLabel controlId="floatingInputGrid" label="N°">
+                                                <Form.Control onChange={handleChangeForm} name="numero_comprobante" type="number" value={egreso.numero_comprobante} />
+                                            </FloatingLabel>
+                                        </Col>
+                                    </Row>
+                                </Form.Group>
+                            }
+                            
                             {showModal == true &&
                                 <ValidacionEgreso mostrar={showModal} datos={datosValidacion} pago={formasPagos} comprobantes={comprobantePago} analisisCostos={analisisCostos} detallesAC={detalleAC} setShow={setShowModal} setSubmit={handleSubmit} usd={checkUSD} />
                             }

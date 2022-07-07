@@ -19,37 +19,24 @@ button .accordion-button {
     color: black;
 }
 
-.accordionCC{
-    border: solid 1px !important;
+.border-right{
+    border-right: 1.5px solid white;
 }
+
 
 .border-top{
     border-top: 1.5px solid white;
 }
 
-.menu-inicio{
-    background-color: whitesmoke;
-    margin-bottom: 2px;
-}
+@media only screen and (hover: none) and (pointer: coarse){
+    .border-mobile-right{
+        border-right: transparent !important;
+    } 
 
-.menu-inicio-button-active {
-    border: transparent;
-    border-bottom: 3px solid black;
-    width: 100%;
-    height: 100%;
-    text-align: center;
-    font-weight: bold;
-    background-color: transparent;
-    padding: 10px 0;
-}
-
-.menu-inicio-button-off {
-    border: transparent;
-    width: 100%;
-    height: 100%;
-    text-align: center;
-    background-color: transparent;
-    padding: 10px 0;
+    .border-mobile-bot{
+        padding-bottom: 5px;
+        border-bottom: solid 1.5px white;
+    }
 }
 
 /*Formulario*/

@@ -25,16 +25,19 @@ const Materiales = () => {
     }
 
     return (<>
-        <Row className="conten-buttons-agregar">
-            <Col xs={6} sm={6} md={4}>
-                <Button className="button-agregar" onClick={() => setShowForm(!showForm)} variant="dark" >
-                    <Icons.Plus className="icon-button" size={19} /> 
-                    Agregar material
-                </Button>
-            </Col>
-        </Row>
         <ModalFormulario formulario={'materiales'} show={showForm} setShow={setShowForm} updateNew={setStock} />
         {showModRestante && <ModRestante show={showModRestante} stock={paramMaterial} setShow={setShowModRestante} setStock={setStock} />}
+
+        <Row className='content-resumen-sec-buttons'>
+            <Row className="conten-buttons-agregar">
+                <Col xs={6} sm={6} md={4}>
+                    <Button className="button-agregar" onClick={() => setShowForm(!showForm)} variant="dark" >
+                        <Icons.Plus className="icon-button" size={19} />
+                        Agregar material
+                    </Button>
+                </Col>
+            </Row>
+        </Row>
 
         <Accordion>
             {
