@@ -10,10 +10,10 @@ import AccordionCentroCosto from "./AccordionCentroCosto";
 //Hooks
 import { formatFecha, formatNumber } from '../../../hooks/useUtils';
 import { useUser } from '../../../hooks/useUser';
+import { useGetProyectos } from '../../../hooks/useProyectos';
 
 //Img-Icons
 import * as Icons from 'react-bootstrap-icons';
-import { useGetProyectos } from '../../../hooks/useProyectos';
 
 const CentrosCostos = ({ proyectos, mostrar, setProyectos }) => {
     const { user } = useUser();

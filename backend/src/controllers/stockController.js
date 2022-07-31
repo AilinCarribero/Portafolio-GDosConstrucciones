@@ -1,6 +1,7 @@
-const { Stock, Auth, Egreso, Proyecto, AnalisisCosto } = require("../../db");
+const { Stock, Auth, Egreso, Proyecto, AnalisisCosto, StockMovimiento } = require("../../db");
 const Decimal = require('decimal.js-light');
 const { desformatNumber } = require("../utils/numbers");
+const { Sequelize } = require("sequelize");
 
 //Agregar stock
 exports.insertStock = async (req, res) => {
@@ -34,13 +35,13 @@ exports.insertStock = async (req, res) => {
             if (datos.length - 1 == i) {
                 const stock = {
                     nombre_stock: dato.nombre_stock,
-                    valor: dato.valor,
+                    //valor: dato.valor,
                     restante_valor: dato.restante_valor,
                     salida: dato.salida,
                     id_user: dato.id_user,
-                    valor_unidad: dato.valor_unidad,
-                    cantidad: dato.cantidad,
-                    medida: dato.medida
+                    //valor_unidad: dato.valor_unidad,
+                    //cantidad: dato.cantidad,
+                    //medida: dato.medida
                 }
 
                 //Insertar el nuevo material
@@ -50,11 +51,42 @@ exports.insertStock = async (req, res) => {
                             model: Auth
                         }]
                     }).then(response => {
-                        console.log(response);
-                        
-                        response.statusText = "Ok";
-                        response.status = 200;
-                        res.json(response);
+                        const dataStock = response;
+                        //Buscamos el ultimo elemento ingresado
+                        Stock.findAll({
+                            attributes: [[Sequelize.fn('max', Sequelize.col('id_stock')), 'ultimoId']],
+                            include: [{
+                                model: Auth
+                            }],
+
+                            raw: true
+                        }).then(response => {
+                            const stockMovimiento = {
+                                id_stock: response[0].ultimoId,
+                                cantidad: dato.cantidad,
+                                valor_unidad: dato.valor_unidad,
+                                valor_total: dato.valor,
+                                medida: dato.medida,
+                                id_user: dato.id_user,
+                            }
+
+                            console.log(stockMovimiento)
+                            StockMovimiento.create(stockMovimiento).then(response => {
+                                dataStock.statusText = "Ok";
+                                dataStock.status = 200;
+                                res.json(dataStock);
+                            }).catch(err => {
+                                err.todoMal = "Error al guardar el material";
+                                console.error(err);
+                                res.json(err);
+                                throw err;
+                            })
+                        }).catch(err => {
+                            err.todoMal = "Error al guardar el material";
+                            console.error(err);
+                            res.json(err);
+                            throw err;
+                        })
                     }).catch(err => {
                         err.todoMal = "Error al guardar el material";
                         console.error(err);
@@ -162,6 +194,6 @@ exports.updateStockRestante = async (req, res) => {
             console.error(err);
             res.json(err);
             throw err;
-        }) 
+        })
     });
 }

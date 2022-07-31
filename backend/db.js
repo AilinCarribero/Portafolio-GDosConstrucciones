@@ -58,6 +58,7 @@ sequelize.sync({ force: false, logging: false }).then(() => {
     //Relaciones
     Auth.belongsTo(Rango, { foreignKey: 'id_rango', targetKey: 'id_rango' });
     Auth.hasMany(Stock, { foreignKey: 'id_user', targetKey: 'id_user' });
+    Auth.hasMany(StockMovimiento, { foreignKey: 'id_user', targetKey: 'id_user' })
     Rango.belongsTo(Auth, { foreignKey: 'id_rango', targetKey: 'id_rango' });
     Alquiler.belongsTo(Modulo, { foreignKey: 'id_modulo', targetKey: 'id_modulo' });
     Alquiler.belongsTo(Proyecto, { foreignKey: 'id_proyecto', targetKey: 'id_proyecto' });
@@ -76,6 +77,7 @@ sequelize.sync({ force: false, logging: false }).then(() => {
     Stock.belongsTo(Auth, { foreignKey: 'id_user', targetKey: 'id_user' });
     Stock.hasMany(StockMovimiento, {foreignKey: 'id_stock', targetKey: 'id_stock'});
     StockMovimiento.belongsTo(Stock, {foreignKey: 'id_stock', targetKey: 'id_stock'});
+    StockMovimiento.belongsTo(Auth, { foreignKey: 'id_user', targetKey: 'id_user' });
     
     console.log('La sincronizacion con la base de datos ' + process.env.DB_NAME + ' fue un exito');
 }).catch(err => {

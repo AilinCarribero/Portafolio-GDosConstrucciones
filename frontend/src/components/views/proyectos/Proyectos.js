@@ -17,7 +17,6 @@ import { ProyectoContext } from '../../../contexts/ProyectosProvider';
 
 //Css
 import '../../../style/Proyectos.scss';
-import './Proyectos.css';
 import '../../../style/CC.scss';
 
 //Img-Incons
