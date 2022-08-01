@@ -1,7 +1,7 @@
-module.exports = ( sequelize, type ) => {
+module.exports = (sequelize, type) => {
     return sequelize.define('proyecto', {
         id_proyecto: {
-            type: type.STRING(1000),
+            type: type.STRING(100),
             primaryKey: true
         },
         id_unidad_negocio: {
@@ -14,22 +14,22 @@ module.exports = ( sequelize, type ) => {
         },
         cliente: type.STRING(100),
         costo: {
-            type:type.DOUBLE,
+            type: type.DOUBLE,
             defaultValue: 0
         },
         venta: {
-            type:type.DOUBLE,
+            type: type.DOUBLE,
             defaultValue: 0
         },
         alquiler_total: {
-            type:type.DOUBLE,
+            type: type.DOUBLE,
             defaultValue: 0
         },
-        fecha_i_proyecto:{ 
+        fecha_i_proyecto: {
             type: type.DATE,
             defaultValue: type.NOW
         },
-        fecha_f_proyecto: { 
+        fecha_f_proyecto: {
             type: type.DATE,
             defaultValue: null
         },

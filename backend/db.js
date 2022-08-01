@@ -72,7 +72,7 @@ sequelize.sync({ force: false, logging: false }).then(() => {
     Ingreso.belongsTo(Auth, { foreignKey: 'id_user', targetKey: 'id_user' });
     Stock.hasMany(Egreso, { foreignKey: 'id_stock', targetKey: 'id_stock' });
     Stock.belongsTo(Auth, { foreignKey: 'id_user', targetKey: 'id_user' });
-    
+
     console.log('La sincronizacion con la base de datos ' + process.env.DB_NAME + ' fue un exito');
 }).catch(err => {
     console.error(err)

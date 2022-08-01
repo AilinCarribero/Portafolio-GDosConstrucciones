@@ -21,8 +21,8 @@ create table rango (id_rango int auto_increment primary key, rango varchar(60));
 
 /* Insert new value so we can test the methods */
 insert into rango (rango) value ("admin"); /*id = 1*/
-insert into rango (rango) value ("comun"); /*id = 2*/
-
+insert into rango (rango) value ("usuario comun"); /*id = 2*/
+insert into rango (rango) value ("moderador"); /*id = 3*/
 /*-------------------------------------------------------------------------------------------------------------------------*/
 /* Create new table */
 create table proyecto (id_proyecto varchar(100) primary key, id_unidad_negocio int, id_centro_costo int, cliente int, costo float, venta float, fecha_i_proyecto date, fecha_f_proyecto date, id_estado int);
