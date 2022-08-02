@@ -18,6 +18,7 @@ import { ProyectoContext } from '../../../contexts/ProyectosProvider';
 //Css
 import '../../../style/Proyectos.scss';
 import '../../../style/CC.scss';
+import { Link } from 'react-router-dom';
 
 //Img-Incons
 //import SpinnerC from '../../utils/spinner/SpinnerC';
@@ -32,7 +33,7 @@ const Proyectos = () => {
     }, [proyectos])
 
     const [spinner, setSpinner] = useState(true);
-    const [menu, setMenu] = useState(user.rango != 'usuario comun' ? 'resumen' : 'proyectos');
+    const [menu, setMenu] = useState(user.rango == "admin" || user.rango == "moderador" ? 'resumen' : 'proyectos');
 
     const [totales, setTotales] = useState({
         egresosHoy: 0,
@@ -418,7 +419,7 @@ const Proyectos = () => {
         <div>
             {/*spinner && <Spinner animation="border" variant="dark" />*/}
             <Row className="menu-inicio">
-                {user.rango != "usuario comun" && <>
+                {(user.rango == "admin" || user.rango == "moderador") && <>
                     <Col>
                         <button className={menu == 'resumen' ? 'menu-inicio-button-active' : 'menu-inicio-button-off'} onClick={handleButton} name="resumen">Resumen</button>
                     </Col>
@@ -450,7 +451,7 @@ const Proyectos = () => {
                                 <CentrosCostos proyectos={proyectosContext} setProyectos={setProyectosContext} mostrar={menu} />
                                 : <Materiales />
                             : <Modulos />
-                        : user.rango != "usuario comun" &&
+                        : (user.rango == "admin" || user.rango == "moderador") &&
                         <Row className="content-resumen">
                             <Col xs={12} md={4} className={isMobile ? "content-section border-bottom" : "content-section"} id="costo-venta" >
                                 <Row>
