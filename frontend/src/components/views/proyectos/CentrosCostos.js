@@ -10,10 +10,10 @@ import AccordionCentroCosto from "./AccordionCentroCosto";
 //Hooks
 import { formatFecha, formatNumber } from '../../../hooks/useUtils';
 import { useUser } from '../../../hooks/useUser';
+import { useGetProyectos } from '../../../hooks/useProyectos';
 
 //Img-Icons
 import * as Icons from 'react-bootstrap-icons';
-import { useGetProyectos } from '../../../hooks/useProyectos';
 
 const CentrosCostos = ({ proyectos, mostrar, setProyectos }) => {
     const { user } = useUser();
@@ -134,14 +134,14 @@ const CentrosCostos = ({ proyectos, mostrar, setProyectos }) => {
         <ModalFormulario formulario={formulario} show={showForm} setShow={setShowForm} updateNew={formulario == 'proyecto' && setProyectos} />
 
         <Row className='content-resumen-sec-buttons'>
-            <Col xs={12} md={user.rango != "usuario comun" ? 6 : 12}>
+            <Col xs={12} md={(user.rango == "admin" || user.rango == "moderador") ? 6 : 12}>
                 <Row className="conten-buttons-agregar">
                     <Col xs={6} sm={6} md={4}>
                         <button className="button-agregar" onClick={() => setShowFormSelccion('egreso')} variant="dark" >
                             <Icons.Plus className="icon-button" size={19} /> Egreso
                         </button>
                     </Col>
-                    {user.rango != "usuario comun" && <>
+                    {(user.rango == "admin" || user.rango == "moderador") && <>
                         <Col xs={6} sm={6} md={4}>
                             <button className="button-agregar" onClick={() => setShowFormSelccion('ingreso')} variant="dark" >
                                 <Icons.Plus className="icon-button" size={19} /> Ingreso
@@ -157,7 +157,7 @@ const CentrosCostos = ({ proyectos, mostrar, setProyectos }) => {
                     </>}
                 </Row>
             </Col>
-            {user.rango != "usuario comun" &&
+            {(user.rango == "admin" || user.rango == "moderador") &&
                 <Col xs={12} md={6}>
                     <Row>
                         <Col xs={6} md={6} className='content-section'> Ingresos: {totales.ingresos ? formatNumber(totales.ingresos) : 0} </Col>

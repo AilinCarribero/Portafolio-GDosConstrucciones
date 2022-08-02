@@ -89,13 +89,13 @@ const AccordionCentrosCostos = ({ proyecto, setProyectos }) => {
                         )
                     }
                     <Col xs={5} md={5}>{proyecto.id_proyecto}</Col>
-                    {user.rango != "usuario comun" && !proyecto.id_proyecto.includes('CCC') && !proyecto.id_proyecto.includes('CCE') &&
+                    {(user.rango == "admin" || user.rango == "moderador") && !proyecto.id_proyecto.includes('CCC') && !proyecto.id_proyecto.includes('CCE') &&
                         <Col xs={4} md={3}> Resto: ${formatNumber(ingresosProyecto(proyecto.ingresos) - egresosProyecto(proyecto.egresos))} / USD${formatNumber(ingresosUSDProyecto(proyecto.ingresos) - egresosUSDProyecto(proyecto.egresos))}</Col>
                     }
                 </Accordion.Header>
                 <Accordion.Body>
                     <Row>
-                        {proyecto.id_centro_costo == 2 && user.rango != 'usuario comun' && <>
+                        {proyecto.id_centro_costo == 2 && (user.rango == "admin" || user.rango == "moderador") && <>
                             <Col xs={12} md={6}>
                                 <Row>
                                     <Col xs={1} md={1}></Col>
@@ -134,7 +134,7 @@ const AccordionCentrosCostos = ({ proyecto, setProyectos }) => {
                                 </Col>
                             </Row>
                         </Col>
-                        {user.rango != "usuario comun" &&
+                        {(user.rango == "admin" || user.rango == "moderador") &&
                             <Col xs={12} md={6}>
                                 <Row>
                                     <Col xs={1} md={1}>

@@ -9,11 +9,16 @@ import ModRestante from "./ModRestante";
 import { useGetStock } from "../../../hooks/useStock";
 import { formatFecha, formatNumber } from "../../../hooks/useUtils";
 
+//Css
+import "../../../style/Material.scss";
+
 //Img-Icons
 import * as Icons from 'react-bootstrap-icons';
 
 const Materiales = () => {
     const { stock, setStock } = useGetStock();
+
+    console.log(stock);
 
     const [showForm, setShowForm] = useState(false);
     const [showModRestante, setShowModRestante] = useState(false);
@@ -82,6 +87,37 @@ const Materiales = () => {
                                         </Row>
                                     </Col>
                                 </Row>
+                                {material.stock_movimientos &&
+                                    <Row className="border-top">
+                                        <Col xs={12} md={12}>
+                                            <p className="title-actions">Trazabilidad</p>
+                                        </Col>
+                                        <Col xs={12} md={12}>
+                                            <Row className="content-trazabilidad">
+                                                {material.stock_movimientos.map((stockD) => (
+                                                    <Col xs={12} md={4} key={stockD.id_movimiento}>
+                                                        <Row className="detalle-trazabilidad">
+                                                            <Col xs={12} md={6} className="text-action" >
+                                                                Cant: {formatNumber(stockD.cantidad)}
+                                                            </Col>
+                                                            <Col xs={12} md={6} className="text-action" >
+                                                                Unidad: ${formatNumber(stockD.valor_unidad)}
+                                                            </Col>
+                                                            <Col xs={12} md={6} className="text-action" >
+                                                                Total: ${formatNumber(stockD.valor_total)} 
+                                                            </Col><Col xs={12} md={12} className="text-action" >
+                                                                Ingresó:{formatFecha(stockD.createdAt)}
+                                                            </Col>
+                                                            <Col xs={12} md={12} className="text-action" >
+                                                                Lo ingresó: {stockD.usuario.nombre_apellido}
+                                                            </Col>
+                                                        </Row>
+                                                    </Col>
+                                                ))}
+                                            </Row>
+                                        </Col>
+                                    </Row>
+                                }
                                 <Row className="border-top">
                                     <Col xs={12} md={12}>
                                         <p className="title-actions">Acciones</p>

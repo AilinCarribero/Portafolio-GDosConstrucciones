@@ -34,7 +34,7 @@ const ModRestante = ({ show, stock, setShow, setStock }) => {
         restante_valor: stock.restante_valor,
         valor: stock.valor,
         valor_unidad: 0,
-        cantidad: 0,
+        cantidad_total: 0,
         valor_pago: 0,
         restante_total: 0,
         id_forma_pago: '',
@@ -44,7 +44,8 @@ const ModRestante = ({ show, stock, setShow, setStock }) => {
         id_comprobante_pago: '',
         numero_comprobante: '',
         id_user: stock.usuario.id_user,
-        proyecto: ''
+        proyecto: '',
+        cantidad: 0
     });
 
     //Variables con informacion
@@ -163,7 +164,8 @@ const ModRestante = ({ show, stock, setShow, setStock }) => {
                             valor: cambiar.valor_pago,
                             valor_pago: valorCuota,
                             fecha_diferido_pago: new Date(año, mesD, dia).toISOString().slice(0, 10),
-                            cantidad: stock.cantidad + cambiar.cantidad
+                            cantidad_total: stock.cantidad + cambiar.cantidad,
+                            cantidad: cambiar.cantidad
                         }
                     }
                 }
@@ -183,7 +185,8 @@ const ModRestante = ({ show, stock, setShow, setStock }) => {
                         valor: cambiar.valor_pago,
                         fecha_diferido_pago: auxChequeFD,
                         cheque: i,
-                        cantidad: stock.cantidad + cambiar.cantidad
+                        cantidad_total: stock.cantidad + cambiar.cantidad,
+                        cantidad: cambiar.cantidad
                     }
                 }
                 setAuxCambiar(auxValuesCambiar);
@@ -195,7 +198,8 @@ const ModRestante = ({ show, stock, setShow, setStock }) => {
                     ...cambiar,
                     restante_valor: cambiar.valor_pago,
                     valor: cambiar.valor_pago,
-                    cantidad: stock.cantidad + cambiar.cantidad
+                    cantidad_total: stock.cantidad + cambiar.cantidad,
+                    cantidad: cambiar.cantidad
                 }
 
                 setDatosValidacion(material);
@@ -224,6 +228,7 @@ const ModRestante = ({ show, stock, setShow, setStock }) => {
                 restante_valor: 0,
                 valor: 0,
                 valor_unidad: 0,
+                cantidad_total: 0,
                 cantidad: 0,
                 valor_pago: 0,
                 restante_total: 0,

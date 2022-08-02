@@ -95,50 +95,6 @@
 }
 
 /*------------------- Resumenes -----------------------*/
-.content-resumen {
-    width: 100vw;
-    background-color: #000000;
-    padding-bottom: 5px;
-    margin-left: 0px;
-    color: #ffffff;
-    text-align: center;
-    font-size: 16px;
-
-    .content-section {
-        padding-top: 10px;
-        padding-bottom: 10px;
-
-        .text-bold {
-            font-weight: bold;
-        }
-    }
-
-    .content-sub-section {
-        padding-top: 10px;
-        padding-bottom: 10px;
-    }
-
-    #costo-venta {
-        padding-top: 45px;
-    }
-
-    .border-bottom {
-        border-bottom: #ffffff solid 1px;
-    }
-
-    .border-top {
-        border-top: #ffffff solid 1px;
-    }
-
-    .border-right {
-        border-right: #ffffff solid 1px;
-    }
-
-    .border-left {
-        border-left: #ffffff solid 1px;
-    }
-}
-
 .content-resumen-sec-buttons {
     width: 97.5%;
     background-color: #dddcdc;
@@ -201,4 +157,9 @@
         border-top: 3px solid #F2F2F2;
         font-weight: bold;
     }
+}
+
+a {
+    text-decoration: none;
+    color: black;
 }

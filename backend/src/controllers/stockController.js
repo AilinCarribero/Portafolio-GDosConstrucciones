@@ -1,6 +1,7 @@
-const { Stock, Auth, Egreso, Proyecto, AnalisisCosto } = require("../../db");
+const { Stock, Auth, Egreso, Proyecto, AnalisisCosto, StockMovimiento } = require("../../db");
 const Decimal = require('decimal.js-light');
 const { desformatNumber } = require("../utils/numbers");
+const { Sequelize } = require("sequelize");
 
 //Agregar stock
 exports.insertStock = async (req, res) => {
@@ -34,13 +35,13 @@ exports.insertStock = async (req, res) => {
             if (datos.length - 1 == i) {
                 const stock = {
                     nombre_stock: dato.nombre_stock,
-                    valor: dato.valor,
+                    //valor: dato.valor,
                     restante_valor: dato.restante_valor,
                     salida: dato.salida,
                     id_user: dato.id_user,
-                    valor_unidad: dato.valor_unidad,
-                    cantidad: dato.cantidad,
-                    medida: dato.medida
+                    //valor_unidad: dato.valor_unidad,
+                    //cantidad: dato.cantidad,
+                    //medida: dato.medida
                 }
 
                 //Insertar el nuevo material
@@ -48,11 +49,50 @@ exports.insertStock = async (req, res) => {
                     Stock.findAll({
                         include: [{
                             model: Auth
+                        },{
+                            model: StockMovimiento,
+                            include: [{
+                                model: Auth
+                            }]
                         }]
                     }).then(response => {
-                        response.statusText = "Ok";
-                        response.status = 200;
-                        res.json(response);
+                        const dataStock = response;
+                        //Buscamos el ultimo elemento ingresado
+                        Stock.findAll({
+                            attributes: [[Sequelize.fn('max', Sequelize.col('id_stock')), 'ultimoId']],
+                            include: [{
+                                model: Auth
+                            }],
+
+                            raw: true
+                        }).then(response => {
+                            const stockMovimiento = {
+                                id_stock: response[0].ultimoId,
+                                cantidad: dato.cantidad,
+                                valor_unidad: dato.valor_unidad,
+                                valor_total: dato.valor,
+                                medida: dato.medida,
+                                id_user: dato.id_user,
+                            }
+
+                            StockMovimiento.create(stockMovimiento).then(response => {
+
+                                /*BUSCAR DE NUEVO LOS DATOS DE STOCK */
+                                dataStock.statusText = "Ok";
+                                dataStock.status = 200;
+                                res.json(dataStock);
+                            }).catch(err => {
+                                err.todoMal = "Error al guardar el material";
+                                console.error(err);
+                                res.json(err);
+                                throw err;
+                            })
+                        }).catch(err => {
+                            err.todoMal = "Error al guardar el material";
+                            console.error(err);
+                            res.json(err);
+                            throw err;
+                        })
                     }).catch(err => {
                         err.todoMal = "Error al guardar el material";
                         console.error(err);
@@ -80,8 +120,14 @@ exports.listStock = async (req, res) => {
     Stock.findAll({
         include: [{
             model: Auth
+        }, {
+            model: StockMovimiento,
+            include: [{
+                model: Auth
+            }]
         }]
     }).then(response => {
+        console.log(response)
         response.statusText = "Ok";
         response.status = 200;
         res.json(response);
@@ -91,6 +137,7 @@ exports.listStock = async (req, res) => {
     });
 }
 
+//Agregar stock a uno existente o modificar stock
 exports.updateStockRestante = async (req, res) => {
     const datos = !req.body.length ? [req.body] : req.body;
 
@@ -125,7 +172,7 @@ exports.updateStockRestante = async (req, res) => {
                     valor: dato.new_valor_total,
                     restante_valor: dato.restante_total,
                     valor_unidad: dato.valor_unidad,
-                    cantidad: dato.cantidad,
+                    cantidad: dato.cantidad_total,
                 }
 
                 //Modificar el stock
@@ -134,20 +181,43 @@ exports.updateStockRestante = async (req, res) => {
                         id_stock: dato.id_stock
                     }
                 }).then(response => {
-                    Stock.findAll({
-                        include: [{
-                            model: Auth
-                        }]
-                    }).then(response => {
-                        response.statusText = "Ok";
-                        response.status = 200;
-                        res.json(response);
+
+                    const stockMovimiento = {
+                        id_stock: dato.id_stock,
+                        cantidad: dato.cantidad,
+                        valor_unidad: dato.valor_unidad,
+                        valor_total: dato.valor,
+                        medida: dato.medida ? dato.medida : 'Unidad',
+                        id_user: dato.id_user,
+                    }
+
+                    //Agregar el seguimiento del stock
+                    StockMovimiento.create(stockMovimiento).then(response => {
+                        Stock.findAll({
+                            include: [{
+                                model: Auth
+                            }, {
+                                model: StockMovimiento,
+                                include: [{
+                                    model: Auth
+                                }]
+                            }]
+                        }).then(response => {
+                            response.statusText = "Ok";
+                            response.status = 200;
+                            res.json(response);
+                        }).catch(err => {
+                            err.todoMal = "Error al actualizar el material";
+                            console.error(err);
+                            res.json(err);
+                            throw err;
+                        });
                     }).catch(err => {
                         err.todoMal = "Error al actualizar el material";
                         console.error(err);
                         res.json(err);
                         throw err;
-                    });
+                    })
                 }).catch(err => {
                     err.todoMal = "Error al actualizar el material";
                     console.error(err);
@@ -160,6 +230,6 @@ exports.updateStockRestante = async (req, res) => {
             console.error(err);
             res.json(err);
             throw err;
-        }) 
+        })
     });
 }

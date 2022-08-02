@@ -1,0 +1,61 @@
+.content-data {
+    position: relative;
+    width: 98vw;
+    max-width: 98vw;
+    left: 1vw;
+
+    .content-resumen {
+        width: 100vw;
+        background-color: #000000;
+        padding-bottom: 5px;
+        margin-left: 0px;
+        color: #ffffff;
+        text-align: center;
+        font-size: 16px;
+
+        .content-section {
+            padding-top: 10px;
+            padding-bottom: 10px;
+
+            .text-bold {
+                font-weight: bold;
+            }
+        }
+
+        .content-sub-section {
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+
+        #costo-venta {
+            padding-top: 45px;
+        }
+
+        .border-bottom {
+            border-bottom: #ffffff solid 1px;
+        }
+
+        .border-top {
+            border-top: #ffffff solid 1px;
+        }
+
+        .border-right {
+            border-right: #ffffff solid 1px;
+        }
+
+        .border-left {
+            border-left: #ffffff solid 1px;
+        }
+
+        @media only screen and (hover: none) and (pointer: coarse){
+            .border-mobile-right{
+                border-right: transparent !important;
+            } 
+        
+            .border-mobile-bot{
+                padding-bottom: 5px;
+                border-bottom: solid 1.5px white;
+            }
+        }
+    }
+}
