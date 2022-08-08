@@ -2,7 +2,7 @@ import axios from 'axios';
 
 import { API, servisTokenConfig } from './apiServices';
 
-export const getProyectos = async () => {
+export const getApiProyectos = async () => {
     const response = await axios.get(API+'proyectos/', servisTokenConfig );
     return response.data;
 }

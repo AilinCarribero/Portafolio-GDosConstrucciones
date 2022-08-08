@@ -18,8 +18,6 @@ import * as Icons from 'react-bootstrap-icons';
 const Materiales = () => {
     const { stock, setStock } = useGetStock();
 
-    console.log(stock);
-
     const [showForm, setShowForm] = useState(false);
     const [showModRestante, setShowModRestante] = useState(false);
     const [paramMaterial, setParamMaterial] = useState([]);

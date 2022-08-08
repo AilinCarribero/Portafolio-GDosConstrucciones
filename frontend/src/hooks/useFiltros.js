@@ -1,11 +1,21 @@
 import { useEffect, useContext, useState } from "react";
-import { ProyectoContext } from "../contexts/ProyectosProvider";
+
+//Hooks
 import { useGetProyectos } from "./useProyectos";
 import { ToastComponent } from "./useUtils";
 
+//Redux
+import { useDispatch } from "react-redux";
+import { activeFiltros } from "../redux/slice/Proyecto/thunks";
+
+//Context
+import { ProyectoContext } from "../contexts/ProyectosProvider";
+
 export const useFiltros = () => {
     const { proyectos } = useGetProyectos();
-    const { proyectosContext, setProyectosContext } = useContext(ProyectoContext);
+    //const { proyectosContext, setProyectosContext } = useContext(ProyectoContext);
+    
+    const dispatch = useDispatch();
 
     const [proyectosFiltros, setProyectosFiltros] = useState();
     let [filtros, setFiltros] = useState({
@@ -24,18 +34,20 @@ export const useFiltros = () => {
     }
 
     //Si los proyectos se modifican 
-    useEffect(() => {
+    /*useEffect(() => {
         setProyectosFiltros(proyectosContext);
-    }, [proyectosContext])
+    }, [proyectosContext])*/
 
     const handleFiltros = (e) => {
-        let targetName = e.target.name;
+
+        dispatch(activeFiltros(e));
+        /*let targetName = e.target.name;
         let targetValue = e.target.value;
         let resultadoFiltroProyecto = [];
 
         console.log(targetName + ' - ' + targetValue);
         /*En caso de que el valor de target venga vacio se resetea el filtro al valor por defecto*/
-        if (!targetValue) {
+        /*if (!targetValue) {
             if (targetName.includes('cobro')) {
                 if (targetName.includes('hasta')) {
                     filtros[targetName] = new Date('3000-12-30').toISOString();
@@ -87,19 +99,19 @@ export const useFiltros = () => {
                 }
             });
         } else {
-            /*Si los filtros son iguales a los defautl debera reiniciar los proyectos que se muestran */
-            setProyectosContext(proyectos);
-        }
+            /*Si los filtros son iguales a los default debera reiniciar los proyectos que se muestran */
+            //setProyectosContext(proyectos);
+       /* }
 
         if (resultadoFiltroProyecto.length > 0) { /*Nos aseguramos de tener resultados */
-            setProyectosContext(resultadoFiltroProyecto);
-        } else if (resultadoFiltroProyecto.length <= 0 && filtros != valueFiltrosdefault) {
+            //setProyectosContext(resultadoFiltroProyecto);
+       /* } else if (resultadoFiltroProyecto.length <= 0 && filtros != valueFiltrosdefault) {
             /*Si no se obtenieron resultados y exisen filtros muestra una alerta de que no se encontraron los resultados 
             y se resetean los proyectos que se muestran */
-            ToastComponent('warn', 'No se encontraron resultados');
+           /* ToastComponent('warn', 'No se encontraron resultados');
             setProyectosContext(proyectos)
-        }
+        }*/
     }
 
-    return { handleFiltros, filtros }
+    return { handleFiltros }
 }

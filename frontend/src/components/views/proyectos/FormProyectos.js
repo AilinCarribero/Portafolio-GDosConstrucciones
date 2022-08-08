@@ -3,6 +3,10 @@ import { Card, Button, Row, FloatingLabel, Form, Col } from 'react-bootstrap';
 import NumberFormat from 'react-number-format';
 import Decimal from 'decimal.js-light';
 
+//Redux
+import { useDispatch } from 'react-redux';
+import { getProyectos } from '../../../redux/slice/Proyecto/thunks';
+
 //Servicios
 import { insertProyecto, setUpdateProyecto } from '../../../services/apiProyectos';
 
@@ -13,13 +17,15 @@ import { desformatNumber, formatFecha, ToastComponent } from '../../../hooks/use
 import { useGetModulos } from '../../../hooks/useModulos';
 
 //Css
-import './Proyectos.css'
+import './Proyectos.css';
 
 const FormProyectos = ({ close, updateProyecto, setUpdateProyectos }) => {
     const newDate = new Date();
     const año = newDate.getFullYear();
     const mes = newDate.getMonth();
     const dia = newDate.getDate();
+
+    const dispatch = useDispatch();
 
     //Datos para usar en el formulario traidos de la api
     const { centroCosto } = useGetCentroCosto();
@@ -158,7 +164,8 @@ const FormProyectos = ({ close, updateProyecto, setUpdateProyectos }) => {
                 if ((resProyecto.statusText == 'OK' || resProyecto.status == 200) || resProyecto.data.todoOk == 'Ok' && !resProyecto.data.todoMal) {
                     ToastComponent('success');
 
-                    setUpdateProyectos(resProyecto.data);
+                    //setUpdateProyectos(resProyecto.data);
+                    dispatch(getProyectos());
 
                     setProyecto({
                         id_centro_costo: '',

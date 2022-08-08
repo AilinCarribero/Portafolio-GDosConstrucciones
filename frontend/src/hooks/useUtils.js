@@ -51,3 +51,8 @@ export const formatFecha = (fecha) => {
 //console.log(dateUTC, fechaFormat)
     return fechaFormat
 }
+
+export const formatFechaISO = (fecha) => {
+    const newFecha = new Date(fecha).toISOString().slice(0, 10);
+    return newFecha;
+}
