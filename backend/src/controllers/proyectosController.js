@@ -66,7 +66,7 @@ exports.insertProyecto = async (req, res) => {
         }
 
         req.body.id_proyecto = id_proyecto;
-        console.log(req.body)
+       
         Proyecto.create(req.body).then(result => {
             req.body.alquileres ?
                 req.body.alquileres.forEach((alquiler, i) => {
@@ -117,7 +117,7 @@ exports.insertProyecto = async (req, res) => {
 //Modificar proyecto
 exports.updateProyecto = async (req, res) => {
     const proyecto = req.body;
-    console.log(proyecto);
+    
     proyecto.costo = !proyecto.costo ? 0 : formatStringToNumber(proyecto.costo);
     proyecto.venta = !proyecto.venta ? 0 : formatStringToNumber(proyecto.venta);
     proyecto.alquiler_total = !proyecto.alquiler_total ? 0 : formatStringToNumber(proyecto.alquiler_total);
