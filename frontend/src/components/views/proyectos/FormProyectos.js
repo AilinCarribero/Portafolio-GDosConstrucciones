@@ -51,13 +51,13 @@ const FormProyectos = ({ close, updateProyecto, setUpdateProyectos }) => {
         fecha_f_proyecto: (updateProyecto && new Date(updateProyecto.fecha_f_proyecto).toISOString().slice(0, 10) != new Date('2200-01-01').toISOString().slice(0, 10)) ? new Date(updateProyecto.fecha_f_proyecto).toISOString().slice(0, 10) : '',
         id_estado: updateProyecto ? updateProyecto.id_estado : '1'
     });
-    
+
     const handleChangeForm = (e) => {
         const targetName = e.target.name;
         const targetValue = e.target.value;
         const targetCheck = e.target.checked;
 
-        //console.log(targetName + ' - ' + targetValue + ' - ' + targetCheck)
+        //console.log(targetName + ' - ' + targetValue + ' - ' + targetCheck + ' - ' + e.target.type)
 
         if (targetCheck) {
             if (targetName == 'condicion') {
@@ -126,7 +126,7 @@ const FormProyectos = ({ close, updateProyecto, setUpdateProyectos }) => {
 
                     auxAlquileres[i] = {
                         id_modulo: auxAlquilerIdM,
-                        valor: auxAlquilerMonto,
+                        valor: auxAlquilerMonto.toNumber(),
                         fecha_d_alquiler: auxAlquilerFI,
                         fecha_h_alquiler: auxAlquilerFV
                     }

@@ -1,4 +1,5 @@
 const { Egreso, FormaPago, Auth, AnalisisCosto, ComprobantePago, Stock } = require('../../db');
+const { formatStringToNumber } = require('../utils/numbers');
 const Decimal = require('decimal.js-light');
 
 const includeEgresos = [{
@@ -23,13 +24,15 @@ exports.insertEgreso = async (req, res) => {
         //Inserta el nuevo egreso
         datos.forEach((dato, i) => {
             dato.fecha_diferido_pago = !dato.fecha_diferido_pago ? '1000-01-01' : dato.fecha_diferido_pago;
-            dato.cuota = !dato.cuota ? 0 : dato.cuota;
+            dato.cuota = !dato.cuota ? 0 : formatStringToNumber(dato.cuota);
             dato.cuotaNumero = !dato.cuotaNumero ? 0 : dato.cuotaNumero;
             dato.observaciones = !dato.observaciones ? '' : dato.observaciones;
             dato.id_detalle_ac = !dato.id_detalle_ac ? 0 : dato.id_detalle_ac;
             dato.id_comprobante_pago = !dato.id_comprobante_pago ? 6 : dato.id_comprobante_pago;
             dato.numero_comprobante = !dato.numero_comprobante ? 0 : dato.numero_comprobante;
             dato.id_stock = !dato.id_stock ? 0 : dato.id_stock;
+            dato.valor_pago = formatStringToNumber(dato.valor_pago);
+            dato.valor_usd = formatStringToNumber(dato.valor_usd);
 
             Egreso.create(dato).then(response => {
                 //Si tiene un id_stock significa que va a manejar material en stock
@@ -138,13 +141,15 @@ exports.updateEgreso = async (req, res) => {
     const egreso = req.body;
 
     egreso.fecha_diferido_pago = !egreso.fecha_diferido_pago ? '1000-01-01' : egreso.fecha_diferido_pago;
-    egreso.cuota = !egreso.cuota ? 0 : egreso.cuota;
+    egreso.cuota = !egreso.cuota ? 0 : formatStringToNumber(egreso.cuota);
     egreso.cuotaNumero = !egreso.cuotaNumero ? 0 : egreso.cuotaNumero;
     egreso.observaciones = !egreso.observaciones ? '' : egreso.observaciones;
     egreso.id_detalle_ac = !egreso.id_detalle_ac ? 0 : egreso.id_detalle_ac;
     egreso.id_comprobante_pago = !egreso.id_comprobante_pago ? 6 : egreso.id_comprobante_pago;
     egreso.numero_comprobante = !egreso.numero_comprobante ? 0 : egreso.numero_comprobante;
     egreso.id_stock = !egreso.id_stock ? 0 : egreso.id_stock;
+    egreso.valor_pago = formatStringToNumber(dato.valor_pago);
+    egreso.valor_usd = formatStringToNumber(dato.valor_usd);
 
     Egreso.update(egreso, {
         where: {

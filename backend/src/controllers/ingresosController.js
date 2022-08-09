@@ -1,5 +1,5 @@
 const { Ingreso, FormaCobro, Auth } = require('../../db');
-const { desformatNumber } = require('../utils/numbers');
+const { formatStringToNumber } = require('../utils/numbers');
 
 const includeIngresos = [{
     model: FormaCobro
@@ -15,12 +15,12 @@ exports.insertIngreso = async (req, res) => {
         //Inserta el nuevo ingreso
         datos.forEach(async (dato, i) => {
             dato.fecha_diferido_cobro = !dato.fecha_diferido_cobro ? '1000-01-01' : dato.fecha_diferido_cobro;
-            dato.cuota = !dato.cuota ? 0 : dato.cuota;
+            dato.cuota = !dato.cuota ? 0 : formatStringToNumber(dato.cuota);
             dato.cuotaNumero = !dato.cuotaNumero ? 0 : dato.cuotaNumero;
             dato.observaciones = !dato.observaciones ? '' : dato.observaciones;
 
-            dato.valor_cobro = dato.valor_cobro ? desformatNumber(dato.valor_cobro) : 0;
-            dato.valor_usd = dato.valor_usd ? desformatNumber(dato.valor_usd) : 0;
+            dato.valor_cobro = dato.valor_cobro ? formatStringToNumber(dato.valor_cobro) : 0;
+            dato.valor_usd = dato.valor_usd ? formatStringToNumber(dato.valor_usd) : 0;
 
             Ingreso.create(dato).then(response => {
                 response.todoOk = "Ok";
@@ -87,12 +87,12 @@ exports.updateIngreso = async (req, res) => {
     const ingreso = req.body;
 
     ingreso.fecha_diferido_cobro = !ingreso.fecha_diferido_cobro ? '1000-01-01' : ingreso.fecha_diferido_cobro;
-    ingreso.cuota = !ingreso.cuota ? 0 : ingreso.cuota;
+    ingreso.cuota = !ingreso.cuota ? 0 : formatStringToNumber(ingreso.cuota);
     ingreso.cuotaNumero = !ingreso.cuotaNumero ? 0 : ingreso.cuotaNumero;
     ingreso.observaciones = !ingreso.observaciones ? '' : ingreso.observaciones;
 
-    ingreso.valor_cobro = ingreso.valor_cobro ? desformatNumber(ingreso.valor_cobro) : 0;
-    ingreso.valor_usd = ingreso.valor_usd ? desformatNumber(ingreso.valor_usd) : 0;
+    ingreso.valor_cobro = ingreso.valor_cobro ? formatStringToNumber(ingreso.valor_cobro) : 0;
+    ingreso.valor_usd = ingreso.valor_usd ? formatStringToNumber(ingreso.valor_usd) : 0;
 
     Ingreso.update(ingreso, {
         where: {

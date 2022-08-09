@@ -96,12 +96,12 @@ const AccordionCentrosCostos = ({ proyecto, setProyectos }) => {
                 <Accordion.Body>
                     <Row>
                         {proyecto.id_centro_costo == 2 && (user.rango == "admin" || user.rango == "moderador") && <>
-                            <Col xs={12} md={6}>
+                            {proyecto.venta > 0 && <Col xs={12} md={6}>
                                 <Row>
                                     <Col xs={1} md={1}></Col>
                                     <Col xs={11} md={11}><p> Venta: ${formatNumber(proyecto.venta)}</p></Col>
                                 </Row>
-                            </Col>
+                            </Col>}
                             {proyecto.costo > 0 &&
                                 <Col xs={12} md={6}>
                                     <Row>

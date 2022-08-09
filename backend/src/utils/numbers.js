@@ -5,3 +5,7 @@ exports.desformatNumber = (number) => {
     newNumber = parseFloat(newNumber);
     return newNumber
 }
+
+exports.formatStringToNumber = (number) => {
+    return typeof number === 'string' ? this.desformatNumber(number) : number;
+}

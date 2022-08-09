@@ -1,5 +1,5 @@
 const { CentroCosto, UnidadNegocio, Alquiler, Proyecto, Modulo, Egreso, Ingreso } = require('../../db');
-const { desformatNumber } = require('../utils/numbers');
+const { formatStringToNumber } = require('../utils/numbers');
 
 const configFindAllProyectos =  {
         include: [{
@@ -31,9 +31,9 @@ exports.insertProyecto = async (req, res) => {
     let id_proyecto = '';
     const countAlquileres = req.body.alquileres ? (req.body.alquileres).length : '';
 
-    req.body.costo = !req.body.costo ? 0 : desformatNumber(req.body.costo);
-    req.body.venta = !req.body.venta ? 0 : desformatNumber(req.body.venta);
-    req.body.alquiler_total = !req.body.alquiler_total ? 0 : req.body.alquiler_total;
+    req.body.costo = !req.body.costo ? 0 : formatStringToNumber(req.body.costo);
+    req.body.venta = !req.body.venta ? 0 : formatStringToNumber(req.body.venta);
+    req.body.alquiler_total = !req.body.alquiler_total ? 0 : formatStringToNumber(req.body.alquiler_total);
     req.body.fecha_f_proyecto = !req.body.fecha_f_proyecto ? '2200-01-01' : req.body.fecha_f_proyecto;
 
     try {
@@ -118,9 +118,9 @@ exports.insertProyecto = async (req, res) => {
 exports.updateProyecto = async (req, res) => {
     const proyecto = req.body;
     console.log(proyecto);
-    proyecto.costo = !proyecto.costo ? 0 : desformatNumber(proyecto.costo);
-    proyecto.venta = !proyecto.venta ? 0 : desformatNumber(proyecto.venta);
-    proyecto.alquiler_total = !proyecto.alquiler_total ? 0 : proyecto.alquiler_total;
+    proyecto.costo = !proyecto.costo ? 0 : formatStringToNumber(proyecto.costo);
+    proyecto.venta = !proyecto.venta ? 0 : formatStringToNumber(proyecto.venta);
+    proyecto.alquiler_total = !proyecto.alquiler_total ? 0 : formatStringToNumber(proyecto.alquiler_total);
     proyecto.fecha_f_proyecto = !proyecto.fecha_f_proyecto ? '2200-01-01' : proyecto.fecha_f_proyecto;
 
     Proyecto.update(proyecto, {
