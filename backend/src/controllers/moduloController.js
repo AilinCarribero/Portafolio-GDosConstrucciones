@@ -5,9 +5,9 @@ exports.insertModulo = (req, res) => {
     if (!req.body.fecha_venta) {
         req.body.fecha_venta = '1000-01-01';
     }
-    if (!req.body.venta) {
-        req.body.venta = 0;
-    }
+    
+    req.body.venta = !req.body.venta ? 0 : formatStringToNumber(req.body.venta);
+    
     if (!req.body.fecha_creacion) {
         req.body.fecha_creacion = new Date().toISOString().slice(0, 10);
     }

@@ -1,6 +1,6 @@
 const { Stock, Auth, Egreso, Proyecto, AnalisisCosto, StockMovimiento } = require("../../db");
 const Decimal = require('decimal.js-light');
-const { desformatNumber } = require("../utils/numbers");
+const { formatStringToNumber } = require("../utils/numbers");
 const { Sequelize } = require("sequelize");
 
 //Agregar stock
@@ -22,7 +22,7 @@ exports.insertStock = async (req, res) => {
             id_forma_pago: dato.id_forma_pago,
             id_user: dato.id_user,
             id_analisis_costo: analisis_costo.id_analisis_costo,
-            valor_pago: dato.valor_pago,
+            valor_pago: formatStringToNumber(dato.valor_pago),
             observaciones: dato.observaciones ? dato.nombre_stock + ' - ' + dato.observaciones : dato.nombre_stock,
             cuotas: dato.cuota,
             cuota: dato.cuotaNumero,
@@ -36,7 +36,7 @@ exports.insertStock = async (req, res) => {
                 const stock = {
                     nombre_stock: dato.nombre_stock,
                     //valor: dato.valor,
-                    restante_valor: dato.restante_valor,
+                    restante_valor: formatStringToNumber(dato.restante_valor),
                     salida: dato.salida,
                     id_user: dato.id_user,
                     //valor_unidad: dato.valor_unidad,
@@ -68,9 +68,9 @@ exports.insertStock = async (req, res) => {
                         }).then(response => {
                             const stockMovimiento = {
                                 id_stock: response[0].ultimoId,
-                                cantidad: dato.cantidad,
-                                valor_unidad: dato.valor_unidad,
-                                valor_total: dato.valor,
+                                cantidad: formatStringToNumber(dato.cantidad),
+                                valor_unidad: formatStringToNumber(dato.valor_unidad),
+                                valor_total: formatStringToNumber(dato.valor),
                                 medida: dato.medida,
                                 id_user: dato.id_user,
                             }
@@ -149,7 +149,6 @@ exports.updateStockRestante = async (req, res) => {
     });
 
     datos.forEach((dato, i) => {
-        console.log(dato);
         const egreso = {
             id_proyecto: dato.proyecto ? dato.proyecto : 'CCE',
             fecha_pago: dato.fecha_pago,
@@ -157,7 +156,7 @@ exports.updateStockRestante = async (req, res) => {
             id_forma_pago: dato.id_forma_pago,
             id_user: dato.id_user,
             id_analisis_costo: analisis_costo.id_analisis_costo,
-            valor_pago: dato.valor_pago,
+            valor_pago: formatStringToNumber(dato.valor_pago),
             observaciones: dato.observaciones ? dato.nombre_stock + ' - ' + dato.observaciones : dato.nombre_stock,
             cuotas: dato.cuota,
             cuota: dato.cuotaNumero,
@@ -169,10 +168,10 @@ exports.updateStockRestante = async (req, res) => {
         Egreso.create(egreso).then(response => {
             if (datos.length - 1 == i) {
                 const stock = {
-                    valor: dato.new_valor_total,
-                    restante_valor: dato.restante_total,
-                    valor_unidad: dato.valor_unidad,
-                    cantidad: dato.cantidad_total,
+                    valor: formatStringToNumber(dato.new_valor_total),
+                    restante_valor: formatStringToNumber(dato.restante_total),
+                    valor_unidad: formatStringToNumber(dato.valor_unidad),
+                    cantidad: formatStringToNumber(dato.cantidad_total),
                 }
 
                 //Modificar el stock
@@ -184,9 +183,9 @@ exports.updateStockRestante = async (req, res) => {
 
                     const stockMovimiento = {
                         id_stock: dato.id_stock,
-                        cantidad: dato.cantidad,
-                        valor_unidad: dato.valor_unidad,
-                        valor_total: dato.valor,
+                        cantidad: formatStringToNumber(dato.cantidad),
+                        valor_unidad: formatStringToNumber(dato.valor_unidad),
+                        valor_total: formatStringToNumber(dato.valor),
                         medida: dato.medida ? dato.medida : 'Unidad',
                         id_user: dato.id_user,
                     }
