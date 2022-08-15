@@ -6,11 +6,12 @@ import { Row, Col, Form, FloatingLabel } from 'react-bootstrap';
 
 //Redux
 import { useDispatch } from "react-redux";
-import { addFiltros } from "../../../redux/slice/Proyecto/proyectoSlice";
-import { activeFiltros } from "../../../redux/slice/Proyecto/thunks";
+import { changeFiltros } from "../../../redux/slice/Proyecto/proyectoSlice";
+import { activeFiltros, removeOneFiltro } from "../../../redux/slice/Proyecto/thunks";
 
 //Css-img-icons
 import './Filtros.css';
+import * as Icons from 'react-bootstrap-icons';
 
 const FiltrosProyectos = ({ show }) => {
     //const { handleFiltros } = useFiltros();
@@ -47,7 +48,11 @@ const FiltrosProyectos = ({ show }) => {
         let targetName = e.target.name;
         let targetValue = e.target.value;
 
-        dispatch(addFiltros({ [targetName]: targetValue }));
+        if (targetValue) {
+            dispatch(changeFiltros({ [targetName]: targetValue }));
+        } else {
+            dispatch(removeOneFiltro(targetName));
+        }
     }
 
     /***FALTA --->>> boton para limpiar los filtros***/

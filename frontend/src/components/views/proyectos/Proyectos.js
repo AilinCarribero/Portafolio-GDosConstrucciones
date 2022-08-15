@@ -9,11 +9,7 @@ import Materiales from '../material/Materiales';
 
 //Hooks
 import { formatNumber } from '../../../hooks/useUtils';
-import { useGetProyectos } from '../../../hooks/useProyectos';
 import { useUser } from '../../../hooks/useUser';
-
-//Contexts 
-import { ProyectoContext } from '../../../contexts/ProyectosProvider';
 
 //Redux
 import { useDispatch, useSelector } from 'react-redux';
@@ -28,16 +24,15 @@ import '../../../style/CC.scss';
 
 const Proyectos = () => {
     const { user } = useUser();
-    //const { proyectosContext, setProyectosContext } = useContext(ProyectoContext);
 
     const dispatch = useDispatch();
 
     const proyectos = useSelector(state => state.proyectoRedux.proyectos);
     const activeLoading = useSelector(state => state.proyectoRedux.loading);
-    console.log(proyectos, activeLoading)
+
+    console.log(proyectos, 'Loading:'+activeLoading)
 
     useEffect(() => {
-        //setProyectosContext(proyectos);
         dispatch(getProyectos());
     }, [])
 

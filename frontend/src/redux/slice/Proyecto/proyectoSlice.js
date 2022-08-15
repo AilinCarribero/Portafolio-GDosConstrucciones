@@ -16,7 +16,7 @@ export const proyectoSlice = createSlice({
             state.proyectos = action.payload;
             state.loading = false;
         },
-        addFiltros: (state, action) => {
+        changeFiltros: (state, action) => {
             console.log(state, action);
             const newFiltro = action.payload;
             const oldFiltros = state.filtros;
@@ -27,72 +27,81 @@ export const proyectoSlice = createSlice({
             const proyectos = state.proyectos;
 
             console.log(filtros)
-            const resultadoFiltroProyecto = [];
-            /*const resultadoFiltroProyecto = proyectos.filter(proyecto => {
-                if (proyecto.ingresos && proyecto.ingresos.length > 0) {   
-                    if (filtros.fecha_cobro_desde) {
-                        proyecto.ingresos.map(ingreso => {
-                            if (formatFechaISO(ingreso.fecha_cobro) >= formatFechaISO(filtros.fecha_cobro_desde)) {
+            let resultadoFiltroProyecto = proyectos;
+
+            /*
+                1er filtro -> si existe el filtro fecha_cobro_desde va a filtrar
+                2do filtro -> si existe el filtro fecha_cobro_hasta filtra los proyectos disponibles
+                ...
+            */
+            if (filtros.fecha_cobro_desde) {
+                resultadoFiltroProyecto = resultadoFiltroProyecto.filter(proyecto => {
+                    if (proyecto.ingresos.length > 0) {
+                        for (let i = 0; i < proyecto.ingresos.length; i++) {
+                            if (formatFechaISO(proyecto.ingresos[i].fecha_cobro) >= formatFechaISO(filtros.fecha_cobro_desde)) {
                                 return proyecto //cobro 
                             }
 
-                            if (formatFechaISO(ingreso.fecha_diferido_cobro) >= formatFechaISO(filtros.fecha_cobro_desde)) {
+                            if (formatFechaISO(proyecto.ingresos[i].fecha_diferido_cobro) >= formatFechaISO(filtros.fecha_cobro_desde)) {
                                 return proyecto //cobro 
                             }
-                        });
-                    }
-
-                    if (filtros.fecha_cobro_hasta) {
-                        proyecto.ingresos.map(ingreso => {
-                            if ((formatFechaISO(ingreso.fecha_cobro) <= formatFechaISO(filtros.fecha_cobro_hasta))
-                                || (formatFechaISO(ingreso.fecha_diferido_cobro) <= formatFechaISO(filtros.fecha_cobro_hasta))) {
-                                return proyecto //cobro 
-                            }
-                        });
-                    }
-                }
-
-                if (proyecto.egresos && proyecto.egresos.length > 0) {
-                    if (filtros.fecha_pago_desde) {
-                        proyecto.egresos.map(egreso => {
-                            if (formatFechaISO(egreso.fecha_pago) >= formatFechaISO(filtros.fecha_pago_desde)) {
-                                return proyecto //pago 
-                            }
-
-                            if (formatFechaISO(egreso.fecha_diferido_pago) >= formatFechaISO(filtros.fecha_pago_desde)) {
-                                return proyecto //pago 
-                            }
-                        });
-                    }
-
-                    if (filtros.fecha_pago_hasta) {
-                        proyecto.egresos.map(egreso => {
-                            if ((formatFechaISO(egreso.fecha_pago) <= formatFechaISO(filtros.fecha_pago_hasta))
-                                || (formatFechaISO(egreso.fecha_diferido_pago) <= formatFechaISO(filtros.fecha_pago_hasta))) {
-                                return proyecto //pago 
-                            }
-                        });
-                    }
-                }
-                
-                /*if (filtros.fecha_cobro_hasta || filtros.fecha_cobro_desde) {
-                    for (let i = 0; i < proyecto.ingresos.length; i++) {
-                        if ((proyecto.ingresos[i].fecha_cobro >= filtros.fecha_cobro_desde
-                            && proyecto.ingresos[i].fecha_cobro <= filtros.fecha_cobro_hasta)
-                            ||
-                            (proyecto.ingresos[i].fecha_diferido_cobro >= filtros.fecha_cobro_desde
-                                && proyecto.ingresos[i].fecha_diferido_cobro <= filtros.fecha_cobro_hasta)) {
-                            return proyecto //cobro 
                         }
                     }
-                } else {
-                    return proyecto
-                }
-            })*/
+                });
+            }
+
+            if (filtros.fecha_cobro_hasta) {
+                resultadoFiltroProyecto = resultadoFiltroProyecto.filter(proyecto => {
+                    if (proyecto.ingresos.length > 0) {
+                        for (let i = 0; i < proyecto.ingresos.length; i++) {
+                            if (formatFechaISO(proyecto.ingresos[i].fecha_cobro) <= formatFechaISO(filtros.fecha_cobro_hasta)) {
+                                return proyecto //cobro 
+                            }
+
+                            if (formatFechaISO(proyecto.ingresos[i].fecha_diferido_cobro) <= formatFechaISO(filtros.fecha_cobro_hasta)) {
+                                return proyecto //cobro 
+                            }
+                        }
+                    }
+                });
+            }
+
+            if (filtros.fecha_pago_desde) {
+                resultadoFiltroProyecto = resultadoFiltroProyecto.filter(proyecto => {
+                    if (proyecto.egresos.length > 0) {
+                        for (let i = 0; i < proyecto.egresos.length; i++) {
+                            if (formatFechaISO(proyecto.egresos[i].fecha_pago) >= formatFechaISO(filtros.fecha_pago_desde)) {
+                                return proyecto //pago 
+                            }
+
+                            if (formatFechaISO(proyecto.egresos[i].fecha_diferido_pago) >= formatFechaISO(filtros.fecha_pago_desde)) {
+                                return proyecto //pago 
+                            }
+                        }
+                    }
+                });
+            }
+
+            if (filtros.fecha_pago_hasta) {
+                resultadoFiltroProyecto = resultadoFiltroProyecto.filter(proyecto => {
+                    if (proyecto.egresos.length > 0) {
+                        for (let i = 0; i < proyecto.egresos.length; i++) {
+                            if (formatFechaISO(proyecto.egresos[i].fecha_pago) <= formatFechaISO(filtros.fecha_pago_hasta)) {
+                                return proyecto //pago 
+                            }
+
+                            if (formatFechaISO(proyecto.egresos[i].fecha_diferido_pago) <= formatFechaISO(filtros.fecha_pago_hasta)) {
+                                return proyecto //pago 
+                            }
+                        }
+                    }
+                });
+            }
 
             console.log(resultadoFiltroProyecto)
 
-            if (resultadoFiltroProyecto.length > 0) { /*Nos aseguramos de tener resultados */
+            if (resultadoFiltroProyecto.length > 0) { 
+                /*Nos aseguramos de tener resultados */
                 state.proyectos = resultadoFiltroProyecto;
             } else if (resultadoFiltroProyecto.length <= 0 && filtros) {
                 /*Si no se obtenieron resultados y exisen filtros muestra una alerta de que no se encontraron los resultados 
@@ -101,8 +110,92 @@ export const proyectoSlice = createSlice({
                 state.proyectos = proyectos;
             }
         },
-        deleteFiltros: (state, action) => {
+        removeFiltros: (state, action) => {
+            console.log(state, action)
 
+            const proyectos = action.payload.proyectos;
+            const filtros = state.filtros;
+
+            //Eliminamos el filtro que se solicito eliminar
+            delete filtros[action.payload.filtro];
+            
+            let resultadoFiltroProyecto = proyectos;
+
+            if (filtros.fecha_cobro_desde) {
+                resultadoFiltroProyecto = resultadoFiltroProyecto.filter(proyecto => {
+                    if (proyecto.ingresos.length > 0) {
+                        for (let i = 0; i < proyecto.ingresos.length; i++) {
+                            if (formatFechaISO(proyecto.ingresos[i].fecha_cobro) >= formatFechaISO(filtros.fecha_cobro_desde)) {
+                                return proyecto //cobro 
+                            }
+
+                            if (formatFechaISO(proyecto.ingresos[i].fecha_diferido_cobro) >= formatFechaISO(filtros.fecha_cobro_desde)) {
+                                return proyecto //cobro 
+                            }
+                        }
+                    }
+                });
+            }
+
+            if (filtros.fecha_cobro_hasta) {
+                resultadoFiltroProyecto = resultadoFiltroProyecto.filter(proyecto => {
+                    if (proyecto.ingresos.length > 0) {
+                        for (let i = 0; i < proyecto.ingresos.length; i++) {
+                            if (formatFechaISO(proyecto.ingresos[i].fecha_cobro) <= formatFechaISO(filtros.fecha_cobro_hasta)) {
+                                return proyecto //cobro 
+                            }
+
+                            if (formatFechaISO(proyecto.ingresos[i].fecha_diferido_cobro) <= formatFechaISO(filtros.fecha_cobro_hasta)) {
+                                return proyecto //cobro 
+                            }
+                        }
+                    }
+                });
+            }
+
+            if (filtros.fecha_pago_desde) {
+                resultadoFiltroProyecto = resultadoFiltroProyecto.filter(proyecto => {
+                    if (proyecto.egresos.length > 0) {
+                        for (let i = 0; i < proyecto.egresos.length; i++) {
+                            if (formatFechaISO(proyecto.egresos[i].fecha_pago) >= formatFechaISO(filtros.fecha_pago_desde)) {
+                                return proyecto //pago 
+                            }
+
+                            if (formatFechaISO(proyecto.egresos[i].fecha_diferido_pago) >= formatFechaISO(filtros.fecha_pago_desde)) {
+                                return proyecto //pago 
+                            }
+                        }
+                    }
+                });
+            }
+
+            if (filtros.fecha_pago_hasta) {
+                resultadoFiltroProyecto = resultadoFiltroProyecto.filter(proyecto => {
+                    if (proyecto.egresos.length > 0) {
+                        for (let i = 0; i < proyecto.egresos.length; i++) {
+                            if (formatFechaISO(proyecto.egresos[i].fecha_pago) <= formatFechaISO(filtros.fecha_pago_hasta)) {
+                                return proyecto //pago 
+                            }
+
+                            if (formatFechaISO(proyecto.egresos[i].fecha_diferido_pago) <= formatFechaISO(filtros.fecha_pago_hasta)) {
+                                return proyecto //pago 
+                            }
+                        }
+                    }
+                });
+            }
+
+            console.log(resultadoFiltroProyecto)
+
+            if (resultadoFiltroProyecto.length > 0) { 
+                /*Nos aseguramos de tener resultados */
+                state.proyectos = resultadoFiltroProyecto;
+            } else if (resultadoFiltroProyecto.length <= 0 && filtros) {
+                /*Si no se obtenieron resultados y exisen filtros muestra una alerta de que no se encontraron los resultados 
+                y se resetean los proyectos que se muestran */
+                ToastComponent('warn', 'No se encontraron resultados');
+                state.proyectos = proyectos;
+            }
         },
         activeLoading: (state, action) => {
             state.loading = action.payload;
@@ -113,6 +206,6 @@ export const proyectoSlice = createSlice({
     }
 })
 
-export const { setProyectos, addFiltros, activeLoading, activeError, deleteFiltros } = proyectoSlice.actions;
+export const { setProyectos, changeFiltros, activeLoading, activeError, removeFiltros } = proyectoSlice.actions;
 
 export default proyectoSlice.reducer;
