@@ -18,8 +18,6 @@ import * as Icons from 'react-bootstrap-icons';
 const Materiales = () => {
     const { stock, setStock } = useGetStock();
 
-    console.log(stock);
-
     const [showForm, setShowForm] = useState(false);
     const [showModRestante, setShowModRestante] = useState(false);
     const [paramMaterial, setParamMaterial] = useState([]);
@@ -90,7 +88,7 @@ const Materiales = () => {
                                 {material.stock_movimientos &&
                                     <Row className="border-top">
                                         <Col xs={12} md={12}>
-                                            <p className="title-actions">Trazabilidad</p>
+                                            <p className="accordion-title-section">Trazabilidad</p>
                                         </Col>
                                         <Col xs={12} md={12}>
                                             <Row className="content-trazabilidad">
@@ -120,7 +118,7 @@ const Materiales = () => {
                                 }
                                 <Row className="border-top">
                                     <Col xs={12} md={12}>
-                                        <p className="title-actions">Acciones</p>
+                                        <p className="accordion-title-section">Acciones</p>
                                     </Col>
                                     <Col xs={12} md={6}>
                                         <button className="button-action" onClick={() => updateRestanteValor(material)}>

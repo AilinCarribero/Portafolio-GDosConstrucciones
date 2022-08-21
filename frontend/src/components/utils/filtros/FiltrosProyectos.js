@@ -1,12 +1,21 @@
 import React, { useState } from "react";
 import { Row, Col, Form, FloatingLabel } from 'react-bootstrap';
-import { useFiltros } from "../../../hooks/useFiltros";
+
+//Hooks
+//import { useFiltros } from "../../../hooks/useFiltros";
+
+//Redux
+import { useDispatch } from "react-redux";
+import { changeFiltros } from "../../../redux/slice/Proyecto/proyectoSlice";
+import { activeFiltros, removeOneFiltro } from "../../../redux/slice/Proyecto/thunks";
 
 //Css-img-icons
 import './Filtros.css';
+import * as Icons from 'react-bootstrap-icons';
 
 const FiltrosProyectos = ({ show }) => {
-    const { handleFiltros } = useFiltros();
+    //const { handleFiltros } = useFiltros();
+    const dispatch = useDispatch();
 
     //const [showCobro, setShowCobro] = useState(false);
     //const [showPago, setShowPago] = useState(false);
@@ -35,6 +44,17 @@ const FiltrosProyectos = ({ show }) => {
         }*/
     }
 
+    const handleFiltros = (e) => {
+        let targetName = e.target.name;
+        let targetValue = e.target.value;
+
+        if (targetValue) {
+            dispatch(changeFiltros({ [targetName]: targetValue }));
+        } else {
+            dispatch(removeOneFiltro(targetName));
+        }
+    }
+
     /***FALTA --->>> boton para limpiar los filtros***/
     return (<>
         <Row hidden={show} className="cont-filtros">
@@ -46,6 +66,9 @@ const FiltrosProyectos = ({ show }) => {
                     <Form.Check inline onChange={handleChangeShowFiltros} label="Fechas para Pagos" name="pago" value="pago" type="checkbox" />
                 </Col>
             </Row>*/}
+            <Col xs={12} sm={12}>
+                <Form.Label className="title-fechas-filtros">FILTROS PARA PROYECTOS</Form.Label>
+            </Col>
             <Col xs={12} sm={6}>
                 <Col xs={12} sm={12}>
                     <Form.Label className="title-fechas-filtros">Fecha de Cobros/Ingresos Realizados</Form.Label>

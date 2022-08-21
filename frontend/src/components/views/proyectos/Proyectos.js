@@ -1,38 +1,42 @@
 import React, { useState, useEffect, useContext } from 'react';
 import {isMobile} from 'react-device-detect';
+import { Row, Col, OverlayTrigger, Tooltip, Spinner } from 'react-bootstrap';
 
 //Componentes
-import { Row, Col, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import CentrosCostos from './CentrosCostos';
 import Modulos from '../modulos/Modulos';
 import Materiales from '../material/Materiales';
 
 //Hooks
 import { formatNumber } from '../../../hooks/useUtils';
-import { useGetProyectos } from '../../../hooks/useProyectos';
 import { useUser } from '../../../hooks/useUser';
 
-//Contexts 
-import { ProyectoContext } from '../../../contexts/ProyectosProvider';
+//Redux
+import { useDispatch, useSelector } from 'react-redux';
+import { getProyectos } from '../../../redux/slice/Proyecto/thunks';
 
 //Css
 import '../../../style/Proyectos.scss';
 import '../../../style/CC.scss';
-import { Link } from 'react-router-dom';
 
 //Img-Incons
 //import SpinnerC from '../../utils/spinner/SpinnerC';
 
 const Proyectos = () => {
     const { user } = useUser();
-    const { proyectosContext, setProyectosContext } = useContext(ProyectoContext);
-    const { proyectos } = useGetProyectos();
+
+    const dispatch = useDispatch();
+
+    const proyectos = useSelector(state => state.proyectoRedux.proyectos);
+    const activeLoading = useSelector(state => state.proyectoRedux.loading);
+
+    //console.log(proyectos, 'Loading:'+activeLoading)
 
     useEffect(() => {
-        setProyectosContext(proyectos);
-    }, [proyectos])
+        dispatch(getProyectos());
+    }, [])
 
-    const [spinner, setSpinner] = useState(true);
+    const [spinner, setSpinner] = useState(activeLoading);
     const [menu, setMenu] = useState(user.rango == "admin" || user.rango == "moderador" ? 'resumen' : 'proyectos');
 
     const [totales, setTotales] = useState({
@@ -111,8 +115,8 @@ const Proyectos = () => {
         let auxCCEI = 0;
 
         //Reparte los ingresos y los egresos correspondientes a cada area
-        if (proyectosContext && proyectosContext.length > 0) {
-            proyectosContext.map(proyecto => {
+        if (proyectos && proyectos.length > 0) {
+            proyectos.map(proyecto => {
                 if (proyecto.id_centro_costo == '2') {
                     auxTotalCosto += parseFloat(proyecto.costo);
                     auxTotalVenta += parseFloat(proyecto.venta);
@@ -351,10 +355,10 @@ const Proyectos = () => {
                 }
             })
         } else {
-            if (proyectosContext) {
-                auxTotalCosto = proyectosContext.costo || 0;
-                auxTotalVenta = proyectosContext.venta || 0;
-                auxTotalAlquiler = proyectosContext.alquiler_total || 0;
+            if (proyectos) {
+                auxTotalCosto = proyectos.costo || 0;
+                auxTotalVenta = proyectos.venta || 0;
+                auxTotalAlquiler = proyectos.alquiler_total || 0;
             } else {
                 auxTotalCosto = 0;
                 auxTotalVenta = 0;
@@ -404,7 +408,7 @@ const Proyectos = () => {
     //Si existe alguna modificacion en los proyectos se debe recalcular todo
     useEffect(() => {
         resumenContableProyectos();
-    }, [proyectosContext]);
+    }, [proyectos]);
 
     const handleButton = (e) => {
         const targetName = e.target.name;
@@ -417,7 +421,7 @@ const Proyectos = () => {
 
     return (<>
         <div>
-            {/*spinner && <Spinner animation="border" variant="dark" />*/}
+            {spinner && <Spinner animation="border" variant="dark" />}
             <Row className="menu-inicio">
                 {(user.rango == "admin" || user.rango == "moderador") && <>
                     <Col>
@@ -448,7 +452,7 @@ const Proyectos = () => {
                     menu != 'resumen' ?
                         menu != 'modulos' ?
                             menu != 'materiales' ?
-                                <CentrosCostos proyectos={proyectosContext} setProyectos={setProyectosContext} mostrar={menu} />
+                                <CentrosCostos proyectos={proyectos} setProyectos={'dispatch(getProyectos())'} mostrar={menu} />
                                 : <Materiales />
                             : <Modulos />
                         : (user.rango == "admin" || user.rango == "moderador") &&

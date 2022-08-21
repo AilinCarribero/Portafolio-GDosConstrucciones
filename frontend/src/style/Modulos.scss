@@ -1,0 +1,36 @@
+@use 'Global.scss';
+
+.accordion-modulos {
+    .accordion-header-modulos {
+        padding-left: 15px;
+
+        .accordion-estado-modulos {
+            @extend .state;
+        }
+
+        .accordion-nombre-modulos {
+            width: auto;
+            margin-top: 4px;
+        }
+
+        #ocupado {
+            background-color: #ff7e42;
+        }
+
+        #disponible {
+            background-color: #05be40;
+        }
+
+        #vendido {
+            background-color: #5B5E6B;
+        }
+    }
+
+    .accordion-body-modulos {
+        .content-trazabilidad-modulos {
+            .proyecto-trazabilidad-modulos {}
+
+            .fecha-trazabilidad-modulos {}
+        }
+    }
+}
