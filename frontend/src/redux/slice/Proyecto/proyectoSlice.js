@@ -17,7 +17,6 @@ export const proyectoSlice = createSlice({
             state.loading = false;
         },
         changeFiltros: (state, action) => {
-            console.log(state, action);
             const newFiltro = action.payload;
             const oldFiltros = state.filtros;
 
@@ -26,7 +25,6 @@ export const proyectoSlice = createSlice({
             const filtros = state.filtros;
             const proyectos = state.proyectos;
 
-            console.log(filtros)
             let resultadoFiltroProyecto = proyectos;
 
             /*
@@ -97,8 +95,6 @@ export const proyectoSlice = createSlice({
                     }
                 });
             }
-
-            console.log(resultadoFiltroProyecto)
 
             if (resultadoFiltroProyecto.length > 0) { 
                 /*Nos aseguramos de tener resultados */

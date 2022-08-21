@@ -82,7 +82,7 @@ console.log(egreso);
                     {user.rango == 'admin' &&
                         <Row className="border-top">
                             <Col xs={12} md={12}>
-                                <p className="title-actions">Acciones</p>
+                                <p className="accordion-title-section">Acciones</p>
                             </Col>
                             <Col xs={6} md={6}>
                                 <button className="button-action" onClick={() => updateEgreso()}>
