@@ -29,7 +29,7 @@ const Proyectos = () => {
 
     const proyectos = useSelector(state => state.proyectoRedux.proyectos);
     const activeLoading = useSelector(state => state.proyectoRedux.loading);
-
+    
     //console.log(proyectos, 'Loading:'+activeLoading)
 
     useEffect(() => {

@@ -12,6 +12,7 @@ app.use(express.urlencoded({ extended: true }));
 require("dotenv").config();
 
 require('./db');
+require('./cron');
 
 // routes
 app.use('/api/auth', require('./src/router/authRoute'));
