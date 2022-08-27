@@ -49,7 +49,8 @@ exports.listModulos = (req, res) => {
         Modulo.findAll({
             include: [{
                 model: Alquiler
-            }]
+            }],
+            order: [['estado', 'ASC'], [Alquiler, 'fecha_h_alquiler', 'ASC']]
         }).then( response => {
             res.json(response);
         }).catch( error => {

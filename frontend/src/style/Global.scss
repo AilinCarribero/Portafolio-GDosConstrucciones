@@ -41,7 +41,7 @@
     }
 }
 
-.accordion-border-top{
+.accordion-border-top {
     border-top: 1px solid rgb(223, 222, 222);
     padding-top: 5px;
 }
@@ -172,4 +172,26 @@
 a {
     text-decoration: none;
     color: black;
+}
+
+
+/*----------------------Gaphics-------------------*/
+.apexcharts-tooltip {
+    border: solid 1px #969696;
+    border-radius: 25px;
+    background-color: #ffffff;
+
+    .range-bar-tooltip {
+        text-align: center;
+        padding: 5px 15px;
+    }
+
+    #range-bar-tooltip-title {
+        font-size: 12px;
+        font-weight: 500;
+    }
+
+    #range-bar-tooltip-fecha {
+        font-size: 11px;
+    }
 }

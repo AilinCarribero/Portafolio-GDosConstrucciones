@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { getModulos } from "../services/apiModulos";
 
 export const useGetModulos = () => {
-    const [ modulos, setModulos ] = useState([]);
+    const [modulos, setModulos] = useState([]);
 
     useEffect(() => {
         (async () => {

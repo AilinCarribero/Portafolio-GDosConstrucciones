@@ -210,7 +210,7 @@ const FormProyectos = ({ close, updateProyecto, setUpdateProyectos }) => {
                                         <option value=""> </option>
                                         {modulos.length > 0 ?
                                             modulos.map((modulo) => (
-                                                <option key={modulo.id_modulo} value={modulo.id_modulo}>
+                                               modulo.estado === 0 && <option key={modulo.id_modulo} value={modulo.id_modulo}>
                                                     {modulo.nombre_modulo}
                                                 </option>
                                             ))

@@ -74,20 +74,11 @@ const AccordionCentrosCostos = ({ proyecto, setProyectos }) => {
 
             <Accordion.Item eventKey={proyecto.id_proyecto} className={proyecto.id_centro_costo == 1 || proyecto.id_centro_costo == 3 ? 'accordionCC' : 'content-accordion'}>
                 <Accordion.Header>
-                    {proyecto.fecha_f_proyecto && new Date(proyecto.fecha_f_proyecto).toISOString().slice(0, 10) != new Date('2200-01-01').toISOString().slice(0, 10) ?
-                        new Date() > new Date(proyecto.fecha_f_proyecto) ? //Si es mayor a la fecha de inicio y a la fecha de fin
-                            <Col xs={1} md={1} className="state-finish" > <Icons.HouseDoorFill size={19} className='state-icon' /> </Col>
-                            : new Date() < new Date(proyecto.fecha_f_proyecto) && new Date() > new Date(proyecto.fecha_i_proyecto) ? //Si esta entre la fecha de fin y la fecha de inicio
-                                <Col xs={1} md={1} className="state-proceso" >  <Icons.Tools size={17} className='state-icon' /></Col>
-                                : new Date() > new Date(proyecto.fecha_i_proyecto) ? //Si es mayor a la fecha de incio
-                                    <Col xs={1} md={1} className="state-proceso" > <Icons.Tools size={17} className='state-icon' /> </Col>
-                                    : <Col xs={1} md={1} className="state-pendiente" > <Icons.ConeStriped size={19} className='state-icon' /></Col>
-                        : proyecto.fecha_i_proyecto &&
-                        (new Date() > new Date(proyecto.fecha_i_proyecto) ? //Si es mayor a la fecha de incio
-                            <Col xs={1} md={1} className="state-proceso" > <Icons.Tools size={17} className='state-icon' /> </Col>
-                            : <Col xs={1} md={1} className="state-pendiente" > <Icons.ConeStriped size={19} className='state-icon' /></Col>
-                        )
-                    }
+                    {/*Estados: 1.Por Empezar 2.En proceso 3.Finalizado */}
+                    {proyecto.id_estado == 1 && <Col xs={1} md={1} className="state-pendiente" > <Icons.ConeStriped size={19} className='state-icon' /></Col>}
+                    {proyecto.id_estado == 2 && <Col xs={1} md={1} className="state-proceso" > <Icons.Tools size={17} className='state-icon' /> </Col>}
+                    {proyecto.id_estado == 3 && <Col xs={1} md={1} className="state-finish" > <Icons.HouseDoorFill size={19} className='state-icon' /> </Col>}
+                    
                     <Col xs={5} md={5}>{proyecto.id_proyecto}</Col>
                     {(user.rango == "admin" || user.rango == "moderador") && !proyecto.id_proyecto.includes('CCC') && !proyecto.id_proyecto.includes('CCE') &&
                         <Col xs={4} md={3}> Resto: ${formatNumber(ingresosProyecto(proyecto.ingresos) - egresosProyecto(proyecto.egresos))} / USD${formatNumber(ingresosUSDProyecto(proyecto.ingresos) - egresosUSDProyecto(proyecto.egresos))}</Col>
