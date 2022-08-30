@@ -136,12 +136,19 @@ const CentrosCostos = ({ proyectos, mostrar, setProyectos }) => {
         <Row className='content-resumen-sec-buttons'>
             <Col xs={12} md={(user.rango == "admin" || user.rango == "moderador") ? 6 : 12}>
                 <Row className="conten-buttons-agregar">
-                    <Col xs={6} sm={6} md={4}>
+                   {/* <Col xs={6} sm={6} md={4}>
                         <button className="button-agregar" onClick={() => setShowFormSelccion('egreso')} variant="dark" >
                             <Icons.Plus className="icon-button" size={19} /> Egreso
                         </button>
-                    </Col>
-                    {(user.rango == "admin" || user.rango == "moderador") && <>
+                    </Col>*/} 
+                    {user.rango == 'admin' &&
+                            <Col xs={6} sm={6} md={4}>
+                            <button className="button-agregar" onClick={() => setShowFormSelccion('proyecto')} variant="dark">
+                                <Icons.Plus className="icon-button" size={19} /> Proyecto
+                            </button>
+                        </Col>
+                    }
+                    {/*(user.rango == "admin" || user.rango == "moderador") && <>
                         <Col xs={6} sm={6} md={4}>
                             <button className="button-agregar" onClick={() => setShowFormSelccion('ingreso')} variant="dark" >
                                 <Icons.Plus className="icon-button" size={19} /> Ingreso
@@ -154,17 +161,17 @@ const CentrosCostos = ({ proyectos, mostrar, setProyectos }) => {
                                 </button>
                             </Col>
                         }
-                    </>}
+                    </>*/}
                 </Row>
             </Col>
-            {(user.rango == "admin" || user.rango == "moderador") &&
+            {/*(user.rango == "admin" || user.rango == "moderador") &&
                 <Col xs={12} md={6}>
                     <Row>
                         <Col xs={6} md={6} className='content-section'> Ingresos: {totales.ingresos ? formatNumber(totales.ingresos) : 0} </Col>
                         <Col xs={6} md={6} className='content-section'> Egresos: {totales.egresos ? formatNumber(totales.egresos) : 0}</Col>
                     </Row>
                 </Col>
-            }
+            */}
         </Row>
 
         <Accordion>

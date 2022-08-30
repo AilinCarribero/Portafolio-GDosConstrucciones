@@ -481,7 +481,7 @@ const Proyectos = () => {
                                     </Col>
                                 </Row>
                             </Col>
-                            <Col xs={12} md={8} className={!isMobile ? "content-section border-left" : "content-section"} >
+                            {/*<Col xs={12} md={8} className={!isMobile ? "content-section border-left" : "content-section"} >
                                 <Row className="content-sub-section border-bottom">
                                     <OverlayTrigger placement="bottom" overlay={
                                         <Tooltip>
@@ -548,8 +548,8 @@ const Proyectos = () => {
                                         </Row>
                                     </Col>
                                 </Row>
-                            </Col>
-                            <Col xs={12} md={12} className="content-section border-bottom border-top" >
+                            </Col>*/}
+                           {/* <Col xs={12} md={12} className="content-section border-bottom border-top" >
                                 <Row className="content-sub-section border-bottom">
                                     <Col xs={6} md={6} className="border-right">
                                         <Row>
@@ -580,7 +580,7 @@ const Proyectos = () => {
                                         Flujo Planificado: ${formatNumber(totales.ingresosFuturo - totales.egresosFuturo)}/USD${formatNumber(totales.ingresosUSDFuturo - totales.egresosUSDFuturo)}
                                     </Col>
                                 </Row>
-                            </Col>
+                            </Col>*/}
                             <Col xs={12} md={12} className="content-section" >
                                 <Row>
                                     <Col xs={12} md={12}>

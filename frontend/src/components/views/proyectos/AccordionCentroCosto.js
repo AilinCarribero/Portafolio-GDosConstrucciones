@@ -80,9 +80,9 @@ const AccordionCentrosCostos = ({ proyecto, setProyectos }) => {
                     {proyecto.id_estado == 3 && <Col xs={1} md={1} className="state-finish" > <Icons.HouseDoorFill size={19} className='state-icon' /> </Col>}
                     
                     <Col xs={5} md={5}>{proyecto.id_proyecto}</Col>
-                    {(user.rango == "admin" || user.rango == "moderador") && !proyecto.id_proyecto.includes('CCC') && !proyecto.id_proyecto.includes('CCE') &&
+                    {/*(user.rango == "admin" || user.rango == "moderador") && !proyecto.id_proyecto.includes('CCC') && !proyecto.id_proyecto.includes('CCE') &&
                         <Col xs={4} md={3}> Resto: ${formatNumber(ingresosProyecto(proyecto.ingresos) - egresosProyecto(proyecto.egresos))} / USD${formatNumber(ingresosUSDProyecto(proyecto.ingresos) - egresosUSDProyecto(proyecto.egresos))}</Col>
-                    }
+                    */}
                 </Accordion.Header>
                 <Accordion.Body>
                     <Row>
@@ -114,7 +114,7 @@ const AccordionCentrosCostos = ({ proyecto, setProyectos }) => {
                         </>}
                     </Row>
                     <Row>
-                        <Col xs={12} md={6}>
+                        {/*<Col xs={12} md={6}>
                             <Row>
                                 <Col xs={1} md={1}>
                                     <Link to={`/egresos/${proyecto.id_proyecto}`}> <Icons.BoxArrowInRight className="icon-detalle" /> </Link>
@@ -137,7 +137,7 @@ const AccordionCentrosCostos = ({ proyecto, setProyectos }) => {
                                     </Col>
                                 </Row>
                             </Col>
-                        }
+                        }*/}
                         {user.rango == "admin" && proyecto.fecha_i_proyecto && <>
                             <Col xs={12} md={6}>
                                 <Row>
