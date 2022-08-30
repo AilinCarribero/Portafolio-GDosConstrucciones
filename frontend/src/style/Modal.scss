@@ -1,0 +1,39 @@
+@use 'Global.scss';
+
+.content-modal-alertas {
+    .content-modal-header {
+        width: 100%;
+    }
+
+    .content-modal-body {
+        .content-modal-mensaje {
+
+        }
+        
+        .content-modal-buttons {
+            position: relative;
+            width: 100%;
+            display: flex;
+            margin: auto;
+            padding: 0;
+            padding-top: 10px;
+            margin: 0;
+            margin-top: 10px;
+
+            .button-alert {
+                border: black;
+                padding: 5px 0;
+            }
+
+            #button-aceptar {
+                @extend .button-green;
+                @extend .button-alert;
+            }
+
+            #button-cancelar {
+                @extend .button-red;
+                @extend .button-alert;
+            }
+        }
+    }
+}

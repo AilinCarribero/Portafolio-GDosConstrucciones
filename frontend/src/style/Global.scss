@@ -31,6 +31,24 @@
     }
 }
 
+.buttons{
+    text-align: center;
+    font-size: 13px;
+    border-radius: 20px;
+}
+
+.button-green{
+    @extend .buttons;
+    background-color: #05be40;
+    color: #ffffff;
+}
+
+.button-red{
+    @extend .buttons;
+    background-color: #c20000;
+    color: #ffffff;
+}
+
 .icon-detalle {
     color: black;
     width: 20px;

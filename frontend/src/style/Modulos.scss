@@ -1,6 +1,8 @@
 @use 'Global.scss';
 
 .accordion-modulos {
+    position: relative;
+
     .accordion-header-modulos {
         padding-left: 15px;
 
@@ -10,11 +12,11 @@
 
         .accordion-nombre-modulos {
             width: auto;
-            margin-top: 4px;
+            margin-top: 3px;
         }
 
         #ocupado {
-            background-color: #ff7e42;
+            background-color: #ffee00;
         }
 
         #disponible {
@@ -22,7 +24,22 @@
         }
 
         #vendido {
-            background-color: #5B5E6B;
+            background-color: #ce0000;
+        }
+
+        .content-buttons {
+            position: absolute;
+            right: 50px;
+            width: auto;
+            z-index: 4;
+
+            .button-vender {
+                margin-top: 7px;
+
+                &:hover {
+                    filter: drop-shadow(0 1px 1px #7e7e7e);
+                }
+            }
         }
     }
 

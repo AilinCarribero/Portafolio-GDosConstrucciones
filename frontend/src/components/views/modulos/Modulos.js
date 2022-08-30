@@ -5,10 +5,16 @@ import { Chart } from "react-google-charts";
 
 //Components
 import ModalFormulario from '../../utils/modal/formularios/ModalFormulario';
+import Alerta from '../../utils/modal/validacion/Alerta';
 
 //Hooks
 import { formatFecha, formatNumber } from '../../../hooks/useUtils';
 import { useGetModulos } from '../../../hooks/useModulos';
+import { useUser } from '../../../hooks/useUser';
+
+
+//Servise
+import { setVendido } from '../../../services/apiModulos';
 
 //Css
 import '../../../style/Modulos.scss';
@@ -18,9 +24,18 @@ import './Modulos.css';
 import * as Icons from 'react-bootstrap-icons';
 
 const Modulos = () => {
+    const { user } = useUser();
     const { modulos, setModulos } = useGetModulos();
 
+    const [infoAlerta, setInfoAlerta] = useState({
+        titulo: '',
+        mensaje: ''
+    })
+
+    const [idModulo, setIdModulo] = useState();
+
     const [showForm, setShowForm] = useState(false);
+    const [showAlerta, setShowAlerta] = useState(false);
 
     /*Inicio de configuracion de grafica */
     const options = {
@@ -36,7 +51,7 @@ const Modulos = () => {
             }
         },
         colors: [
-            "#5E737E", "#536A9A","#394349", "#23272A", "#23272A", "#558FB1",
+            "#5E737E", "#536A9A", "#394349", "#23272A", "#23272A", "#558FB1",
             "#365364", "#212631", , "#354057", "#707092",
             "#444454", "#292931"
         ],
@@ -79,8 +94,27 @@ const Modulos = () => {
     }
     /* Finalizacion de config de grafica */
 
+    const vender = async (vender, id) => {
+        id && setIdModulo(id);
+
+        setInfoAlerta({
+            titulo: 'Vender Módulo',
+            mensaje: 'Seguro desea cambiar el estado de este módulo a "Vendido"??'
+        })
+        setShowAlerta(true);
+
+        if (vender) {
+            const response = await setVendido(idModulo);
+
+            if (response.statusText == "OK" && response.status == 200) {
+                setModulos(response.data)
+            }
+        }
+    }
+
     return (<>
         <ModalFormulario formulario={'modulo'} show={showForm} setShow={setShowForm} updateNew={setModulos} />
+        <Alerta titulo={infoAlerta.titulo} mensaje={infoAlerta.mensaje} show={showAlerta} setShow={setShowAlerta} submit={vender} />
 
         <Row className='content-resumen-sec-buttons'>
             <Row className="conten-buttons-agregar">
@@ -106,7 +140,12 @@ const Modulos = () => {
                                             {modulo.estado == 0 && <Col xs={2} md={2} className="accordion-estado-modulos" id="disponible"></Col>}
                                             {modulo.estado == 1 && <Col xs={2} md={2} className="accordion-estado-modulos" id="ocupado"></Col>}
                                             {modulo.estado == 2 && <Col xs={2} md={2} className="accordion-estado-modulos" id="vendido"></Col>}
-                                            <Col xs={6} md={6} className="accordion-nombre-modulos"> {modulo.nombre_modulo} </Col>
+                                            <Col xs={4} md={4} className="accordion-nombre-modulos"> {modulo.nombre_modulo} </Col>
+                                            {user.rango == "admin" &&
+                                                <Col xs={2} md={2} className="content-buttons" >
+                                                    <Icons.CashCoin className="button-vender" onClick={() => vender(false, modulo.id_modulo)}/>
+                                                </Col>
+                                            }
                                         </Row>
                                     </Accordion.Header>
                                     <Accordion.Body className='accordion-body-modulos'>

@@ -61,3 +61,33 @@ exports.listModulos = (req, res) => {
         return res.json(error);
     }
 }
+
+exports.changeVendido = (req, res) => {
+    const id = req.params.id.toString().replace(/\%20/g, ' ');
+
+    try {
+        //Cambiamos el estado del modulo a vendido
+        Modulo.update({ estado: 2 }, {
+            where: {
+                id_modulo: id
+            }
+        }).then(response => {
+            Modulo.findAll({
+                include: [{
+                    model: Alquiler
+                }],
+                order: [['estado', 'ASC'], [Alquiler, 'fecha_h_alquiler', 'ASC']]
+            }).then( response => {
+                res.json(response);
+            }).catch( error => {
+                console.error(error)
+                res.json(error);
+            });
+        }).catch(err => {
+            console.error(err)
+            res.json(err);
+        })
+    } catch (error) {
+        return res.json(error);
+    }
+}

@@ -27,13 +27,12 @@ exports.estadoProyectos = () => {
                 if (proyecto.fecha_f_proyecto && proyecto.fecha_f_proyecto > new Date()) {
                     //Si el estado es diferentes a 2 entonces lo cambia a iniciado
                     if (proyecto.id_estado != 2) {
-                        console.log(proyecto.id_proyecto)
                         Proyecto.update({ id_estado: 2 }, {
                             where: {
                                 id_proyecto: proyecto.id_proyecto
                             }
                         }).then(response => {
-                            console.log('Estado actualizado a "En proceso"')
+                            console.log('Estado del protecto actualizado a "En proceso"')
                         }).catch(err => {
                             console.error(err);
                         })
@@ -51,7 +50,7 @@ exports.estadoProyectos = () => {
                                 id_proyecto: proyecto.id_proyecto
                             }
                         }).then(response => {
-                            console.log('Estado actualizado a "Finalizado"')
+                            console.log('Estado del protecto actualizado a "Finalizado"')
                         }).catch(err => {
                             console.error(err);
                         })

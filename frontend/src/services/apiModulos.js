@@ -11,3 +11,8 @@ export const insertModulos = async (modulo) => {
     const response = await axios.post(API+'modulos/insert', modulo, servisTokenConfig)
     return response;
 }
+
+export const setVendido = async (id) => {
+    const response = await axios.post(API+`modulos/update/vendido/${id}`, '', servisTokenConfig);
+    return response;
+}

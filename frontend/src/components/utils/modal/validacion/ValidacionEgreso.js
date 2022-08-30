@@ -1,9 +1,11 @@
 import React from 'react';
 import { Modal, Button, Row, Col } from 'react-bootstrap';
 
+//Hooks
+import { formatFecha, formatNumber } from '../../../../hooks/useUtils';
+
 //Icons
 import * as Icons from 'react-bootstrap-icons';
-import { formatFecha, formatNumber } from '../../../../hooks/useUtils';
 
 //Css
 import './Validacion.css';
