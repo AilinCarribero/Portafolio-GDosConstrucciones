@@ -18,7 +18,7 @@ exports.insertStock = async (req, res) => {
         const egreso = {
             id_proyecto: dato.proyecto,
             fecha_pago: dato.fecha_pago,
-            fecha_diferido_pago: dato.fecha_diferido_pago ? dato.fecha_diferido_pago : '1000-01-01',
+            fecha_diferido_pago: dato.fecha_diferido_pago ? dato.fecha_diferido_pago : null,
             id_forma_pago: dato.id_forma_pago,
             id_user: dato.id_user,
             id_analisis_costo: analisis_costo.id_analisis_costo,

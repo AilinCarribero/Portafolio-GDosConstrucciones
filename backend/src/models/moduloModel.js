@@ -22,11 +22,16 @@ module.exports = ( sequelize, type ) => {
         },
         fecha_venta: { 
             type: type.DATE,
-            defaultValue: '0000-00-00'
+            allowNull: true,
+            defaultValue: null
         },
         estado: {
             type: type.INTEGER,
             isNumeric: true
         },
+        descripcion: {
+            type: type.STRING(500),
+            defaultValue: null
+        }
     });
 }

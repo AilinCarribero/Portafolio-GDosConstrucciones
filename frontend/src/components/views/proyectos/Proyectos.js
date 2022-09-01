@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import {isMobile} from 'react-device-detect';
+import { isMobile } from 'react-device-detect';
 import { Row, Col, OverlayTrigger, Tooltip, Spinner } from 'react-bootstrap';
 
 //Componentes
@@ -29,7 +29,7 @@ const Proyectos = () => {
 
     const proyectos = useSelector(state => state.proyectoRedux.proyectos);
     const activeLoading = useSelector(state => state.proyectoRedux.loading);
-    
+
     //console.log(proyectos, 'Loading:'+activeLoading)
 
     useEffect(() => {
@@ -427,9 +427,9 @@ const Proyectos = () => {
                     <Col>
                         <button className={menu == 'resumen' ? 'menu-inicio-button-active' : 'menu-inicio-button-off'} onClick={handleButton} name="resumen">Resumen</button>
                     </Col>
-                    <Col>
+                    {/* <Col>
                         <button className={menu == 'ccc-cce' ? 'menu-inicio-button-active' : 'menu-inicio-button-off'} onClick={handleButton} name="ccc-cce">CCC y CCE</button>
-                    </Col>
+                    </Col>*/}
                 </>}
                 <Col>
                     <button className={menu == 'proyectos' ? 'menu-inicio-button-active' : 'menu-inicio-button-off'} onClick={handleButton} name="proyectos">Proyectos</button>
@@ -442,9 +442,9 @@ const Proyectos = () => {
                         <button className={menu == 'modulos' ? 'menu-inicio-button-active' : 'menu-inicio-button-off'} onClick={handleButton} name="modulos">Modulos</button>
                     </Col>
                 </>}
-                <Col>
+                {/*<Col>
                     <button className={menu == 'materiales' ? 'menu-inicio-button-active' : 'menu-inicio-button-off'} onClick={handleButton} name="materiales">Materiales</button>
-                </Col>
+                </Col>*/}
             </Row>
             <Row className="content-data">
                 {
@@ -549,7 +549,7 @@ const Proyectos = () => {
                                     </Col>
                                 </Row>
                             </Col>*/}
-                           {/* <Col xs={12} md={12} className="content-section border-bottom border-top" >
+                            {/* <Col xs={12} md={12} className="content-section border-bottom border-top" >
                                 <Row className="content-sub-section border-bottom">
                                     <Col xs={6} md={6} className="border-right">
                                         <Row>

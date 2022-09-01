@@ -1,30 +1,46 @@
 @use 'Global.scss';
 
+.accordion-estado-modulos {
+    @extend .state;
+    font-size: 15px;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+#ocupado {
+    @extend .accordion-estado-modulos;
+    background-color: #e4c203;
+}
+
+#disponible {
+    @extend .accordion-estado-modulos;
+    background-color: #05be40;
+}
+
+#vendido {
+    @extend .accordion-estado-modulos;
+    background-color: #ce0000;
+}
+
+.content-total-modulos-estados {
+    #total {
+        @extend .accordion-estado-modulos;
+        background-color: #353535;
+    }
+    .content-total-estado {
+        margin-top: 8px;
+    }
+}
+
 .accordion-modulos {
     position: relative;
 
     .accordion-header-modulos {
         padding-left: 15px;
 
-        .accordion-estado-modulos {
-            @extend .state;
-        }
-
         .accordion-nombre-modulos {
             width: auto;
             margin-top: 3px;
-        }
-
-        #ocupado {
-            background-color: #ffee00;
-        }
-
-        #disponible {
-            background-color: #05be40;
-        }
-
-        #vendido {
-            background-color: #ce0000;
         }
 
         .content-buttons {
@@ -48,6 +64,44 @@
             .proyecto-trazabilidad-modulos {}
 
             .fecha-trazabilidad-modulos {}
+        }
+    }
+}
+
+.content-modal-alertas {
+    .content-modal-header {
+        width: 100%;
+    }
+
+    .content-modal-body {
+        .content-modal-mensaje {
+            width: 100%;
+        }
+
+        .content-modal-buttons {
+            position: relative;
+            width: 100%;
+            display: flex;
+            margin: auto;
+            padding: 0;
+            padding-top: 10px;
+            margin: 0;
+            margin-top: 10px;
+
+            .button-alert {
+                border: black;
+                padding: 5px 0;
+            }
+
+            #button-aceptar {
+                @extend .button-green;
+                @extend .button-alert;
+            }
+
+            #button-cancelar {
+                @extend .button-red;
+                @extend .button-alert;
+            }
         }
     }
 }

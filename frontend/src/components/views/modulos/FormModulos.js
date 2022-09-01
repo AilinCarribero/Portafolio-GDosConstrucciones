@@ -5,10 +5,11 @@ import { Card, Button, Row, FloatingLabel, Form, Col } from 'react-bootstrap';
 import { insertModulos } from '../../../services/apiModulos';
 
 //Hooks
-import { ToastComponent } from '../../../hooks/useUtils';
+import { desformatNumber, ToastComponent } from '../../../hooks/useUtils';
 
 //Css
 import './Modulos.css'
+import NumberFormat from 'react-number-format';
 
 const FormModulos = ({ close, updateModulo, setUpdateModulo }) => {
     const newDate = new Date();
@@ -24,7 +25,8 @@ const FormModulos = ({ close, updateModulo, setUpdateModulo }) => {
         venta: '',
         fecha_creacion: new Date().toISOString().slice(0, 10),
         fecha_venta: '',
-        estado: ''
+        estado: '',
+        descripcion: ''
     })
 
     const handleChangeForm = (e) => {
@@ -49,12 +51,16 @@ const FormModulos = ({ close, updateModulo, setUpdateModulo }) => {
         setValidated(true);
 
         if (form.checkValidity() === true) {
-            auxModulo = { ...modulo }
+            auxModulo = { 
+                ...modulo, 
+                costo: desformatNumber(modulo.costo), 
+                venta: desformatNumber(modulo.venta) 
+            }
 
             try {
                 const resModulo = await insertModulos(auxModulo);
 
-                if (!resModulo.data.errors || resModulo.data.todoOk == 'Ok' || resModulo.statusText == 'OK' || resModulo.status == 200) {
+                if (!resModulo.data.errors && (resModulo.data.todoOk == 'Ok' || resModulo.statusText == 'OK' || resModulo.status == 200)) {
                     ToastComponent('success');
 
                     setUpdateModulo(resModulo.data);
@@ -94,14 +100,25 @@ const FormModulos = ({ close, updateModulo, setUpdateModulo }) => {
                                 <Col sm={6}>
                                     <Form.Group className="mb-3">
                                         <FloatingLabel label="Costo">
-                                            <Form.Control onChange={handleChangeForm} name="costo" type="number" value={modulo.costo} required />
+                                            <NumberFormat customInput={Form.Control} decimalSeparator={","} thousandSeparator={"."}
+                                                onChange={handleChangeForm} name="costo" value={modulo.costo} required />
                                         </FloatingLabel>
                                     </Form.Group>
                                 </Col>
                                 <Col sm={6}>
                                     <Form.Group className="mb-3">
                                         <FloatingLabel label="Venta">
-                                            <Form.Control onChange={handleChangeForm} name="venta" type="number" value={modulo.venta} />
+                                            <NumberFormat customInput={Form.Control} decimalSeparator={","} thousandSeparator={"."}
+                                                onChange={handleChangeForm} name="venta" value={modulo.venta} />
+                                        </FloatingLabel>
+                                    </Form.Group>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col sm={12}>
+                                    <Form.Group className="mb-3">
+                                        <FloatingLabel label="Descripción">
+                                            <Form.Control as="textarea" row={3} onChange={handleChangeForm} name="descripcion" type="text" value={modulo.descripcion} required />
                                         </FloatingLabel>
                                     </Form.Group>
                                 </Col>

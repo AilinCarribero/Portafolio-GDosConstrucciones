@@ -12,7 +12,7 @@ const configFindAllProyectos =  {
         }, {
             model: Ingreso
         }],
-        order: [['fecha_f_proyecto', 'DESC']]
+        order: [['fecha_f_proyecto', 'DESC'], ['id_estado', 'ASC']]
     }
 
 //listar todos los proyectos existentes
@@ -34,7 +34,7 @@ exports.insertProyecto = async (req, res) => {
     req.body.costo = !req.body.costo ? 0 : formatStringToNumber(req.body.costo);
     req.body.venta = !req.body.venta ? 0 : formatStringToNumber(req.body.venta);
     req.body.alquiler_total = !req.body.alquiler_total ? 0 : formatStringToNumber(req.body.alquiler_total);
-    req.body.fecha_f_proyecto = !req.body.fecha_f_proyecto ? '2200-01-01' : req.body.fecha_f_proyecto;
+    req.body.fecha_f_proyecto = !req.body.fecha_f_proyecto ? null : req.body.fecha_f_proyecto;
 
     try {
         const centro_costo = req.body.id_centro_costo ? await CentroCosto.findAll({
@@ -121,7 +121,7 @@ exports.updateProyecto = async (req, res) => {
     proyecto.costo = !proyecto.costo ? 0 : formatStringToNumber(proyecto.costo);
     proyecto.venta = !proyecto.venta ? 0 : formatStringToNumber(proyecto.venta);
     proyecto.alquiler_total = !proyecto.alquiler_total ? 0 : formatStringToNumber(proyecto.alquiler_total);
-    proyecto.fecha_f_proyecto = !proyecto.fecha_f_proyecto ? '2200-01-01' : proyecto.fecha_f_proyecto;
+    proyecto.fecha_f_proyecto = !proyecto.fecha_f_proyecto ? null : proyecto.fecha_f_proyecto;
 
     Proyecto.update(proyecto, {
         where: {
