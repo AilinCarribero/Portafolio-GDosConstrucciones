@@ -13,7 +13,7 @@ exports.insertModulo = (req, res) => {
     req.body.venta = !req.body.venta ? 0 : req.body.venta;
     req.body.fecha_creacion = !req.body.fecha_creacion ? new Date().toISOString().slice(0, 10) : req.body.fecha_creacion;
     /*  0 => Libre / 1 => Alquilado / 2 => Vendido */
-    req.body.estado = !req.body.estado ? 0 : req.body.estado;
+    req.body.estado = !req.body.estado ? (req.body.venta ? 2 : 0) : req.body.estado;
 
     try {
         Modulo.create(req.body).then(response => {

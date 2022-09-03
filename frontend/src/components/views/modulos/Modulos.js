@@ -205,7 +205,7 @@ const Modulos = () => {
                                                     <Col xs={11} md={11}><p> Costo: ${formatNumber(modulo.costo)}</p></Col>
                                                 </Row>
                                             </Col>
-                                            {modulo.fecha_venta >= modulo.fecha_creacion && modulo.estado == 2 &&
+                                            {modulo.estado == 2 &&
                                                 <Col xs={12} md={6}>
                                                     <Row>
                                                         <Col xs={1} md={1}></Col>
@@ -219,7 +219,7 @@ const Modulos = () => {
                                                     <Col xs={11} md={11}><p> Fecha de creación: {formatFecha(modulo.fecha_creacion)}</p></Col>
                                                 </Row>
                                             </Col>
-                                            {modulo.fecha_venta >= modulo.fecha_creacion && modulo.fecha_venta &&
+                                            {modulo.fecha_venta && (modulo.fecha_venta >= modulo.fecha_creacion && modulo.fecha_venta) &&
                                                 <Col xs={12} md={6}>
                                                     <Row>
                                                         <Col xs={1} md={1}></Col>
