@@ -27,6 +27,7 @@
         @extend .accordion-estado-modulos;
         background-color: #353535;
     }
+
     .content-total-estado {
         margin-top: 8px;
     }
@@ -60,6 +61,13 @@
     }
 
     .accordion-body-modulos {
+        #descripcion {
+            margin-left: 4%;
+            @media only screen and (hover: none) and (pointer: coarse){
+                margin-left: 0;
+            }
+        }
+
         .content-trazabilidad-modulos {
             .proyecto-trazabilidad-modulos {}
 

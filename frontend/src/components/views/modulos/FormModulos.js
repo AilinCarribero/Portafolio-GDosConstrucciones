@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Card, Button, Row, FloatingLabel, Form, Col } from 'react-bootstrap';
 
 //Servicios
-import { insertModulos } from '../../../services/apiModulos';
+import { insertModulos, setUpdate } from '../../../services/apiModulos';
 
 //Hooks
 import { desformatNumber, ToastComponent } from '../../../hooks/useUtils';
@@ -20,13 +20,13 @@ const FormModulos = ({ close, updateModulo, setUpdateModulo }) => {
     const [validated, setValidated] = useState(false);
 
     const [modulo, setModulo] = useState({
-        nombre_modulo: '',
-        costo: '',
-        venta: '',
-        fecha_creacion: new Date().toISOString().slice(0, 10),
-        fecha_venta: '',
-        estado: '',
-        descripcion: ''
+        nombre_modulo: updateModulo.nombre_modulo ? updateModulo.nombre_modulo : '',
+        costo: updateModulo.costo ? updateModulo.costo : '',
+        venta: updateModulo.venta ? updateModulo.venta : '',
+        fecha_creacion: updateModulo.fecha_creacion ? new Date(updateModulo.fecha_creacion).toISOString().slice(0, 10) : new Date().toISOString().slice(0, 10),
+        fecha_venta: updateModulo.fecha_venta ? new Date(updateModulo.fecha_venta).toISOString().slice(0, 10) : '',
+        estado: updateModulo.estado ? updateModulo.estado : '',
+        descripcion: updateModulo.descripcion ? updateModulo.descripcion : ''
     })
 
     const handleChangeForm = (e) => {
@@ -51,16 +51,22 @@ const FormModulos = ({ close, updateModulo, setUpdateModulo }) => {
         setValidated(true);
 
         if (form.checkValidity() === true) {
-            auxModulo = { 
-                ...modulo, 
-                costo: desformatNumber(modulo.costo), 
-                venta: desformatNumber(modulo.venta) 
+            auxModulo = {
+                ...modulo,
+                costo: desformatNumber(modulo.costo),
+                venta: desformatNumber(modulo.venta)
             }
 
             try {
-                const resModulo = await insertModulos(auxModulo);
+                let resModulo = [];
 
-                if (!resModulo.data.errors && (resModulo.data.todoOk == 'Ok' || resModulo.statusText == 'OK' || resModulo.status == 200)) {
+                if (updateModulo) {
+                    resModulo = await setUpdate(auxModulo, updateModulo.id_modulo);
+                } else {
+                    resModulo = await insertModulos(auxModulo);
+                }
+
+                if (resModulo && !resModulo.data.todoMal && (resModulo.data.todoOk == 'Ok' || resModulo.statusText == 'OK' || resModulo.status == 200)) {
                     ToastComponent('success');
 
                     setUpdateModulo(resModulo.data);

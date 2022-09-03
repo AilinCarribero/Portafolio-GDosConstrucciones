@@ -34,7 +34,7 @@ const AccordionEgreso = ({ egreso, setEgresos }) => {
             console.log(resEgreso)
         }
     }
-console.log(egreso);
+
     return (<>
         {showForm && <ModalFormulario formulario={'egreso'} informacion={egreso} show={showForm} setShow={setShowForm} updateNew={setEgresos} />}
 

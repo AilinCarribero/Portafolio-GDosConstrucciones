@@ -40,6 +40,7 @@ const Modulos = () => {
     })
 
     const [idModulo, setIdModulo] = useState();
+    const [infoUpdate, setInfoUpdate] = useState([]);
 
     const [showForm, setShowForm] = useState(false);
     const [showModalVenta, setShowModalVenta] = useState(false);
@@ -152,13 +153,19 @@ const Modulos = () => {
         }
     }
 
+    const updateModalModulo = (modulo) => {
+        console.log(modulo)
+        setInfoUpdate(modulo);
+        setShowForm(true)
+    }
+
     return (<>
-        <ModalFormulario formulario={'modulo'} show={showForm} setShow={setShowForm} updateNew={setModulos} />
+        <ModalFormulario formulario={'modulo'} informacion={infoUpdate} show={showForm} setShow={setShowForm} updateNew={setModulos} />
         <ModalVenta titulo={infoModalVenta.titulo} show={showModalVenta} setShow={setShowModalVenta} submit={vender} />
 
         <Row className='content-resumen-sec-buttons'>
             <Row className="conten-buttons-agregar">
-                <Col xs={4} sm={4} md={3}>
+                <Col xs={12} sm={4} md={3}>
                     <Button className="button-agregar" onClick={() => setShowForm(!showForm)} variant="dark" >
                         <Icons.Plus className="icon-button" size={19} />
                         Agregar modulo
@@ -166,11 +173,11 @@ const Modulos = () => {
                 </Col>
                 <Col xs={12} md={9} className="content-total-modulos-estados">
                     <Row>
-                        <Col xs={2} md={2} className='content-section'>Total de Modulos: </Col>
-                        <Col xs={2} md={2} className='content-total-estado' id="total"> {cantModulos.total} </Col>
-                        <Col xs={2} md={2} className='content-total-estado' id="disponible"> {cantModulos.disponibles} </Col>
-                        <Col xs={2} md={2} className='content-total-estado' id="ocupado"> {cantModulos.ocupados} </Col>
-                        <Col xs={2} md={2} className='content-total-estado' id="vendido"> {cantModulos.vendidos} </Col>
+                        <Col xs={12} md={2} className='content-section'>Total de Modulos: </Col>
+                        <Col xs={3} md={2} className='content-total-estado' id="total"> {cantModulos.total} </Col>
+                        <Col xs={3} md={2} className='content-total-estado' id="disponible"> {cantModulos.disponibles} </Col>
+                        <Col xs={3} md={2} className='content-total-estado' id="ocupado"> {cantModulos.ocupados} </Col>
+                        <Col xs={3} md={2} className='content-total-estado' id="vendido"> {cantModulos.vendidos} </Col>
                     </Row>
                 </Col>
             </Row>
@@ -227,14 +234,14 @@ const Modulos = () => {
                                                     </Row>
                                                 </Col>
                                             }
-                                            <Col xs={12} md={6}>
-                                                <Row>
-                                                    <Col xs={1} md={1}></Col>
-                                                    {modulo.estado == 0 && <Col xs={11} md={11}><p> Estado: Disponible</p></Col>}
-                                                    {modulo.estado == 1 && <Col xs={11} md={11}><p> Estado: En alquiler</p></Col>}
-                                                    {modulo.estado == 2 && <Col xs={11} md={11}><p> Estado: Vendido</p></Col>}
-                                                </Row>
-                                            </Col>
+                                            {modulo.descripcion &&
+                                                <Col xs={12} md={12} id="descripcion">
+                                                    <Row>
+                                                        <Col xs={12} md={12}><p>Descripción: {modulo.descripcion}</p></Col>
+                                                    </Row>
+                                                </Col>
+                                            }
+
                                         </Row>
                                         {modulo.alquilers.length > 0 && <Row>
                                             <Col xs={12} md={12} >
@@ -244,6 +251,25 @@ const Modulos = () => {
                                             </Col>
                                             <ReactApexCharts options={options} series={formatDataTimeLine(modulo.alquilers)} type="rangeBar" height={140} />
                                         </Row>
+                                        }
+                                        {user.rango == 'admin' &&
+                                            <Row className="border-top">
+                                                <Col xs={12} md={12}>
+                                                    <p className="accordion-title-section">Acciones</p>
+                                                </Col>
+                                                <Col xs={6} md={6}>
+                                                    <button className="button-action" onClick={() => updateModalModulo(modulo)}>
+                                                        <Row>
+                                                            <Col xs={1} md={1} className='icon-action'>
+                                                                <Icons.PencilSquare size={19} />
+                                                            </Col>
+                                                            <Col xs={10} md={10} className='text-action'>
+                                                                Modificar
+                                                            </Col>
+                                                        </Row>
+                                                    </button>
+                                                </Col>
+                                            </Row>
                                         }
                                     </Accordion.Body>
                                 </Accordion.Item>
