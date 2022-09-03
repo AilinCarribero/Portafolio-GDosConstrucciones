@@ -9,8 +9,8 @@ const findAllModulos = {
 
 //Insertar un modulo nuevo
 exports.insertModulo = (req, res) => {
-    req.body.fecha_venta = !req.body.fecha_venta ? null : req.body.fecha_venta;
-    req.body.venta = !req.body.venta ? 0 : formatStringToNumber(req.body.venta);
+    req.body.fecha_venta = !req.body.fecha_venta ? (req.body.venta ? new Date().toISOString().slice(0, 10) : null) : req.body.fecha_venta;
+    req.body.venta = !req.body.venta ? 0 : req.body.venta;
     req.body.fecha_creacion = !req.body.fecha_creacion ? new Date().toISOString().slice(0, 10) : req.body.fecha_creacion;
     /*  0 => Libre / 1 => Alquilado / 2 => Vendido */
     req.body.estado = !req.body.estado ? 0 : req.body.estado;
@@ -28,7 +28,7 @@ exports.insertModulo = (req, res) => {
                 throw err;
             });
         }).catch(err => {
-            console.error(err)
+            console.error(err)  
             return res.json(err)
         })
     } catch (error) {
