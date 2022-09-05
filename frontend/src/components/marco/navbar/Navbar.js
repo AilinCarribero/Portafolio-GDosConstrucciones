@@ -4,15 +4,17 @@ import { Link } from 'react-router-dom';
 
 //Hooks
 import { useUser } from '../../../hooks/useUser';
+import FiltrosProyectos from '../../utils/filtros/FiltrosProyectos';
 
 //Componentes
 import Sidenav from '../sidenav/Sidenav';
 
 //Css
 import './Navbar.css';
+
+//Img - Icons
 import * as Icons from 'react-bootstrap-icons';
 import logo from '../../../img/logowhitev2.png';
-import FiltrosProyectos from '../../utils/filtros/FiltrosProyectos';
 
 //Contexts
 //import ProyectoProvider from '../../../contexts/ProyectosProvider';

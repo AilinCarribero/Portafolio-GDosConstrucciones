@@ -31,7 +31,6 @@ const Routers = () => {
         <BrowserRouter>
             <NavbarComponent path={window.location.pathname} />
             <Container fluid>
-                <HashRouter>
                     <Route exact path="/" render={() => {
                         return (user.token
                             ? <> <Proyectos /> </> : <Home />
@@ -77,7 +76,6 @@ const Routers = () => {
                         :
                         <Redirect to="/" />
                     }
-                </HashRouter>
             </Container>
         </BrowserRouter>
     )
