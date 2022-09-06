@@ -59,8 +59,8 @@ const FormModulos = ({ close, updateModulo, setUpdateModulo }) => {
 
             try {
                 let resModulo = [];
-
-                if (updateModulo) {
+                
+                if (updateModulo.length > 0) {
                     resModulo = await setUpdate(auxModulo, updateModulo.id_modulo);
                 } else {
                     resModulo = await insertModulos(auxModulo);
@@ -82,7 +82,7 @@ const FormModulos = ({ close, updateModulo, setUpdateModulo }) => {
                     setValidated(false);
                     close();
                 } else {
-                    ToastComponent('error');
+                    ToastComponent('error', resModulo.data.todoMal && resModulo.data.todoMal);
                 }
             } catch (error) {
                 console.log(error);
