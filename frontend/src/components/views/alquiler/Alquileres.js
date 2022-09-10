@@ -21,6 +21,7 @@ const Alquileres = () => {
     const { user } = useUser();
     const { alquileres, setAlquileres } = useGetAlquileresId(id);
 
+    console.log(alquileres);
     const [showModalRenovar, setShowModalRenovar] = useState(false);
 
     return (<>
@@ -33,13 +34,22 @@ const Alquileres = () => {
                     alquileres.length > 0 ?
                         alquileres.map(alquiler => (
                             <Row key={alquiler.id_alquiler}>
-                                {showModalRenovar && <FormRenovar alquiler={alquiler} show={showModalRenovar} setShow={setShowModalRenovar} setAlquileres={setAlquileres}/>}
+                                {showModalRenovar && <FormRenovar alquiler={alquiler} show={showModalRenovar} setShow={setShowModalRenovar} setAlquileres={setAlquileres} />}
                                 <Col xs={12}>
                                     <Accordion.Item eventKey={alquiler.id_alquiler}>
                                         <Accordion.Header>
+                                            {new Date(alquiler.fecha_d_alquiler) <= new Date() && new Date() <= new Date(alquiler.fecha_h_alquiler) ?
+                                                <Col xs={2} md={2} id="activo"></Col>
+                                                :
+                                                (new Date() >= new Date(alquiler.fecha_h_alquiler) ?
+                                                    <Col xs={2} md={2} className="state-finish"></Col>
+                                                    :
+                                                    <Col xs={2} md={2} id="no-activo"></Col>
+                                                )
+                                            }
                                             <Col className="acordion-title" xs={4} md={4}><b>{alquiler.modulo.nombre_modulo}</b></Col>
-                                            <Col className="acordion-title" xs={3} md={3}><b>${formatNumber(alquiler.valor)}</b> </Col>
-                                            <Col className="acordion-title" xs={3} md={3}>Hasta: <b>{formatFecha(alquiler.fecha_h_alquiler)}</b> </Col>
+                                            <Col className="acordion-title" xs={3} md={2}><b>${formatNumber(alquiler.valor)}</b> </Col>
+                                            <Col className="acordion-title" xs={3} md={2}>Hasta: <b>{formatFecha(alquiler.fecha_h_alquiler)}</b> </Col>
                                         </Accordion.Header>
                                         <Accordion.Body>
                                             <Row>

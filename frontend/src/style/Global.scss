@@ -122,6 +122,14 @@
     }
 }
 
+#activo {
+    @extend .state-proceso;
+}
+
+#no-activo {
+    @extend .state-pendiente;
+}
+
 /*------------------- Resumenes -----------------------*/
 .content-resumen-sec-buttons {
     width: 97.5%;

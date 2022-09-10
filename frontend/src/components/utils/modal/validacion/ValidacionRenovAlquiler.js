@@ -15,7 +15,7 @@ const ValidacionRenovAlquiler = ({ mostrar, datos, setShow, setSubmit }) => {
         setShow(false);
         setSubmit();
     }
-    console.log(datos)
+
     return (
         <Modal className="fondo-desenfocado" show={mostrar} onHide={handleClose} animation={false}>
             <Modal.Header closeButton>
