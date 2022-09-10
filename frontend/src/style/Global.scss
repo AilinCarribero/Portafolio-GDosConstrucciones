@@ -31,19 +31,19 @@
     }
 }
 
-.buttons{
+.buttons {
     text-align: center;
     font-size: 13px;
     border-radius: 20px;
 }
 
-.button-green{
+.button-green {
     @extend .buttons;
     background-color: #05be40;
     color: #ffffff;
 }
 
-.button-red{
+.button-red {
     @extend .buttons;
     background-color: #c20000;
     color: #ffffff;
@@ -214,4 +214,16 @@ a {
     #range-bar-tooltip-fecha {
         font-size: 11px;
     }
+}
+
+
+/*-----------------------Textos-----------------------------*/
+.text-descripcion-agregar {
+    margin-left: 10px;
+    font-size: 11px;
+}
+
+/*-------------------------Botones---------------------------*/
+.button-submit {
+    margin-top: 15px;
 }

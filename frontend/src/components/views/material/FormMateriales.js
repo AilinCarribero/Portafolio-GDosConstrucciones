@@ -218,7 +218,7 @@ const FormMateriales = ({ close, setStock }) => {
             }
         }
 
-        if ((resNewMaterial.data.todoOk == 'Ok' || resNewMaterial.statusText == 'OK' || resNewMaterial.status == 200) && !resNewMaterial.data.todoMal) {
+        if (resNewMaterial && !resNewMaterial.data.todoMal && (resNewMaterial.data.todoOk == 'Ok' || resNewMaterial.statusText == 'OK' || resNewMaterial.status == 200)) {
             ToastComponent('success');
 
             //En caso de tener algun elemento extra mostrandose se vuelve a ocular
@@ -254,7 +254,7 @@ const FormMateriales = ({ close, setStock }) => {
             if (resNewMaterial.data.todoMal) {
                 ToastComponent('error', resNewMaterial.data.todoMal);
             } else {
-                ToastComponent('error');
+                ToastComponent('error', resNewMaterial.data.todoMal && resNewMaterial.data.todoMal);
             }
         }
     }

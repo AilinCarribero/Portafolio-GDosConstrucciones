@@ -12,9 +12,10 @@ import * as Icons from 'react-bootstrap-icons';
 import '../../../style/Modulos.scss';
 
 const ModalVenta = ({ titulo, show, setShow, submit }) => {
-    const handleClose = () => setShow(false);
     const [venta, setVenta] = useState();
 
+    const handleClose = () => setShow(false);
+    
     const handleChangeForm = (e) => {
         const targetValue = e.target.value
         setVenta(targetValue)

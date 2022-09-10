@@ -42,13 +42,14 @@ export const ToastComponent = (estado, mensaje) => {
 export const formatFecha = (fecha) => {
     const date = new Date(fecha);
     const dateUTC = date.toISOString();
-    //console.log(dateUTC, date.getUTCDate(), date.getFullYear(), date.getMonth(), date.getDate());
-    const año = date.getFullYear();
+    
     const dia = date.getUTCDate();
     const mes = dia == 1 ? (date.getMonth()+2 > 12 ? date.getMonth()+2 - 12 : date.getMonth()+2 ) : (date.getMonth()+1 > 12 ? date.getMonth()+1 - 12 : date.getMonth()+1);
+    //Si mes es 1 y dia es 1 entonces hay que sumarle 1 al año
+    const año = mes == 1 && dia == 1 ? date.getFullYear() + 1 : date.getFullYear();
 
     const fechaFormat = dia +'/'+ mes +'/'+ año;
-//console.log(dateUTC, fechaFormat)
+
     return fechaFormat
 }
 
