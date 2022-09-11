@@ -41,7 +41,7 @@ export const ToastComponent = (estado, mensaje) => {
 //Formatea la fecha para mostrarse en el orden dd-mm-aaaa
 export const formatFecha = (fecha) => {
     const date = new Date(fecha);
-    const dateUTC = date.toISOString();
+    //const dateUTC = date.toISOString();
     
     const dia = date.getUTCDate();
     const mes = dia == 1 ? (date.getMonth()+2 > 12 ? date.getMonth()+2 - 12 : date.getMonth()+2 ) : (date.getMonth()+1 > 12 ? date.getMonth()+1 - 12 : date.getMonth()+1);

@@ -24,9 +24,27 @@ const Alquileres = () => {
     console.log(alquileres);
     const [showModalRenovar, setShowModalRenovar] = useState(false);
 
+    const cobroMensual = (alquiler) => {
+        const fechaDesde = new Date(alquiler.fecha_d_alquiler);
+        const fechaHasta = new Date(alquiler.fecha_h_alquiler);
+
+        const mesDesde = fechaDesde.getMonth();
+        const mesHasta = fechaHasta.getMonth();
+
+        const cantMeses = fechaHasta - fechaDesde;
+
+        console.log(fechaDesde, mesDesde)
+        console.log(fechaHasta, mesHasta)
+        console.log(cantMeses)
+        console.log("---------------------------------------")
+
+        /* Los meses van del 0 al 11 */
+    }
+
     return (<>
         <Row>
             <Col className="titulo-alquileres-vista">{id}</Col>
+
         </Row>
         <Row className="acordion">
             <Accordion>
@@ -34,6 +52,7 @@ const Alquileres = () => {
                     alquileres.length > 0 ?
                         alquileres.map(alquiler => (
                             <Row key={alquiler.id_alquiler}>
+                                {cobroMensual(alquiler)}
                                 {showModalRenovar && <FormRenovar alquiler={alquiler} show={showModalRenovar} setShow={setShowModalRenovar} setAlquileres={setAlquileres} />}
                                 <Col xs={12}>
                                     <Accordion.Item eventKey={alquiler.id_alquiler}>
