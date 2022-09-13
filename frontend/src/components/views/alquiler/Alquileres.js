@@ -1,12 +1,14 @@
 import React, { useState } from 'react'
 import { useParams } from 'react-router-dom';
-import { Accordion, Row, Col } from 'react-bootstrap';
+import { Accordion, Row, Col, ModalBody } from 'react-bootstrap';
+import Decimal from 'decimal.js-light';
+import moment from 'moment';
 
 //Components
 import FormRenovar from './FormRenovar';
 
 //Hooks
-import { formatFecha, formatNumber } from '../../../hooks/useUtils';
+import { formatFecha, formatNameMes, formatNumber, formatTextMix } from '../../../hooks/useUtils';
 import { useUser } from '../../../hooks/useUser';
 import { useGetAlquileresId } from '../../../hooks/useAlquileres';
 
@@ -14,37 +16,29 @@ import { useGetAlquileresId } from '../../../hooks/useAlquileres';
 import * as Icons from 'react-bootstrap-icons';
 
 //Css
-import './Alquileres.css';
+import '../../../style/Alquiler.scss';
 
 const Alquileres = () => {
+    const mesActual = formatNameMes(moment().month());
+    const mesAnterior = formatNameMes(moment().month() - 1);
+    const mesPosterior = formatNameMes(moment().month() + 1);
+
     const { id } = useParams();
     const { user } = useUser();
-    const { alquileres, setAlquileres } = useGetAlquileresId(id);
+    const { alquileres, mesAlquiler, totalAlquiler, setAlquileres } = useGetAlquileresId(id);
 
-    console.log(alquileres);
+    //console.log(alquileres, mesAlquiler, totalAlquiler);
     const [showModalRenovar, setShowModalRenovar] = useState(false);
-
-    const cobroMensual = (alquiler) => {
-        const fechaDesde = new Date(alquiler.fecha_d_alquiler);
-        const fechaHasta = new Date(alquiler.fecha_h_alquiler);
-
-        const mesDesde = fechaDesde.getMonth();
-        const mesHasta = fechaHasta.getMonth();
-
-        const cantMeses = fechaHasta - fechaDesde;
-
-        console.log(fechaDesde, mesDesde)
-        console.log(fechaHasta, mesHasta)
-        console.log(cantMeses)
-        console.log("---------------------------------------")
-
-        /* Los meses van del 0 al 11 */
-    }
 
     return (<>
         <Row>
-            <Col className="titulo-alquileres-vista">{id}</Col>
-
+            <Col xs={12} md={8} className="titulo-alquileres-vista">{id}</Col>
+            <Row className='content-resumen-alquileres'>
+                <Col><b>Total:</b> ${formatNumber(totalAlquiler)}</Col>
+                <Col><b>{formatTextMix(mesAnterior)}:</b> ${formatNumber(mesAlquiler[mesAnterior])}</Col>
+                <Col><b>{formatTextMix(mesActual)}:</b> ${formatNumber(mesAlquiler[mesActual])}</Col>
+                <Col><b>{formatTextMix(mesPosterior)}:</b> ${formatNumber(mesAlquiler[mesPosterior])}</Col>
+            </Row>
         </Row>
         <Row className="acordion">
             <Accordion>
@@ -52,7 +46,6 @@ const Alquileres = () => {
                     alquileres.length > 0 ?
                         alquileres.map(alquiler => (
                             <Row key={alquiler.id_alquiler}>
-                                {cobroMensual(alquiler)}
                                 {showModalRenovar && <FormRenovar alquiler={alquiler} show={showModalRenovar} setShow={setShowModalRenovar} setAlquileres={setAlquileres} />}
                                 <Col xs={12}>
                                     <Accordion.Item eventKey={alquiler.id_alquiler}>
