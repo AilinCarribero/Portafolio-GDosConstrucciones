@@ -8,6 +8,7 @@ export const proyectoSlice = createSlice({
     initialState: {
         filtros: [],
         proyectos: [],
+        alquilerXMes: [],
         loading: false,
         error: false
     },

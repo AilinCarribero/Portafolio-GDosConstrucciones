@@ -1,0 +1,32 @@
+.titulo-alquileres-vista {
+    font-size: 17px;
+    margin-left: 10px;
+    margin-top: 15px !important;
+    margin-bottom: -15px;
+    font-weight: bold;
+}
+
+.content-resumen-alquileres {
+    width: 97.5% !important;
+    background-color: #dddcdc;
+    border: 1px solid white;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    margin-top: 18px !important;
+    margin-left: 1.3vw !important;
+    color: #000000;
+    text-align: center;
+    font-size: 14px;
+}
+
+.acordion {
+    margin-top: 15px !important;
+
+    .acordion-title {
+        font-size: 13px;
+    }
+
+    .acordion-title-number {
+        font-size: 12px;
+    }
+}
