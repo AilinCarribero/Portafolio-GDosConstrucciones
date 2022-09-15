@@ -2,29 +2,36 @@ import React, { useState } from 'react'
 import { Button, Form, Modal, Row, FloatingLabel, Col } from 'react-bootstrap'
 import NumberFormat from 'react-number-format';
 import Decimal from 'decimal.js-light';
+import { useParams } from 'react-router-dom';
+//Redux
+import { useSelector } from 'react-redux';
 
 //Componets
-import ValidacionRenovAlquiler from '../../utils/modal/validacion/ValidacionRenovAlquiler';
+import ValidacionNewContrato from '../../utils/modal/validacion/ValidacionNewContrato';
 
 //Hooks
 import { desformatNumber, formatFechaISO, formatNumber, ToastComponent } from '../../../hooks/useUtils';
+import { useGetModulos } from '../../../hooks/useModulos';
 
 //Service
 import { postNewContrato } from '../../../services/apiAlquileres';
 
-//Img-Icons
-import * as Icons from 'react-bootstrap-icons';
+const FormContrato = ({ alquiler, show, setShow, setAlquileres }) => {
+    const { id } = useParams();
+    const { modulos } = useGetModulos();
 
-const FormRenovar = ({ alquiler, show, setShow, setAlquileres }) => {
+    const proyectos = useSelector(state => state.proyectoRedux.proyectos);
+    const proyecto = proyectos.find(proyecto => proyecto.id_proyecto == id);
+
     const [newContrato, setNewContrato] = useState({
-        id_alquiler: alquiler.id_alquiler,
-        id_modulo: alquiler.id_modulo,
-        alquiler: alquiler,
-        nombre_modulo: alquiler.modulo.nombre_modulo,
-        id_proyecto: alquiler.id_proyecto,
-        alquiler_total: alquiler.proyecto.alquiler_total,
-        fecha_d_alquiler: formatFechaISO(alquiler.fecha_h_alquiler),
-        fecha_h_alquiler: formatFechaISO(alquiler.fecha_h_alquiler),
+        id_alquiler: alquiler ? alquiler.id_alquiler : '',
+        id_modulo: alquiler ? alquiler.id_modulo : '',
+        alquiler: alquiler ? alquiler : '',
+        nombre_modulo: alquiler ? alquiler.modulo.nombre_modulo : '',
+        id_proyecto: id,
+        alquiler_total: proyecto.alquiler_total,
+        fecha_d_alquiler: alquiler ? formatFechaISO(alquiler.fecha_h_alquiler) : formatFechaISO(new Date()),
+        fecha_h_alquiler: alquiler ? formatFechaISO(alquiler.fecha_h_alquiler) : '',
         valor: '',
     });
 
@@ -106,10 +113,29 @@ const FormRenovar = ({ alquiler, show, setShow, setAlquileres }) => {
 
     return (
         <Modal show={show} onHide={handleClose} animation={false}>
-            <Modal.Header closeButton className="content-modal-header"><b>Renovar Contrato del módulo {newContrato.nombre_modulo}</b></Modal.Header>
+            <Modal.Header className="content-modal-header" closeButton><b>Renovar Contrato del módulo {newContrato.nombre_modulo}</b></Modal.Header>
             <Modal.Body className="content-modal-body">
                 <Row>
                     <Form noValidate validated={validated} onSubmit={handleValidacion}>
+                        {!alquiler &&
+                            <Row>
+                                <Col>
+                                    <FloatingLabel label="Módulo">
+                                        <Form.Select onChange={handleChangeForm} name="id_modulo" required >
+                                            <option value=""> </option>
+                                            {modulos.length > 0 ?
+                                                modulos.map((modulo) => (
+                                                    modulo.estado === 0 && <option key={modulo.id_modulo} value={modulo.id_modulo}>
+                                                        {modulo.nombre_modulo}
+                                                    </option>
+                                                ))
+                                                : <option>NO HAY MÓDULOS DISPONIBLES</option>
+                                            }
+                                        </Form.Select>
+                                    </FloatingLabel>
+                                </Col>
+                            </Row>
+                        }
                         <Row>
                             <Col xs={12} sm={12} >Fechas del contrato</Col>
                             <Col xs={12} sm={6}>
@@ -135,12 +161,12 @@ const FormRenovar = ({ alquiler, show, setShow, setAlquileres }) => {
                                 </FloatingLabel>
                             </Col>
                             <Col xs={12} sm={12} className="text-descripcion-agregar">
-                                ${formatNumber(newContrato.alquiler_total)} + ${newContrato.valor ? newContrato.valor : 0} = ${formatNumber(new Decimal(newContrato.alquiler_total).add(newContrato.valor ? desformatNumber(newContrato.valor) : 0).toNumber())}
+                                ${formatNumber(newContrato.alquiler_total ? newContrato.alquiler_total : 0)} + ${newContrato.valor ? newContrato.valor : 0} = ${formatNumber(new Decimal(newContrato.alquiler_total ? newContrato.alquiler_total : 0).add(newContrato.valor ? desformatNumber(newContrato.valor) : 0).toNumber())}
                             </Col>
                         </Row>
 
                         {showModalValidation &&
-                            <ValidacionRenovAlquiler mostrar={showModalValidation} datos={newContrato} setShow={setShowModalValidation} setSubmit={handleSubmit} />
+                            <ValidacionNewContrato mostrar={showModalValidation} datos={newContrato} setShow={setShowModalValidation} setSubmit={handleSubmit} />
                         }
 
                         <Row>
@@ -155,4 +181,8 @@ const FormRenovar = ({ alquiler, show, setShow, setAlquileres }) => {
     )
 }
 
-export default React.memo(FormRenovar);
+FormContrato.defaultProps = {
+    alquiler: ''
+}
+
+export default React.memo(FormContrato);

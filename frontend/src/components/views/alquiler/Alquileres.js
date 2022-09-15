@@ -5,7 +5,7 @@ import Decimal from 'decimal.js-light';
 import moment from 'moment';
 
 //Components
-import FormRenovar from './FormRenovar';
+import FormContrato from './FormContrato';
 
 //Hooks
 import { formatFecha, formatNameMes, formatNumber, formatTextMix } from '../../../hooks/useUtils';
@@ -29,15 +29,22 @@ const Alquileres = () => {
 
     //console.log(alquileres, mesAlquiler, totalAlquiler);
     const [showModalRenovar, setShowModalRenovar] = useState(false);
+    const [showModalNewContrato, setShowModalNewContrato] = useState(false);
 
     return (<>
+        {showModalNewContrato && <FormContrato show={showModalNewContrato} setShow={setShowModalNewContrato} setAlquileres={setAlquileres} />}
         <Row>
             <Col xs={12} md={8} className="titulo-alquileres-vista">{id}</Col>
             <Row className='content-resumen-alquileres'>
-                <Col><b>Total:</b> ${formatNumber(totalAlquiler)}</Col>
-                <Col><b>{formatTextMix(mesAnterior)}:</b> ${formatNumber(mesAlquiler[mesAnterior])}</Col>
-                <Col><b>{formatTextMix(mesActual)}:</b> ${formatNumber(mesAlquiler[mesActual])}</Col>
-                <Col><b>{formatTextMix(mesPosterior)}:</b> ${formatNumber(mesAlquiler[mesPosterior])}</Col>
+                <Col>
+                    <button className="button-agregar" onClick={() => setShowModalNewContrato(true)} variant="dark">
+                        <Icons.Plus className="icon-button" size={19} /> Agregar Contrato
+                    </button>
+                </Col>
+                <Col className='text-resumen-alquileres'><b>Total:</b> ${formatNumber(totalAlquiler)}</Col>
+                <Col className='text-resumen-alquileres'><b>{formatTextMix(mesAnterior)}:</b> ${formatNumber(mesAlquiler[mesAnterior])}</Col>
+                <Col className='text-resumen-alquileres'><b>{formatTextMix(mesActual)}:</b> ${formatNumber(mesAlquiler[mesActual])}</Col>
+                <Col className='text-resumen-alquileres'><b>{formatTextMix(mesPosterior)}:</b> ${formatNumber(mesAlquiler[mesPosterior])}</Col>
             </Row>
         </Row>
         <Row className="acordion">
@@ -46,7 +53,7 @@ const Alquileres = () => {
                     alquileres.length > 0 ?
                         alquileres.map(alquiler => (
                             <Row key={alquiler.id_alquiler}>
-                                {showModalRenovar && <FormRenovar alquiler={alquiler} show={showModalRenovar} setShow={setShowModalRenovar} setAlquileres={setAlquileres} />}
+                                {showModalRenovar && <FormContrato alquiler={alquiler} show={showModalRenovar} setShow={setShowModalRenovar} setAlquileres={setAlquileres} />}
                                 <Col xs={12}>
                                     <Accordion.Item eventKey={alquiler.id_alquiler}>
                                         <Accordion.Header>
@@ -91,7 +98,8 @@ const Alquileres = () => {
                                 </Col>
                             </Row>
                         ))
-                        : <Col>
+                        :
+                        <Col>
                             <h6>No existen alquileres</h6>
                         </Col>
                 }

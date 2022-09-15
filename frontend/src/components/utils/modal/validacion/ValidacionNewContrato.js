@@ -8,7 +8,7 @@ import { formatFecha, formatNumber } from '../../../../hooks/useUtils';
 //Css
 import './Validacion.css';
 
-const ValidacionRenovAlquiler = ({ mostrar, datos, setShow, setSubmit }) => {
+const ValidacionNewContrato = ({ mostrar, datos, setShow, setSubmit }) => {
     const handleClose = () => setShow(false);
 
     const handleEnviar = () => {
@@ -26,7 +26,7 @@ const ValidacionRenovAlquiler = ({ mostrar, datos, setShow, setSubmit }) => {
             </Modal.Header>
             <Modal.Body>
                 <Row>
-                   <Col className="texto" xs={12} sm={12}><b>Modulo: </b>{datos.nombre_modulo} </Col>
+                   {datos.nombre_modulo && <Col className="texto" xs={12} sm={12}><b>Modulo: </b>{datos.nombre_modulo} </Col>}
                    <Col className="texto" xs={12} sm={12}><b>Fecha de Inicio: </b>{formatFecha(datos.fecha_d_alquiler)} </Col>
                    <Col className="texto" xs={12} sm={12}><b>Fecha de Vencimiento: </b>{formatFecha(datos.fecha_h_alquiler)} </Col>
                    <Col className="texto" xs={12} sm={12}><b>Valor total del alquiler: </b>{formatNumber(datos.valor)} </Col>
@@ -48,4 +48,4 @@ const ValidacionRenovAlquiler = ({ mostrar, datos, setShow, setSubmit }) => {
     )
 }
 
-export default React.memo(ValidacionRenovAlquiler);
+export default React.memo(ValidacionNewContrato);
