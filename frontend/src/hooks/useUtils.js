@@ -41,15 +41,7 @@ export const ToastComponent = (estado, mensaje) => {
 
 //Formatea la fecha para mostrarse en el orden dd-mm-aaaa
 export const formatFecha = (fecha) => {
-    const date = new Date(fecha);
-    //const dateUTC = date.toISOString();
-
-    const dia = date.getUTCDate();
-    const mes = dia == 1 ? (date.getMonth() + 2 > 12 ? date.getMonth() + 2 - 12 : date.getMonth() + 2) : (date.getMonth() + 1 > 12 ? date.getMonth() + 1 - 12 : date.getMonth() + 1);
-    //Si mes es 1 y dia es 1 entonces hay que sumarle 1 al año
-    const año = mes == 1 && dia == 1 ? date.getFullYear() + 1 : date.getFullYear();
-
-    const fechaFormat = dia + '/' + mes + '/' + año;
+    const fechaFormat = moment(fecha).format("DD-MM-YYYY");
 
     return fechaFormat
 }
@@ -77,6 +69,9 @@ export const calcularValorXMes = (fechaInicio, cantMeses, valorXMes) => {
 
     const limitFor = cantMeses ? cantMeses : 1;
 
+    const yearHere = new Date().getFullYear();
+    const monthHere = new Date().getMonth();
+
     let enero = 0;
     let febrero = 0;
     let marzo = 0;
@@ -92,67 +87,70 @@ export const calcularValorXMes = (fechaInicio, cantMeses, valorXMes) => {
 
     /* Los meses van del 0 al 11 */
     for (let i = 0; i < limitFor; i++) {
-        switch (fecha.get('month')) {
-            case 0:
-                //console.log('enero');
-                enero += valorXMes;
-                fecha.add(1, 'months').get('month');
-                break;
-            case 1:
-                //console.log('febrero');
-                febrero += valorXMes;
-                fecha.add(1, 'months').get('month');
-                break;
-            case 2:
-                //console.log('marzo');
-                marzo += valorXMes;
-                fecha.add(1, 'months').get('month');
-                break;
-            case 3:
-                //console.log('abril');
-                abril += valorXMes;
-                fecha.add(1, 'months').get('month');
-                break;
-            case 4:
-                //console.log('mayo');
-                mayo += valorXMes;
-                fecha.add(1, 'months').get('month');
-                break;
-            case 5:
-                //console.log('junio');
-                junio += valorXMes;
-                fecha.add(1, 'months').get('month');
-                break;
-            case 6:
-                //console.log('julio');
-                julio += valorXMes;
-                fecha.add(1, 'months').get('month');
-                break;
-            case 7:
-                //console.log('agosto');
-                agosto += valorXMes;
-                fecha.add(1, 'months').get('month');
-                break;
-            case 8:
-                //console.log('setiembre');
-                setiembre += valorXMes;
-                fecha.add(1, 'months').get('month');
-                break;
-            case 9:
-                //console.log('octubre');
-                octubre += valorXMes;
-                fecha.add(1, 'months').get('month');
-                break;
-            case 10:
-                //console.log('noviembre');
-                noviembre += valorXMes;
-                fecha.add(1, 'months').get('month');
-                break;
-            case 11:
-                //console.log('diciembre');
-                diciembre += valorXMes;
-                fecha.add(1, 'months').get('month');
-                break;
+        //console.log(fecha.get('year'), yearHere, fecha.get('month'), monthHere)
+        if (fecha.get('year') === yearHere || (yearHere < fecha.get('year') && fecha.get('month') < (monthHere - 1))) {
+            switch (fecha.get('month')) {
+                case 0:
+                    //console.log('enero');
+                    enero += valorXMes;
+                    fecha.add(1, 'months').get('month');
+                    break;
+                case 1:
+                    //console.log('febrero');
+                    febrero += valorXMes;
+                    fecha.add(1, 'months').get('month');
+                    break;
+                case 2:
+                    //console.log('marzo');
+                    marzo += valorXMes;
+                    fecha.add(1, 'months').get('month');
+                    break;
+                case 3:
+                    //console.log('abril');
+                    abril += valorXMes;
+                    fecha.add(1, 'months').get('month');
+                    break;
+                case 4:
+                    //console.log('mayo');
+                    mayo += valorXMes;
+                    fecha.add(1, 'months').get('month');
+                    break;
+                case 5:
+                    //console.log('junio');
+                    junio += valorXMes;
+                    fecha.add(1, 'months').get('month');
+                    break;
+                case 6:
+                    //console.log('julio');
+                    julio += valorXMes;
+                    fecha.add(1, 'months').get('month');
+                    break;
+                case 7:
+                    //console.log('agosto');
+                    agosto += valorXMes;
+                    fecha.add(1, 'months').get('month');
+                    break;
+                case 8:
+                    //console.log('setiembre');
+                    setiembre += valorXMes;
+                    fecha.add(1, 'months').get('month');
+                    break;
+                case 9:
+                    //console.log('octubre');
+                    octubre += valorXMes;
+                    fecha.add(1, 'months').get('month');
+                    break;
+                case 10:
+                    //console.log('noviembre');
+                    noviembre += valorXMes;
+                    fecha.add(1, 'months').get('month');
+                    break;
+                case 11:
+                    //console.log('diciembre');
+                    diciembre += valorXMes;
+                    fecha.add(1, 'months').get('month');
+                    break;
+            }
         }
     }
 
