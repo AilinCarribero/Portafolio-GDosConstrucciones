@@ -86,10 +86,7 @@ const FormContrato = ({ alquiler, show, setShow, setAlquileres }) => {
 
             if (resNewContrato && !resNewContrato.data.todoMal && (resNewContrato.data.todoOk == 'Ok' || resNewContrato.statusText == 'OK' || resNewContrato.status == 200)) {
                 ToastComponent('success');
-
-                setShow(false);
-                setAlquileres(resNewContrato.data)
-
+                
                 setNewContrato({
                     id_alquiler: '',
                     id_modulo: '',
@@ -101,6 +98,9 @@ const FormContrato = ({ alquiler, show, setShow, setAlquileres }) => {
                     fecha_h_alquiler: '',
                     valor: '',
                 })
+
+                setShow(false);
+                setAlquileres(resNewContrato.data)
             } else {
                 ToastComponent('error', resNewContrato.data.todoMal && resNewContrato.data.todoMal);
             }

@@ -27,9 +27,15 @@ const Alquileres = () => {
     const { user } = useUser();
     const { alquileres, mesAlquiler, totalAlquiler, setAlquileres } = useGetAlquileresId(id);
 
+    const [renovarAlquiler, setRenovarAlquiler] = useState([]);
     //console.log(alquileres, mesAlquiler, totalAlquiler);
     const [showModalRenovar, setShowModalRenovar] = useState(false);
     const [showModalNewContrato, setShowModalNewContrato] = useState(false);
+
+    const renovarContrato = (alquiler) => {
+        setShowModalRenovar(true) 
+        setRenovarAlquiler(alquiler)
+    }
 
     return (<>
         {showModalNewContrato && <FormContrato show={showModalNewContrato} setShow={setShowModalNewContrato} setAlquileres={setAlquileres} />}
@@ -53,7 +59,7 @@ const Alquileres = () => {
                     alquileres.length > 0 ?
                         alquileres.map(alquiler => (
                             <Row key={alquiler.id_alquiler}>
-                                {showModalRenovar && <FormContrato alquiler={alquiler} show={showModalRenovar} setShow={setShowModalRenovar} setAlquileres={setAlquileres} />}
+                                {showModalRenovar && <FormContrato alquiler={renovarAlquiler} show={showModalRenovar} setShow={setShowModalRenovar} setAlquileres={setAlquileres} />}
                                 <Col xs={12}>
                                     <Accordion.Item eventKey={alquiler.id_alquiler}>
                                         <Accordion.Header>
@@ -80,7 +86,7 @@ const Alquileres = () => {
                                                         <p className="accordion-title-section">Acciones</p>
                                                     </Col>
                                                     <Col xs={6} md={6}>
-                                                        <button className="button-action" onClick={() => setShowModalRenovar(true)}>
+                                                        <button className="button-action" onClick={() => renovarContrato(alquiler)}>
                                                             <Row>
                                                                 <Col xs={1} md={1} className='icon-action'>
                                                                     <Icons.PencilSquare size={19} />
