@@ -19,7 +19,7 @@ import { postNewContrato } from '../../../services/apiAlquileres';
 const FormContrato = ({ alquiler, show, setShow, setAlquileres, actionContrato }) => {
     const { id } = useParams();
     const { modulos } = useGetModulos();
-console.log(alquiler, actionContrato)
+
     const proyectos = useSelector(state => state.proyectoRedux.proyectos);
     const proyecto = proyectos.find(proyecto => proyecto.id_proyecto == id);
 
