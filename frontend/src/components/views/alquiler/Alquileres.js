@@ -28,13 +28,15 @@ const Alquileres = () => {
     const { alquileres, mesAlquiler, totalAlquiler, setAlquileres } = useGetAlquileresId(id);
 
     const [renovarAlquiler, setRenovarAlquiler] = useState([]);
+    const [actionContrato, setActionContrato] = useState();
     //console.log(alquileres, mesAlquiler, totalAlquiler);
     const [showModalRenovar, setShowModalRenovar] = useState(false);
     const [showModalNewContrato, setShowModalNewContrato] = useState(false);
 
-    const renovarContrato = (alquiler) => {
+    const renovarContrato = (alquiler, action) => {
         setShowModalRenovar(true) 
-        setRenovarAlquiler(alquiler)
+        setRenovarAlquiler(alquiler);
+        setActionContrato(action);
     }
 
     return (<>
@@ -59,7 +61,7 @@ const Alquileres = () => {
                     alquileres.length > 0 ?
                         alquileres.map(alquiler => (
                             <Row key={alquiler.id_alquiler}>
-                                {showModalRenovar && <FormContrato alquiler={renovarAlquiler} show={showModalRenovar} setShow={setShowModalRenovar} setAlquileres={setAlquileres} />}
+                                {showModalRenovar && <FormContrato alquiler={renovarAlquiler} show={showModalRenovar} setShow={setShowModalRenovar} setAlquileres={setAlquileres} actionContrato={actionContrato} />}
                                 <Col xs={12}>
                                     <Accordion.Item eventKey={alquiler.id_alquiler}>
                                         <Accordion.Header>
@@ -86,13 +88,24 @@ const Alquileres = () => {
                                                         <p className="accordion-title-section">Acciones</p>
                                                     </Col>
                                                     <Col xs={6} md={6}>
-                                                        <button className="button-action" onClick={() => renovarContrato(alquiler)}>
+                                                        <button className="button-action" onClick={() => renovarContrato(alquiler, 'renovar')}>
+                                                            <Row>
+                                                                <Col xs={1} md={1} className='icon-action'>
+                                                                    <Icons.ArrowRepeat size={19} />
+                                                                </Col>
+                                                                <Col xs={10} md={10} className='text-action'>
+                                                                    Renovar contrato
+                                                                </Col>
+                                                            </Row>
+                                                        </button>
+                                                    </Col><Col xs={6} md={6}>
+                                                        <button className="button-action" onClick={() => renovarContrato(alquiler, 'modificar')}>
                                                             <Row>
                                                                 <Col xs={1} md={1} className='icon-action'>
                                                                     <Icons.PencilSquare size={19} />
                                                                 </Col>
                                                                 <Col xs={10} md={10} className='text-action'>
-                                                                    Renovar contrato
+                                                                    Modificar Contrato
                                                                 </Col>
                                                             </Row>
                                                         </button>

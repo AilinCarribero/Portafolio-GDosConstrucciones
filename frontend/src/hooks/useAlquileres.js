@@ -38,7 +38,7 @@ export const useGetAlquileresId = (id) => {
             const fechaDesde = moment(alquiler.fecha_d_alquiler);
             const fechaHasta = moment(alquiler.fecha_h_alquiler);
 
-            const cantMeses = Math.abs(fechaHasta.diff(fechaDesde, 'month'));
+            const cantMeses = Math.abs(fechaHasta.diff(fechaDesde, 'month') + 1);
             const valorXMes = cantMeses ? new Decimal(alquiler.valor).div(cantMeses).toNumber() : alquiler.valor;
 
             const valorTotalXMes = calcularValorXMes(fechaDesde, cantMeses, valorXMes);

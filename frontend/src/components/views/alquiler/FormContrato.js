@@ -16,10 +16,10 @@ import { useGetModulos } from '../../../hooks/useModulos';
 //Service
 import { postNewContrato } from '../../../services/apiAlquileres';
 
-const FormContrato = ({ alquiler, show, setShow, setAlquileres }) => {
+const FormContrato = ({ alquiler, show, setShow, setAlquileres, actionContrato }) => {
     const { id } = useParams();
     const { modulos } = useGetModulos();
-
+console.log(alquiler, actionContrato)
     const proyectos = useSelector(state => state.proyectoRedux.proyectos);
     const proyecto = proyectos.find(proyecto => proyecto.id_proyecto == id);
 
@@ -32,7 +32,7 @@ const FormContrato = ({ alquiler, show, setShow, setAlquileres }) => {
         alquiler_total: proyecto.alquiler_total,
         fecha_d_alquiler: alquiler ? formatFechaISO(alquiler.fecha_h_alquiler) : formatFechaISO(new Date()),
         fecha_h_alquiler: alquiler ? formatFechaISO(alquiler.fecha_h_alquiler) : '',
-        valor: '',
+        valor: actionContrato == "modificar" ? alquiler.valor : '',
     });
 
     //Variables para validacion
@@ -71,7 +71,8 @@ const FormContrato = ({ alquiler, show, setShow, setAlquileres }) => {
             setNewContrato(prevNewContrato => ({
                 ...prevNewContrato,
                 alquiler_total: new Decimal(newContrato.alquiler_total).add(newContrato.valor ? desformatNumber(newContrato.valor) : 0).toNumber(),
-                valor: desformatNumber(newContrato.valor)
+                valor: desformatNumber(newContrato.valor),
+                action: actionContrato
             }))
 
             setShowModalValidation(true);
@@ -171,7 +172,7 @@ const FormContrato = ({ alquiler, show, setShow, setAlquileres }) => {
 
                         <Row>
                             <Button className="button-submit" variant="dark" type="submit">
-                                Renovar el contrato
+                                Guardar
                             </Button>
                         </Row>
                     </Form>

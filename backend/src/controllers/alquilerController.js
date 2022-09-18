@@ -52,6 +52,8 @@ exports.getAlquileresId = async (req, res) => {
 }
 
 exports.updateContrato = async (req, res) => {
+    const action = req.body.action;
+
     const updateProyecto = {
         id_proyecto: req.body.id_proyecto,
         alquiler_total: req.body.alquiler_total
@@ -64,7 +66,7 @@ exports.updateContrato = async (req, res) => {
         fecha_d_alquiler: req.body.fecha_d_alquiler,
         fecha_h_alquiler: req.body.fecha_h_alquiler
     }
-
+    console.log(req.body)
     /*Si la fecha de inicio del aquiler es anterior a hoy entonces se debe actualizar el estado del modulo */
     if (new Date(newAlquiler.fecha_d_alquiler) <= new Date()) {
         Modulo.update({ estado: 1 }, {
@@ -83,30 +85,61 @@ exports.updateContrato = async (req, res) => {
             id_proyecto: updateProyecto.id_proyecto
         }
     }).then(response => {
-        Alquiler.create(newAlquiler).then(response => {
-            Alquiler.findAll({
-                include: [{
-                    model: Modulo
-                }, {
-                    model: Proyecto
-                }],
+        if (action === "modificar") {
+            Alquiler.update(newAlquiler, {
                 where: {
-                    id_proyecto: updateProyecto.id_proyecto
+                    id_alquiler: req.body.id_alquiler
                 }
             }).then(response => {
-                response.statusText = "Ok";
-                response.status = 200;
-                res.json(response);
-            }).catch(error => {
-                err.todoMal = `Error al buscar los alquileres del proyecto ${updateProyecto.id_proyecto}`;
-                console.error(error);
-                res.json(error);
-            });
-        }).catch(err => {
-            err.todoMal = `Error al ingresar el nuevo alquiler del modulo ${req.body.nombre_modulo}`;
-            console.error(err)
-            res.json(err);
-        })
+                Alquiler.findAll({
+                    include: [{
+                        model: Modulo
+                    }, {
+                        model: Proyecto
+                    }],
+                    where: {
+                        id_proyecto: updateProyecto.id_proyecto
+                    }
+                }).then(response => {
+                    response.statusText = "Ok";
+                    response.status = 200;
+                    res.json(response);
+                }).catch(error => {
+                    err.todoMal = `Error al buscar los alquileres del proyecto ${updateProyecto.id_proyecto}`;
+                    console.error(error);
+                    res.json(error);
+                });
+            }).catch(err => {
+                err.todoMal = `Error al modificar el alquiler del modulo ${req.body.nombre_modulo}`;
+                console.error(err)
+                res.json(err);
+            })
+        } else {
+            Alquiler.create(newAlquiler).then(response => {
+                Alquiler.findAll({
+                    include: [{
+                        model: Modulo
+                    }, {
+                        model: Proyecto
+                    }],
+                    where: {
+                        id_proyecto: updateProyecto.id_proyecto
+                    }
+                }).then(response => {
+                    response.statusText = "Ok";
+                    response.status = 200;
+                    res.json(response);
+                }).catch(error => {
+                    err.todoMal = `Error al buscar los alquileres del proyecto ${updateProyecto.id_proyecto}`;
+                    console.error(error);
+                    res.json(error);
+                });
+            }).catch(err => {
+                err.todoMal = `Error al ingresar el nuevo alquiler del modulo ${req.body.nombre_modulo}`;
+                console.error(err)
+                res.json(err);
+            })
+        }
     }).catch(err => {
         err.todoMal = "Error al actualizar el valor total del alquiler en el proyecto";
         console.error(err)
