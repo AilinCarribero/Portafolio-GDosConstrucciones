@@ -66,7 +66,7 @@ exports.updateContrato = async (req, res) => {
         fecha_d_alquiler: req.body.fecha_d_alquiler,
         fecha_h_alquiler: req.body.fecha_h_alquiler
     }
-    console.log(req.body)
+
     /*Si la fecha de inicio del aquiler es anterior a hoy entonces se debe actualizar el estado del modulo */
     if (new Date(newAlquiler.fecha_d_alquiler) <= new Date()) {
         Modulo.update({ estado: 1 }, {
