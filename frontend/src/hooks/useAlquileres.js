@@ -71,7 +71,7 @@ export const useGetAlquileresId = (id) => {
 
         const cantMeses = Math.abs(fechaHasta.diff(fechaDesde, 'month'));
 
-        return cantMeses;
+        return cantMeses === 0 ? 1 : cantMeses;
     }
 
     return { alquileres, mesAlquiler, totalAlquiler, CalcMesesAlquiler, setAlquileres }
