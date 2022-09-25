@@ -68,7 +68,7 @@ export const formatTextMix = (text) => {
 export const calcularValorXMes = (fechaInicio, cantMeses, valorXMes) => {
     const fecha = fechaInicio instanceof Object ? fechaInicio : moment(fechaInicio);
 
-    const limitFor = cantMeses ? cantMeses : 1;
+    const limitFor = cantMeses ? cantMeses + 1 : 1;
 
     const yearHere = new Date().getFullYear();
     const monthHere = new Date().getMonth();
@@ -81,78 +81,70 @@ export const calcularValorXMes = (fechaInicio, cantMeses, valorXMes) => {
     let junio = 0;
     let julio = 0;
     let agosto = 0;
-    let setiembre = 0;
+    let septiembre = 0;
     let octubre = 0;
     let noviembre = 0;
     let diciembre = 0;
 
     /* Los meses van del 0 al 11 */
-    for (let i = 0; i < limitFor; i++) {
-        //console.log(fecha.get('year'), yearHere, fecha.get('month'), monthHere)
+    for (let i = 0; i <= limitFor; i++) {
+        /* En caso de que el año sea igual al actual pasa directo sino tiene que ver que el mes del siguiente año sea menor al mes anterior al actual 
+        Esto se hace para verificar que no estamos mostrando un valor que no se va a cobrar al mes actual ya que corresponde al mismo mes pero de otro año*/
         if (fecha.get('year') === yearHere || (yearHere < fecha.get('year') && fecha.get('month') < (monthHere - 1))) {
+            //console.log('año fecha ',fecha.get('year'), 'año actual ', yearHere, 'mes fecha', fecha.get('month'), 'mes actual', monthHere)
             switch (fecha.get('month')) {
                 case 0:
                     //console.log('enero');
                     enero += valorXMes;
-                    fecha.add(1, 'months').get('month');
                     break;
                 case 1:
                     //console.log('febrero');
                     febrero += valorXMes;
-                    fecha.add(1, 'months').get('month');
                     break;
                 case 2:
                     //console.log('marzo');
                     marzo += valorXMes;
-                    fecha.add(1, 'months').get('month');
                     break;
                 case 3:
                     //console.log('abril');
                     abril += valorXMes;
-                    fecha.add(1, 'months').get('month');
                     break;
                 case 4:
                     //console.log('mayo');
                     mayo += valorXMes;
-                    fecha.add(1, 'months').get('month');
                     break;
                 case 5:
                     //console.log('junio');
                     junio += valorXMes;
-                    fecha.add(1, 'months').get('month');
                     break;
                 case 6:
                     //console.log('julio');
                     julio += valorXMes;
-                    fecha.add(1, 'months').get('month');
                     break;
                 case 7:
                     //console.log('agosto');
                     agosto += valorXMes;
-                    fecha.add(1, 'months').get('month');
                     break;
                 case 8:
-                    //console.log('setiembre');
-                    setiembre += valorXMes;
-                    fecha.add(1, 'months').get('month');
+                    //console.log('septiembre');
+                    septiembre += valorXMes;
                     break;
                 case 9:
                     //console.log('octubre');
                     octubre += valorXMes;
-                    fecha.add(1, 'months').get('month');
                     break;
                 case 10:
                     //console.log('noviembre');
                     noviembre += valorXMes;
-                    fecha.add(1, 'months').get('month');
                     break;
                 case 11:
                     //console.log('diciembre');
                     diciembre += valorXMes;
-                    fecha.add(1, 'months').get('month');
                     break;
             }
         }
+
+        fecha.add(1, 'months').get('month');
     }
 
     return ({
@@ -164,7 +156,7 @@ export const calcularValorXMes = (fechaInicio, cantMeses, valorXMes) => {
         junio: junio,
         julio: julio,
         agosto: agosto,
-        setiembre: setiembre,
+        septiembre: septiembre,
         octubre: octubre,
         noviembre: noviembre,
         diciembre: diciembre,
@@ -191,7 +183,7 @@ export const formatNameMes = (numMes) => {
         case 7:
             return 'agosto';
         case 8:
-            return 'setiembre';
+            return 'septiembre';
         case 9:
             return 'octubre';
         case 10:

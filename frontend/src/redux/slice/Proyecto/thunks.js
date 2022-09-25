@@ -9,7 +9,7 @@ export const getProyectos = () => (dispatch) => {
     dispatch(activeLoading(true));
 
     getApiProyectos().then(proyectos => {
-        //console.log(proyectos)
+        console.log(proyectos)
         dispatch(setProyectos(proyectos));
     }).catch(err => {
         console.error(err);

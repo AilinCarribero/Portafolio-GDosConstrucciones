@@ -25,7 +25,7 @@ const Alquileres = () => {
 
     const { id } = useParams();
     const { user } = useUser();
-    const { alquileres, mesAlquiler, totalAlquiler, setAlquileres } = useGetAlquileresId(id);
+    const { alquileres, mesAlquiler, totalAlquiler, CalcMesesAlquiler, setAlquileres } = useGetAlquileresId(id);
 
     const [renovarAlquiler, setRenovarAlquiler] = useState([]);
     const [actionContrato, setActionContrato] = useState();
@@ -74,13 +74,14 @@ const Alquileres = () => {
                                                     <Col xs={2} md={2} id="no-activo"></Col>
                                                 )
                                             }
-                                            <Col className="acordion-title" xs={4} md={4}><b>{alquiler.modulo.nombre_modulo}</b></Col>
+                                            <Col className="acordion-title" xs={4} md={3}><b>{alquiler.modulo.nombre_modulo}</b></Col>
                                             <Col className="acordion-title" xs={3} md={2}><b>${formatNumber(alquiler.valor)}</b> </Col>
-                                            <Col className="acordion-title" xs={3} md={2}>Hasta: <b>{formatFecha(alquiler.fecha_h_alquiler)}</b> </Col>
+                                            <Col className="acordion-title" xs={3} md={2}>Cant. de Meses: <b>{CalcMesesAlquiler(alquiler.fecha_d_alquiler, alquiler.fecha_h_alquiler)}</b> </Col>
                                         </Accordion.Header>
                                         <Accordion.Body>
                                             <Row>
                                                 <Col xs={12} md={6}>Fecha de inicio: <b>:</b> {formatFecha(alquiler.fecha_d_alquiler)}</Col>
+                                                <Col xs={12} md={6}>Fecha de fin: <b>:</b> {formatFecha(alquiler.fecha_h_alquiler)} </Col>
                                             </Row>
                                             {user.rango == 'admin' &&
                                                 <Row className="border-top">

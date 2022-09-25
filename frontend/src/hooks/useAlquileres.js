@@ -28,7 +28,7 @@ export const useGetAlquileresId = (id) => {
             junio: 0,
             julio: 0,
             agosto: 0,
-            setiembre: 0,
+            septiembre: 0,
             octubre: 0,
             noviembre: 0,
             diciembre: 0,
@@ -38,7 +38,7 @@ export const useGetAlquileresId = (id) => {
             const fechaDesde = moment(alquiler.fecha_d_alquiler);
             const fechaHasta = moment(alquiler.fecha_h_alquiler);
 
-            const cantMeses = Math.abs(fechaHasta.diff(fechaDesde, 'month') + 1);
+            const cantMeses = Math.abs(fechaHasta.diff(fechaDesde, 'month'));
             const valorXMes = cantMeses ? new Decimal(alquiler.valor).div(cantMeses).toNumber() : alquiler.valor;
 
             const valorTotalXMes = calcularValorXMes(fechaDesde, cantMeses, valorXMes);
@@ -54,7 +54,7 @@ export const useGetAlquileresId = (id) => {
                 junio: new Decimal(auxTotalesXMes.junio).add(valorTotalXMes.junio).toNumber(),
                 julio: new Decimal(auxTotalesXMes.julio).add(valorTotalXMes.julio).toNumber(),
                 agosto: new Decimal(auxTotalesXMes.agosto).add(valorTotalXMes.agosto).toNumber(),
-                setiembre: new Decimal(auxTotalesXMes.setiembre).add(valorTotalXMes.setiembre).toNumber(),
+                septiembre: new Decimal(auxTotalesXMes.septiembre).add(valorTotalXMes.septiembre).toNumber(),
                 octubre: new Decimal(auxTotalesXMes.octubre).add(valorTotalXMes.octubre).toNumber(),
                 noviembre: new Decimal(auxTotalesXMes.noviembre).add(valorTotalXMes.noviembre).toNumber(),
                 diciembre: new Decimal(auxTotalesXMes.diciembre).add(valorTotalXMes.diciembre).toNumber()
@@ -65,5 +65,14 @@ export const useGetAlquileresId = (id) => {
         setMesAlquiler(auxTotalesXMes);
     }
 
-    return { alquileres, mesAlquiler, totalAlquiler, setAlquileres }
+    const CalcMesesAlquiler = (inicio, fin) => {
+        const fechaDesde = moment(inicio);
+        const fechaHasta = moment(fin);
+
+        const cantMeses = Math.abs(fechaHasta.diff(fechaDesde, 'month'));
+
+        return cantMeses;
+    }
+
+    return { alquileres, mesAlquiler, totalAlquiler, CalcMesesAlquiler, setAlquileres }
 }
