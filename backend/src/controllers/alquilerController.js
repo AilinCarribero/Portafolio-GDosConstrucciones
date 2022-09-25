@@ -53,10 +53,12 @@ exports.getAlquileresId = async (req, res) => {
 
 exports.updateContrato = async (req, res) => {
     const action = req.body.action;
-
+    console.log(req.body)
     const updateProyecto = {
         id_proyecto: req.body.id_proyecto,
-        alquiler_total: req.body.alquiler_total
+        alquiler_total: req.body.alquiler_total,
+        fecha_f_proyecto: new Date(req.body.fecha_h_alquiler) >= new Date(req.body.alquiler.proyecto.fecha_f_proyecto) ? new Date(req.body.fecha_h_alquiler).toISOString().slice(0, 10) : new Date(req.body.alquiler.proyecto.fecha_f_proyecto).toISOString().slice(0, 10),
+        id_estado: new Date(req.body.fecha_h_alquiler) >= new Date() ? 2 : 3
     }
 
     const newAlquiler = {
@@ -80,7 +82,7 @@ exports.updateContrato = async (req, res) => {
         });
     }
 
-    Proyecto.update({ alquiler_total: updateProyecto.alquiler_total }, {
+    Proyecto.update({ alquiler_total: updateProyecto.alquiler_total, fecha_f_proyecto: updateProyecto.fecha_f_proyecto, id_estado: updateProyecto.id_estado  }, {
         where: {
             id_proyecto: updateProyecto.id_proyecto
         }

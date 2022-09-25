@@ -14,7 +14,7 @@ const configFindAllProyectos = {
     }, {
         model: Ingreso
     }],
-    order: [['fecha_f_proyecto', 'DESC'], ['id_estado', 'ASC']]
+    order: [['id_estado', 'ASC'], ['fecha_f_proyecto', 'DESC']]
 }
 
 const alquilerXMes = (alquileres) => {
