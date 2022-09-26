@@ -53,6 +53,7 @@ exports.getAlquileresId = async (req, res) => {
 
 exports.updateContrato = async (req, res) => {
     const action = req.body.action;
+    console.log('hola')
     console.log(req.body)
     const updateProyecto = {
         id_proyecto: req.body.id_proyecto,
