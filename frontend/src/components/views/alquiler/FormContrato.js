@@ -27,6 +27,7 @@ const FormContrato = ({ alquiler, show, setShow, setAlquileres, actionContrato }
         id_alquiler: alquiler ? alquiler.id_alquiler : '',
         id_modulo: alquiler ? alquiler.id_modulo : '',
         alquiler: alquiler ? alquiler : '',
+        proyecto: proyecto,
         nombre_modulo: alquiler ? alquiler.modulo.nombre_modulo : '',
         id_proyecto: id,
         alquiler_total: proyecto.alquiler_total,
