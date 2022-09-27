@@ -9,12 +9,12 @@
 
 #ocupado {
     @extend .accordion-estado-modulos;
-    background-color: #e4c203;
+    background-color: #05be40;
 }
 
 #disponible {
     @extend .accordion-estado-modulos;
-    background-color: #05be40;
+    background-color: #e4c203;
 }
 
 #vendido {

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Accordion, Row, Col, Button } from 'react-bootstrap';
+import { Accordion, Row, Col, Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 //Components
@@ -70,51 +70,63 @@ const AccordionCentrosCostos = ({ proyecto, setProyectos }) => {
     }
 
     return (<>
-            {showFormUpdate && <ModalFormulario formulario={'proyecto'} informacion={proyecto} show={showFormUpdate} setShow={setShowFormUpdate} updateNew={setProyectos} />}
+        {showFormUpdate && <ModalFormulario formulario={'proyecto'} informacion={proyecto} show={showFormUpdate} setShow={setShowFormUpdate} updateNew={setProyectos} />}
 
-            <Accordion.Item eventKey={proyecto.id_proyecto} className={proyecto.id_centro_costo == 1 || proyecto.id_centro_costo == 3 ? 'accordionCC' : 'content-accordion'}>
-                <Accordion.Header>
-                    {/*Estados: 1.Por Empezar 2.En proceso 3.Finalizado */}
-                    {proyecto.id_estado == 1 && <Col xs={1} md={1} className="state-pendiente" > <Icons.ConeStriped size={19} className='state-icon' /></Col>}
-                    {proyecto.id_estado == 2 && <Col xs={1} md={1} className="state-proceso" > <Icons.Tools size={17} className='state-icon' /> </Col>}
-                    {proyecto.id_estado == 3 && <Col xs={1} md={1} className="state-finish" > <Icons.HouseDoorFill size={19} className='state-icon' /> </Col>}
-                    
-                    <Col xs={5} md={5}>{proyecto.id_proyecto}</Col>
-                    {/*(user.rango == "admin" || user.rango == "moderador") && !proyecto.id_proyecto.includes('CCC') && !proyecto.id_proyecto.includes('CCE') &&
+        <Accordion.Item eventKey={proyecto.id_proyecto} className={proyecto.id_centro_costo == 1 || proyecto.id_centro_costo == 3 ? 'accordionCC' : 'content-accordion'}>
+            <Accordion.Header>
+                {/*Estados: 1.Por Empezar 2.En proceso 3.Finalizado */}
+                {proyecto.id_estado == 1 &&
+                    <OverlayTrigger placement="right" overlay={<Tooltip>Pendiente.</Tooltip>} >
+                        <Col xs={1} md={1} className="state-pendiente" > <Icons.ConeStriped size={19} className='state-icon' /></Col>
+                    </OverlayTrigger>
+                }
+                {proyecto.id_estado == 2 &&
+                    <OverlayTrigger placement="right" overlay={<Tooltip>En proceso.</Tooltip>} >
+                        <Col xs={1} md={1} className="state-proceso" > <Icons.Tools size={17} className='state-icon' /> </Col>
+                    </OverlayTrigger>
+                }
+                {proyecto.id_estado == 3 &&
+                    <OverlayTrigger placement="right" overlay={<Tooltip>Finalizado.</Tooltip>} >
+                        <Col xs={1} md={1} className="state-finish" > <Icons.HouseDoorFill size={19} className='state-icon' /> </Col>
+                    </OverlayTrigger>
+                }
+
+                <Col xs={5} md={5}>{proyecto.id_proyecto}</Col>
+                {/*(user.rango == "admin" || user.rango == "moderador") && !proyecto.id_proyecto.includes('CCC') && !proyecto.id_proyecto.includes('CCE') &&
                         <Col xs={4} md={3}> Resto: ${formatNumber(ingresosProyecto(proyecto.ingresos) - egresosProyecto(proyecto.egresos))} / USD${formatNumber(ingresosUSDProyecto(proyecto.ingresos) - egresosUSDProyecto(proyecto.egresos))}</Col>
                     */}
-                </Accordion.Header>
-                <Accordion.Body>
-                    <Row>
-                        {proyecto.id_centro_costo == 2 && (user.rango == "admin" || user.rango == "moderador") && <>
-                            {proyecto.venta > 0 && <Col xs={12} md={6}>
+            </Accordion.Header>
+            <Accordion.Body>
+                <Row>
+                    {proyecto.id_centro_costo == 2 && (user.rango == "admin" || user.rango == "moderador") && <>
+                        {proyecto.venta > 0 && <Col xs={12} md={6}>
+                            <Row>
+                                <Col xs={1} md={1}></Col>
+                                <Col xs={11} md={11}><p> Venta: ${formatNumber(proyecto.venta)}</p></Col>
+                            </Row>
+                        </Col>}
+                        {proyecto.costo > 0 &&
+                            <Col xs={12} md={6}>
                                 <Row>
                                     <Col xs={1} md={1}></Col>
-                                    <Col xs={11} md={11}><p> Venta: ${formatNumber(proyecto.venta)}</p></Col>
+                                    <Col xs={11} md={11}><p> Costo: ${formatNumber(proyecto.costo)}</p></Col>
                                 </Row>
-                            </Col>}
-                            {proyecto.costo > 0 &&
-                                <Col xs={12} md={6}>
-                                    <Row>
-                                        <Col xs={1} md={1}></Col>
-                                        <Col xs={11} md={11}><p> Costo: ${formatNumber(proyecto.costo)}</p></Col>
-                                    </Row>
-                                </Col>
-                            }
-                            {proyecto.alquiler_total > 0 &&
-                                <Col xs={12} md={6}>
-                                    <Row>
-                                        <Col xs={1} md={1}>
-                                            <Link to={`/alquileres/${proyecto.id_proyecto}`}> <Icons.BoxArrowInRight className="icon-detalle" /> </Link>
-                                        </Col>
-                                        <Col xs={11} md={11}><p> Total por Alquileres: ${formatNumber(proyecto.alquiler_total)}</p></Col>
-                                    </Row>
-                                </Col>
-                            }
-                        </>}
-                    </Row>
-                    <Row>
-                        {/*<Col xs={12} md={6}>
+                            </Col>
+                        }
+                        {proyecto.alquiler_total > 0 &&
+                            <Col xs={12} md={6}>
+                                <Row>
+                                    <Col xs={1} md={1}>
+                                        <Link to={`/alquileres/${proyecto.id_proyecto}`}> <Icons.BoxArrowInRight className="icon-detalle" /> </Link>
+                                    </Col>
+                                    <Col xs={11} md={11}><p> Total por Alquileres: ${formatNumber(proyecto.alquiler_total)}</p></Col>
+                                </Row>
+                            </Col>
+                        }
+                    </>}
+                </Row>
+                <Row>
+                    {/*<Col xs={12} md={6}>
                             <Row>
                                 <Col xs={1} md={1}>
                                     <Link to={`/egresos/${proyecto.id_proyecto}`}> <Icons.BoxArrowInRight className="icon-detalle" /> </Link>
@@ -138,44 +150,44 @@ const AccordionCentrosCostos = ({ proyecto, setProyectos }) => {
                                 </Row>
                             </Col>
                         }*/}
-                        {user.rango == "admin" && proyecto.fecha_i_proyecto && <>
+                    {user.rango == "admin" && proyecto.fecha_i_proyecto && <>
+                        <Col xs={12} md={6}>
+                            <Row>
+                                <Col xs={1} md={1}></Col>
+                                <Col xs={11} md={11}><p> Fecha de inicio: {formatFecha(proyecto.fecha_i_proyecto)}</p> </Col>
+                            </Row>
+                        </Col>
+                        {proyecto.fecha_f_proyecto && (new Date(proyecto.fecha_f_proyecto).toISOString().slice(0, 10) != new Date('2200-01-01').toISOString().slice(0, 10)) &&
                             <Col xs={12} md={6}>
                                 <Row>
                                     <Col xs={1} md={1}></Col>
-                                    <Col xs={11} md={11}><p> Fecha de inicio: {formatFecha(proyecto.fecha_i_proyecto)}</p> </Col>
+                                    <Col xs={11} md={11}><p> Fecha de finalizacion: {formatFecha(proyecto.fecha_f_proyecto)}</p> </Col>
                                 </Row>
                             </Col>
-                            {proyecto.fecha_f_proyecto && (new Date(proyecto.fecha_f_proyecto).toISOString().slice(0, 10) != new Date('2200-01-01').toISOString().slice(0, 10)) &&
-                                <Col xs={12} md={6}>
-                                    <Row>
-                                        <Col xs={1} md={1}></Col>
-                                        <Col xs={11} md={11}><p> Fecha de finalizacion: {formatFecha(proyecto.fecha_f_proyecto)}</p> </Col>
-                                    </Row>
-                                </Col>
-                            }
-                        </>}
+                        }
+                    </>}
+                </Row>
+                {user.rango == 'admin' &&
+                    <Row className="border-top">
+                        <Col xs={12} md={12}>
+                            <p className="accordion-title-section">Acciones</p>
+                        </Col>
+                        <Col xs={6} md={6}>
+                            <button className="button-action" onClick={() => updateProyecto()}>
+                                <Row>
+                                    <Col xs={1} md={1} className='icon-action'>
+                                        <Icons.PencilSquare size={19} />
+                                    </Col>
+                                    <Col xs={10} md={10} className='text-action'>
+                                        Modificar
+                                    </Col>
+                                </Row>
+                            </button>
+                        </Col>
                     </Row>
-                    {user.rango == 'admin' &&
-                        <Row className="border-top">
-                            <Col xs={12} md={12}>
-                                <p className="accordion-title-section">Acciones</p>
-                            </Col>
-                            <Col xs={6} md={6}>
-                                <button className="button-action" onClick={() => updateProyecto()}>
-                                    <Row>
-                                        <Col xs={1} md={1} className='icon-action'>
-                                            <Icons.PencilSquare size={19} />
-                                        </Col>
-                                        <Col xs={10} md={10} className='text-action'>
-                                            Modificar
-                                        </Col>
-                                    </Row>
-                                </button>
-                            </Col>
-                        </Row>
-                    }
-                </Accordion.Body>
-            </Accordion.Item>
+                }
+            </Accordion.Body>
+        </Accordion.Item>
     </>)
 }
 

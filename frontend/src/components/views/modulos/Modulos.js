@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Accordion, Row, Col, Button } from 'react-bootstrap';
+import { Accordion, Row, Col, Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import ReactApexCharts from 'react-apexcharts';
 
 //Components
@@ -168,16 +168,24 @@ const Modulos = () => {
                 <Col xs={12} sm={4} md={3}>
                     <Button className="button-agregar" onClick={() => setShowForm(!showForm)} variant="dark" >
                         <Icons.Plus className="icon-button" size={19} />
-                        Agregar modulo
+                        Agregar módulo
                     </Button>
                 </Col>
                 <Col xs={12} md={9} className="content-total-modulos-estados">
                     <Row>
-                        <Col xs={12} md={2} className='content-section'>Total de Modulos: </Col>
-                        <Col xs={3} md={2} className='content-total-estado' id="total"> {cantModulos.total} </Col>
-                        <Col xs={3} md={2} className='content-total-estado' id="disponible"> {cantModulos.disponibles} </Col>
-                        <Col xs={3} md={2} className='content-total-estado' id="ocupado"> {cantModulos.ocupados} </Col>
-                        <Col xs={3} md={2} className='content-total-estado' id="vendido"> {cantModulos.vendidos} </Col>
+                        <Col xs={12} md={4} className='content-section'>Total de Módulos: </Col>
+                        <OverlayTrigger placement="bottom" overlay={<Tooltip>Módulos en total.</Tooltip>} >
+                            <Col xs={3} md={2} className='content-total-estado' id="total"> {cantModulos.total} </Col>
+                        </OverlayTrigger>
+                        <OverlayTrigger placement="bottom" overlay={<Tooltip>Módulos disponibles.</Tooltip>} >
+                            <Col xs={3} md={2} className='content-total-estado' id="disponible"> {cantModulos.disponibles} </Col>
+                        </OverlayTrigger>
+                        <OverlayTrigger placement="bottom" overlay={<Tooltip>Módulos ocupados.</Tooltip>} >
+                            <Col xs={3} md={2} className='content-total-estado' id="ocupado"> {cantModulos.ocupados} </Col>
+                        </OverlayTrigger>
+                        <OverlayTrigger placement="bottom" overlay={<Tooltip>Módulos vendidos.</Tooltip>} >
+                            <Col xs={3} md={2} className='content-total-estado' id="vendido"> {cantModulos.vendidos} </Col>
+                        </OverlayTrigger>
                     </Row>
                 </Col>
             </Row>
@@ -193,9 +201,21 @@ const Modulos = () => {
                                 <Accordion.Item eventKey={modulo.id_modulo}>
                                     <Accordion.Header className="accordion-header-modulos">
                                         <Row>
-                                            {modulo.estado == 0 && <Col xs={2} md={2} id="disponible"></Col>}
-                                            {modulo.estado == 1 && <Col xs={2} md={2} id="ocupado"></Col>}
-                                            {modulo.estado == 2 && <Col xs={2} md={2} id="vendido"></Col>}
+                                            {modulo.estado == 0 &&
+                                                <OverlayTrigger placement="right" overlay={<Tooltip>Disponible.</Tooltip>} >
+                                                    <Col xs={2} md={2} id="disponible"></Col>
+                                                </OverlayTrigger>
+                                            }
+                                            {modulo.estado == 1 &&
+                                                <OverlayTrigger placement="right" overlay={<Tooltip>Ocupado.</Tooltip>} >
+                                                    <Col xs={2} md={2} id="ocupado"></Col>
+                                                </OverlayTrigger>
+                                            }
+                                            {modulo.estado == 2 &&
+                                                <OverlayTrigger placement="right" overlay={<Tooltip>Vendido.</Tooltip>} >
+                                                    <Col xs={2} md={2} id="vendido"></Col>
+                                                </OverlayTrigger>
+                                            }
                                             <Col xs={4} md={4} className="accordion-nombre-modulos"> {modulo.nombre_modulo} </Col>
                                             {user.rango == "admin" && modulo.estado != 2 &&
                                                 <Col xs={2} md={2} className="content-buttons" >
