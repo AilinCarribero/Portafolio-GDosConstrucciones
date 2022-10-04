@@ -7,6 +7,11 @@ export const getModulos = async () => {
     return response.data;
 }
 
+export const getApiCantModulos = async () => {
+    const response = await axios.get(API+'modulos/cantidad-modulos', servisTokenConfig );
+    return response.data;
+}
+
 export const insertModulos = async (modulo) => {
     const response = await axios.post(API+'modulos/insert', modulo, servisTokenConfig)
     return response;

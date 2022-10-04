@@ -68,7 +68,7 @@ export const formatTextMix = (text) => {
 export const calcularValorXMes = (fechaInicio, cantMeses, valorXMes) => {
     const fecha = fechaInicio instanceof Object ? fechaInicio : moment(fechaInicio);
 
-    const limitFor = cantMeses ? cantMeses + 1 : 1;
+    const limitFor = cantMeses ? cantMeses : 1;
 
     const yearHere = new Date().getFullYear();
     const monthHere = new Date().getMonth();
@@ -87,7 +87,7 @@ export const calcularValorXMes = (fechaInicio, cantMeses, valorXMes) => {
     let diciembre = 0;
 
     /* Los meses van del 0 al 11 */
-    for (let i = 0; i <= limitFor; i++) {
+    for (let i = 0; i < limitFor; i++) {
         /* En caso de que el año sea igual al actual pasa directo sino tiene que ver que el mes del siguiente año sea menor al mes anterior al actual 
         Esto se hace para verificar que no estamos mostrando un valor que no se va a cobrar al mes actual ya que corresponde al mismo mes pero de otro año*/
         if (fecha.get('year') === yearHere || (yearHere < fecha.get('year') && fecha.get('month') < (monthHere - 1))) {

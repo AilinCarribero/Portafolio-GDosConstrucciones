@@ -11,6 +11,7 @@ import { formatNumber, ToastComponent, desformatNumber } from "../../../hooks/us
 import { useGetComprobantesPago } from "../../../hooks/useComprobantePago";
 import { useGetFormasPagos } from "../../../hooks/useFormasPagos";
 import { useGetProyectos } from "../../../hooks/useProyectos";
+import { useResponse } from "../../../hooks/useResponse";
 
 //Services
 import { insertStock } from "../../../services/apiStock";
@@ -19,6 +20,7 @@ import { insertStock } from "../../../services/apiStock";
 import "./Materiales.css";
 
 const FormMateriales = ({ close, setStock }) => {
+    const { response } = useResponse();
     const { user } = useUser();
     const { formasPagos } = useGetFormasPagos();
     const { proyectos } = useGetProyectos();
@@ -218,7 +220,9 @@ const FormMateriales = ({ close, setStock }) => {
             }
         }
 
-        if (resNewMaterial && !resNewMaterial.data.todoMal && (resNewMaterial.data.todoOk == 'Ok' || resNewMaterial.statusText == 'OK' || resNewMaterial.status == 200)) {
+        const res = response(resNewMaterial);
+
+        if (res) {
             ToastComponent('success');
 
             //En caso de tener algun elemento extra mostrandose se vuelve a ocular

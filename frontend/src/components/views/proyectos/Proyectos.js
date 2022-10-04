@@ -6,6 +6,7 @@ import { Row, Col, OverlayTrigger, Tooltip, Spinner } from 'react-bootstrap';
 import CentrosCostos from './CentrosCostos';
 import Modulos from '../modulos/Modulos';
 import Materiales from '../material/Materiales';
+import ResumenContable from '../resumenContable/ResumenContable';
 
 //Hooks
 import { formatNumber } from '../../../hooks/useUtils';
@@ -405,7 +406,7 @@ const Proyectos = () => {
         setSpinner(false);
     }
 
-    //Si existe alguna modificacion en los proyectos se debe recalcular todo
+    //Si existe alguna modificacion en los proyectos se debe recalcular todos
     useEffect(() => {
         resumenContableProyectos();
     }, [proyectos]);
@@ -439,7 +440,7 @@ const Proyectos = () => {
                 </Col>
                 {user.rango == 'admin' && <>
                     <Col>
-                        <button className={menu == 'modulos' ? 'menu-inicio-button-active' : 'menu-inicio-button-off'} onClick={handleButton} name="modulos">Modulos</button>
+                        <button className={menu == 'modulos' ? 'menu-inicio-button-active' : 'menu-inicio-button-off'} onClick={handleButton} name="modulos">Módulos</button>
                     </Col>
                 </>}
                 {/*<Col>
@@ -448,7 +449,7 @@ const Proyectos = () => {
             </Row>
             <Row className="content-data">
                 {
-                    /*Si no es recumen ni modulo ni materiales es centro de costo. Si no es modulo es materiales. Si es modulo*/
+                    /*Si no es resumen ni modulo ni materiales es centro de costo. Si no es modulo es materiales. Si es modulo*/
                     menu != 'resumen' ?
                         menu != 'modulos' ?
                             menu != 'materiales' ?
@@ -456,148 +457,7 @@ const Proyectos = () => {
                                 : <Materiales />
                             : <Modulos />
                         : (user.rango == "admin" || user.rango == "moderador") &&
-                        <Row className="content-resumen">
-                            <Col xs={12} md={4} className={isMobile ? "content-section border-bottom" : "content-section"} id="costo-venta" >
-                                <Row>
-                                    <Col xs={6} md={6} className="border-right" >
-                                        <Row>
-                                            <Col xs={12} md={12} >
-                                                Costos:
-                                            </Col>
-                                            <Col xs={12} md={12} >
-                                                ${formatNumber(totales.costos)}
-                                            </Col>
-                                        </Row>
-                                    </Col>
-                                    <Col xs={6} md={6} >
-                                        <Row>
-                                            <Col xs={12} md={12} >
-                                                Venta:
-                                            </Col>
-                                            <Col xs={12} md={12} >
-                                                ${formatNumber(totales.ventas)}
-                                            </Col>
-                                        </Row>
-                                    </Col>
-                                </Row>
-                            </Col>
-                            {/*<Col xs={12} md={8} className={!isMobile ? "content-section border-left" : "content-section"} >
-                                <Row className="content-sub-section border-bottom">
-                                    <OverlayTrigger placement="bottom" overlay={
-                                        <Tooltip>
-                                            <p>PP: ${formatNumber(totalesUN.PPIngreso)}</p>
-                                            <p>D: ${formatNumber(totalesUN.DIngreso)}</p>
-                                            <p>M: ${formatNumber(totalesUN.MIngreso)}</p>
-                                            <p>CCC: ${formatNumber(totalesUN.CCCIngreso)}</p>
-                                            <p>CCE: ${formatNumber(totalesUN.CCEIngreso)}</p>
-                                            <p>Alquileres: ${formatNumber(totales.alquiler)}</p>
-                                        </Tooltip>
-                                    }>
-                                        <Col xs={6} md={6} className="border-right" >
-                                            <Row>
-                                                <Col xs={12} md={12} >
-                                                    Ingresos:
-                                                </Col>
-                                                <Col xs={12} md={6} >
-                                                    ${totales.ingresos ? formatNumber(totales.ingresos) : 0}
-                                                </Col>
-                                                <Col xs={12} md={6} >
-                                                    USD${totales.ingresosUSD ? formatNumber(totales.ingresosUSD) : 0}
-                                                </Col>
-                                            </Row>
-                                        </Col>
-                                    </OverlayTrigger>
-                                    <OverlayTrigger placement="bottom" overlay={
-                                        <Tooltip>
-                                            <p>PP: ${formatNumber(totalesUN.PPEgreso)}</p>
-                                            <p>D: ${formatNumber(totalesUN.DEgreso)}</p>
-                                            <p>M: ${formatNumber(totalesUN.MEgreso)}</p>
-                                            <p>CCC: ${formatNumber(totalesUN.CCCEgreso)}</p>
-                                            <p>CCE: ${formatNumber(totalesUN.CCEEgreso)}</p>
-                                        </Tooltip>
-                                    }>
-                                        <Col xs={6} md={6} >
-                                            <Row>
-                                                <Col xs={12} md={12} >
-                                                    Egresos:
-                                                </Col>
-                                                <Col xs={12} md={6} >
-                                                    ${totales.egresos ? formatNumber(totales.egresos) : 0}
-                                                </Col>
-                                                <Col xs={12} md={6} >
-                                                    USD${totales.egresosUSD ? formatNumber(totales.egresosUSD) : 0}
-                                                </Col>
-                                            </Row>
-                                        </Col>
-                                    </OverlayTrigger>
-                                </Row>
-                                <Row className="content-sub-section">
-                                    <Col xs={12} md={12} >
-                                        <Row>
-                                            <Col xs={12} md={12} >
-                                                Diferencia entre Ingresos y Egresos:
-                                            </Col>
-                                            <Col xs={6} md={6} >
-                                                ${formatNumber(totales.ingresos - totales.egresos)}
-                                            </Col>
-                                            <Col xs={6} md={6} >
-                                                USD${totales.ingresosUSD && totales.egresosUSD ? formatNumber(totales.ingresosUSD - totales.egresosUSD)
-                                                    : (totales.ingresosUSD ? formatNumber(totales.ingresosUSD)
-                                                        : (totales.egresosUSD ? formatNumber(totales.egresosUSD) : 0))}
-                                            </Col>
-                                        </Row>
-                                    </Col>
-                                </Row>
-                            </Col>*/}
-                            {/* <Col xs={12} md={12} className="content-section border-bottom border-top" >
-                                <Row className="content-sub-section border-bottom">
-                                    <Col xs={6} md={6} className="border-right">
-                                        <Row>
-                                            <Col xs={12} md={12}>Ingresos a la fecha:  ${formatNumber(totales.ingresosHoy)}/USD${formatNumber(totales.ingresosUSDHoy)}</Col>
-                                            <Col xs={12} md={12}>Ingresos por cobrar:  ${formatNumber(totales.ingresosFuturo)}/USD${formatNumber(totales.ingresosUSDFuturo)}</Col>
-                                        </Row>
-                                    </Col>
-                                    <Col xs={6} md={6}>
-                                        <Row>
-                                            <Col xs={12} md={12}>Egresos a la fecha:  ${formatNumber(totales.egresosHoy)}/USD${formatNumber(totales.egresosUSDHoy)}</Col>
-                                            <Col xs={12} md={12}>Egresos por pagar:  ${formatNumber(totales.egresosFuturo)}/USD${formatNumber(totales.egresosUSDFuturo)}</Col>
-                                        </Row>
-                                    </Col>
-                                </Row>
-                                <Row className="content-sub-section">
-                                    <Row className="content-sub-section">
-                                        <Col xs={12} md={12} >
-                                            Flujo de Hoy: ${formatNumber(totales.flujoIngresos - totales.flujoEgresos)}/USD${formatNumber(totales.flujoIngresosUSD - totales.flujoEgresosUSD)}
-                                        </Col>
-                                        <Col xs={12} md={6}>
-                                            Ingresos de hoy: ${formatNumber(totales.flujoIngresos)}/USD${formatNumber(totales.flujoIngresosUSD)}
-                                        </Col>
-                                        <Col xs={12} md={6}>
-                                            Egresos de hoy: ${formatNumber(totales.flujoEgresos)}/USD${formatNumber(totales.flujoEgresosUSD)}
-                                        </Col>
-                                    </Row>
-                                    <Col xs={12} md={12} >
-                                        Flujo Planificado: ${formatNumber(totales.ingresosFuturo - totales.egresosFuturo)}/USD${formatNumber(totales.ingresosUSDFuturo - totales.egresosUSDFuturo)}
-                                    </Col>
-                                </Row>
-                            </Col>*/}
-                            <Col xs={12} md={12} className="content-section" >
-                                <Row>
-                                    <Col xs={12} md={12}>
-                                        <Row>
-                                            <Col xs={12} md={6}>
-                                                <Row>
-                                                    <Col xs={12} md={12} >Alquileres:</Col>
-                                                    <Col xs={12} md={12} >
-                                                        ${formatNumber(totales.alquiler)}
-                                                    </Col>
-                                                </Row>
-                                            </Col>
-                                        </Row>
-                                    </Col>
-                                </Row>
-                            </Col>
-                        </Row>
+                        <ResumenContable Totales={totales} />
                 }
             </Row>
         </div >

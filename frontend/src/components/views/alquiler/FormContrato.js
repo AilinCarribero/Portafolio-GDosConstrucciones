@@ -3,8 +3,10 @@ import { Button, Form, Modal, Row, FloatingLabel, Col } from 'react-bootstrap'
 import NumberFormat from 'react-number-format';
 import Decimal from 'decimal.js-light';
 import { useParams } from 'react-router-dom';
+
 //Redux
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { getProyectos } from '../../../redux/slice/Proyecto/thunks';
 
 //Componets
 import ValidacionNewContrato from '../../utils/modal/validacion/ValidacionNewContrato';
@@ -12,13 +14,17 @@ import ValidacionNewContrato from '../../utils/modal/validacion/ValidacionNewCon
 //Hooks
 import { desformatNumber, formatFechaISO, formatNumber, ToastComponent } from '../../../hooks/useUtils';
 import { useGetModulos } from '../../../hooks/useModulos';
+import { useResponse } from '../../../hooks/useResponse';
 
 //Service
 import { postNewContrato } from '../../../services/apiAlquileres';
 
 const FormContrato = ({ alquiler, show, setShow, setAlquileres, actionContrato }) => {
+    const dispatch = useDispatch();
+
     const { id } = useParams();
     const { modulos } = useGetModulos();
+    const { response } = useResponse();
 
     const proyectos = useSelector(state => state.proyectoRedux.proyectos);
     const proyecto = proyectos.find(proyecto => proyecto.id_proyecto == id);
@@ -86,7 +92,9 @@ const FormContrato = ({ alquiler, show, setShow, setAlquileres, actionContrato }
         try {
             resNewContrato = await postNewContrato(newContrato);
 
-            if (resNewContrato && !resNewContrato.data.todoMal && (resNewContrato.data.todoOk == 'Ok' || resNewContrato.statusText == 'OK' || resNewContrato.status == 200)) {
+            const res = response(resNewContrato);
+
+            if (res) {
                 ToastComponent('success');
                 
                 setNewContrato({
@@ -101,8 +109,10 @@ const FormContrato = ({ alquiler, show, setShow, setAlquileres, actionContrato }
                     valor: '',
                 })
 
+                dispatch(getProyectos());
                 setShow(false);
-                setAlquileres(resNewContrato.data)
+
+                setAlquileres(resNewContrato.data);
             } else {
                 ToastComponent('error', resNewContrato.data.todoMal && resNewContrato.data.todoMal);
             }

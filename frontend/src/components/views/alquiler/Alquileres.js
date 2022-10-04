@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom';
 import { Accordion, Row, Col, ModalBody } from 'react-bootstrap';
 import Decimal from 'decimal.js-light';
@@ -17,6 +17,7 @@ import * as Icons from 'react-bootstrap-icons';
 
 //Css
 import '../../../style/Alquiler.scss';
+import { useSelector } from 'react-redux';
 
 const Alquileres = () => {
     const mesActual = formatNameMes(moment().month());
@@ -25,7 +26,10 @@ const Alquileres = () => {
 
     const { id } = useParams();
     const { user } = useUser();
-    const { alquileres, mesAlquiler, totalAlquiler, CalcMesesAlquiler, setAlquileres } = useGetAlquileresId(id);
+    const { CalcMesesAlquiler, setAlquileres } = useGetAlquileresId(id);
+    
+    const proyectos = useSelector(state => state.proyectoRedux.proyectos);
+    const [proyecto, setProyecto] = useState(proyectos.find(proyecto => proyecto.id_proyecto == id));
 
     const [renovarAlquiler, setRenovarAlquiler] = useState([]);
     const [actionContrato, setActionContrato] = useState();
@@ -33,8 +37,14 @@ const Alquileres = () => {
     const [showModalRenovar, setShowModalRenovar] = useState(false);
     const [showModalNewContrato, setShowModalNewContrato] = useState(false);
 
+
+    useEffect(() => {
+        setProyecto(proyectos.find(proyecto => proyecto.id_proyecto == id));
+    }, [proyectos])
+
+
     const renovarContrato = (alquiler, action) => {
-        setShowModalRenovar(true) 
+        setShowModalRenovar(true)
         setRenovarAlquiler(alquiler);
         setActionContrato(action);
     }
@@ -49,17 +59,17 @@ const Alquileres = () => {
                         <Icons.Plus className="icon-button" size={19} /> Agregar Contrato
                     </button>
                 </Col>
-                <Col className='text-resumen-alquileres'><b>Total:</b> ${formatNumber(totalAlquiler)}</Col>
-                <Col className='text-resumen-alquileres'><b>{formatTextMix(mesAnterior)}:</b> ${formatNumber(mesAlquiler[mesAnterior])}</Col>
-                <Col className='text-resumen-alquileres'><b>{formatTextMix(mesActual)}:</b> ${formatNumber(mesAlquiler[mesActual])}</Col>
-                <Col className='text-resumen-alquileres'><b>{formatTextMix(mesPosterior)}:</b> ${formatNumber(mesAlquiler[mesPosterior])}</Col>
+                <Col className='text-resumen-alquileres'><b>Total:</b> ${proyecto && formatNumber(proyecto.totalAlquiler)}</Col>
+                <Col className='text-resumen-alquileres'><b>{formatTextMix(mesAnterior)}:</b> ${proyecto && formatNumber(proyecto.totalAlquilerXMes[mesAnterior])}</Col>
+                <Col className='text-resumen-alquileres'><b>{formatTextMix(mesActual)}:</b> ${proyecto && formatNumber(proyecto.totalAlquilerXMes[mesActual])}</Col>
+                <Col className='text-resumen-alquileres'><b>{formatTextMix(mesPosterior)}:</b> ${proyecto && formatNumber(proyecto.totalAlquilerXMes[mesPosterior])}</Col>
             </Row>
         </Row>
         <Row className="acordion">
             <Accordion>
                 {
-                    alquileres.length > 0 ?
-                        alquileres.map(alquiler => (
+                    proyecto && proyecto.alquilers.length > 0 ?
+                        proyecto.alquilers.map(alquiler => (
                             <Row key={alquiler.id_alquiler}>
                                 {showModalRenovar && <FormContrato alquiler={renovarAlquiler} show={showModalRenovar} setShow={setShowModalRenovar} setAlquileres={setAlquileres} actionContrato={actionContrato} />}
                                 <Col xs={12}>

@@ -1,17 +1,22 @@
 import React, { useState } from 'react';
 import { Card, Button, Row, FloatingLabel, Form, Col } from 'react-bootstrap';
 
+//Components
+import NumberFormat from 'react-number-format';
+
 //Servicios
 import { insertModulos, setUpdate } from '../../../services/apiModulos';
 
 //Hooks
 import { desformatNumber, ToastComponent } from '../../../hooks/useUtils';
+import { useResponse } from '../../../hooks/useResponse';
 
 //Css
-import './Modulos.css'
-import NumberFormat from 'react-number-format';
+import './Modulos.css';
 
 const FormModulos = ({ close, updateModulo, setUpdateModulo }) => {
+    const { response } = useResponse();
+
     const newDate = new Date();
     const año = newDate.getFullYear();
     const mes = newDate.getMonth();
@@ -66,7 +71,9 @@ const FormModulos = ({ close, updateModulo, setUpdateModulo }) => {
                     resModulo = await insertModulos(auxModulo);
                 }
 
-                if (resModulo && !resModulo.data.todoMal && (resModulo.data.todoOk == 'Ok' || resModulo.statusText == 'OK' || resModulo.status == 200)) {
+                const res = response(resModulo);
+
+                if (res) {
                     ToastComponent('success');
 
                     setUpdateModulo(resModulo.data);

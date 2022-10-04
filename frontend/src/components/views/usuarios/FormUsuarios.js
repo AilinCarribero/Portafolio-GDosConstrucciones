@@ -3,6 +3,7 @@ import { Card, Button, Row, FloatingLabel, Form, Col } from 'react-bootstrap';
 
 //Hooks
 import { ToastComponent } from '../../../hooks/useUtils';
+import { useResponse } from "../../../hooks/useResponse";
 
 //Servicios
 import { insertUser } from "../../../services/apiAuth";
@@ -10,6 +11,8 @@ import { insertUser } from "../../../services/apiAuth";
 import './Usuarios.css';
 
 const FormUsuarios = () => {
+    const { response } = useResponse();
+
     const [newUser, setNewUser] = useState({
         nombre_apellido: '',
         correo: '',
@@ -44,7 +47,9 @@ const FormUsuarios = () => {
             try {
                 const resNewUser = await insertUser(newUser);
 
-                if (resNewUser.todoOk == 'Ok' || resNewUser.statusText == 'OK' || resNewUser.status == 200) {
+                const res = response(resNewUser);
+
+                if (res) {
                     ToastComponent('success');
 
                     setNewUser({

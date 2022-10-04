@@ -29,7 +29,7 @@ exports.insertModulo = (req, res) => {
             });
         }).catch(err => {
             err.todoMal = "Error al ingresar el módulo";
-            console.error(err)  
+            console.error(err)
             return res.json(err)
         })
     } catch (error) {
@@ -57,8 +57,8 @@ exports.changeVendido = (req, res) => {
 
     try {
         //Cambiamos el estado del modulo a vendido
-        Modulo.update({ 
-            estado: 2, 
+        Modulo.update({
+            estado: 2,
             venta: req.body.venta,
             fecha_venta: new Date().toISOString().slice(0, 10)
         }, {
@@ -110,6 +110,49 @@ exports.updateModulo = (req, res) => {
         })
     } catch (error) {
         error.todoMal = "Error inesperado al actualizar el módulo";
+        return res.json(error);
+    }
+}
+
+exports.getCantModulos = (req, res) => {
+    try {
+        Modulo.findAll({
+            include: [{
+                model: Alquiler
+            }],
+            order: [['estado', 'ASC'], [Alquiler, 'fecha_h_alquiler', 'ASC']]
+        }).then(response => {
+            let auxDisponibles = 0;
+            let auxOcupados = 0;
+            let auxVendidos = 0;
+
+            response.forEach(modulo => {
+                switch (modulo.estado) {
+                    case 0:
+                        auxDisponibles += 1;
+                        break;
+                    case 1:
+                        auxOcupados += 1;
+                        break;
+                    case 2:
+                        auxVendidos += 1;
+                        break;
+                }
+            });
+
+            const cantModulos = {
+                total: response.length,
+                disponibles: auxDisponibles,
+                ocupados: auxOcupados,
+                vendidos: auxVendidos
+            }
+
+            res.json(cantModulos)
+        }).catch(error => {
+            console.error(error)
+            res.json(error);
+        });
+    } catch (error) {
         return res.json(error);
     }
 }

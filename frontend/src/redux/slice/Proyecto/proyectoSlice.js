@@ -9,12 +9,18 @@ export const proyectoSlice = createSlice({
         filtros: [],
         proyectos: [],
         alquilerXMes: [],
+        totalAlquieres: 0,
+        totalVigente: 0,
         loading: false,
         error: false
     },
     reducers: {
         setProyectos: (state, action) => {
-            state.proyectos = action.payload;
+            state.proyectos = action.payload.proyectos;
+            state.alquilerXMes = action.payload.totalAlquileresXMes;
+            state.totalAlquieres = action.payload.totalAlquileres;
+            state.totalVigente = action.payload.totalVigente;
+
             state.loading = false;
         },
         changeFiltros: (state, action) => {

@@ -11,7 +11,11 @@ import ModalVenta from './ModalVenta';
 import { formatFecha, formatNumber } from '../../../hooks/useUtils';
 import { useGetModulos } from '../../../hooks/useModulos';
 import { useUser } from '../../../hooks/useUser';
+import { useResponse } from '../../../hooks/useResponse';
 
+//Redux
+import { useDispatch } from 'react-redux';
+import { setCantidadModulos } from '../../../redux/slice/Modulo/moduloSlice';
 
 //Servise
 import { setVendido } from '../../../services/apiModulos';
@@ -24,8 +28,11 @@ import './Modulos.css';
 import * as Icons from 'react-bootstrap-icons';
 
 const Modulos = () => {
+    const { response } = useResponse();
     const { user } = useUser();
     const { modulos, setModulos } = useGetModulos();
+
+    const dispatch = useDispatch();
 
     const [infoModalVenta, setInfoModalVenta] = useState({
         titulo: '',
@@ -70,6 +77,13 @@ const Modulos = () => {
             ocupados: auxOcupados,
             vendidos: auxVendidos
         })
+
+        dispatch(setCantidadModulos({
+            total: modulos.length,
+            disponibles: auxDisponibles,
+            ocupados: auxOcupados,
+            vendidos: auxVendidos
+        }));
 
     }, [modulos])
 
@@ -145,9 +159,11 @@ const Modulos = () => {
                 venta: data.valor
             }
 
-            const response = await setVendido(dataSend);
+            const responseVendido = await setVendido(dataSend);
 
-            if (response.statusText == "OK" && response.status == 200) {
+            const res = response(responseVendido);
+
+            if (res) {
                 setModulos(response.data)
             }
         }
