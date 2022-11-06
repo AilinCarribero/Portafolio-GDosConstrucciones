@@ -50,16 +50,14 @@ services:
       - letsencrypt
     environment:
       - VIRTUAL_HOST=gestion.gdosconstrucciones.com.ar
-      - VIRTUAL_HOST=cuerre.gdosconstrucciones.com.ar
       - LETSENCRYPT_HOST=gestion.gdosconstrucciones.com.ar
-      - LETSENCRYPT_HOST=cuerre.gdosconstrucciones.com.ar
     restart: always
 
   nginx2:
     container_name: nginx2
     build: ./nginx
     ports:
-      - "8080:80"
+      - "8080:81"
     links:
       - reactjscuerre
       - nginx-proxy
