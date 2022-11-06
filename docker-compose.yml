@@ -55,6 +55,20 @@ services:
       - LETSENCRYPT_HOST=cuerre.gdosconstrucciones.com.ar
     restart: always
 
+  nginx2:
+    container_name: nginx2
+    build: ./nginx
+    ports:
+      - "8080:80"
+    links:
+      - reactjscuerre
+      - nginx-proxy
+      - letsencrypt
+    environment:
+      - VIRTUAL_HOST=cuerre.gdosconstrucciones.com.ar
+      - LETSENCRYPT_HOST=cuerre.gdosconstrucciones.com.ar
+    restart: always
+
   nginx-proxy:
     image: jwilder/nginx-proxy
     restart: always
