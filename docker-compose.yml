@@ -31,7 +31,7 @@ services:
     restart: always
     build: ./cuerre
     ports: 
-      - "5002:3002"
+      - "3000:3002"
     volumes: 
       - ./cuerre:/usr/src/app/cuerre
     links:
