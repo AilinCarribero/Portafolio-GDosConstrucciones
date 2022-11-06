@@ -57,7 +57,7 @@ services:
     container_name: nginx2
     build: ./nginx
     ports:
-      - "8080:81"
+      - "8081:81"
     links:
       - reactjscuerre
       - nginx-proxy
@@ -72,6 +72,7 @@ services:
     restart: always
     ports:
       - "80:80"
+      - "81:81"
       - "443:443"
     volumes:
         - /var/run/docker.sock:/tmp/docker.sock:ro
