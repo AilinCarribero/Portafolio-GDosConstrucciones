@@ -19,6 +19,7 @@ const RangoModel = require('./src/models/rangoModel');
 const StockModel = require('./src/models/stockModel');
 const StockMovimientoModel = require('./src/models/stockMovimientoModel');
 const UnidadNegocioModel = require('./src/models/unidadNegocioModel');
+const TokenModel = require('./src/models/tokenModel');
 
 //Declaro la base de datos
 const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASSWORD, {
@@ -27,7 +28,7 @@ const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, proces
     dialect: 'mysql',
     define: {
         freezeTableName: true,
-        alter: false, // cuando se realice un cambio en algun modelo o relacion pasar a true
+        alter: true, // cuando se realice un cambio en algun modelo o relacion pasar a true
         modelName: 'singularName'
     },
 });
@@ -51,6 +52,7 @@ const Rango = RangoModel(sequelize, Sequelize);
 const Stock = StockModel(sequelize, Sequelize);
 const StockMovimiento = StockMovimientoModel(sequelize, Sequelize);
 const UnidadNegocio = UnidadNegocioModel(sequelize, Sequelize);
+const Token = TokenModel(sequelize, Sequelize);
 
 /*Conecto con la base de datos, verifico que esten los modelos creados, si no lo estan los crea 
  logging tiene que pasar a true cuando se mande a produccion */
@@ -86,5 +88,5 @@ sequelize.sync({ force: false, logging: false }).then(() => {
 
 module.exports = {
     Alquiler, AnalisisCosto, Auth, CentroCosto, ComprobantePago, DetalleAC, Egreso, Estado, FormaCobro, FormaPago,
-    Indice, Ingreso, Modulo, Proyecto, Rango, Stock, StockMovimiento, UnidadNegocio
+    Indice, Ingreso, Modulo, Proyecto, Rango, Stock, StockMovimiento, UnidadNegocio, Token
 }

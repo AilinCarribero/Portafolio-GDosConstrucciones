@@ -24,6 +24,19 @@ services:
     links:
       - nodejsapp
 
+  reactjscuerre:
+    container_name: reactjscuerre
+    stdin_open: true
+    tty: true
+    restart: always
+    build: ./cuerre
+    ports: 
+      - "5002:3002"
+    volumes: 
+      - ./cuerre:/usr/src/app/cuerre
+    links:
+      - nodejsapp
+
   nginx:
     container_name: nginx
     build: ./nginx
@@ -32,11 +45,14 @@ services:
     links:
       - nodejsapp
       - reactjsapp
+      - reactjscuerre
       - nginx-proxy
       - letsencrypt
     environment:
       - VIRTUAL_HOST=gestion.gdosconstrucciones.com.ar
+      - VIRTUAL_HOST=cuerre.gdosconstrucciones.com.ar
       - LETSENCRYPT_HOST=gestion.gdosconstrucciones.com.ar
+      - LETSENCRYPT_HOST=cuerre.gdosconstrucciones.com.ar
     restart: always
 
   nginx-proxy:

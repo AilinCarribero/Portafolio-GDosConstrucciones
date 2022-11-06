@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 
 //Base de datos
-const { Auth } = require('../../db');
+const { Auth, Token } = require('../../db');
 
 exports.verifyToken = async (req, res, next) => {
     try {
@@ -51,4 +51,29 @@ exports.verifyAdmin = async (req, res, next) => {
 
 exports.verifyMedio = async (req, res, next) => {
 
+}
+
+exports.verifyBasicAuth = async (req, res, next) => {
+    const auth = req.get('authorization');
+
+    const token = await Token.findOne({ where: { uso: 'QRmodulos' }});
+
+    if(!auth) {
+        console.error('No existe el encabezado authorization')
+    } else {
+        const credentials = Buffer.from(auth.split(' ')[1], 'base64').toString().split(':');
+
+        const user = credentials[0];
+        const password = credentials[1];
+
+        if(!(user === 'GDosConstrucciones' && password === token.token)) {
+            const err = new Error('Not Authenticated!');
+
+            res.status(401).set('WWW-Authenticate', 'Basic');
+            next(err);
+        } else {
+            res.status(200);
+            next();
+        }
+    }
 }

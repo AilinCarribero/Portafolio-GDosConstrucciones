@@ -33,6 +33,15 @@
     }
 }
 
+@media only screen and (hover: none) and (pointer: coarse) {
+    .content-total-modulos-estados {
+        .accordion-estado-modulos {
+            position: relative;
+            margin: auto;
+        }
+    }
+}
+
 .accordion-modulos {
     position: relative;
 
@@ -61,13 +70,26 @@
     }
 
     .accordion-body-modulos {
-        #descripcion {
+        .col-12-accordion {
             margin-left: 4%;
-            @media only screen and (hover: none) and (pointer: coarse){
-                margin-left: 0;
+
+            .url-qr {
+                padding-right: 90px;
+                word-break: break-all;
             }
         }
 
+
+        @media only screen and (hover: none) and (pointer: coarse) {
+            .col-12-accordion {
+                margin-left: 27px;
+    
+                .url-qr {
+                    padding-right: 60px;
+                    word-break: break-all;
+                }
+            }
+        }
         .content-trazabilidad-modulos {
             .proyecto-trazabilidad-modulos {}
 
@@ -99,6 +121,10 @@
             .button-alert {
                 border: black;
                 padding: 5px 0;
+
+                &:hover {
+                    cursor: pointer;
+                }
             }
 
             #button-aceptar {
@@ -112,4 +138,53 @@
             }
         }
     }
+}
+
+/*Formulario*/
+.card-form-modulo {
+    position: relative;
+    top: 5%;
+    width: 400px !important;
+    border: 1px;
+    border-style: hidden;
+    border-radius: 10px;
+    margin: 5px;
+}
+
+.container-form-modulo {
+    .content-select {
+        margin-top: 5px;
+        margin-bottom: 10px;
+    }
+
+    .title-caracteristicas {
+        margin: 0;
+        padding-top: 10px;
+        margin-bottom: -10px;
+        font-weight: bold;
+        text-align: center;
+        border-top: 1px solid #dddcdc;
+    }
+
+    .title-section {
+        padding-left: 15px;
+        text-align: left;
+        font-weight: 500;
+    }
+
+    .content-checks {
+        text-align: left;
+        padding-bottom: 10px;
+    }
+}
+
+@media only screen and (hover: none) and (pointer: coarse) {
+    .mobile-form-modulo {
+        width: 340px !important;
+    }
+}
+
+.label-title-modulo {
+    font-size: 15px;
+    font-weight: bold;
 }

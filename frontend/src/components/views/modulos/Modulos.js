@@ -4,17 +4,17 @@ import ReactApexCharts from 'react-apexcharts';
 
 //Components
 import ModalFormulario from '../../utils/modal/formularios/ModalFormulario';
-import Alerta from '../../utils/modal/validacion/Alerta';
 import ModalVenta from './ModalVenta';
+import UrlQr from '../../utils/modal/alerta/UrlQr';
 
 //Hooks
-import { formatFecha, formatNumber } from '../../../hooks/useUtils';
+import { formatFecha, formatNumber, ToastComponent } from '../../../hooks/useUtils';
 import { useGetModulos } from '../../../hooks/useModulos';
 import { useUser } from '../../../hooks/useUser';
 import { useResponse } from '../../../hooks/useResponse';
 
 //Redux
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setCantidadModulos } from '../../../redux/slice/Modulo/moduloSlice';
 
 //Servise
@@ -22,7 +22,6 @@ import { setVendido } from '../../../services/apiModulos';
 
 //Css
 import '../../../style/Modulos.scss';
-import './Modulos.css';
 
 //Img-Icons
 import * as Icons from 'react-bootstrap-icons';
@@ -31,8 +30,9 @@ const Modulos = () => {
     const { response } = useResponse();
     const { user } = useUser();
     const { modulos, setModulos } = useGetModulos();
-
     const dispatch = useDispatch();
+
+    const showModalUrlQr = useSelector(state => state.qrRedux.urlQr);
 
     const [infoModalVenta, setInfoModalVenta] = useState({
         titulo: '',
@@ -164,20 +164,39 @@ const Modulos = () => {
             const res = response(responseVendido);
 
             if (res) {
-                setModulos(response.data)
+                setModulos(responseVendido.data);
+                ToastComponent('success', 'Se registró la venta correctamente');
+                setShowModalVenta(false);
+            } else {
+                ToastComponent('error', responseVendido.data.todoMal && responseVendido.data.todoMal);
             }
         }
     }
 
     const updateModalModulo = (modulo) => {
-        console.log(modulo)
         setInfoUpdate(modulo);
-        setShowForm(true)
+        setShowForm(true);
+    }
+
+    const setShowFormReset = (show) => {
+        setShowForm(show);
+        setInfoUpdate([]);
+    }
+
+    const searchTipologia = (siglas) => {
+        switch (siglas) {
+            case "OS": return 'Oficina Simple'
+            case "OD": return 'Oficina Doble'
+            case "MA": return 'Módulo Apareado'
+            case "E": return 'Especial'
+            case "BM": return 'Base Maritima'
+        }
     }
 
     return (<>
-        <ModalFormulario formulario={'modulo'} informacion={infoUpdate} show={showForm} setShow={setShowForm} updateNew={setModulos} />
+        <ModalFormulario formulario={'modulo'} informacion={infoUpdate} show={showForm} setShow={setShowFormReset} updateNew={setModulos} />
         <ModalVenta titulo={infoModalVenta.titulo} show={showModalVenta} setShow={setShowModalVenta} submit={vender} />
+        <UrlQr show={showModalUrlQr} />
 
         <Row className='content-resumen-sec-buttons'>
             <Row className="conten-buttons-agregar">
@@ -232,7 +251,12 @@ const Modulos = () => {
                                                     <Col xs={2} md={2} id="vendido"></Col>
                                                 </OverlayTrigger>
                                             }
-                                            <Col xs={4} md={4} className="accordion-nombre-modulos"> {modulo.nombre_modulo} </Col>
+                                            <Col xs={4} md={4} className="accordion-nombre-modulos">
+                                                {modulo.nombre_modulo ?
+                                                    modulo.nombre_modulo
+                                                    : `${modulo.tipologia} - ${formatNumber(modulo.ancho)} x ${formatNumber(modulo.largo)} - ${modulo.material_cerramiento} - ${modulo.id_modulo}`
+                                                }
+                                            </Col>
                                             {user.rango == "admin" && modulo.estado != 2 &&
                                                 <Col xs={2} md={2} className="content-buttons" >
                                                     <Icons.CashCoin className="button-vender" onClick={() => vender(false, modulo.id_modulo)} />
@@ -270,14 +294,80 @@ const Modulos = () => {
                                                     </Row>
                                                 </Col>
                                             }
+                                            <Col xs={12} md={6}>
+                                                <Row>
+                                                    <Col xs={1} md={1}></Col>
+                                                    <Col xs={11} md={11}><p> Dimensión: {`Ancho: ${formatNumber(modulo.ancho)} / Largo: ${formatNumber(modulo.largo)}`}</p></Col>
+                                                </Row>
+                                            </Col>
+                                            <Col xs={12} md={6}>
+                                                <Row>
+                                                    <Col xs={1} md={1}></Col>
+                                                    <Col xs={11} md={11}><p> Tipologia: {searchTipologia(modulo.tipologia)}</p></Col>
+                                                </Row>
+                                            </Col>
+                                            <Col xs={12} md={6}>
+                                                <Row>
+                                                    <Col xs={1} md={1}></Col>
+                                                    <Col xs={11} md={11}><p> Material de Cerramiento: {modulo.material_cerramiento === "PUR" ? 'PUR (Poliuretano)' : (modulo.material_cerramiento === 'EPS' ? 'EPS (Poliestireno)' : modulo.material_cerramiento)}</p></Col>
+                                                </Row>
+                                            </Col>
+                                            <Col xs={12} md={6}>
+                                                <Row>
+                                                    <Col xs={1} md={1}></Col>
+                                                    <Col xs={11} md={11}><p> Colores: {`Exterior: ${modulo.col_exterior} - Interior: ${modulo.col_interior}`}</p></Col>
+                                                </Row>
+                                            </Col>
+                                            <Col xs={12} md={6}>
+                                                <Row>
+                                                    <Col xs={1} md={1}></Col>
+                                                    <Col xs={11} md={11}><p> Material del Piso: {modulo.material_piso}</p></Col>
+                                                </Row>
+                                            </Col>
+                                            <Col xs={12} md={6}>
+                                                <Row>
+                                                    <Col xs={1} md={1}></Col>
+                                                    <Col xs={11} md={11}><p> Equipamiento: {modulo.equipamiento}</p></Col>
+                                                </Row>
+                                            </Col>
+                                            <Col xs={12} md={6}>
+                                                <Row>
+                                                    <Col xs={1} md={1}></Col>
+                                                    <Col xs={11} md={11}><p>Carpinteria: Puertas: {modulo.puertas} / Ventanas: {`${modulo.ventanas} con dimensión de ${formatNumber(modulo.vent_dimension)}`}</p></Col>
+                                                </Row>
+                                            </Col>
+                                            <Col xs={12} md={6}>
+                                                <Row>
+                                                    <Col xs={1} md={1}></Col>
+                                                    <Col xs={11} md={11}><p> Instalación Eléctrica: {modulo.inst_electrica ? <Icons.CheckSquareFill color='#05be40' /> : <Icons.XSquareFill color='#ce0000' />}</p></Col>
+                                                </Row>
+                                            </Col>
+                                            <Col xs={12} md={6}>
+                                                <Row>
+                                                    <Col xs={1} md={1}></Col>
+                                                    <Col xs={11} md={11}><p> Instalación Sanitaria: {modulo.inst_sanitaria ? <Icons.CheckSquareFill color='#05be40' /> : <Icons.XSquareFill color='#ce0000' />}</p></Col>
+                                                </Row>
+                                            </Col>
+                                            <Col xs={12} md={6}>
+                                                <Row>
+                                                    <Col xs={1} md={1}></Col>
+                                                    <Col xs={11} md={11}><p> Instalaciones Especiales: {modulo.inst_especiales ? <Icons.CheckSquareFill color='#05be40' /> : <Icons.XSquareFill color='#ce0000' />}</p></Col>
+                                                </Row>
+                                            </Col>
                                             {modulo.descripcion &&
-                                                <Col xs={12} md={12} id="descripcion">
+                                                <Col xs={12} md={12} className="col-12-accordion">
                                                     <Row>
                                                         <Col xs={12} md={12}><p>Descripción: {modulo.descripcion}</p></Col>
                                                     </Row>
                                                 </Col>
                                             }
-
+                                            {modulo.url_qr &&
+                                                <Col xs={12} md={12} className="col-12-accordion">
+                                                    <Row>
+                                                        <Col className='url-qr' xs={12} md={12}><p>URL del QR: {modulo.url_qr} </p></Col>
+                                                    </Row>
+                                                </Col>
+                                            }
                                         </Row>
                                         {modulo.alquilers.length > 0 && <Row>
                                             <Col xs={12} md={12} >
@@ -293,7 +383,7 @@ const Modulos = () => {
                                                 <Col xs={12} md={12}>
                                                     <p className="accordion-title-section">Acciones</p>
                                                 </Col>
-                                                <Col xs={6} md={6}>
+                                                <Col xs={12} md={6}>
                                                     <button className="button-action" onClick={() => updateModalModulo(modulo)}>
                                                         <Row>
                                                             <Col xs={1} md={1} className='icon-action'>

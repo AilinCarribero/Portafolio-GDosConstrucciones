@@ -1,0 +1,45 @@
+button {
+    border-radius: 20px;
+    background-color: transparent;
+    text-align: center;
+    font-weight: bold;
+    font-size: 15px;
+    padding: 5px 20px;
+    width: 100%;
+
+    &:hover {
+        background-color: #e0e0e0;
+        cursor: pointer;
+    }
+}
+
+.content-card {
+    position: relative;
+    max-width: 500px;
+    padding: 20px 40px;
+    margin: auto;
+    margin-top: 10vh;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    border-radius: 20px;
+    border: solid 1px #575757;
+
+    p {
+        font-size: 15px;
+        margin: 0;
+        padding: 0;
+    }
+
+    .text-field {
+        width: 100%;
+    }
+}
+
+.content-info {
+    padding: 1vh 3vw;
+    
+    .icon {
+        margin-bottom: -5px;
+    }
+}

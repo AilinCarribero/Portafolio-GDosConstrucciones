@@ -46,5 +46,27 @@
     .modal-content{
         align-items: center;
         justify-content: center;
+
+        .button-copy {
+            border: transparent;
+            background-color: transparent; 
+            padding: 30px;
+            padding-top: 0;
+
+            &:hover {
+                border-color: 2px solid #dfdfdf;
+                cursor: pointer;
+            }
+
+            .icon-text-copy {
+                border: solid 2px #292929;
+                border-radius: 5px;
+                padding: 2px; 
+
+                &:hover {
+                    background-color: #c7c7c7;
+                }
+            }
+        }
     }
 }
