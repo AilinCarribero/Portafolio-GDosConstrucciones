@@ -15,6 +15,7 @@ exports.insertModulo = (req, res) => {
     req.body.fecha_creacion = !req.body.fecha_creacion ? new Date().toISOString().slice(0, 10) : req.body.fecha_creacion;
     /*  0 => Libre / 1 => Alquilado / 2 => Vendido */
     req.body.estado = !req.body.estado ? 0 : req.body.estado;
+    req.body.nombre_modulo = null
 
     try {
         Modulo.create(req.body).then(response => {

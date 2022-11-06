@@ -6,7 +6,9 @@ module.exports = ( sequelize, type ) => {
             autoIncrement: true
         },
         nombre_modulo: {
-            type: type.STRING(100)
+            type: type.STRING(100),
+            allowNull: true,
+            defaultValue: null
         },
         cliente: {
             type: type.STRING(100)

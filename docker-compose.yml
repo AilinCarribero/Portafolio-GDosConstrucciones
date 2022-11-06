@@ -31,7 +31,7 @@ services:
     restart: always
     build: ./cuerre
     ports: 
-      - "3000:3002"
+      - "3002:3002"
     volumes: 
       - ./cuerre:/usr/src/app/cuerre
     links:
@@ -45,9 +45,25 @@ services:
     links:
       - nodejsapp
       - reactjsapp
+      - nginx-proxy
+      - letsencrypt
+    environment:
+      - VIRTUAL_HOST=gestion.gdosconstrucciones.com.ar
+      - LETSENCRYPT_HOST=gestion.gdosconstrucciones.com.ar
+    restart: always
+
+  nginx2:
+    container_name: nginx2
+    build: ./nginx
+    ports:
+      - "8081:81"
+    links:
       - reactjscuerre
       - nginx-proxy
       - letsencrypt
+    environment:
+      - VIRTUAL_HOST=cuerre.gdosconstrucciones.com.ar
+      - LETSENCRYPT_HOST=cuerre.gdosconstrucciones.com.ar
     restart: always
 
   nginx-proxy:
