@@ -18,6 +18,7 @@ cron.schedule('00 00 * * *', () => {
     estadoModulos();
 });
 
-cron.schedule('* * * * * 01', () => {
+//Tarea programada para realizar cada semana
+cron.schedule('00 00 * * 01', () => {
     createToken();
 })
