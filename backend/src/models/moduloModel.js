@@ -89,10 +89,10 @@ module.exports = ( sequelize, type ) => {
             defaultValue: null
         },
         token_modulo: {
-            type: type.STRING(2000)
+            type: type.STRING(3000)
         },
         url_qr: {
-            type: type.STRING(1000)
+            type: type.STRING(3000)
         }
     });
 }

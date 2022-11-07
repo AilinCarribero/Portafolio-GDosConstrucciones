@@ -15,12 +15,12 @@ exports.insertModulo = (req, res) => {
     req.body.fecha_creacion = !req.body.fecha_creacion ? new Date().toISOString().slice(0, 10) : req.body.fecha_creacion;
     /*  0 => Libre / 1 => Alquilado / 2 => Vendido */
     req.body.estado = !req.body.estado ? 0 : req.body.estado;
-    req.body.nombre_modulo = 'sin nombre'
+    req.body.nombre_modulo = null;
 
     try {
         Modulo.create(req.body).then(response => {
             const tokenId = jwt.sign(response.id_modulo, process.env.JWT_SECRET); //Este es para la url
-            const tokenModulo = jwt.sign(response, process.env.JWT_SECRET); //Este es modificable y contiene la informacion del modulo
+            const tokenModulo = jwt.sign(response.dataValues, process.env.JWT_SECRET); //Este es modificable y contiene la informacion del modulo
 
             const url_qr = `https://cuerre.gdosconstrucciones.com.ar/${tokenId}`
 

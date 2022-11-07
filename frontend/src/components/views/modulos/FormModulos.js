@@ -30,7 +30,6 @@ const FormModulos = ({ close, updateModulo, setUpdateModulo }) => {
     const [validated, setValidated] = useState(false);
 
     const [modulo, setModulo] = useState({
-        id_modulo: updateModulo.id_modulo ? updateModulo.id_modulo : '',
         nombre_modulo: updateModulo.nombre_modulo ? updateModulo.nombre_modulo : '',
         costo: updateModulo.costo ? updateModulo.costo : '',
         venta: updateModulo.venta ? updateModulo.venta : '',
@@ -177,7 +176,7 @@ const FormModulos = ({ close, updateModulo, setUpdateModulo }) => {
                         <Form noValidate validated={validated} onSubmit={handleSubmitForm} >
                             <Form.Group className="mb-3" >
                                 <Row>
-                                    <p>Módulo<b> {`${modulo.tipologia ? modulo.tipologia : 'tipologia'} - ${modulo.ancho ? modulo.ancho : 'ancho'} x ${modulo.largo ? modulo.largo : 'largo'} - ${modulo.material_cerramiento ? modulo.material_cerramiento : 'Material de Cerramiento'} - ${modulo.id_modulo ? modulo.id_modulo : 'id'}`}</b> </p>
+                                    <p>Módulo<b> {`${modulo.tipologia ? modulo.tipologia : 'tipologia'} - ${modulo.ancho ? modulo.ancho : 'ancho'} x ${modulo.largo ? modulo.largo : 'largo'} - ${modulo.material_cerramiento ? modulo.material_cerramiento : 'Material de Cerramiento'} - ${updateModulo.id_modulo ? updateModulo.id_modulo : 'id'}`}</b> </p>
                                 </Row>
                             </Form.Group>
                             <Row>
