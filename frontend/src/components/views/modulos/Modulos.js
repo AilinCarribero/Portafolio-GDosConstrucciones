@@ -252,7 +252,7 @@ const Modulos = () => {
                                                 </OverlayTrigger>
                                             }
                                             <Col xs={4} md={4} className="accordion-nombre-modulos">
-                                                {modulo.nombre_modulo ?
+                                                {modulo.nombre_modulo && modulo.nombre_modulo != "sin nombre" ?
                                                     modulo.nombre_modulo
                                                     : `${modulo.tipologia} - ${formatNumber(modulo.ancho)} x ${formatNumber(modulo.largo)} - ${modulo.material_cerramiento} - ${modulo.id_modulo}`
                                                 }

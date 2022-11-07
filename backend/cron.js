@@ -19,6 +19,6 @@ cron.schedule('00 00 * * *', () => {
 });
 
 //Tarea programada para realizar cada semana
-cron.schedule('00 00 * * 01', () => {
+cron.schedule('0 0 * * 0', () => {
     createToken();
 })
