@@ -34,7 +34,7 @@ const FormContrato = ({ alquiler, show, setShow, setAlquileres, actionContrato }
         id_modulo: alquiler ? alquiler.id_modulo : '',
         alquiler: alquiler ? alquiler : '',
         proyecto: proyecto,
-        nombre_modulo: alquiler ? alquiler.modulo.nombre_modulo : '',
+        nombre_modulo: alquiler ? alquiler.modulo.nombre_modulo || `${alquiler.modulo.tipologia} - ${formatNumber(alquiler.modulo.ancho)} x ${formatNumber(alquiler.modulo.largo)} - ${alquiler.modulo.material_cerramiento} - ${alquiler.modulo.id_modulo}`: '',
         id_proyecto: id,
         alquiler_total: proyecto.alquiler_total,
         fecha_d_alquiler: alquiler ? formatFechaISO(alquiler.fecha_h_alquiler) : formatFechaISO(new Date()),
@@ -138,7 +138,7 @@ const FormContrato = ({ alquiler, show, setShow, setAlquileres, actionContrato }
                                             {modulos.length > 0 ?
                                                 modulos.map((modulo) => (
                                                     modulo.estado === 0 && <option key={modulo.id_modulo} value={modulo.id_modulo}>
-                                                        {modulo.nombre_modulo}
+                                                        {modulo.nombre_modulo || `${modulo.tipologia} - ${formatNumber(modulo.ancho)} x ${formatNumber(modulo.largo)} - ${modulo.material_cerramiento} - ${modulo.id_modulo}`}
                                                     </option>
                                                 ))
                                                 : <option>NO HAY MÓDULOS DISPONIBLES</option>

@@ -84,7 +84,7 @@ const Alquileres = () => {
                                                     <Col xs={2} md={2} id="no-activo"></Col>
                                                 )
                                             }
-                                            <Col className="acordion-title" xs={4} md={3}><b>{alquiler.modulo.nombre_modulo}</b></Col>
+                                            <Col className="acordion-title" xs={4} md={3}><b>{alquiler.modulo.nombre_modulo || `${alquiler.modulo.tipologia} - ${formatNumber(alquiler.modulo.ancho)} x ${formatNumber(alquiler.modulo.largo)} - ${alquiler.modulo.material_cerramiento} - ${alquiler.modulo.id_modulo}`}</b></Col>
                                             <Col className="acordion-title" xs={3} md={2}><b>${formatNumber(alquiler.valor)}</b> </Col>
                                             <Col className="acordion-title" xs={3} md={2}>Cant. de Meses: <b>{CalcMesesAlquiler(alquiler.fecha_d_alquiler, alquiler.fecha_h_alquiler)}</b> </Col>
                                         </Accordion.Header>

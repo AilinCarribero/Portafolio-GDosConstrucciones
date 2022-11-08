@@ -13,7 +13,7 @@ import { insertProyecto, setUpdateProyecto } from '../../../services/apiProyecto
 //Hooks
 import { useGetCentroCosto } from '../../../hooks/useCentroCosto';
 import { useGetUnidadNegocio } from '../../../hooks/useUnidadNegocio';
-import { desformatNumber, formatFecha, ToastComponent } from '../../../hooks/useUtils';
+import { desformatNumber, formatFecha, formatNumber, ToastComponent } from '../../../hooks/useUtils';
 import { useGetModulos } from '../../../hooks/useModulos';
 
 //Css
@@ -27,13 +27,25 @@ const FormProyectos = ({ close, updateProyecto, setUpdateProyectos }) => {
 
     const dispatch = useDispatch();
 
+    const [proyecto, setProyecto] = useState({
+        id_centro_costo: updateProyecto ? updateProyecto.id_centro_costo : 2,
+        id_unidad_negocio: updateProyecto ? updateProyecto.id_unidad_negocio : '',
+        cliente: updateProyecto ? updateProyecto.cliente : '',
+        costo: updateProyecto ? updateProyecto.costo : '',
+        venta: updateProyecto ? updateProyecto.venta : '',
+        alquiler_total: updateProyecto ? updateProyecto.alquiler_total : 0,
+        fecha_i_proyecto: updateProyecto ? new Date(updateProyecto.fecha_i_proyecto).toISOString().slice(0, 10) : new Date().toISOString().slice(0, 10),
+        fecha_f_proyecto: (updateProyecto && new Date(updateProyecto.fecha_f_proyecto).toISOString().slice(0, 10) != new Date('2200-01-01').toISOString().slice(0, 10)) ? new Date(updateProyecto.fecha_f_proyecto).toISOString().slice(0, 10) : '',
+        id_estado: updateProyecto ? updateProyecto.id_estado : '1'
+    });
+
     //Datos para usar en el formulario traidos de la api
     const { centroCosto } = useGetCentroCosto();
     const { unidadNegocio } = useGetUnidadNegocio();
     const { modulos } = useGetModulos();
 
     //Eventos para mostrar partes del formulario
-    const [showCostoVenta, setShowCostoVenta] = useState(updateProyecto && updateProyecto.id_centro_costo == 2 ? true : false);
+    const [showCostoVenta, setShowCostoVenta] = useState(updateProyecto && updateProyecto.id_centro_costo == 2 || proyecto.id_centro_costo === 2 ? true : false);
     const [showVenta, setShowVenta] = useState(updateProyecto && updateProyecto.id_centro_costo == 2 ? true : false);
     const [showAlquiler, setShowAlquiler] = useState(false);
     const [showDataAlquileres, setShowDataAlquileres] = useState(false);
@@ -45,18 +57,6 @@ const FormProyectos = ({ close, updateProyecto, setUpdateProyectos }) => {
 
     //Variables de validacion
     const [validated, setValidated] = useState(false);
-
-    const [proyecto, setProyecto] = useState({
-        id_centro_costo: updateProyecto ? updateProyecto.id_centro_costo : '',
-        id_unidad_negocio: updateProyecto ? updateProyecto.id_unidad_negocio : '',
-        cliente: updateProyecto ? updateProyecto.cliente : '',
-        costo: updateProyecto ? updateProyecto.costo : '',
-        venta: updateProyecto ? updateProyecto.venta : '',
-        alquiler_total: updateProyecto ? updateProyecto.alquiler_total : 0,
-        fecha_i_proyecto: updateProyecto ? new Date(updateProyecto.fecha_i_proyecto).toISOString().slice(0, 10) : new Date().toISOString().slice(0, 10),
-        fecha_f_proyecto: (updateProyecto && new Date(updateProyecto.fecha_f_proyecto).toISOString().slice(0, 10) != new Date('2200-01-01').toISOString().slice(0, 10)) ? new Date(updateProyecto.fecha_f_proyecto).toISOString().slice(0, 10) : '',
-        id_estado: updateProyecto ? updateProyecto.id_estado : '1'
-    });
 
     const handleChangeForm = (e) => {
         const targetName = e.target.name;
@@ -211,7 +211,10 @@ const FormProyectos = ({ close, updateProyecto, setUpdateProyectos }) => {
                                         {modulos.length > 0 ?
                                             modulos.map((modulo) => (
                                                modulo.estado === 0 && <option key={modulo.id_modulo} value={modulo.id_modulo}>
-                                                    {modulo.nombre_modulo}
+                                                    {
+                                                        modulo.nombre_modulo ||
+                                                        `${modulo.tipologia} - ${formatNumber(modulo.ancho)} x ${formatNumber(modulo.largo)} - ${modulo.material_cerramiento} - ${modulo.id_modulo}`
+                                                    }
                                                 </option>
                                             ))
                                             : <option>NO HAY MÓDULOS DISPONIBLES</option>
@@ -260,9 +263,9 @@ const FormProyectos = ({ close, updateProyecto, setUpdateProyectos }) => {
                                 <Form.Group className="mb-3" >
                                     <Form.Label className="label-title-proyecto">Nombre del Proyecto</Form.Label>
                                     <Row>
-                                        <Col sm={6} >
+                                        <Col sm={12} >
                                             <FloatingLabel label="C.C.">
-                                                <Form.Select onChange={handleChangeForm} name="id_centro_costo" value={proyecto.id_centro_costo} required >
+                                                <Form.Select onChange={handleChangeForm} name="id_centro_costo" value={proyecto.id_centro_costo} required disabled >
                                                     <option value=""> </option>
                                                     {
                                                         centroCosto.map((centro_costo) => (
@@ -274,7 +277,7 @@ const FormProyectos = ({ close, updateProyecto, setUpdateProyectos }) => {
                                                 </Form.Select>
                                             </FloatingLabel>
                                         </Col>
-                                        <Col sm={6}>
+                                        <Col sm={12}>
                                             <FloatingLabel label="U.N.">
                                                 <Form.Select onChange={handleChangeForm} name="id_unidad_negocio" value={proyecto.id_unidad_negocio} required >
                                                     <option value="" > </option>

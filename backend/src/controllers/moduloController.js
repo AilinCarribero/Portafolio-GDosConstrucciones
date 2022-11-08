@@ -17,6 +17,8 @@ exports.insertModulo = (req, res) => {
     req.body.estado = !req.body.estado ? 0 : req.body.estado;
     req.body.nombre_modulo = null;
 
+    req.body.equipamiento = req.body.equipamiento.toString();
+
     try {
         Modulo.create(req.body).then(response => {
             const tokenId = jwt.sign(response.id_modulo, process.env.JWT_SECRET); //Este es para la url
@@ -132,6 +134,7 @@ exports.updateModulo = (req, res) => {
 
     data.estado = !data.estado ? 0 : data.estado;
     data.fecha_venta = !data.fecha_venta ? (data.venta ? new Date().toISOString().slice(0, 10) : null) : data.fecha_venta;
+    data.equipamiento = data.equipamiento.toString();
 
     const tokenId = jwt.sign(id, process.env.JWT_SECRET);
 

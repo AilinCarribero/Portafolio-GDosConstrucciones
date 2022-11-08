@@ -65,12 +65,16 @@ module.exports = ( sequelize, type ) => {
             type: type.DOUBLE,
             isNumeric: true
         },
-        vent_dimension: {
+        vent_alto: {
+            type: type.DOUBLE,
+            isNumeric: true
+        },
+        vent_ancho: {
             type: type.DOUBLE,
             isNumeric: true
         },
         equipamiento: {
-            type: type.STRING(20)
+            type: type.STRING(200)
         },
         inst_electrica: {
             type: type.BOOLEAN,

@@ -333,7 +333,7 @@ const Modulos = () => {
                                             <Col xs={12} md={6}>
                                                 <Row>
                                                     <Col xs={1} md={1}></Col>
-                                                    <Col xs={11} md={11}><p>Carpinteria: Puertas: {modulo.puertas} / Ventanas: {`${modulo.ventanas} con dimensión de ${formatNumber(modulo.vent_dimension)}`}</p></Col>
+                                                    <Col xs={11} md={11}><p>Carpinteria: Puertas: {modulo.puertas} / Ventanas: {`${modulo.ventanas} con dimensión de alto ${formatNumber(modulo.vent_alto)} y de ancho ${formatNumber(modulo.vent_ancho)}`}</p></Col>
                                                 </Row>
                                             </Col>
                                             <Col xs={12} md={6}>

@@ -112,7 +112,7 @@ exports.updateContrato = async (req, res) => {
                     res.json(error);
                 });
             }).catch(err => {
-                err.todoMal = `Error al modificar el alquiler del modulo ${req.body.nombre_modulo}`;
+                err.todoMal = `Error al modificar el alquiler del módulo ${req.body.nombre_modulo}`;
                 console.error(err)
                 res.json(err);
             })
@@ -137,7 +137,7 @@ exports.updateContrato = async (req, res) => {
                     res.json(error);
                 });
             }).catch(err => {
-                err.todoMal = `Error al ingresar el nuevo alquiler del modulo ${req.body.nombre_modulo}`;
+                err.todoMal = `Error al ingresar el nuevo alquiler del módulo ${req.body.nombre_modulo}`;
                 console.error(err)
                 res.json(err);
             })

@@ -18,6 +18,9 @@ import { useResponse } from '../../../hooks/useResponse';
 //Css
 import '../../../style/Modulos.scss';
 
+//Img
+import * as Icons from 'react-bootstrap-icons';
+
 const FormModulos = ({ close, updateModulo, setUpdateModulo }) => {
     const dispatch = useDispatch();
     const { response } = useResponse();
@@ -43,16 +46,19 @@ const FormModulos = ({ close, updateModulo, setUpdateModulo }) => {
         material_cerramiento: updateModulo.material_cerramiento ? updateModulo.material_cerramiento : '',
         col_exterior: updateModulo.col_exterior ? updateModulo.col_exterior : '',
         col_interior: updateModulo.col_interior ? updateModulo.col_interior : '',
-        vent_dimension: updateModulo.vent_dimension ? updateModulo.vent_dimension : '',
+        vent_alto: updateModulo.vent_alto ? updateModulo.vent_alto : '',
+        vent_ancho: updateModulo.vent_ancho ? updateModulo.vent_ancho : '',
         material_piso: updateModulo.material_piso ? updateModulo.material_piso : '',
         puertas: updateModulo.puertas ? updateModulo.puertas : '',
         ventanas: updateModulo.ventanas ? updateModulo.ventanas : '',
-        equipamiento: updateModulo.equipamiento ? updateModulo.equipamiento : '',
+        equipamiento: updateModulo.equipamiento ? updateModulo.equipamiento.split(',') : '',
         inst_electrica: updateModulo.inst_electrica ? updateModulo.inst_electrica : false,
         inst_sanitaria: updateModulo.inst_sanitaria ? updateModulo.inst_sanitaria : false,
         inst_especiales: updateModulo.inst_especiales ? updateModulo.inst_especiales : false,
         cliente: updateModulo.cliente ? updateModulo.cliente : ''
-    })
+    });
+
+    const [countEquipamiento, setCountEquipamiento] = useState(updateModulo.equipamiento ? updateModulo.equipamiento.split(',').length : 1);
 
     const [checkVenta, setCheckVenta] = useState(false);
 
@@ -62,18 +68,45 @@ const FormModulos = ({ close, updateModulo, setUpdateModulo }) => {
         const targetCheck = e.target.checked;
         const targetType = e.target.type;
 
-        //console.log(targetName, targetValue, targetCheck, targetType)
+        if (targetName.includes("equipamiento")) {
+            const nameSplit = targetName.split('-');
 
-        if (targetType === "checkbox") {
-            setModulo(prevModulo => ({
-                ...prevModulo,
-                [targetName]: targetCheck
-            }));
+            if (modulo.equipamiento[nameSplit[1]]) {
+                const newArray = modulo.equipamiento.map((value, index) => {
+                    console.log(index, nameSplit[1])
+                    if (index == nameSplit[1]) {
+                        return targetValue
+                    } else {
+                        return value
+                    }
+                })
+
+                setModulo(prevModulo => ({
+                    ...prevModulo,
+                    [nameSplit[0]]: newArray
+                }));
+            } else {
+                const array = modulo.equipamiento ? modulo.equipamiento.concat([targetValue]) : [targetValue]
+                console.log(array)
+
+                setModulo(prevModulo => ({
+                    ...prevModulo,
+                    [nameSplit[0]]: array
+                }));
+            }
+
         } else {
-            setModulo(prevModulo => ({
-                ...prevModulo,
-                [targetName]: targetValue
-            }));
+            if (targetType === "checkbox") {
+                setModulo(prevModulo => ({
+                    ...prevModulo,
+                    [targetName]: targetCheck
+                }));
+            } else {
+                setModulo(prevModulo => ({
+                    ...prevModulo,
+                    [targetName]: targetValue
+                }));
+            }
         }
     }
 
@@ -107,7 +140,8 @@ const FormModulos = ({ close, updateModulo, setUpdateModulo }) => {
                 venta: desformatNumber(modulo.venta),
                 ancho: desformatNumber(modulo.ancho),
                 largo: desformatNumber(modulo.largo),
-                vent_dimension: desformatNumber(modulo.vent_dimension)
+                vent_alto: desformatNumber(modulo.vent_alto),
+                vent_ancho: desformatNumber(modulo.vent_ancho)
             }
 
             try {
@@ -165,6 +199,42 @@ const FormModulos = ({ close, updateModulo, setUpdateModulo }) => {
                 console.log(error);
             }
         }
+    }
+
+    const restValueEquipamiento = () => {
+        setCountEquipamiento(countEquipamiento - 1);
+
+        const newArray = modulo.equipamiento;
+
+        newArray.pop();
+
+        setModulo(prevModulo => ({
+            ...prevModulo,
+            "equipamiento": newArray
+        }));
+    }
+
+    const renderSelectEquipamiento = () => {
+        const rows = [];
+        for (let i = 0; i < countEquipamiento; i++) {
+            rows.push(
+                <Col key={i} sm={11}>
+                    <FloatingLabel label="Equipamiento" >
+                        <Form.Select onChange={handleChangeForm} name={`equipamiento-${i}`} value={modulo.equipamiento[i]} required>
+                            <option value=""></option>
+                            <option value="Termo Mecánico">Termo Mecánico</option>
+                            <option value="Mobiliario">Mobiliario</option>
+                            <option value="Sanitario">Sanitario</option>
+                            <option value="Cocina">Cocina</option>
+                        </Form.Select>
+                    </FloatingLabel>
+                </Col>
+            );
+            if (i === 0 && countEquipamiento > 1) {
+                rows.push(<Col key={countEquipamiento} sm={1} id='button-sum-equipamiento' ><Icons.DashSquareFill id="icon" size={30} onClick={() => restValueEquipamiento()} /></Col>)
+            }
+        }
+        return rows;
     }
 
     return (<>
@@ -250,17 +320,8 @@ const FormModulos = ({ close, updateModulo, setUpdateModulo }) => {
                                 </Col>
                             </Row>
                             <Row className='content-select'>
-                                <Col sm={12}>
-                                    <FloatingLabel label="Equipamiento" >
-                                        <Form.Select onChange={handleChangeForm} name="equipamiento" value={modulo.equipamiento} required>
-                                            <option value=""></option>
-                                            <option value="Termo Mecánico">Termo Mecánico</option>
-                                            <option value="Mobiliario">Mobiliario</option>
-                                            <option value="Sanitario">Sanitario</option>
-                                            <option value="Cocina">Cocina</option>
-                                        </Form.Select>
-                                    </FloatingLabel>
-                                </Col>
+                                {renderSelectEquipamiento()}
+                                <Col sm={1} id='button-sum-equipamiento' ><Icons.PlusSquareFill id="icon" size={30} onClick={() => setCountEquipamiento(countEquipamiento + 1)} /></Col>
                             </Row>
                             <Row>
                                 <Col sm={12} className="title-section">Dimensiones</Col>
@@ -300,7 +361,7 @@ const FormModulos = ({ close, updateModulo, setUpdateModulo }) => {
                             </Row>
                             <Row>
                                 <Col sm={12} className="title-section">Carpinterias</Col>
-                                <Col sm={7}>
+                                <Col sm={12}>
                                     <Form.Group className="mb-3">
                                         <FloatingLabel label="UN Puertas">
                                             <NumberFormat customInput={Form.Control} decimalSeparator={","} thousandSeparator={"."}
@@ -308,7 +369,7 @@ const FormModulos = ({ close, updateModulo, setUpdateModulo }) => {
                                         </FloatingLabel>
                                     </Form.Group>
                                 </Col>
-                                <Col sm={7}>
+                                <Col sm={12}>
                                     <Form.Group className="mb-3">
                                         <FloatingLabel label="UN Ventanas">
                                             <NumberFormat customInput={Form.Control} decimalSeparator={","} thousandSeparator={"."}
@@ -316,11 +377,19 @@ const FormModulos = ({ close, updateModulo, setUpdateModulo }) => {
                                         </FloatingLabel>
                                     </Form.Group>
                                 </Col>
-                                <Col sm={5}>
+                                <Col sm={6}>
                                     <Form.Group className="mb-3">
-                                        <FloatingLabel label="Dimension ">
+                                        <FloatingLabel label="Dimensión-Alto">
                                             <NumberFormat customInput={Form.Control} decimalSeparator={","} thousandSeparator={"."}
-                                                onChange={handleChangeForm} name="vent_dimension" value={modulo.vent_dimension} />
+                                                onChange={handleChangeForm} name="vent_alto" value={modulo.vent_alto} />
+                                        </FloatingLabel>
+                                    </Form.Group>
+                                </Col>
+                                <Col sm={6}>
+                                    <Form.Group className="mb-3">
+                                        <FloatingLabel label="Dimensión-Ancho">
+                                            <NumberFormat customInput={Form.Control} decimalSeparator={","} thousandSeparator={"."}
+                                                onChange={handleChangeForm} name="vent_ancho" value={modulo.vent_ancho} />
                                         </FloatingLabel>
                                     </Form.Group>
                                 </Col>
