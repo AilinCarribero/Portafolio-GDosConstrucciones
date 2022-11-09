@@ -206,8 +206,10 @@ const FormModulos = ({ close, updateModulo, setUpdateModulo }) => {
 
         const newArray = modulo.equipamiento;
 
-        newArray.pop();
-
+        if (newArray.length > 1) {
+            newArray.pop();
+        }
+        
         setModulo(prevModulo => ({
             ...prevModulo,
             "equipamiento": newArray
