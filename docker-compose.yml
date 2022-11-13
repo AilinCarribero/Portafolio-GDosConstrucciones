@@ -49,8 +49,8 @@ services:
       - nginx-proxy
       - letsencrypt
     environment:
-      - VIRTUAL_HOST=gestion.gdosconstrucciones.com.ar,cuerre.gdosconstrucciones.com.ar
-      - LETSENCRYPT_HOST=gestion.gdosconstrucciones.com.ar,cuerre.gdosconstrucciones.com.ar
+      - VIRTUAL_HOST=gestion.gdosconstrucciones.com.ar, cuerre.gdosconstrucciones.com.ar
+      - LETSENCRYPT_HOST=gestion.gdosconstrucciones.com.ar, cuerre.gdosconstrucciones.com.ar
     restart: always
 
   nginx-proxy:
