@@ -48,6 +48,8 @@ services:
       - reactjsapp
       - nginx-proxy
       - letsencrypt
+    environment:
+      - LETSENCRYPT_HOST=gestion.gdosconstrucciones.com.ar, cuerre.gdosconstrucciones.com.ar
     restart: always
 
   nginx-proxy:
