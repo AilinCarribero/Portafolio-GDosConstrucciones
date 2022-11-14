@@ -42,8 +42,6 @@ services:
     build: ./nginx
     ports:
       - "8080:80"
-      - "81:81"
-      - "82:82"
     links:
       - reactjscuerre
       - nodejsapp
@@ -57,8 +55,6 @@ services:
     restart: always
     ports:
       - "80:80"
-      - "81:81"
-      - "82:82"
       - "443:443"
     volumes:
         - /var/run/docker.sock:/tmp/docker.sock:ro
