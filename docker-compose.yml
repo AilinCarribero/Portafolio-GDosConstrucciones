@@ -42,6 +42,8 @@ services:
     build: ./nginx
     ports:
       - "8080:80"
+      - "8081:81"
+      - "8082:82"
     links:
       - reactjscuerre
       - nodejsapp
