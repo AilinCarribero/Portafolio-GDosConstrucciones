@@ -11,7 +11,9 @@ module.exports = ( sequelize, type ) => {
             defaultValue: null
         },
         cliente: {
-            type: type.STRING(100)
+            type: type.STRING(100),
+            allowNull: true,
+            defaultValue: null
         },
         costo: {
             type:type.DOUBLE,
@@ -32,64 +34,94 @@ module.exports = ( sequelize, type ) => {
         },
         estado: {
             type: type.INTEGER,
+            allowNull: true,
+            defaultValue: 0,
             isNumeric: true
         },
         tipologia: {
-            type: type.STRING(20)
+            type: type.STRING(20),
+            allowNull: true,
+            defaultValue: null
         },
         ancho: {
             type: type.DOUBLE,
+            allowNull: true,
+            defaultValue: 0,
             isNumeric: true
         },
         largo: {
             type: type.DOUBLE,
+            allowNull: true,
+            defaultValue: 0,
             isNumeric: true
         },
         material_cerramiento: {
-            type: type.STRING(20)
+            type: type.STRING(20),
+            allowNull: true,
+            defaultValue: null
         },
         col_exterior: {
-            type: type.STRING(20)
+            type: type.STRING(20),
+            allowNull: true,
+            defaultValue: null
         },
         col_interior: {
-            type: type.STRING(20)
+            type: type.STRING(20),
+            allowNull: true,
+            defaultValue: null
         },
         material_piso: {
-            type: type.STRING(20)
+            type: type.STRING(20),
+            allowNull: true,
+            defaultValue: null
         },
         puertas: {
             type: type.DOUBLE,
+            allowNull: true,
+            defaultValue: 0,
             isNumeric: true
         },
         ventanas: {
             type: type.DOUBLE,
+            allowNull: true,
+            defaultValue: 0,
             isNumeric: true
         },
         vent_alto: {
             type: type.DOUBLE,
+            allowNull: true,
+            defaultValue: 0,
             isNumeric: true
         },
         vent_ancho: {
             type: type.DOUBLE,
+            allowNull: true,
+            defaultValue: 0,
             isNumeric: true
         },
         equipamiento: {
-            type: type.STRING(200)
+            type: type.STRING(200),
+            allowNull: true,
+            defaultValue: null
         },
         inst_electrica: {
             type: type.BOOLEAN,
+            allowNull: true,
             defaultValue: false
         },
         inst_sanitaria: {
             type: type.BOOLEAN,
+            allowNull: true,
             defaultValue: false
         },
         inst_especiales: {
             type: type.BOOLEAN,
+            allowNull: true,
             defaultValue: false
         },
         descripcion: {
             type: type.STRING(500),
+            allowNull: true,
             defaultValue: null
         },
         token_modulo: {
