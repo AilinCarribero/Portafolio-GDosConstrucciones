@@ -19,7 +19,9 @@ exports.insertModulo = (req, res) => {
     /*  0 => Libre / 1 => Alquilado / 2 => Vendido */
     req.body.estado = !req.body.estado ? 0 : req.body.estado;
 
-    req.body.equipamiento = req.body.equipamiento.toString();
+    req.body.equipamiento = req.body.equipamiento ? req.body.equipamiento.toString() : '';
+    req.body.vent_alto = req.body.vent_alto ? req.body.vent_alto.join('-') : '';
+    req.body.vent_ancho = req.body.vent_ancho ? req.body.vent_ancho.join('-') : '';
 
     try {
         Modulo.create(req.body).then(response => {
@@ -136,7 +138,10 @@ exports.updateModulo = (req, res) => {
 
     data.estado = !data.estado ? 0 : data.estado;
     data.fecha_venta = !data.fecha_venta ? (data.venta ? new Date().toISOString().slice(0, 10) : null) : data.fecha_venta;
-    data.equipamiento = data.equipamiento.toString();
+
+    data.equipamiento = !data.equipamiento ? '' : data.equipamiento.toString();
+    data.vent_alto = !data.vent_alto ? '' : data.vent_alto.join('-');
+    data.vent_ancho = !data.vent_ancho ? '' : data.vent_ancho.join('-');
 
     const tokenId = jwt.sign(id, process.env.JWT_SECRET);
 

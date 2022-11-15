@@ -46,8 +46,8 @@ const FormModulos = ({ close, updateModulo, setUpdateModulo }) => {
         material_cerramiento: updateModulo.material_cerramiento ? updateModulo.material_cerramiento : '',
         col_exterior: updateModulo.col_exterior ? updateModulo.col_exterior : '',
         col_interior: updateModulo.col_interior ? updateModulo.col_interior : '',
-        vent_alto: updateModulo.vent_alto ? updateModulo.vent_alto : '',
-        vent_ancho: updateModulo.vent_ancho ? updateModulo.vent_ancho : '',
+        vent_alto: updateModulo.vent_alto ? updateModulo.vent_alto.split('-') : '',
+        vent_ancho: updateModulo.vent_ancho ? updateModulo.vent_ancho.split('-') : '',
         material_piso: updateModulo.material_piso ? updateModulo.material_piso : '',
         puertas: updateModulo.puertas ? updateModulo.puertas : '',
         ventanas: updateModulo.ventanas ? updateModulo.ventanas : '',
@@ -59,6 +59,7 @@ const FormModulos = ({ close, updateModulo, setUpdateModulo }) => {
     });
 
     const [countEquipamiento, setCountEquipamiento] = useState(updateModulo.equipamiento ? updateModulo.equipamiento.split(',').length : 1);
+    const [countDimensionesVentanas, setCountDimensionesVentanas] = useState(updateModulo.vent_alto ? updateModulo.vent_alto.split('-').length : 1);
 
     const [checkVenta, setCheckVenta] = useState(false);
 
@@ -73,7 +74,6 @@ const FormModulos = ({ close, updateModulo, setUpdateModulo }) => {
 
             if (modulo.equipamiento[nameSplit[1]]) {
                 const newArray = modulo.equipamiento.map((value, index) => {
-                    console.log(index, nameSplit[1])
                     if (index == nameSplit[1]) {
                         return targetValue
                     } else {
@@ -86,8 +86,7 @@ const FormModulos = ({ close, updateModulo, setUpdateModulo }) => {
                     [nameSplit[0]]: newArray
                 }));
             } else {
-                const array = modulo.equipamiento ? modulo.equipamiento.concat([targetValue]) : [targetValue]
-                console.log(array)
+                const array = modulo.equipamiento ? modulo.equipamiento.concat([targetValue]) : [targetValue];
 
                 setModulo(prevModulo => ({
                     ...prevModulo,
@@ -95,6 +94,30 @@ const FormModulos = ({ close, updateModulo, setUpdateModulo }) => {
                 }));
             }
 
+        } else if (targetName.includes("vent_alto") || targetName.includes("vent_ancho")) {
+            const nameSplit = targetName.split('-');
+
+            if (modulo[nameSplit[0]][nameSplit[1]]) {
+                const newArray = modulo[nameSplit[0]].map((value, index) => {
+                    if (index == nameSplit[1]) {
+                        return targetValue
+                    } else {
+                        return value
+                    }
+                })
+
+                setModulo(prevModulo => ({
+                    ...prevModulo,
+                    [nameSplit[0]]: newArray
+                }));
+            } else {
+                const array = modulo[nameSplit[0]] ? modulo[nameSplit[0]].concat([targetValue]) : [targetValue];
+
+                setModulo(prevModulo => ({
+                    ...prevModulo,
+                    [nameSplit[0]]: array
+                }));
+            }
         } else {
             if (targetType === "checkbox") {
                 setModulo(prevModulo => ({
@@ -140,13 +163,13 @@ const FormModulos = ({ close, updateModulo, setUpdateModulo }) => {
                 venta: desformatNumber(modulo.venta),
                 ancho: desformatNumber(modulo.ancho),
                 largo: desformatNumber(modulo.largo),
-                vent_alto: desformatNumber(modulo.vent_alto),
-                vent_ancho: desformatNumber(modulo.vent_ancho)
+                vent_alto: modulo.vent_alto.map(vent_alto => desformatNumber(vent_alto)),
+                vent_ancho: modulo.vent_ancho.map(vent_ancho => desformatNumber(vent_ancho)),
             }
 
             try {
                 let resModulo = [];
-                
+
                 if (updateModulo && updateModulo.id_modulo) {
                     resModulo = await setUpdate(auxModulo, updateModulo.id_modulo);
                 } else {
@@ -176,7 +199,8 @@ const FormModulos = ({ close, updateModulo, setUpdateModulo }) => {
                         material_cerramiento: '',
                         col_exterior: '',
                         col_interior: '',
-                        vent_dimension: '',
+                        vent_alto: '',
+                        vent_ancho: '',
                         material_piso: '',
                         puertas: '',
                         ventanas: '',
@@ -209,10 +233,31 @@ const FormModulos = ({ close, updateModulo, setUpdateModulo }) => {
         if (newArray.length > 1) {
             newArray.pop();
         }
-        
+
         setModulo(prevModulo => ({
             ...prevModulo,
             "equipamiento": newArray
+        }));
+    }
+
+    const restDimensionesVentanas = () => {
+        setCountDimensionesVentanas(countDimensionesVentanas - 1);
+
+        const newArrayVentAlto = modulo.vent_alto;
+        const newArrayVentAncho = modulo.vent_ancho;
+
+        if (newArrayVentAlto.length > 1) {
+            newArrayVentAlto.pop();
+        }
+
+        if (newArrayVentAncho.length > 1) {
+            newArrayVentAncho.pop();
+        }
+
+        setModulo(prevModulo => ({
+            ...prevModulo,
+            "vent_alto": newArrayVentAlto,
+            "vent_ancho": newArrayVentAncho
         }));
     }
 
@@ -236,6 +281,37 @@ const FormModulos = ({ close, updateModulo, setUpdateModulo }) => {
                 rows.push(<Col key={countEquipamiento} sm={1} id='button-sum-equipamiento' ><Icons.DashSquareFill id="icon" size={30} onClick={() => restValueEquipamiento()} /></Col>)
             }
         }
+        return rows;
+    }
+
+    const renderDimensionesVentana = () => {
+        const rows = [];
+        for (let i = 0; i < countDimensionesVentanas; i++) {
+            rows.push(
+                <Col key={`vent_alto-${i}`} sm={5}>
+                    <Form.Group className="mb-3">
+                        <FloatingLabel label="Dimensión-Alto">
+                            <NumberFormat customInput={Form.Control} decimalSeparator={","} thousandSeparator={"."}
+                                onChange={handleChangeForm} name={`vent_alto-${i}`} value={modulo.vent_alto[i]} />
+                        </FloatingLabel>
+                    </Form.Group>
+                </Col>
+            )
+            rows.push(
+                <Col key={`vent_ancho-${i}`} sm={5}>
+                    <Form.Group className="mb-3">
+                        <FloatingLabel label="Dimensión-Ancho">
+                            <NumberFormat customInput={Form.Control} decimalSeparator={","} thousandSeparator={"."}
+                                onChange={handleChangeForm} name={`vent_ancho-${i}`} value={modulo.vent_ancho[i]} />
+                        </FloatingLabel>
+                    </Form.Group>
+                </Col>
+            )
+            if (i === 0 && countDimensionesVentanas > 1) {
+                rows.push(<Col key={countDimensionesVentanas} sm={1} id='button-sum' ><Icons.DashSquareFill id="icon" size={30} onClick={() => restDimensionesVentanas()} /></Col>)
+            }
+        }
+
         return rows;
     }
 
@@ -379,22 +455,8 @@ const FormModulos = ({ close, updateModulo, setUpdateModulo }) => {
                                         </FloatingLabel>
                                     </Form.Group>
                                 </Col>
-                                <Col sm={6}>
-                                    <Form.Group className="mb-3">
-                                        <FloatingLabel label="Dimensión-Alto">
-                                            <NumberFormat customInput={Form.Control} decimalSeparator={","} thousandSeparator={"."}
-                                                onChange={handleChangeForm} name="vent_alto" value={modulo.vent_alto} />
-                                        </FloatingLabel>
-                                    </Form.Group>
-                                </Col>
-                                <Col sm={6}>
-                                    <Form.Group className="mb-3">
-                                        <FloatingLabel label="Dimensión-Ancho">
-                                            <NumberFormat customInput={Form.Control} decimalSeparator={","} thousandSeparator={"."}
-                                                onChange={handleChangeForm} name="vent_ancho" value={modulo.vent_ancho} />
-                                        </FloatingLabel>
-                                    </Form.Group>
-                                </Col>
+                                {renderDimensionesVentana()}
+                                <Col sm={1} id='button-sum' ><Icons.PlusSquareFill id="icon" size={30} onClick={() => setCountDimensionesVentanas(countDimensionesVentanas + 1)} /></Col>
                             </Row>
                             <Row className='content-checks'>
                                 <Col sm={12}>

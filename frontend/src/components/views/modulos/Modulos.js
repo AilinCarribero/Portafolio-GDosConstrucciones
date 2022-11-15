@@ -206,12 +206,23 @@ const Modulos = () => {
     }
 
     const handleChangeToken = (e) => {
-        const targetName = e.target.name;
-        const targetValue = e.target.value;
         const targetCheck = e.target.checked;
-        const targetType = e.target.type;
 
         setShowToken(targetCheck)
+    }
+
+    const renderTextDimensiones = (alto, ancho) => {
+        let text = '';
+        
+        alto.map((alto, i) => {
+            if( i === 0) {
+                text = `${formatNumber(alto)} x ${formatNumber(ancho[i])}`;
+            } else {
+                text = text + ` / ${formatNumber(alto)} x ${formatNumber(ancho[i])}`;
+            }
+        });
+
+        return text;
     }
 
     return (<>
@@ -364,7 +375,10 @@ const Modulos = () => {
                                             <Col xs={12} md={6}>
                                                 <Row>
                                                     <Col xs={1} md={1}></Col>
-                                                    <Col xs={11} md={11}><p>Carpinteria: Puertas: {modulo.puertas} / Ventanas: {`${modulo.ventanas} con dimensión de alto ${formatNumber(modulo.vent_alto)} y de ancho ${formatNumber(modulo.vent_ancho)}`}</p></Col>
+                                                    <Col xs={11} md={11}>
+                                                        <p>Carpinteria: Puertas: {modulo.puertas}</p>
+                                                        <p>Ventanas: {modulo.ventanas} {modulo.vent_alto && (Array.isArray(modulo.vent_alto.split('-')) ? 'con dimensiones: ' + renderTextDimensiones(modulo.vent_alto.split('-'), modulo.vent_ancho.split('-')) : `con dimensión ${formatNumber(modulo.vent_alto)} x ${formatNumber(modulo.vent_ancho)}`)}</p>
+                                                    </Col>
                                                 </Row>
                                             </Col>
                                             <Col xs={12} md={6}>
@@ -372,14 +386,10 @@ const Modulos = () => {
                                                     <Col xs={1} md={1}></Col>
                                                     <Col xs={11} md={11}><p> Instalación Eléctrica: {modulo.inst_electrica ? <Icons.CheckSquareFill color='#05be40' /> : <Icons.XSquareFill color='#ce0000' />}</p></Col>
                                                 </Row>
-                                            </Col>
-                                            <Col xs={12} md={6}>
                                                 <Row>
                                                     <Col xs={1} md={1}></Col>
                                                     <Col xs={11} md={11}><p> Instalación Sanitaria: {modulo.inst_sanitaria ? <Icons.CheckSquareFill color='#05be40' /> : <Icons.XSquareFill color='#ce0000' />}</p></Col>
                                                 </Row>
-                                            </Col>
-                                            <Col xs={12} md={6}>
                                                 <Row>
                                                     <Col xs={1} md={1}></Col>
                                                     <Col xs={11} md={11}><p> Instalaciones Especiales: {modulo.inst_especiales ? <Icons.CheckSquareFill color='#05be40' /> : <Icons.XSquareFill color='#ce0000' />}</p></Col>

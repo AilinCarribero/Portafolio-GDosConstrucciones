@@ -88,16 +88,14 @@ module.exports = ( sequelize, type ) => {
             isNumeric: true
         },
         vent_alto: {
-            type: type.DOUBLE,
+            type: type.STRING(200),
             allowNull: true,
             defaultValue: 0,
-            isNumeric: true
         },
         vent_ancho: {
-            type: type.DOUBLE,
+            type: type.STRING(200),
             allowNull: true,
             defaultValue: 0,
-            isNumeric: true
         },
         equipamiento: {
             type: type.STRING(200),
