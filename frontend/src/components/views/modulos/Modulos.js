@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Accordion, Row, Col, Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Accordion, Row, Col, Button, OverlayTrigger, Tooltip, Form } from 'react-bootstrap';
 import ReactApexCharts from 'react-apexcharts';
 
 //Components
@@ -19,6 +19,7 @@ import { setCantidadModulos } from '../../../redux/slice/Modulo/moduloSlice';
 
 //Servise
 import { setVendido } from '../../../services/apiModulos';
+import { getApiTokenQRModulos } from '../../../services/apiToken';
 
 //Css
 import '../../../style/Modulos.scss';
@@ -30,6 +31,7 @@ const Modulos = () => {
     const { response } = useResponse();
     const { user } = useUser();
     const { modulos, setModulos } = useGetModulos();
+
     const dispatch = useDispatch();
 
     const showModalUrlQr = useSelector(state => state.qrRedux.urlQr);
@@ -48,9 +50,20 @@ const Modulos = () => {
 
     const [idModulo, setIdModulo] = useState();
     const [infoUpdate, setInfoUpdate] = useState([]);
+    const [tokenQR, setTokenQR] = useState('');
 
     const [showForm, setShowForm] = useState(false);
     const [showModalVenta, setShowModalVenta] = useState(false);
+    const [showToken, setShowToken] = useState(false);
+
+    useEffect(() => {
+        getApiTokenQRModulos().then(res => {
+            setTokenQR(res.token);
+        }).catch(err => {
+            console.error(err);
+        });
+    }, [])
+
 
     useEffect(() => {
         let auxDisponibles = 0;
@@ -86,7 +99,6 @@ const Modulos = () => {
         }));
 
     }, [modulos])
-
 
     /*Inicio de configuracion de grafica */
     const options = {
@@ -193,6 +205,15 @@ const Modulos = () => {
         }
     }
 
+    const handleChangeToken = (e) => {
+        const targetName = e.target.name;
+        const targetValue = e.target.value;
+        const targetCheck = e.target.checked;
+        const targetType = e.target.type;
+
+        setShowToken(targetCheck)
+    }
+
     return (<>
         <ModalFormulario formulario={'modulo'} informacion={infoUpdate} show={showForm} setShow={setShowFormReset} updateNew={setModulos} />
         <ModalVenta titulo={infoModalVenta.titulo} show={showModalVenta} setShow={setShowModalVenta} submit={vender} />
@@ -206,7 +227,7 @@ const Modulos = () => {
                         Agregar módulo
                     </Button>
                 </Col>
-                <Col xs={12} md={9} className="content-total-modulos-estados">
+                <Col xs={12} md={5} className="content-total-modulos-estados">
                     <Row>
                         <Col xs={12} md={4} className='content-section'>Total de Módulos: </Col>
                         <OverlayTrigger placement="bottom" overlay={<Tooltip>Módulos en total.</Tooltip>} >
@@ -221,6 +242,16 @@ const Modulos = () => {
                         <OverlayTrigger placement="bottom" overlay={<Tooltip>Módulos vendidos.</Tooltip>} >
                             <Col xs={3} md={2} className='content-total-estado' id="vendido"> {cantModulos.vendidos} </Col>
                         </OverlayTrigger>
+                    </Row>
+                </Col>
+                <Col xs={12} sm={3} className="content-token">
+                    <Row>
+                        <Col xs={7} sm={7}>
+                            {showToken && <h6>{tokenQR}</h6>}
+                        </Col>
+                        <Col xs={5} sm={5}>
+                            <Form.Check type="switch" label="Ver token" onChange={handleChangeToken} name="show_token" checked={showToken} />
+                        </Col>
                     </Row>
                 </Col>
             </Row>

@@ -33,11 +33,28 @@
     }
 }
 
+.content-token {
+    position: relative;
+    padding-top: 10px;
+    margin: auto;
+}
+
 @media only screen and (hover: none) and (pointer: coarse) {
-    .content-total-modulos-estados {
-        .accordion-estado-modulos {
-            position: relative;
-            margin: auto;
+    .conten-buttons-agregar {
+        margin: 0 !important;
+        padding: 0 !important;
+        margin: auto;
+
+        .content-total-modulos-estados {
+            .accordion-estado-modulos {
+                position: relative;
+                margin: auto;
+            }
+        }
+
+        .content-token {
+            margin-top: 10px !important;
+            border-top: 2px solid #e4e4e4;
         }
     }
 }
@@ -83,13 +100,14 @@
         @media only screen and (hover: none) and (pointer: coarse) {
             .col-12-accordion {
                 margin-left: 27px;
-    
+
                 .url-qr {
                     padding-right: 60px;
                     word-break: break-all;
                 }
             }
         }
+
         .content-trazabilidad-modulos {
             .proyecto-trazabilidad-modulos {}
 

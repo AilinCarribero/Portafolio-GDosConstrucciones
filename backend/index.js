@@ -28,6 +28,7 @@ app.use('/api/unidad-negocio', require('./src/router/unidadNegocioRoute'));
 app.use('/api/modulos', require('./src/router/moduloRoute'));
 app.use('/api/alquiler', require('./src/router/alquilerRoute'));
 app.use('/api/stock', require('./src/router/stockRoute'));
+app.use('/api/token', require('./src/router/tokenRoute'));
 
 // port
 const port = process.env.PORT || 5030 ;

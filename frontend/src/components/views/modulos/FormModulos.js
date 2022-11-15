@@ -146,7 +146,7 @@ const FormModulos = ({ close, updateModulo, setUpdateModulo }) => {
 
             try {
                 let resModulo = [];
-                console.log(updateModulo)
+                
                 if (updateModulo && updateModulo.id_modulo) {
                     resModulo = await setUpdate(auxModulo, updateModulo.id_modulo);
                 } else {
