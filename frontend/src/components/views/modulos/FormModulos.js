@@ -222,7 +222,7 @@ const FormModulos = ({ close, updateModulo, setUpdateModulo }) => {
             rows.push(
                 <Col key={i} sm={11}>
                     <FloatingLabel label="Equipamiento" >
-                        <Form.Select onChange={handleChangeForm} name={`equipamiento-${i}`} value={modulo.equipamiento[i]} required>
+                        <Form.Select onChange={handleChangeForm} name={`equipamiento-${i}`} value={modulo.equipamiento[i]}>
                             <option value=""></option>
                             <option value="Termo Mecánico">Termo Mecánico</option>
                             <option value="Mobiliario">Mobiliario</option>
@@ -256,7 +256,7 @@ const FormModulos = ({ close, updateModulo, setUpdateModulo }) => {
                                     <Form.Group className="mb-3">
                                         <FloatingLabel label="Costo">
                                             <NumberFormat customInput={Form.Control} decimalSeparator={","} thousandSeparator={"."}
-                                                onChange={handleChangeForm} name="costo" value={modulo.costo} required />
+                                                onChange={handleChangeForm} name="costo" value={modulo.costo} />
                                         </FloatingLabel>
                                     </Form.Group>
                                 </Col>
@@ -275,7 +275,7 @@ const FormModulos = ({ close, updateModulo, setUpdateModulo }) => {
                                     <Col sm={6}>
                                         <Form.Group className="mb-3">
                                             <FloatingLabel label="Cliente">
-                                                <Form.Control onChange={handleChangeForm} name="cliente" value={modulo.cliente} required />
+                                                <Form.Control onChange={handleChangeForm} name="cliente" value={modulo.cliente} />
                                             </FloatingLabel>
                                         </Form.Group>
                                     </Col>
@@ -285,7 +285,7 @@ const FormModulos = ({ close, updateModulo, setUpdateModulo }) => {
                             <Row className='content-select'>
                                 <Col sm={12}>
                                     <FloatingLabel label="Tipologia" >
-                                        <Form.Select onChange={handleChangeForm} name="tipologia" value={modulo.tipologia} required>
+                                        <Form.Select onChange={handleChangeForm} name="tipologia" value={modulo.tipologia}>
                                             <option value=""></option>
                                             <option value="OS">Oficina Simple</option>
                                             <option value="OD">Oficina Doble</option>
@@ -299,7 +299,7 @@ const FormModulos = ({ close, updateModulo, setUpdateModulo }) => {
                             <Row className='content-select'>
                                 <Col sm={12}>
                                     <FloatingLabel label="Material de Cerramiento" >
-                                        <Form.Select onChange={handleChangeForm} name="material_cerramiento" value={modulo.material_cerramiento} required>
+                                        <Form.Select onChange={handleChangeForm} name="material_cerramiento" value={modulo.material_cerramiento}>
                                             <option value=""></option>
                                             <option value="PUR">{'PUR (Poliuretano)'}</option>
                                             <option value="EPS">{'EPS (Poliestireno)'}</option>
@@ -311,7 +311,7 @@ const FormModulos = ({ close, updateModulo, setUpdateModulo }) => {
                             <Row className='content-select'>
                                 <Col sm={12}>
                                     <FloatingLabel label="Material del Piso" >
-                                        <Form.Select onChange={handleChangeForm} name="material_piso" value={modulo.material_piso} required>
+                                        <Form.Select onChange={handleChangeForm} name="material_piso" value={modulo.material_piso}>
                                             <option value=""></option>
                                             <option value="Multilaminado">Multilaminado</option>
                                             <option value="Goma">Goma</option>
@@ -349,14 +349,14 @@ const FormModulos = ({ close, updateModulo, setUpdateModulo }) => {
                                 <Col sm={6}>
                                     <Form.Group className="mb-3">
                                         <FloatingLabel label="Exterior">
-                                            <Form.Control onChange={handleChangeForm} name="col_exterior" value={modulo.col_exterior} required />
+                                            <Form.Control onChange={handleChangeForm} name="col_exterior" value={modulo.col_exterior} />
                                         </FloatingLabel>
                                     </Form.Group>
                                 </Col>
                                 <Col sm={6}>
                                     <Form.Group className="mb-3">
                                         <FloatingLabel label="Interior">
-                                            <Form.Control onChange={handleChangeForm} name="col_interior" value={modulo.col_interior} required />
+                                            <Form.Control onChange={handleChangeForm} name="col_interior" value={modulo.col_interior} />
                                         </FloatingLabel>
                                     </Form.Group>
                                 </Col>
