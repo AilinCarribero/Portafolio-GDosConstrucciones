@@ -10,11 +10,18 @@ import { formatNumber } from '../../utils/numbers';
 const Modulo = () => {
   const { token } = useParams();
 
-  const infoModulo = decodeToken(token);
+  const [infoModulo, setInfoModulo] = useState(decodeToken(token));
+
+  useEffect(() => {
+    setInfoModulo(decodeToken(token));
+  
+    return () => {}
+  }, [])
+  
 
   const auth_ok = sessionStorage.getItem("auth_ok");
 
-  return (
+  return (infoModulo &&
     <Grid container spacing={1} className="content-info">
       <Grid item>
         <h3>{`${infoModulo.tipologia} - ${formatNumber(infoModulo.ancho)} x ${formatNumber(infoModulo.largo)} - ${infoModulo.material_cerramiento} - ${infoModulo.id_modulo}`}</h3>

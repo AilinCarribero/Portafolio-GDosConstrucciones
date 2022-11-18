@@ -163,8 +163,8 @@ const FormModulos = ({ close, updateModulo, setUpdateModulo }) => {
                 venta: desformatNumber(modulo.venta),
                 ancho: desformatNumber(modulo.ancho),
                 largo: desformatNumber(modulo.largo),
-                vent_alto: modulo.vent_alto.map(vent_alto => desformatNumber(vent_alto)),
-                vent_ancho: modulo.vent_ancho.map(vent_ancho => desformatNumber(vent_ancho)),
+                vent_alto: modulo.vent_alto && modulo.vent_alto.map(vent_alto => desformatNumber(vent_alto)),
+                vent_ancho: modulo.vent_alto && modulo.vent_ancho.map(vent_ancho => desformatNumber(vent_ancho)),
             }
 
             try {
