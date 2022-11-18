@@ -37,6 +37,16 @@
     position: relative;
     padding-top: 10px;
     margin: auto;
+
+    button {
+        border: transparent;
+        background-color: transparent;
+
+        .icon-text-copy {
+            margin-top: -7px;
+            border: transparent;
+        }
+    }
 }
 
 @media only screen and (hover: none) and (pointer: coarse) {
@@ -55,7 +65,28 @@
         .content-token {
             margin-top: 10px !important;
             border-top: 2px solid #e4e4e4;
+
+            button {
+                border: transparent;
+                background-color: transparent;
+
+                .icon-text-copy {
+                    border: transparent;
+                }
+            }
         }
+    }
+}
+
+.icon-text-copy {
+    border: solid 2px #292929;
+    border-radius: 5px;
+    padding: 3px 3px 2px 2px;
+    margin-top: -4px;
+
+    &:hover {
+        cursor: pointer;
+        background-color: #c7c7c7;
     }
 }
 
@@ -66,14 +97,18 @@
         padding-left: 15px;
 
         .accordion-nombre-modulos {
-            width: auto;
+            width: fit-content;
+            padding: 0;
+            margin: 0;
             margin-top: 3px;
         }
 
         .content-buttons {
             position: absolute;
-            right: 50px;
-            width: auto;
+            background-color: #ffffff;
+            right: 40px;
+            top: 15px;
+            width: 40px;
             z-index: 4;
 
             .button-vender {
@@ -91,6 +126,16 @@
             margin-left: 4%;
 
             .url-qr {
+                .button-copy-modulo {
+                    border: transparent;
+                    background-color: transparent;
+                    margin-left: 1px;
+
+                    &:hover {
+                        cursor: pointer;
+                    }
+                }
+
                 padding-right: 90px;
                 word-break: break-all;
             }
@@ -102,6 +147,12 @@
                 margin-left: 27px;
 
                 .url-qr {
+                    .button-copy-modulo {
+                        border: transparent;
+                        background-color: transparent;
+                        margin-left: 1px;
+                    }
+
                     padding-right: 60px;
                     word-break: break-all;
                 }

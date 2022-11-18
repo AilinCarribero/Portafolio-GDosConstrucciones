@@ -1,6 +1,9 @@
 import React from 'react';
 import { Modal, Row, Col, Button } from 'react-bootstrap';
 
+//Hook
+import { ToastComponent } from '../../../../hooks/useUtils';
+
 //Redux
 import { useDispatch, useSelector } from 'react-redux';
 import { setCloseModalQr } from '../../../../redux/slice/QR/qrSlice';
@@ -10,7 +13,6 @@ import * as Icons from 'react-bootstrap-icons';
 
 //Css
 import "../../../../style/Modal.scss";
-
 const UrlQr = () => {
     const dispatch = useDispatch();
 
@@ -22,6 +24,7 @@ const UrlQr = () => {
     const handleCopy = (e) => {
         e.preventDefault();
         navigator.clipboard.writeText(url);
+        ToastComponent('success', "Se copió correctamente");
     }
 
     return (

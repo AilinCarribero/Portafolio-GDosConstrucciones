@@ -211,11 +211,17 @@ const Modulos = () => {
         setShowToken(targetCheck)
     }
 
+    const handleCopy = (e, copy) => {
+        e.preventDefault();
+        navigator.clipboard.writeText(copy);
+        ToastComponent('success', "Se copió correctamente");
+    }
+
     const renderTextDimensiones = (alto, ancho) => {
         let text = '';
-        
+
         alto.map((alto, i) => {
-            if( i === 0) {
+            if (i === 0) {
                 text = `${formatNumber(alto)} x ${formatNumber(ancho[i])}`;
             } else {
                 text = text + ` / ${formatNumber(alto)} x ${formatNumber(ancho[i])}`;
@@ -258,7 +264,7 @@ const Modulos = () => {
                 <Col xs={12} sm={3} className="content-token">
                     <Row>
                         <Col xs={7} sm={7}>
-                            {showToken && <h6>{tokenQR}</h6>}
+                            {showToken && <button onClick={(e) => handleCopy(e, tokenQR)}><h6>{tokenQR} <Icons.Files size="20px" className='icon-text-copy' /></h6></button>}
                         </Col>
                         <Col xs={5} sm={5}>
                             <Form.Check type="switch" label="Ver token" onChange={handleChangeToken} name="show_token" checked={showToken} />
@@ -280,27 +286,27 @@ const Modulos = () => {
                                         <Row>
                                             {modulo.estado == 0 &&
                                                 <OverlayTrigger placement="right" overlay={<Tooltip>Disponible.</Tooltip>} >
-                                                    <Col xs={2} md={2} id="disponible"></Col>
+                                                    <Col xs={1} md={1} id="disponible"></Col>
                                                 </OverlayTrigger>
                                             }
                                             {modulo.estado == 1 &&
                                                 <OverlayTrigger placement="right" overlay={<Tooltip>Ocupado.</Tooltip>} >
-                                                    <Col xs={2} md={2} id="ocupado"></Col>
+                                                    <Col xs={1} md={1} id="ocupado"></Col>
                                                 </OverlayTrigger>
                                             }
                                             {modulo.estado == 2 &&
                                                 <OverlayTrigger placement="right" overlay={<Tooltip>Vendido.</Tooltip>} >
-                                                    <Col xs={2} md={2} id="vendido"></Col>
+                                                    <Col xs={1} md={1} id="vendido"></Col>
                                                 </OverlayTrigger>
                                             }
-                                            <Col xs={4} md={4} className="accordion-nombre-modulos">
+                                            <Col xs={9} md={10} className="accordion-nombre-modulos">
                                                 {modulo.nombre_modulo && modulo.nombre_modulo != "sin nombre" ?
                                                     modulo.nombre_modulo
                                                     : `${modulo.tipologia} - ${formatNumber(modulo.ancho)} x ${formatNumber(modulo.largo)} - ${modulo.material_cerramiento} - ${modulo.id_modulo}`
                                                 }
                                             </Col>
                                             {user.rango == "admin" && modulo.estado != 2 &&
-                                                <Col xs={2} md={2} className="content-buttons" >
+                                                <Col className="content-buttons" >
                                                     <Icons.CashCoin className="button-vender" onClick={() => vender(false, modulo.id_modulo)} />
                                                 </Col>
                                             }
@@ -405,7 +411,13 @@ const Modulos = () => {
                                             {modulo.url_qr &&
                                                 <Col xs={12} md={12} className="col-12-accordion">
                                                     <Row>
-                                                        <Col className='url-qr' xs={12} md={12}><p>URL del QR: {modulo.url_qr} </p></Col>
+                                                        <Col className='url-qr' xs={12} md={12}>
+                                                            <p>URL del QR:
+                                                                <button type='button' className='button-copy-modulo' onClick={(e) => handleCopy(e, modulo.url_qr)}>
+                                                                    {modulo.url_qr} <Icons.Files size="25px" className='icon-text-copy' />
+                                                                </button>
+                                                            </p>
+                                                        </Col>
                                                     </Row>
                                                 </Col>
                                             }
