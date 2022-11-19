@@ -1,0 +1,65 @@
+.navbar {
+    background-color: black !important;
+    align-items: center;
+
+    .img {
+        width: 30px;
+        margin-left: -2%;
+        height: 50px;
+        
+        &:hover {
+            color: grey;
+        }
+    }
+
+    .filtros {
+        margin: 0 5%;
+
+        .icon-filtros {
+            color: white;
+
+            &:hover {
+                color: gray;
+                cursor: pointer;
+            }
+        }
+    }
+
+    .url-qr-navbar {
+        color: #fff;
+
+        .icon {
+            margin-top: -3px;
+        }
+
+        &:hover {
+            color: gray;
+            cursor: pointer;
+        }
+    }
+
+    .text-nombre {
+        color: aliceblue;
+        align-items: right;
+        text-align: right;
+        align-content: right;
+        font-size: 15px;
+    }
+
+    .botton-sesion {
+        color: azure;
+        
+        .icon-salida {
+            color: white;
+        
+            &:hover {
+                color: gray;
+            }
+        }
+    }
+}
+
+.text-color {
+    color: azure;
+}
+

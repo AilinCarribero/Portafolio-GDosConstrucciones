@@ -143,6 +143,8 @@ exports.updateModulo = (req, res) => {
     data.vent_alto = !data.vent_alto ? '' : data.vent_alto.join('-');
     data.vent_ancho = !data.vent_ancho ? '' : data.vent_ancho.join('-');
 
+    data.nombre_modulo = null;
+
     const tokenId = jwt.sign(id, process.env.JWT_SECRET);
 
     Modulo.findOne({

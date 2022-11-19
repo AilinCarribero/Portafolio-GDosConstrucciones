@@ -10,7 +10,7 @@ import FiltrosProyectos from '../../utils/filtros/FiltrosProyectos';
 import Sidenav from '../sidenav/Sidenav';
 
 //Css
-import './Navbar.css';
+import '../../../style/Navbar.scss';
 
 //Img - Icons
 import * as Icons from 'react-bootstrap-icons';
@@ -26,12 +26,22 @@ const NavbarComponent = () => {
 
     const handleShow = () => { setShow(!show); };
 
+    const handleRedirectQR = () => {
+        window.open("https://me-qr.com/es/qr-code-generator/link", '_blank', 'noopener,noreferrer');
+
+        //https://www.qrcode-monkey.com/es/#
+        //https://me-qr.com/es/qr-code-generator/link
+    }
+
     const renderLogaut = () => {
         if (user.token) {
             return (<>
                 {/*Si no esta en la url de proyectos no se debe mostrar el boton de filtros*/}
                 <Nav.Item className="filtros" onClick={handleShow} >
                     <Icons.FunnelFill className="icon-filtros" size="25px" />
+                </Nav.Item>
+                <Nav.Item className="url-qr-navbar" onClick={() => handleRedirectQR()} >
+                    <Icons.Tools className="icon" size="20px" /> QR
                 </Nav.Item>
                 <Navbar.Collapse className="justify-content-end">
                     <Navbar.Text> <b className="text-nombre">{user.nombre_apellido}</b> </Navbar.Text>

@@ -45,11 +45,7 @@ const Sidenav = () => {
             <Icons.CaretDownFill className='icon-drop' />
           </button>
           { showDrop && <>
-            <Link className="text-link dropdown-link" to="/ingresar/egreso" onClick={handleClose} >Egreso</Link>
-            <Link className="text-link dropdown-link" to="/ingresar/ingreso" onClick={handleClose} >Ingreso</Link>
-            {user.rango == 'admin' && <Link className="text-link dropdown-link" to="/ingresar/proyecto" onClick={handleClose} >Proyecto</Link>}
             {user.rango == 'admin' && <Link className="text-link dropdown-link" to="/ingresar/usuario" onClick={handleClose} >Usuario</Link>}
-            {user.rango == 'admin' && <Link className="text-link dropdown-link" to="/ingresar/modulos" onClick={handleClose} >Modulo</Link>}
           </>}
         </Nav>
       </Offcanvas.Body>
