@@ -12,11 +12,7 @@ const Routers = () => {
             <Routes>
                 <Route exact path='/' element={<NotAcces />} />
                 <Route exact path="/:token" element={<Auth />} />
-                {sessionStorage.getItem("auth_ok") ?
-                    <Route exact path="/modulo/:token" element={<Modulo />} />
-                    :
-                    <Route exact path="/:token" element={<Auth />} />
-                }
+                <Route exact path="/modulo/:token" element={<Modulo />} />
             </Routes>
         </BrowserRouter>
     )

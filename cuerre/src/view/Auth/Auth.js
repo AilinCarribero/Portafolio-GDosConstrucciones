@@ -7,8 +7,9 @@ import { getApiModulo } from '../../services/api/apiModulo';
 import { ToastComponent } from '../../components/ToastComponent';
 
 const Auth = () => {
-    const { token } = useParams();
     const navigate = useNavigate();
+    
+    const { token } = useParams();
 
     const [password, setPassword] = useState('');
 
