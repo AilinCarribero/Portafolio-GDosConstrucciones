@@ -261,16 +261,18 @@ const Modulos = () => {
                         </OverlayTrigger>
                     </Row>
                 </Col>
-                <Col xs={12} sm={3} className="content-token">
-                    <Row>
-                        <Col xs={7} sm={7}>
-                            {showToken && <button onClick={(e) => handleCopy(e, tokenQR)}><h6>{tokenQR} <Icons.Files size="20px" className='icon-text-copy' /></h6></button>}
-                        </Col>
-                        <Col xs={5} sm={5}>
-                            <Form.Check type="switch" label="Ver token" onChange={handleChangeToken} name="show_token" checked={showToken} />
-                        </Col>
-                    </Row>
-                </Col>
+                {user.rango == "admin" &&
+                    <Col xs={12} sm={3} className="content-token">
+                        <Row>
+                            <Col xs={7} sm={7}>
+                                {showToken && <button onClick={(e) => handleCopy(e, tokenQR)}><h6>{tokenQR} <Icons.Files size="20px" className='icon-text-copy' /></h6></button>}
+                            </Col>
+                            <Col xs={5} sm={5}>
+                                <Form.Check type="switch" label="Ver token" onChange={handleChangeToken} name="show_token" checked={showToken} />
+                            </Col>
+                        </Row>
+                    </Col>
+                }
             </Row>
         </Row>
 
