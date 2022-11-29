@@ -18,7 +18,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setCantidadModulos } from '../../../redux/slice/Modulo/moduloSlice';
 
 //Servise
-import { setVendido } from '../../../services/apiModulos';
+import { deleteApiModulo, setVendido } from '../../../services/apiModulos';
 import { getApiTokenQRModulos } from '../../../services/apiToken';
 
 //Css
@@ -26,6 +26,7 @@ import '../../../style/Modulos.scss';
 
 //Img-Icons
 import * as Icons from 'react-bootstrap-icons';
+import Alerta from '../../utils/modal/validacion/Alerta';
 
 const Modulos = () => {
     const { response } = useResponse();
@@ -39,14 +40,20 @@ const Modulos = () => {
     const [infoModalVenta, setInfoModalVenta] = useState({
         titulo: '',
         mensaje: ''
-    })
+    });
 
     const [cantModulos, setCantModulos] = useState({
         total: 0,
         disponibles: 0,
         ocupados: 0,
         vendidos: 0
-    })
+    });
+
+    const [alerta, setAlerta] = useState({
+        titulo: '',
+        mensaje: '',
+        data: ''
+    });
 
     const [idModulo, setIdModulo] = useState();
     const [infoUpdate, setInfoUpdate] = useState([]);
@@ -55,6 +62,7 @@ const Modulos = () => {
     const [showForm, setShowForm] = useState(false);
     const [showModalVenta, setShowModalVenta] = useState(false);
     const [showToken, setShowToken] = useState(false);
+    const [showAlerta, setShowAlerta] = useState(false);
 
     useEffect(() => {
         getApiTokenQRModulos().then(res => {
@@ -185,6 +193,34 @@ const Modulos = () => {
         }
     }
 
+    const deleteModulo = (data, setDelete) => {
+        setAlerta({
+            titulo: 'Eliminar módulo',
+            mensaje: `¿Desea eliminar el módulo ${!data.tipologia ? data.nombre_data : `${data.tipologia} - ${formatNumber(data.ancho)} x ${formatNumber(data.largo)} - ${data.material_cerramiento} - ${data.id_modulo}`}? Recuerde que si lo elimina no podrá recuperarlo`,
+            data: data
+        });
+
+        setShowAlerta(true);
+
+        if (setDelete) {
+            deleteApiModulo(data.id_modulo, data).then(resModulo => {
+                console.log(resModulo)
+                const res = response(resModulo);
+                if (res) {
+                    setModulos(resModulo.data);
+                    ToastComponent('success', 'Se eliminó correctamente');
+                    setShowModalVenta(false);
+                } else {
+                    ToastComponent('error', resModulo.data.todoMal && resModulo.data.todoMal);
+                }
+            }).catch(err => {
+                console.error(err);
+                
+                ToastComponent('error', err.data.todoMal && err.data.todoMal);
+            })
+        }
+    }
+
     const updateModalModulo = (modulo) => {
         setInfoUpdate(modulo);
         setShowForm(true);
@@ -235,6 +271,7 @@ const Modulos = () => {
         <ModalFormulario formulario={'modulo'} informacion={infoUpdate} show={showForm} setShow={setShowFormReset} updateNew={setModulos} />
         <ModalVenta titulo={infoModalVenta.titulo} show={showModalVenta} setShow={setShowModalVenta} submit={vender} />
         <UrlQr show={showModalUrlQr} />
+        <Alerta titulo={alerta.titulo} mensaje={alerta.mensaje} show={showAlerta} setShow={setShowAlerta} submit={deleteModulo} data={alerta.data} />
 
         <Row className='content-resumen-sec-buttons'>
             <Row className="conten-buttons-agregar">
@@ -309,7 +346,14 @@ const Modulos = () => {
                                             </Col>
                                             {user.rango == "admin" && modulo.estado != 2 &&
                                                 <Col className="content-buttons" >
-                                                    <Icons.CashCoin className="button-vender" onClick={() => vender(false, modulo.id_modulo)} />
+                                                    <Row>
+                                                        <Col xs={6} sm={6}>
+                                                            <Icons.CashCoin className="button-vender" onClick={() => vender(false, modulo.id_modulo)} />
+                                                        </Col>
+                                                        <Col xs={6} sm={6}>
+                                                            <Icons.TrashFill className="button-delete" onClick={() => deleteModulo(modulo)} />
+                                                        </Col>
+                                                    </Row>
                                                 </Col>
                                             }
                                         </Row>

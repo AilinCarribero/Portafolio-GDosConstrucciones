@@ -108,7 +108,7 @@
             background-color: #ffffff;
             right: 40px;
             top: 15px;
-            width: 40px;
+            width: 80px;
             z-index: 4;
 
             .button-vender {
@@ -118,6 +118,13 @@
                     filter: drop-shadow(0 1px 1px #7e7e7e);
                 }
             }
+
+            .button-delete {
+                margin-top: 4px;
+
+                &:hover {
+                    filter: drop-shadow(0 1px 1px #7e7e7e);
+                }}
         }
     }
 

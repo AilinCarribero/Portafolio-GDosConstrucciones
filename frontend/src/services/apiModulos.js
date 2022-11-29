@@ -26,3 +26,9 @@ export const setUpdate = async (data, id) => {
     const response = await axios.post(API+`modulos/update/${id}`, data, servisTokenConfig);
     return response;
 }
+
+export const deleteApiModulo = async (id, data) => {
+    const response = await axios.post(API+`modulos/delete/${id}`, data, servisTokenConfig);
+
+    return response;
+}

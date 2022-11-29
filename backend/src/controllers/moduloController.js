@@ -250,3 +250,33 @@ exports.getModulosToken = (req, res) => {
         return res.json(err);
     });
 }
+
+exports.deleteModuloId = (req, res) => {
+    const id = req.params.id.toString().replace(/\%20/g, ' ');
+
+    Modulo.destroy({
+        where: {
+            id_modulo: id
+        },
+        include: [{
+            model: Alquiler
+        }],
+    }).then(response => {
+        Modulo.findAll(findAllModulos).then(response => {
+            response.statusText = "Ok";
+            response.status = 200;
+
+            res.json(response);
+        }).catch(err => {
+            err.todoMal = "Error al actualizar el módulo";
+            console.error(err);
+            res.json(err);
+            throw err;
+        });
+    }).catch(error => {
+        err.todoMal = "Error al eliminar el módulo";
+        console.error(error);
+        res.json(error);
+        throw error;
+    });
+}

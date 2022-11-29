@@ -7,11 +7,11 @@ import * as Icons from 'react-bootstrap-icons';
 //Css
 import '../../../../style/Modal.scss';
 
-const Alerta = ({ titulo, mensaje, show, setShow, submit }) => {
+const Alerta = ({ titulo, mensaje, show, setShow, submit, data }) => {
     const handleClose = () => setShow(false);
 
     const handleSubmit = () => {
-        submit(true);
+        submit(data, true);
         setShow(false);
     }
 
