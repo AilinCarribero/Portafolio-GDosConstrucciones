@@ -19,6 +19,7 @@ import { getProyectos } from '../../../redux/slice/Proyecto/thunks';
 //Css
 import '../../../style/Proyectos.scss';
 import '../../../style/CC.scss';
+import ModulosDobles from '../modulos/ModulosDobles';
 
 //Img-Incons
 //import SpinnerC from '../../utils/spinner/SpinnerC';
@@ -442,6 +443,9 @@ const Proyectos = () => {
                     <Col>
                         <button className={menu == 'modulos' ? 'menu-inicio-button-active' : 'menu-inicio-button-off'} onClick={handleButton} name="modulos">Módulos</button>
                     </Col>
+                    <Col>
+                        <button className={menu == 'modulos-dobles' ? 'menu-inicio-button-active' : 'menu-inicio-button-off'} onClick={handleButton} name="modulos-dobles">Módulos Dobles</button>
+                    </Col>
                 </>}
                 {/*<Col>
                     <button className={menu == 'materiales' ? 'menu-inicio-button-active' : 'menu-inicio-button-off'} onClick={handleButton} name="materiales">Materiales</button>
@@ -452,9 +456,9 @@ const Proyectos = () => {
                     /*Si no es resumen ni modulo ni materiales es centro de costo. Si no es modulo es materiales. Si es modulo*/
                     menu != 'resumen' ?
                         menu != 'modulos' ?
-                            menu != 'materiales' ?
+                            menu != 'modulos-dobles' ?
                                 <CentrosCostos proyectos={proyectos} setProyectos={'dispatch(getProyectos())'} mostrar={menu} />
-                                : <Materiales />
+                                : <ModulosDobles />
                             : <Modulos />
                         : (user.rango == "admin" || user.rango == "moderador") &&
                         <ResumenContable Totales={totales} />

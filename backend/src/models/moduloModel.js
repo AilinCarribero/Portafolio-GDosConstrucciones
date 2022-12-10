@@ -127,6 +127,11 @@ module.exports = ( sequelize, type ) => {
         },
         url_qr: {
             type: type.STRING(3000)
-        }
+        },
+        vinculado: {
+            type: type.BOOLEAN,
+            allowNull: true,
+            defaultValue: false
+        },
     });
 }

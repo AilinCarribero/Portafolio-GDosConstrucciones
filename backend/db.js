@@ -20,6 +20,7 @@ const StockModel = require('./src/models/stockModel');
 const StockMovimientoModel = require('./src/models/stockMovimientoModel');
 const UnidadNegocioModel = require('./src/models/unidadNegocioModel');
 const TokenModel = require('./src/models/tokenModel');
+const ModuloDobleModel = require('./src/models/moduloDobleModel');
 
 //Declaro la base de datos
 const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASSWORD, {
@@ -53,6 +54,7 @@ const Stock = StockModel(sequelize, Sequelize);
 const StockMovimiento = StockMovimientoModel(sequelize, Sequelize);
 const UnidadNegocio = UnidadNegocioModel(sequelize, Sequelize);
 const Token = TokenModel(sequelize, Sequelize);
+const ModuloDoble = ModuloDobleModel(sequelize, Sequelize);
 
 /*Conecto con la base de datos, verifico que esten los modelos creados, si no lo estan los crea 
  logging tiene que pasar a true cuando se mande a produccion */
@@ -64,7 +66,10 @@ sequelize.sync({ force: false, logging: false }).then(() => {
     Rango.belongsTo(Auth, { foreignKey: 'id_rango', targetKey: 'id_rango' });
     Alquiler.belongsTo(Modulo, { foreignKey: 'id_modulo', targetKey: 'id_modulo' });
     Alquiler.belongsTo(Proyecto, { foreignKey: 'id_proyecto', targetKey: 'id_proyecto' });
+    Alquiler.belongsTo(ModuloDoble, { foreignKey: 'id_modulo_doble', targetKey: 'id_modulo_doble' });
     Modulo.hasMany(Alquiler, { foreignKey: 'id_modulo', targetKey: 'id_modulo' });
+    Modulo.hasMany(ModuloDoble, { foreignKey: 'id_modulo_uno', targetKey: 'id_modulo' });
+    Modulo.hasMany(ModuloDoble, { foreignKey: 'id_modulo_dos', targetKey: 'id_modulo' });
     Proyecto.hasMany(Alquiler, { foreignKey: 'id_proyecto', targetKey: 'id_proyecto' });
     Proyecto.hasMany(Egreso, { foreignKey: 'id_proyecto', targetKey: 'id_proyecto' });
     Proyecto.hasMany(Ingreso, { foreignKey: 'id_proyecto', targetKey: 'id_proyecto' });
@@ -80,6 +85,9 @@ sequelize.sync({ force: false, logging: false }).then(() => {
     Stock.hasMany(StockMovimiento, {foreignKey: 'id_stock', targetKey: 'id_stock'});
     StockMovimiento.belongsTo(Stock, {foreignKey: 'id_stock', targetKey: 'id_stock'});
     StockMovimiento.belongsTo(Auth, { foreignKey: 'id_user', targetKey: 'id_user' });
+    ModuloDoble.belongsTo(Modulo, { as: 'moduloUno', foreignKey: 'id_modulo_uno', targetKey: 'id_modulo' });
+    ModuloDoble.belongsTo(Modulo, { as: 'moduloDos', foreignKey: 'id_modulo_dos', targetKey: 'id_modulo' });
+    ModuloDoble.hasMany(Alquiler, { foreignKey: 'id_modulo_doble', targetKey: 'id_modulo_doble' });
     
     console.log('La sincronizacion con la base de datos ' + process.env.DB_NAME + ' fue un exito');
 }).catch(err => {
@@ -88,5 +96,5 @@ sequelize.sync({ force: false, logging: false }).then(() => {
 
 module.exports = {
     Alquiler, AnalisisCosto, Auth, CentroCosto, ComprobantePago, DetalleAC, Egreso, Estado, FormaCobro, FormaPago,
-    Indice, Ingreso, Modulo, Proyecto, Rango, Stock, StockMovimiento, UnidadNegocio, Token
+    Indice, Ingreso, Modulo, Proyecto, Rango, Stock, StockMovimiento, UnidadNegocio, Token, ModuloDoble
 }

@@ -6,6 +6,8 @@ import ReactApexCharts from 'react-apexcharts';
 import ModalFormulario from '../../utils/modal/formularios/ModalFormulario';
 import ModalVenta from './ModalVenta';
 import UrlQr from '../../utils/modal/alerta/UrlQr';
+import Alerta from '../../utils/modal/validacion/Alerta';
+import ModalVinculacion from './ModalVinculacion';
 
 //Hooks
 import { formatFecha, formatNumber, ToastComponent } from '../../../hooks/useUtils';
@@ -26,12 +28,12 @@ import '../../../style/Modulos.scss';
 
 //Img-Icons
 import * as Icons from 'react-bootstrap-icons';
-import Alerta from '../../utils/modal/validacion/Alerta';
 
 const Modulos = () => {
     const { response } = useResponse();
     const { user } = useUser();
     const { modulos, setModulos } = useGetModulos();
+    console.log(modulos)
 
     const dispatch = useDispatch();
 
@@ -63,6 +65,7 @@ const Modulos = () => {
     const [showModalVenta, setShowModalVenta] = useState(false);
     const [showToken, setShowToken] = useState(false);
     const [showAlerta, setShowAlerta] = useState(false);
+    const [showFormVincular, setShowFormVincular] = useState(false);
 
     useEffect(() => {
         getApiTokenQRModulos().then(res => {
@@ -215,7 +218,7 @@ const Modulos = () => {
                 }
             }).catch(err => {
                 console.error(err);
-                
+
                 ToastComponent('error', err.data.todoMal && err.data.todoMal);
             })
         }
@@ -272,13 +275,20 @@ const Modulos = () => {
         <ModalVenta titulo={infoModalVenta.titulo} show={showModalVenta} setShow={setShowModalVenta} submit={vender} />
         <UrlQr show={showModalUrlQr} />
         <Alerta titulo={alerta.titulo} mensaje={alerta.mensaje} show={showAlerta} setShow={setShowAlerta} submit={deleteModulo} data={alerta.data} />
+        <ModalVinculacion show={showFormVincular} setShow={setShowFormVincular} modulos={modulos} setModulos={setModulos} />
 
         <Row className='content-resumen-sec-buttons'>
             <Row className="conten-buttons-agregar">
-                <Col xs={12} sm={4} md={3}>
+                <Col xs={12} sm={3} md={2}>
                     <Button className="button-agregar" onClick={() => setShowForm(!showForm)} variant="dark" >
                         <Icons.Plus className="icon-button" size={19} />
                         Agregar módulo
+                    </Button>
+                </Col>
+                <Col xs={12} sm={3} md={2}>
+                    <Button className="button-agregar" onClick={() => setShowFormVincular(!showFormVincular)} variant="dark" >
+                        <Icons.Plus className="icon-button" size={19} />
+                        Vincular módulos
                     </Button>
                 </Col>
                 <Col xs={12} md={5} className="content-total-modulos-estados">
@@ -324,24 +334,30 @@ const Modulos = () => {
                                     <Accordion.Header className="accordion-header-modulos">
                                         <Row>
                                             {modulo.estado == 0 &&
-                                                <OverlayTrigger placement="right" overlay={<Tooltip>Disponible.</Tooltip>} >
-                                                    <Col xs={1} md={1} id="disponible"></Col>
+                                                <OverlayTrigger placement="right" overlay={<Tooltip>Disponible {modulo.vinculado && 'vinculado'}.</Tooltip>} >
+                                                    <Col xs={1} md={1} id="disponible">
+                                                        {modulo.vinculado && <Icons.Diagram2Fill className='icon-vinculado' />}
+                                                    </Col>
                                                 </OverlayTrigger>
                                             }
                                             {modulo.estado == 1 &&
-                                                <OverlayTrigger placement="right" overlay={<Tooltip>Ocupado.</Tooltip>} >
-                                                    <Col xs={1} md={1} id="ocupado"></Col>
+                                                <OverlayTrigger placement="right" overlay={<Tooltip>Ocupado {modulo.vinculado && 'vinculado'}.</Tooltip>} >
+                                                    <Col xs={1} md={1} id="ocupado">
+                                                        {modulo.vinculado && <Icons.Diagram2Fill className='icon-vinculado'/>}
+                                                    </Col>
                                                 </OverlayTrigger>
                                             }
                                             {modulo.estado == 2 &&
-                                                <OverlayTrigger placement="right" overlay={<Tooltip>Vendido.</Tooltip>} >
-                                                    <Col xs={1} md={1} id="vendido"></Col>
+                                                <OverlayTrigger placement="right" overlay={<Tooltip>Vendido {modulo.vinculado && 'vinculado'}.</Tooltip>} >
+                                                    <Col xs={1} md={1} id="vendido">
+                                                        {modulo.vinculado && <Icons.Diagram2Fill className='icon-vinculado'/>}
+                                                    </Col>
                                                 </OverlayTrigger>
                                             }
                                             <Col xs={9} md={10} className="accordion-nombre-modulos">
                                                 {!modulo.tipologia ?
                                                     modulo.nombre_modulo
-                                                    : `${modulo.tipologia} - ${formatNumber(modulo.ancho)} x ${formatNumber(modulo.largo)} - ${modulo.material_cerramiento} - ${modulo.id_modulo}`
+                                                    : `${modulo.tipologia} - ${modulo.id_modulo} - ${formatNumber(modulo.ancho)} x ${formatNumber(modulo.largo)} - ${modulo.material_cerramiento} `
                                                 }
                                             </Col>
                                             {user.rango == "admin" && modulo.estado != 2 &&

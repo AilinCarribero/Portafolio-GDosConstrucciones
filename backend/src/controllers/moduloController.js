@@ -1,10 +1,13 @@
-const { Modulo, Alquiler } = require('../../db');
+const { Modulo, Alquiler, ModuloDoble } = require('../../db');
 const jwt = require('jsonwebtoken');
 
 const findAllModulos = {
     include: [{
         model: Alquiler
-    }],
+    }, {
+        model: ModuloDoble
+    }
+    ],
     order: [['estado', 'ASC'], [Alquiler, 'fecha_h_alquiler', 'ASC']]
 }
 
@@ -150,6 +153,8 @@ exports.updateModulo = (req, res) => {
     Modulo.findOne({
         include: [{
             model: Alquiler
+        }, {
+            model: ModuloDoble
         }],
         where: {
             id_modulo: id
@@ -162,7 +167,7 @@ exports.updateModulo = (req, res) => {
         }
 
         data.token_modulo = jwt.sign(data, process.env.JWT_SECRET);
-        
+
         try {
             //Cambiamos el estado del modulo a vendido
             Modulo.update(data, {
@@ -192,12 +197,7 @@ exports.updateModulo = (req, res) => {
 
 exports.getCantModulos = (req, res) => {
     try {
-        Modulo.findAll({
-            include: [{
-                model: Alquiler
-            }],
-            order: [['estado', 'ASC'], [Alquiler, 'fecha_h_alquiler', 'ASC']]
-        }).then(response => {
+        Modulo.findAll(findAllModulos).then(response => {
             let auxDisponibles = 0;
             let auxOcupados = 0;
             let auxVendidos = 0;
@@ -260,7 +260,11 @@ exports.deleteModuloId = (req, res) => {
         },
         include: [{
             model: Alquiler
-        }],
+        },
+        {
+            model: ModuloDoble
+        }
+        ],
     }).then(response => {
         Modulo.findAll(findAllModulos).then(response => {
             response.statusText = "Ok";
@@ -278,5 +282,79 @@ exports.deleteModuloId = (req, res) => {
         console.error(error);
         res.json(error);
         throw error;
+    });
+}
+
+exports.newModuloDoble = (req, res) => {
+    const data = req.body;
+
+    data.vinculacion = true;
+
+    console.log(data)
+
+    ModuloDoble.create(data).then(response => {
+        //Editar el estado de vinculacion en los modulos
+        //Modulo 1
+        Modulo.update({ vinculado: true }, {
+            where: {
+                id_modulo: data.id_modulo_uno
+            }
+        }).then(response => {
+            //Modulo 2
+            Modulo.update({ vinculado: true }, {
+                where: {
+                    id_modulo: data.id_modulo_dos
+                }
+            }).then(response => {
+                //Busqueda de modulos
+                Modulo.findAll(findAllModulos).then(response => {
+                    res.json({ data: response });
+                }).catch(error => {
+                    err.todoMal = "Error al buscar los módulos";
+                    console.error(error)
+                    res.json(error);
+                });
+            }).catch(err => {
+                err.todoMal = "Error al cambiar el estado de vinculación del módulo";
+                console.error(err)
+                return res.json(err)
+            })
+        }).catch(err => {
+            err.todoMal = "Error al cambiar el estado de vinculación del módulo";
+            console.error(err)
+            return res.json(err)
+        })
+    }).catch(err => {
+        err.todoMal = "Error al ingresar el módulo";
+        console.error(err)
+        return res.json(err)
+    })
+}
+
+exports.getModulosDobles = (req, res) => {
+    ModuloDoble.findAll({
+        include: [{
+            model: Modulo,
+            as: 'moduloUno',
+            include: [{
+                model: Alquiler
+            },
+            ]
+        }, {
+            model: Modulo,
+            as: 'moduloDos',
+            include: [{
+                model: Alquiler
+            },
+            ]
+        }],
+        order: [['vinculacion', 'ASC']]
+    }).then(response => {
+        res.json(response);
+    }).catch(err => {
+        err.todoMal = "Error al buscar los módulos dobles";
+        console.error(err);
+        res.json(err);
+        throw err;
     });
 }

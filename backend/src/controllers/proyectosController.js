@@ -1,4 +1,4 @@
-const { CentroCosto, UnidadNegocio, Alquiler, Proyecto, Modulo, Egreso, Ingreso } = require('../../db');
+const { CentroCosto, UnidadNegocio, Alquiler, Proyecto, Modulo, Egreso, Ingreso, ModuloDoble } = require('../../db');
 const { formatStringToNumber } = require('../utils/numbers');
 const Decimal = require('decimal.js-light');
 const moment = require('moment');
@@ -121,7 +121,7 @@ const alquilerXMes = (alquileres) => {
         }
     });
 
-    return(alquilerTotalXMes)
+    return (alquilerTotalXMes)
 }
 
 //listar todos los proyectos existentes
@@ -180,29 +180,84 @@ exports.insertProyecto = async (req, res) => {
             req.body.alquileres ?
                 req.body.alquileres.forEach((alquiler, i) => {
                     alquiler.id_proyecto = id_proyecto;
-
                     //Una vez guardado el proyecto guardamos los alquileres relacionados con el proyecto
                     Alquiler.create(alquiler).then(result => {
                         /*Si el alquiler se guardo como corresponde el estado del modulo correspondiente al alquiler pasa a tener 
                         un estado de ocupado*/
-                        Modulo.update({ estado: 1 }, {
-                            where: {
-                                id_modulo: alquiler.id_modulo
-                            }
-                        }).then(result => {
-                            /*Si hasta aqui no hay errores se fija si es el ultimo alquiler que se guardo. De ser asi responde que todo
-                            esta bien */
-                            if (i == (countAlquileres - 1)) {
-                                Proyecto.findAll(configFindAllProyectos).then(response => {
-                                    res.json(response);
+                        if (alquiler.id_modulo) {
+                            Modulo.update({ estado: 1 }, {
+                                where: {
+                                    id_modulo: alquiler.id_modulo
+                                }
+                            }).then(result => {
+                                /*Si hasta aqui no hay errores se fija si es el ultimo alquiler que se guardo. De ser asi responde que todo
+                                esta bien */
+                                if (i == (countAlquileres - 1)) {
+                                    Proyecto.findAll(configFindAllProyectos).then(response => {
+                                        res.json(response);
+                                    }).catch(error => {
+                                        res.json(error);
+                                    });
+                                }
+                            }).catch(error => {
+                                console.error(error);
+                                return res.json(error);
+                            });
+                        } else if (alquiler.id_modulo_doble) {
+                            ModuloDoble.findOne({
+                                where: {
+                                    id_modulo_doble: alquiler.id_modulo_doble
+                                },
+                                include: [{
+                                    model: Modulo,
+                                    as: 'moduloUno',
+                                    include: [{
+                                        model: Alquiler
+                                    },
+                                    ]
+                                }, {
+                                    model: Modulo,
+                                    as: 'moduloDos',
+                                    include: [{
+                                        model: Alquiler
+                                    },
+                                    ]
+                                }],
+                                raw: true
+                            }).then(modulo_doble => {
+                                /*Si hasta aqui no hay errores debe actualizar los estados de los modulos de la oficina doble*/
+                                Modulo.update({ estado: 1 }, {
+                                    where: {
+                                        id_modulo: modulo_doble.id_modulo_uno
+                                    }
+                                }).then(result => {
+                                    Modulo.update({ estado: 1 }, {
+                                        where: {
+                                            id_modulo: modulo_doble.id_modulo_dos
+                                        }
+                                    }).then(result => {
+                                        /*Si hasta aqui no hay errores se fija si es el ultimo alquiler que se guardo. De ser asi responde que todo
+                                        esta bien */
+                                        if (i == (countAlquileres - 1)) {
+                                            Proyecto.findAll(configFindAllProyectos).then(response => {
+                                                res.json(response);
+                                            }).catch(error => {
+                                                res.json(error);
+                                            });
+                                        }
+                                    }).catch(error => {
+                                        console.error(error);
+                                        return res.json(error);
+                                    });
                                 }).catch(error => {
-                                    res.json(error);
+                                    console.error(error);
+                                    return res.json(error);
                                 });
-                            }
-                        }).catch(error => {
-                            console.error(error);
-                            return res.json(error);
-                        });
+                            }).catch(error => {
+                                console.error(error);
+                                return res.json(error);
+                            });
+                        } 
                     }).catch(error => {
                         console.error(error);
                         return res.json(error);

@@ -32,3 +32,15 @@ export const deleteApiModulo = async (id, data) => {
 
     return response;
 }
+
+export const setApiVincularModulo = async (data) => {
+    const response = await axios.post(API+`modulos/modulo-doble`, data, servisTokenConfig);
+
+    return response;
+}
+
+export const getApiModulosDobles = async () => {
+    const response = await axios.get(API+`modulos/listen/modulo-doble`, servisTokenConfig);
+
+    return response.data;
+}

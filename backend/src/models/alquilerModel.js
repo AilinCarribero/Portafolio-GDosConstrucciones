@@ -7,7 +7,13 @@ module.exports = ( sequelize, type ) => {
         },
         id_modulo: {
             type: type.INTEGER,
-            isNumeric: true
+            isNumeric: true,
+            allowNull: true,
+        },
+        id_modulo_doble: {
+            type: type.INTEGER,
+            isNumeric: true,
+            allowNull: true,
         },
         id_proyecto: {
             type: type.STRING(100),

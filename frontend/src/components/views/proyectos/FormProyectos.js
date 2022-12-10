@@ -18,6 +18,7 @@ import { useGetModulos } from '../../../hooks/useModulos';
 
 //Css
 import './Proyectos.css';
+import { useResponse } from '../../../hooks/useResponse';
 
 const FormProyectos = ({ close, updateProyecto, setUpdateProyectos }) => {
     const newDate = new Date();
@@ -42,7 +43,9 @@ const FormProyectos = ({ close, updateProyecto, setUpdateProyectos }) => {
     //Datos para usar en el formulario traidos de la api
     const { centroCosto } = useGetCentroCosto();
     const { unidadNegocio } = useGetUnidadNegocio();
-    const { modulos } = useGetModulos();
+    const { modulos, modulosDobles } = useGetModulos();
+    
+    const { response } = useResponse();
 
     //Eventos para mostrar partes del formulario
     const [showCostoVenta, setShowCostoVenta] = useState(updateProyecto && updateProyecto.id_centro_costo == 2 || proyecto.id_centro_costo === 2 ? true : false);
@@ -118,7 +121,8 @@ const FormProyectos = ({ close, updateProyecto, setUpdateProyectos }) => {
                 for (let i = 0; i < cantAlquiler; i++) {
                     const auxAlquilerFI = dataAlquiler['fechaI' + i];
                     const auxAlquilerFV = dataAlquiler['fechaV' + i];
-                    const auxAlquilerIdM = dataAlquiler['id_modulo-' + i];
+                    const auxAlquilerIdM = dataAlquiler['id_modulo-' + i] || null;
+                    const auxAlquilerIdMD = dataAlquiler['id_modulo_doble-' + i] || null;
                     let auxAlquilerMonto = dataAlquiler['monto' + i];
 
                     const mesFI = auxAlquilerFI.slice(5, 7);
@@ -132,6 +136,7 @@ const FormProyectos = ({ close, updateProyecto, setUpdateProyectos }) => {
 
                     auxAlquileres[i] = {
                         id_modulo: auxAlquilerIdM,
+                        id_modulo_doble: auxAlquilerIdMD,
                         valor: auxAlquilerMonto.toNumber(),
                         fecha_d_alquiler: auxAlquilerFI,
                         fecha_h_alquiler: auxAlquilerFV
@@ -161,7 +166,9 @@ const FormProyectos = ({ close, updateProyecto, setUpdateProyectos }) => {
                     resProyecto = await insertProyecto(auxProyecto);
                 }
 
-                if ((resProyecto.statusText == 'OK' || resProyecto.status == 200) || resProyecto.data.todoOk == 'Ok' && !resProyecto.data.todoMal) {
+                const res = response(resProyecto);
+
+                if (res) {
                     ToastComponent('success');
 
                     //setUpdateProyectos(resProyecto.data);
@@ -204,16 +211,16 @@ const FormProyectos = ({ close, updateProyecto, setUpdateProyectos }) => {
                 rows.push(
                     <Row key={i}>
                         <Row>
-                            <Col xs={6} sm={6}>
+                            <Col xs={12} sm={12}>
                                 <FloatingLabel label="Módulo">
-                                    <Form.Select onChange={handleChangeForm} name={"id_modulo" + '-' + i} required >
+                                    <Form.Select onChange={handleChangeForm} name={"id_modulo" + '-' + i} >
                                         <option value=""> </option>
                                         {modulos.length > 0 ?
                                             modulos.map((modulo) => (
-                                               modulo.estado === 0 && <option key={modulo.id_modulo} value={modulo.id_modulo}>
+                                                modulo.estado === 0 && <option key={modulo.id_modulo} value={modulo.id_modulo}>
                                                     {
                                                         modulo.nombre_modulo ||
-                                                        `${modulo.tipologia} - ${formatNumber(modulo.ancho)} x ${formatNumber(modulo.largo)} - ${modulo.material_cerramiento} - ${modulo.id_modulo}`
+                                                        `${modulo.tipologia} - ${modulo.id_modulo} - ${formatNumber(modulo.ancho)} x ${formatNumber(modulo.largo)} - ${modulo.material_cerramiento}`
                                                     }
                                                 </option>
                                             ))
@@ -222,7 +229,25 @@ const FormProyectos = ({ close, updateProyecto, setUpdateProyectos }) => {
                                     </Form.Select>
                                 </FloatingLabel>
                             </Col>
-                            <Col xs={6} sm={6}>
+                            <Col xs={12} sm={12}>
+                                <FloatingLabel label="Módulo Doble">
+                                    <Form.Select onChange={handleChangeForm} name={"id_modulo_doble" + '-' + i} >
+                                        <option value=""> </option>
+                                        {modulosDobles.length > 0 ?
+                                            modulosDobles.map((moduloDoble) => (
+                                                moduloDoble.vinculacion === true && 
+                                                <option key={moduloDoble.id_modulo} value={moduloDoble.id_modulo_doble}>
+                                                    { `OD - ${moduloDoble.id_modulo_doble} - OS - ${moduloDoble.id_modulo_uno} - OS - ${moduloDoble.id_modulo_dos} `}
+                                                </option>
+                                            ))
+                                            : <option>NO HAY MÓDULOS DOBLES DISPONIBLES</option>
+                                        }
+                                    </Form.Select>
+                                </FloatingLabel>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col xs={12} sm={12}>
                                 <FloatingLabel label="Monto del Alquiler">
                                     <NumberFormat customInput={Form.Control} decimalSeparator={","} thousandSeparator={"."}
                                         onChange={handleChangeForm} name={"monto" + i} required />
@@ -304,7 +329,7 @@ const FormProyectos = ({ close, updateProyecto, setUpdateProyectos }) => {
                             {showCostoVenta && <>
                                 <Form.Group className="mb-3">
                                     <FloatingLabel label="Costo">
-                                        <NumberFormat customInput={Form.Control} decimalSeparator={","} thousandSeparator={"."} 
+                                        <NumberFormat customInput={Form.Control} decimalSeparator={","} thousandSeparator={"."}
                                             onChange={handleChangeForm} name="costo" value={proyecto.costo} required />
                                     </FloatingLabel>
                                 </Form.Group>
