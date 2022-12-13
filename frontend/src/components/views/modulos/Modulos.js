@@ -33,7 +33,6 @@ const Modulos = () => {
     const { response } = useResponse();
     const { user } = useUser();
     const { modulos, setModulos } = useGetModulos();
-    console.log(modulos)
 
     const dispatch = useDispatch();
 

@@ -8,6 +8,8 @@ const configFindAllProyectos = {
         model: Alquiler,
         include: [{
             model: Modulo
+        },{
+            model: ModuloDoble
         }]
     }, {
         model: Egreso

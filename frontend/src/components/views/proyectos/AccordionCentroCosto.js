@@ -117,7 +117,7 @@ const AccordionCentrosCostos = ({ proyecto, setProyectos }) => {
                             <Col xs={12} md={6}>
                                 <Row>
                                     <Col xs={1} md={1}>
-                                        <Link to={`/alquileres/${proyecto.id_proyecto}`}> <Icons.BoxArrowInRight className="icon-detalle" /> </Link>
+                                        {proyecto.alquilers.length > 0 && <Link to={`/alquileres/${proyecto.id_proyecto}`}> <Icons.BoxArrowInRight className="icon-detalle" /> </Link>}
                                     </Col>
                                     <Col xs={11} md={11}><p> Total por Alquileres: ${formatNumber(proyecto.alquiler_total)}</p></Col>
                                 </Row>

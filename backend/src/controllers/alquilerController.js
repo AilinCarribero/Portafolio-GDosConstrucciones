@@ -1,4 +1,4 @@
-const { Alquiler, Modulo, Proyecto } = require("../../db")
+const { Alquiler, Modulo, Proyecto, ModuloDoble } = require("../../db")
 
 exports.insertAlquiler = (req, res) => {
     try {
@@ -20,7 +20,7 @@ exports.getAlquileres = (req, res) => {
     try {
         Alquiler.findAll({
             include: {
-                model: [Modulo, Proyecto]
+                model: [Modulo, Proyecto, ModuloDoble]
             }
         })
     } catch (error) {
@@ -37,6 +37,8 @@ exports.getAlquileresId = async (req, res) => {
             model: Modulo
         }, {
             model: Proyecto
+        },{
+            model: ModuloDoble
         }],
         where: {
             id_proyecto: idProyecto
@@ -98,6 +100,8 @@ exports.updateContrato = async (req, res) => {
                         model: Modulo
                     }, {
                         model: Proyecto
+                    },{
+                        model: ModuloDoble
                     }],
                     where: {
                         id_proyecto: updateProyecto.id_proyecto
@@ -123,6 +127,8 @@ exports.updateContrato = async (req, res) => {
                         model: Modulo
                     }, {
                         model: Proyecto
+                    },{
+                        model: ModuloDoble
                     }],
                     where: {
                         id_proyecto: updateProyecto.id_proyecto

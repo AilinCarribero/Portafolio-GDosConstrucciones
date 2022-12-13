@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Button, Form, Modal, Row, FloatingLabel, Col } from 'react-bootstrap'
 import NumberFormat from 'react-number-format';
 import Decimal from 'decimal.js-light';
@@ -23,7 +23,7 @@ const FormContrato = ({ alquiler, show, setShow, setAlquileres, actionContrato }
     const dispatch = useDispatch();
 
     const { id } = useParams();
-    const { modulos } = useGetModulos();
+    const { modulos, modulosDobles } = useGetModulos();
     const { response } = useResponse();
 
     const proyectos = useSelector(state => state.proyectoRedux.proyectos);
@@ -32,15 +32,24 @@ const FormContrato = ({ alquiler, show, setShow, setAlquileres, actionContrato }
     const [newContrato, setNewContrato] = useState({
         id_alquiler: alquiler ? alquiler.id_alquiler : '',
         id_modulo: alquiler ? alquiler.id_modulo : '',
+        id_modulo_doble: alquiler ? alquiler.id_modulo_doble : '',
         alquiler: alquiler ? alquiler : '',
         proyecto: proyecto,
-        nombre_modulo: alquiler ? alquiler.modulo.nombre_modulo || `${alquiler.modulo.tipologia} - ${formatNumber(alquiler.modulo.ancho)} x ${formatNumber(alquiler.modulo.largo)} - ${alquiler.modulo.material_cerramiento} - ${alquiler.modulo.id_modulo}`: '',
+        nombre_modulo: alquiler ? (alquiler.modulo ? alquiler.modulo.nombre_modulo || `${alquiler.modulo.tipologia} - ${alquiler.modulo.id_modulo} - ${formatNumber(alquiler.modulo.ancho)} x ${formatNumber(alquiler.modulo.largo)} - ${alquiler.modulo.material_cerramiento}` : `OD - ${alquiler.modulo_doble.id_modulo_doble} - OS - ${alquiler.modulo_doble.id_modulo_uno} - OS - ${alquiler.modulo_doble.id_modulo_dos} `) : '',
         id_proyecto: id,
         alquiler_total: proyecto.alquiler_total,
         fecha_d_alquiler: alquiler ? formatFechaISO(alquiler.fecha_h_alquiler) : formatFechaISO(new Date()),
         fecha_h_alquiler: alquiler ? formatFechaISO(alquiler.fecha_h_alquiler) : '',
         valor: actionContrato == "modificar" ? alquiler.valor : '',
     });
+
+    useEffect(() => {
+        if (proyecto) {
+            //console.log(proyecto)
+        }
+
+        return () => { }
+    }, [proyecto])
 
     //Variables para validacion
     const [validated, setValidated] = useState(false);
@@ -96,10 +105,11 @@ const FormContrato = ({ alquiler, show, setShow, setAlquileres, actionContrato }
 
             if (res) {
                 ToastComponent('success');
-                
+
                 setNewContrato({
                     id_alquiler: '',
                     id_modulo: '',
+                    id_modulo_doble: '',
                     alquiler: '',
                     nombre_modulo: '',
                     id_proyecto: '',
@@ -122,7 +132,6 @@ const FormContrato = ({ alquiler, show, setShow, setAlquileres, actionContrato }
         }
     }
 
-
     return (
         <Modal show={show} onHide={handleClose} animation={false}>
             <Modal.Header className="content-modal-header" closeButton><b>Renovar Contrato del módulo {newContrato.nombre_modulo}</b></Modal.Header>
@@ -131,7 +140,7 @@ const FormContrato = ({ alquiler, show, setShow, setAlquileres, actionContrato }
                     <Form noValidate validated={validated} onSubmit={handleValidacion}>
                         {!alquiler &&
                             <Row>
-                                <Col>
+                                <Col xs={12} sm={12}>
                                     <FloatingLabel label="Módulo">
                                         <Form.Select onChange={handleChangeForm} name="id_modulo" required >
                                             <option value=""> </option>
@@ -142,6 +151,22 @@ const FormContrato = ({ alquiler, show, setShow, setAlquileres, actionContrato }
                                                     </option>
                                                 ))
                                                 : <option>NO HAY MÓDULOS DISPONIBLES</option>
+                                            }
+                                        </Form.Select>
+                                    </FloatingLabel>
+                                </Col>
+                                <Col xs={12} sm={12}>
+                                    <FloatingLabel label="Módulo Doble">
+                                        <Form.Select onChange={handleChangeForm} name="id_modulo_doble" >
+                                            <option value=""> </option>
+                                            {modulosDobles.length > 0 ?
+                                                modulosDobles.map((moduloDoble) => (
+                                                    moduloDoble.vinculacion === true &&
+                                                    <option key={moduloDoble.id_modulo} value={moduloDoble.id_modulo_doble}>
+                                                        {`OD - ${moduloDoble.id_modulo_doble} - OS - ${moduloDoble.id_modulo_uno} - OS - ${moduloDoble.id_modulo_dos} `}
+                                                    </option>
+                                                ))
+                                                : <option>NO HAY MÓDULOS DOBLES DISPONIBLES</option>
                                             }
                                         </Form.Select>
                                     </FloatingLabel>
@@ -173,7 +198,7 @@ const FormContrato = ({ alquiler, show, setShow, setAlquileres, actionContrato }
                                 </FloatingLabel>
                             </Col>
                             <Col xs={12} sm={12} className="text-descripcion-agregar">
-                                ${formatNumber(newContrato.alquiler_total ? newContrato.alquiler_total : 0)} + ${newContrato.valor ? newContrato.valor : 0} = ${formatNumber(new Decimal(newContrato.alquiler_total ? newContrato.alquiler_total : 0).add(newContrato.valor ? desformatNumber(newContrato.valor) : 0).toNumber())}
+                                ${formatNumber(newContrato.alquiler_total ? newContrato.alquiler_total : 0)} + ${formatNumber(newContrato.valor ? newContrato.valor : 0)} = ${formatNumber(new Decimal(newContrato.alquiler_total ? newContrato.alquiler_total : 0).add(newContrato.valor ? new Decimal(newContrato.valor) : 0).toNumber())}
                             </Col>
                         </Row>
 
