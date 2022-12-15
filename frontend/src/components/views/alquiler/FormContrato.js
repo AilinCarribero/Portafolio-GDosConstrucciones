@@ -192,13 +192,13 @@ const FormContrato = ({ alquiler, show, setShow, setAlquileres, actionContrato }
                         </Row>
                         <Row>
                             <Col xs={12} sm={12}>
-                                <FloatingLabel label="Total del alquiler">
+                                <FloatingLabel label="Total del alquiler"> 
                                     <NumberFormat customInput={Form.Control} decimalSeparator={","} thousandSeparator={"."}
                                         onChange={handleChangeForm} name="valor" value={newContrato.valor} required />
                                 </FloatingLabel>
                             </Col>
                             <Col xs={12} sm={12} className="text-descripcion-agregar">
-                                ${formatNumber(newContrato.alquiler_total ? newContrato.alquiler_total : 0)} + ${formatNumber(newContrato.valor ? newContrato.valor : 0)} = ${formatNumber(new Decimal(newContrato.alquiler_total ? newContrato.alquiler_total : 0).add(newContrato.valor ? new Decimal(newContrato.valor) : 0).toNumber())}
+                                ${formatNumber(newContrato.alquiler_total ? newContrato.alquiler_total : 0)} + ${(newContrato.valor ? newContrato.valor : 0)} = ${formatNumber(new Decimal(newContrato.alquiler_total ? newContrato.alquiler_total : 0).add(newContrato.valor ? new Decimal(desformatNumber(newContrato.valor)) : 0).toNumber())}
                             </Col>
                         </Row>
 
