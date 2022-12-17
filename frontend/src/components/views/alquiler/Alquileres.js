@@ -4,6 +4,9 @@ import { Accordion, Row, Col, ModalBody } from 'react-bootstrap';
 import Decimal from 'decimal.js-light';
 import moment from 'moment';
 
+//Redux
+import { useSelector } from 'react-redux';
+
 //Components
 import FormContrato from './FormContrato';
 
@@ -17,7 +20,6 @@ import * as Icons from 'react-bootstrap-icons';
 
 //Css
 import '../../../style/Alquiler.scss';
-import { useSelector } from 'react-redux';
 
 const Alquileres = () => {
     const mesActual = formatNameMes(moment().month());
@@ -34,27 +36,27 @@ const Alquileres = () => {
     const [renovarAlquiler, setRenovarAlquiler] = useState([]);
     const [actionContrato, setActionContrato] = useState();
     //console.log(alquileres, mesAlquiler, totalAlquiler);
-    const [showModalRenovar, setShowModalRenovar] = useState(false);
-    const [showModalNewContrato, setShowModalNewContrato] = useState(false);
+    const [showModalFormContrato, setShowModalFormContrato] = useState(false);
 
 
     useEffect(() => {
         setProyecto(proyectos.find(proyecto => proyecto.id_proyecto == id));
     }, [proyectos])
 
-    const renovarContrato = (alquiler, action) => {
-        setShowModalRenovar(true)
+    const modalFormContrato = (action, alquiler) => {
+        setShowModalFormContrato(true);
         setRenovarAlquiler(alquiler);
         setActionContrato(action);
     }
 
     return (<>
-        {showModalNewContrato && <FormContrato show={showModalNewContrato} setShow={setShowModalNewContrato} setAlquileres={setAlquileres} />}
+        {showModalFormContrato && <FormContrato alquiler={renovarAlquiler} show={showModalFormContrato} setShow={setShowModalFormContrato} setAlquileres={setAlquileres} actionContrato={actionContrato} />}
+
         <Row>
             <Col xs={12} md={8} className="titulo-alquileres-vista">{id}</Col>
             <Row className='content-resumen-alquileres'>
                 <Col>
-                    <button className="button-agregar" onClick={() => setShowModalNewContrato(true)} variant="dark">
+                    <button className="button-agregar" onClick={() => modalFormContrato('Nuevo')} variant="dark">
                         <Icons.Plus className="icon-button" size={19} /> Agregar Contrato
                     </button>
                 </Col>
@@ -70,7 +72,6 @@ const Alquileres = () => {
                     proyecto && proyecto.alquilers.length > 0 ?
                         proyecto.alquilers.map(alquiler => (
                             <Row key={alquiler.id_alquiler}>
-                                {showModalRenovar && <FormContrato alquiler={renovarAlquiler} show={showModalRenovar} setShow={setShowModalRenovar} setAlquileres={setAlquileres} actionContrato={actionContrato} />}
                                 <Col xs={12}>
                                     <Accordion.Item eventKey={alquiler.id_alquiler}>
                                         <Accordion.Header>
@@ -86,7 +87,7 @@ const Alquileres = () => {
                                             <Col className="acordion-title" xs={4} md={3}>
                                                 <b>
                                                     {alquiler.modulo ? 
-                                                        alquiler.modulo.nombre_modulo || `${alquiler.modulo.tipologia} - ${formatNumber(alquiler.modulo.ancho)} x ${formatNumber(alquiler.modulo.largo)} - ${alquiler.modulo.material_cerramiento} - ${alquiler.modulo.id_modulo}` 
+                                                        alquiler.modulo.nombre_modulo || `${alquiler.modulo.tipologia} - ${alquiler.modulo.id_modulo} - ${formatNumber(alquiler.modulo.ancho)} x ${formatNumber(alquiler.modulo.largo)} - ${alquiler.modulo.material_cerramiento}` 
                                                         : `OD - ${alquiler.modulo_doble.id_modulo_doble} - OS - ${alquiler.modulo_doble.id_modulo_uno} - OS - ${alquiler.modulo_doble.id_modulo_dos} `
                                                     }
                                                 </b>
@@ -105,7 +106,7 @@ const Alquileres = () => {
                                                         <p className="accordion-title-section">Acciones</p>
                                                     </Col>
                                                     <Col xs={6} md={6}>
-                                                        <button className="button-action" onClick={() => renovarContrato(alquiler, 'renovar')}>
+                                                        <button className="button-action" onClick={() => modalFormContrato('Renovar', alquiler)}>
                                                             <Row>
                                                                 <Col xs={1} md={1} className='icon-action'>
                                                                     <Icons.ArrowRepeat size={19} />
@@ -116,7 +117,7 @@ const Alquileres = () => {
                                                             </Row>
                                                         </button>
                                                     </Col><Col xs={6} md={6}>
-                                                        <button className="button-action" onClick={() => renovarContrato(alquiler, 'modificar')}>
+                                                        <button className="button-action" onClick={() => modalFormContrato('Modificar', alquiler)}>
                                                             <Row>
                                                                 <Col xs={1} md={1} className='icon-action'>
                                                                     <Icons.PencilSquare size={19} />

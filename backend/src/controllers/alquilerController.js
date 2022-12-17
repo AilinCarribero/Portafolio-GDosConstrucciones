@@ -53,7 +53,7 @@ exports.getAlquileresId = async (req, res) => {
     });
 }
 
-exports.updateContrato = async (req, res) => {
+exports.updateNewRenovarContrato = async (req, res) => {
     const action = req.body.action;
 
     const updateProyecto = {
@@ -89,7 +89,7 @@ exports.updateContrato = async (req, res) => {
             id_proyecto: updateProyecto.id_proyecto
         }
     }).then(response => {
-        if (action === "modificar") {
+        if (action === "Modificar") {
             Alquiler.update(newAlquiler, {
                 where: {
                     id_alquiler: req.body.id_alquiler

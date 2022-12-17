@@ -17,7 +17,7 @@ import { useGetModulos } from '../../../hooks/useModulos';
 import { useResponse } from '../../../hooks/useResponse';
 
 //Service
-import { postNewContrato } from '../../../services/apiAlquileres';
+import { postNewRenovarUpdateContrato } from '../../../services/apiAlquileres';
 
 const FormContrato = ({ alquiler, show, setShow, setAlquileres, actionContrato }) => {
     const dispatch = useDispatch();
@@ -40,7 +40,7 @@ const FormContrato = ({ alquiler, show, setShow, setAlquileres, actionContrato }
         alquiler_total: proyecto.alquiler_total,
         fecha_d_alquiler: alquiler ? formatFechaISO(alquiler.fecha_h_alquiler) : formatFechaISO(new Date()),
         fecha_h_alquiler: alquiler ? formatFechaISO(alquiler.fecha_h_alquiler) : '',
-        valor: actionContrato == "modificar" ? alquiler.valor : '',
+        valor: actionContrato == "Modificar" ? alquiler.valor : '',
     });
 
     useEffect(() => {
@@ -99,7 +99,7 @@ const FormContrato = ({ alquiler, show, setShow, setAlquileres, actionContrato }
         let resNewContrato = [];
 
         try {
-            resNewContrato = await postNewContrato(newContrato);
+            resNewContrato = await postNewRenovarUpdateContrato(newContrato);
 
             const res = response(resNewContrato);
 
@@ -134,11 +134,11 @@ const FormContrato = ({ alquiler, show, setShow, setAlquileres, actionContrato }
 
     return (
         <Modal show={show} onHide={handleClose} animation={false}>
-            <Modal.Header className="content-modal-header" closeButton><b>Renovar Contrato del módulo {newContrato.nombre_modulo}</b></Modal.Header>
+            <Modal.Header className="content-modal-header" closeButton><b>{actionContrato} Contrato del módulo {newContrato.nombre_modulo}</b></Modal.Header>
             <Modal.Body className="content-modal-body">
                 <Row>
                     <Form noValidate validated={validated} onSubmit={handleValidacion}>
-                        {!alquiler &&
+                        {actionContrato !== 'Renovar' &&
                             <Row>
                                 <Col xs={12} sm={12}>
                                     <FloatingLabel label="Módulo">

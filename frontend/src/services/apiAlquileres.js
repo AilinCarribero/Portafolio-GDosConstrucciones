@@ -7,7 +7,7 @@ export const getAlquileresId = async (id) => {
     return response.data;
 }
 
-export const postNewContrato = async (data) => {
-    const response = await axios.post(API+`alquiler/renovar/contrato`, data, servisTokenConfig);
+export const postNewRenovarUpdateContrato = async (data) => {
+    const response = await axios.post(API+`alquiler/ren-agr-upd/contrato`, data, servisTokenConfig);
     return response;
 }
