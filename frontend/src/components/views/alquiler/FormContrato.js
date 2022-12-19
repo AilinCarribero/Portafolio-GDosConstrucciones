@@ -142,7 +142,7 @@ const FormContrato = ({ alquiler, show, setShow, setAlquileres, actionContrato }
                             <Row>
                                 <Col xs={12} sm={12}>
                                     <FloatingLabel label="Módulo">
-                                        <Form.Select onChange={handleChangeForm} name="id_modulo" required >
+                                        <Form.Select onChange={handleChangeForm} name="id_modulo" >
                                             <option value=""> </option>
                                             {modulos.length > 0 ?
                                                 modulos.map((modulo) => (
