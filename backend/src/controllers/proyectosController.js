@@ -9,7 +9,22 @@ const configFindAllProyectos = {
         include: [{
             model: Modulo
         },{
-            model: ModuloDoble
+            model: ModuloDoble,
+            include: [{
+                model: Modulo,
+                as: 'moduloUno',
+                include: [{
+                    model: Alquiler
+                },
+                ]
+            }, {
+                model: Modulo,
+                as: 'moduloDos',
+                include: [{
+                    model: Alquiler
+                },
+                ]
+            }],
         }]
     }, {
         model: Egreso

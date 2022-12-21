@@ -37,7 +37,7 @@ exports.getAlquileresId = async (req, res) => {
             model: Modulo
         }, {
             model: Proyecto
-        },{
+        }, {
             model: ModuloDoble
         }],
         where: {
@@ -64,7 +64,8 @@ exports.updateNewRenovarContrato = async (req, res) => {
     }
 
     const newAlquiler = {
-        id_modulo: req.body.id_modulo,
+        id_modulo: req.body.id_modulo || null,
+        id_modulo_doble: req.body.id_modulo_doble || null,
         id_proyecto: req.body.id_proyecto,
         valor: req.body.valor,
         fecha_d_alquiler: req.body.fecha_d_alquiler,
@@ -73,18 +74,64 @@ exports.updateNewRenovarContrato = async (req, res) => {
 
     /*Si la fecha de inicio del aquiler es anterior a hoy entonces se debe actualizar el estado del modulo */
     if (new Date(newAlquiler.fecha_d_alquiler) <= new Date()) {
-        Modulo.update({ estado: 1 }, {
-            where: {
-                id_modulo: newAlquiler.id_modulo
-            }
-        }).then(response => { }).catch(err => {
-            err.todoMal = "Error al actualizar el estado del módulo";
-            console.error(err)
-            res.json(err);
-        });
+        if (newAlquiler.id_modulo) {
+            Modulo.update({ estado: 1 }, {
+                where: {
+                    id_modulo: newAlquiler.id_modulo
+                }
+            }).then(response => { }).catch(err => {
+                err.todoMal = "Error al actualizar el estado del módulo";
+                console.error(err)
+                res.json(err);
+            });
+        } else {
+            ModuloDoble.findOne({
+                where: {
+                    id_modulo_doble: newAlquiler.id_modulo_doble
+                },
+                include: [{
+                    model: Modulo,
+                    as: 'moduloUno',
+                    include: [{
+                        model: Alquiler
+                    },
+                    ]
+                }, {
+                    model: Modulo,
+                    as: 'moduloDos',
+                    include: [{
+                        model: Alquiler
+                    },
+                    ]
+                }],
+            }).then(response => {
+                Modulo.update({ estado: 1 }, {
+                    where: {
+                        id_modulo: response.id_modulo_uno
+                    }
+                }).then(response => { }).catch(err => {
+                    err.todoMal = "Error al actualizar el estado del módulo";
+                    console.error(err)
+                    res.json(err);
+                });
+
+                Modulo.update({ estado: 1 }, {
+                    where: {
+                        id_modulo: response.id_modulo_dos
+                    }
+                }).then(response => { }).catch(err => {
+                    err.todoMal = "Error al actualizar el estado del módulo";
+                    console.error(err)
+                    res.json(err);
+                });
+            }).catch(err => {
+                console.error(err);
+                res.json(err);
+            })
+        }
     }
 
-    Proyecto.update({ alquiler_total: updateProyecto.alquiler_total, fecha_f_proyecto: updateProyecto.fecha_f_proyecto, id_estado: updateProyecto.id_estado  }, {
+    Proyecto.update({ alquiler_total: updateProyecto.alquiler_total, fecha_f_proyecto: updateProyecto.fecha_f_proyecto, id_estado: updateProyecto.id_estado }, {
         where: {
             id_proyecto: updateProyecto.id_proyecto
         }
@@ -100,8 +147,23 @@ exports.updateNewRenovarContrato = async (req, res) => {
                         model: Modulo
                     }, {
                         model: Proyecto
-                    },{
-                        model: ModuloDoble
+                    }, {
+                        model: ModuloDoble,
+                        include: [{
+                            model: Modulo,
+                            as: 'moduloUno',
+                            include: [{
+                                model: Alquiler
+                            },
+                            ]
+                        }, {
+                            model: Modulo,
+                            as: 'moduloDos',
+                            include: [{
+                                model: Alquiler
+                            },
+                            ]
+                        }],
                     }],
                     where: {
                         id_proyecto: updateProyecto.id_proyecto
@@ -127,7 +189,7 @@ exports.updateNewRenovarContrato = async (req, res) => {
                         model: Modulo
                     }, {
                         model: Proyecto
-                    },{
+                    }, {
                         model: ModuloDoble
                     }],
                     where: {

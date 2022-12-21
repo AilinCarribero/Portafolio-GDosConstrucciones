@@ -12,7 +12,7 @@ import { getProyectos } from '../../../redux/slice/Proyecto/thunks';
 import ValidacionNewContrato from '../../utils/modal/validacion/ValidacionNewContrato';
 
 //Hooks
-import { desformatNumber, formatFechaISO, formatNumber, ToastComponent } from '../../../hooks/useUtils';
+import { calcDifMeses, desformatNumber, formatFechaISO, formatNumber, ToastComponent } from '../../../hooks/useUtils';
 import { useGetModulos } from '../../../hooks/useModulos';
 import { useResponse } from '../../../hooks/useResponse';
 
@@ -63,6 +63,19 @@ const FormContrato = ({ alquiler, show, setShow, setAlquileres, actionContrato }
         const targetCheck = e.target.checked;
 
         //console.log("tn: ", targetName, " tv: ", targetValue, " tc: ", targetCheck);
+        if(targetName === "id_modulo") {
+            setNewContrato(prevNewContrato => ({
+                ...prevNewContrato,
+                id_modulo_doble: ''
+            }))
+        }
+
+        if(targetName === "id_modulo_doble") {
+            setNewContrato(prevNewContrato => ({
+                ...prevNewContrato,
+                id_modulo: ''
+            }))
+        }
 
         setNewContrato(prevNewContrato => ({
             ...prevNewContrato,
@@ -162,7 +175,7 @@ const FormContrato = ({ alquiler, show, setShow, setAlquileres, actionContrato }
                                             {modulosDobles.length > 0 ?
                                                 modulosDobles.map((moduloDoble) => (
                                                     moduloDoble.vinculacion === true &&
-                                                    <option key={moduloDoble.id_modulo} value={moduloDoble.id_modulo_doble}>
+                                                    <option key={moduloDoble.id_modulo_doble} value={moduloDoble.id_modulo_doble}>
                                                         {`OD - ${moduloDoble.id_modulo_doble} - OS - ${moduloDoble.id_modulo_uno} - OS - ${moduloDoble.id_modulo_dos} `}
                                                     </option>
                                                 ))
@@ -175,6 +188,9 @@ const FormContrato = ({ alquiler, show, setShow, setAlquileres, actionContrato }
                         }
                         <Row>
                             <Col xs={12} sm={12} >Fechas del contrato</Col>
+                            <Col xs={12} sm={12} className="text-descripcion-agregar">
+                                Cantidad de meses: {calcDifMeses(newContrato.fecha_d_alquiler, newContrato.fecha_h_alquiler)}
+                            </Col>
                             <Col xs={12} sm={6}>
                                 <Form.Group className="mb-3">
                                     <FloatingLabel controlId="floatingInputGrid" label="Inicio">

@@ -193,3 +193,12 @@ export const formatNameMes = (numMes) => {
             return 'diciembre';
     }
 }
+
+export const calcDifMeses = (inicio, fin) => {
+    const fechaDesde = moment(inicio);
+    const fechaHasta = moment(fin);
+
+    const cantMeses = Math.abs(fechaHasta.diff(fechaDesde, 'month'));
+
+    return cantMeses === 0 ? 1 : cantMeses;
+}

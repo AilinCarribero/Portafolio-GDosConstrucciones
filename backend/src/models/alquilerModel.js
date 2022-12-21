@@ -9,11 +9,13 @@ module.exports = ( sequelize, type ) => {
             type: type.INTEGER,
             isNumeric: true,
             allowNull: true,
+            defaultValue: null
         },
         id_modulo_doble: {
             type: type.INTEGER,
             isNumeric: true,
             allowNull: true,
+            defaultValue: null
         },
         id_proyecto: {
             type: type.STRING(100),
