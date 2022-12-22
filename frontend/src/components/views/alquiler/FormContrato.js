@@ -63,14 +63,14 @@ const FormContrato = ({ alquiler, show, setShow, setAlquileres, actionContrato }
         const targetCheck = e.target.checked;
 
         //console.log("tn: ", targetName, " tv: ", targetValue, " tc: ", targetCheck);
-        if(targetName === "id_modulo") {
+        if (targetName === "id_modulo") {
             setNewContrato(prevNewContrato => ({
                 ...prevNewContrato,
                 id_modulo_doble: ''
             }))
         }
 
-        if(targetName === "id_modulo_doble") {
+        if (targetName === "id_modulo_doble") {
             setNewContrato(prevNewContrato => ({
                 ...prevNewContrato,
                 id_modulo: ''
@@ -145,6 +145,20 @@ const FormContrato = ({ alquiler, show, setShow, setAlquileres, actionContrato }
         }
     }
 
+    const findModuloAlquiler = (idModulo) => {
+        const moduloFind = proyecto.alquilers.find(moduloAlquiler => idModulo == moduloAlquiler.id_modulo);
+
+        if (moduloFind) {
+            const modulo = moduloFind.modulo;
+
+            return (
+                <option key={idModulo} value={idModulo}>
+                    {modulo.nombre_modulo || `${modulo.tipologia} - ${formatNumber(modulo.ancho)} x ${formatNumber(modulo.largo)} - ${modulo.material_cerramiento} - ${idModulo}`}
+                </option>
+            )
+        }
+    }
+
     return (
         <Modal show={show} onHide={handleClose} animation={false}>
             <Modal.Header className="content-modal-header" closeButton><b>{actionContrato} Contrato del módulo {newContrato.nombre_modulo}</b></Modal.Header>
@@ -159,9 +173,12 @@ const FormContrato = ({ alquiler, show, setShow, setAlquileres, actionContrato }
                                             <option value=""> </option>
                                             {modulos.length > 0 ?
                                                 modulos.map((modulo) => (
-                                                    modulo.estado === 0 && <option key={modulo.id_modulo} value={modulo.id_modulo}>
-                                                        {modulo.nombre_modulo || `${modulo.tipologia} - ${formatNumber(modulo.ancho)} x ${formatNumber(modulo.largo)} - ${modulo.material_cerramiento} - ${modulo.id_modulo}`}
-                                                    </option>
+                                                    modulo.estado === 0 ?
+                                                        <option key={modulo.id_modulo} value={modulo.id_modulo}>
+                                                            {modulo.nombre_modulo || `${modulo.tipologia} - ${formatNumber(modulo.ancho)} x ${formatNumber(modulo.largo)} - ${modulo.material_cerramiento} - ${modulo.id_modulo}`}
+                                                        </option>
+                                                        :
+                                                        findModuloAlquiler(modulo.id_modulo)
                                                 ))
                                                 : <option>NO HAY MÓDULOS DISPONIBLES</option>
                                             }
@@ -208,7 +225,7 @@ const FormContrato = ({ alquiler, show, setShow, setAlquileres, actionContrato }
                         </Row>
                         <Row>
                             <Col xs={12} sm={12}>
-                                <FloatingLabel label="Total del alquiler"> 
+                                <FloatingLabel label="Total del alquiler">
                                     <NumberFormat customInput={Form.Control} decimalSeparator={","} thousandSeparator={"."}
                                         onChange={handleChangeForm} name="valor" value={newContrato.valor} required />
                                 </FloatingLabel>
