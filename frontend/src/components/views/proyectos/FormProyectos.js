@@ -44,7 +44,7 @@ const FormProyectos = ({ close, updateProyecto, setUpdateProyectos }) => {
     const { centroCosto } = useGetCentroCosto();
     const { unidadNegocio } = useGetUnidadNegocio();
     const { modulos, modulosDobles } = useGetModulos();
-    
+
     const { response } = useResponse();
 
     //Eventos para mostrar partes del formulario
@@ -79,6 +79,37 @@ const FormProyectos = ({ close, updateProyecto, setUpdateProyectos }) => {
             setCantAlquiler(targetValue);
             setShowDataAlquileres(true);
         } else if (targetName.includes('fechaV') || targetName.includes('fechaI') || targetName.includes('id_modulo') || targetName.includes('monto')) {
+
+            const positionArray = targetName.split('-')[1];
+
+            if (targetName.includes('id_modulo') || dataAlquiler['id_modulo-' + positionArray]) {
+                const moduloRev = modulos.find(modulo => modulo.id_modulo == targetValue || modulo.id_modulo == dataAlquiler['id_modulo-' + positionArray]);
+
+
+                if (moduloRev.alquilers.length > 0) {
+                    /*Revisar que la fecha de I no se encuentre entre alguna de las fechas de I y F de cada alquiler que posea el modulo */
+                    /*Revisar que la fecha de F no se encuentre entre alguna de las fechas de I y F de cada alquiler que posea el modulo */
+                    moduloRev.alquilers.map(alquiler => {
+                        
+                        if (dataAlquiler['fechaI-' + positionArray] || targetName == `fechaI-${positionArray}`) {
+                            const fechaI = new Date(targetName == `fechaI-${positionArray}` ? targetValue : dataAlquiler['fechaI-' + positionArray]);
+
+                            if (new Date(alquiler.fecha_d_alquiler) <= fechaI && fechaI <= new Date(alquiler.fecha_h_alquiler)) {
+                                ToastComponent('warn', 'El módulo ingresado en dicha fecha de inicio del contrato será utilizado en otro alquiler');
+                            }
+                        }
+
+                        if (dataAlquiler['fechaV-' + positionArray] || targetName == `fechaV-${positionArray}`) {
+                            const fechaV = new Date(targetName == `fechaV-${positionArray}` ? targetValue : dataAlquiler['fechaV-' + positionArray]);
+
+                            if (new Date(alquiler.fecha_d_alquiler) <= fechaV && fechaV <= new Date(alquiler.fecha_h_alquiler)) {
+                                ToastComponent('warn', 'El módulo ingresado en dicha fecha de finalización del contrato será utilizado en otro alquiler');
+                            }
+                        }
+                    });
+                }
+            }
+
             setDataAlquiler(prevDataAlquiler => ({
                 ...prevDataAlquiler,
                 [targetName]: targetValue
@@ -119,11 +150,11 @@ const FormProyectos = ({ close, updateProyecto, setUpdateProyectos }) => {
                 datos.
                  */
                 for (let i = 0; i < cantAlquiler; i++) {
-                    const auxAlquilerFI = dataAlquiler['fechaI' + i];
-                    const auxAlquilerFV = dataAlquiler['fechaV' + i];
+                    const auxAlquilerFI = dataAlquiler['fechaI-' + i];
+                    const auxAlquilerFV = dataAlquiler['fechaV-' + i];
                     const auxAlquilerIdM = dataAlquiler['id_modulo-' + i] || null;
                     const auxAlquilerIdMD = dataAlquiler['id_modulo_doble-' + i] || null;
-                    let auxAlquilerMonto = dataAlquiler['monto' + i];
+                    let auxAlquilerMonto = dataAlquiler['monto-' + i];
 
                     const mesFI = auxAlquilerFI.slice(5, 7);
                     const mesFV = auxAlquilerFV.slice(5, 7);
@@ -209,7 +240,7 @@ const FormProyectos = ({ close, updateProyecto, setUpdateProyectos }) => {
 
             for (let i = 0; i < cantAlquiler; i++) {
                 rows.push(
-                    <Row key={i}>
+                    <Row key={`data-modulo-${i+1}`}>
                         <Row>
                             <Col xs={12} sm={12}>
                                 <FloatingLabel label="Módulo">
@@ -235,9 +266,9 @@ const FormProyectos = ({ close, updateProyecto, setUpdateProyectos }) => {
                                         <option value=""> </option>
                                         {modulosDobles.length > 0 ?
                                             modulosDobles.map((moduloDoble) => (
-                                                moduloDoble.vinculacion === true && 
+                                                moduloDoble.vinculacion === true &&
                                                 <option key={moduloDoble.id_modulo} value={moduloDoble.id_modulo_doble}>
-                                                    { `OD - ${moduloDoble.id_modulo_doble} - OS - ${moduloDoble.id_modulo_uno} - OS - ${moduloDoble.id_modulo_dos} `}
+                                                    {`OD - ${moduloDoble.id_modulo_doble} - OS - ${moduloDoble.id_modulo_uno} - OS - ${moduloDoble.id_modulo_dos} `}
                                                 </option>
                                             ))
                                             : <option>NO HAY MÓDULOS DOBLES DISPONIBLES</option>
@@ -250,19 +281,19 @@ const FormProyectos = ({ close, updateProyecto, setUpdateProyectos }) => {
                             <Col xs={12} sm={12}>
                                 <FloatingLabel label="Monto del Alquiler">
                                     <NumberFormat customInput={Form.Control} decimalSeparator={","} thousandSeparator={"."}
-                                        onChange={handleChangeForm} name={"monto" + i} required />
+                                        onChange={handleChangeForm} name={"monto-" + i} required />
                                 </FloatingLabel>
                             </Col>
                         </Row>
                         <Row>
                             <Col xs={6} sm={6}>
                                 <FloatingLabel label="Inicio">
-                                    <Form.Control onChange={handleChangeForm} name={"fechaI" + i} type="date" required />
+                                    <Form.Control onChange={handleChangeForm} name={"fechaI-" + i} type="date" required />
                                 </FloatingLabel>
                             </Col>
                             <Col xs={6} sm={6}>
                                 <FloatingLabel label="Vencimiento">
-                                    <Form.Control onChange={handleChangeForm} name={"fechaV" + i} type="date" required />
+                                    <Form.Control onChange={handleChangeForm} name={"fechaV-" + i} type="date" required />
                                 </FloatingLabel>
                             </Col>
                         </Row>
