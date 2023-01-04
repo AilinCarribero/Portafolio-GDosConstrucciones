@@ -205,7 +205,7 @@ const FormMateriales = ({ close, setStock }) => {
             try {
                 resNewMaterial = await insertStock(auxNewMaterials);
             } catch (error) {
-                console.log(error);
+                console.error(error);
                 ToastComponent('error');
             }
         } else {
@@ -215,7 +215,7 @@ const FormMateriales = ({ close, setStock }) => {
                 }
                 resNewMaterial = await insertStock(auxNewMaterials);
             } catch (error) {
-                console.log(error);
+                console.error(error);
                 ToastComponent('error');
             }
         }

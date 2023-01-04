@@ -49,11 +49,11 @@ const Home = () => {
                 history.push("/");
             } else {
                 ToastComponent('error', userResponse.data);
-                console.log('Error');
+                console.error('Error');
             }
         } catch (error) {
             ToastComponent('error', 'Error al intentar ingresar');
-            console.log(error);
+            console.error(error);
         }
     }
 

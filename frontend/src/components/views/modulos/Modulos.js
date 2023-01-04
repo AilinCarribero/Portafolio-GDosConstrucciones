@@ -206,7 +206,6 @@ const Modulos = () => {
 
         if (setDelete) {
             deleteApiModulo(data.id_modulo, data).then(resModulo => {
-                console.log(resModulo)
                 const res = response(resModulo);
                 if (res) {
                     setModulos(resModulo.data);
@@ -342,14 +341,14 @@ const Modulos = () => {
                                             {modulo.estado == 1 &&
                                                 <OverlayTrigger placement="right" overlay={<Tooltip>Ocupado {modulo.vinculado && 'vinculado'}.</Tooltip>} >
                                                     <Col xs={1} md={1} id="ocupado">
-                                                        {modulo.vinculado && <Icons.Diagram2Fill className='icon-vinculado'/>}
+                                                        {modulo.vinculado && <Icons.Diagram2Fill className='icon-vinculado' />}
                                                     </Col>
                                                 </OverlayTrigger>
                                             }
                                             {modulo.estado == 2 &&
                                                 <OverlayTrigger placement="right" overlay={<Tooltip>Vendido {modulo.vinculado && 'vinculado'}.</Tooltip>} >
                                                     <Col xs={1} md={1} id="vendido">
-                                                        {modulo.vinculado && <Icons.Diagram2Fill className='icon-vinculado'/>}
+                                                        {modulo.vinculado && <Icons.Diagram2Fill className='icon-vinculado' />}
                                                     </Col>
                                                 </OverlayTrigger>
                                             }
@@ -476,6 +475,19 @@ const Modulos = () => {
                                                             <p>URL del QR:
                                                                 <button type='button' className='button-copy-modulo' onClick={(e) => handleCopy(e, modulo.url_qr)}>
                                                                     {modulo.url_qr} <Icons.Files size="25px" className='icon-text-copy' />
+                                                                </button>
+                                                            </p>
+                                                        </Col>
+                                                    </Row>
+                                                </Col>
+                                            }
+                                            {modulo.ubicacion &&
+                                                <Col xs={12} md={12} className="col-12-accordion">
+                                                    <Row>
+                                                        <Col className='url-qr' xs={12} md={12}>
+                                                            <p> Ubicación:
+                                                                <button type='button' className='button-copy-modulo' onClick={(e) => handleCopy(e, modulo.ubicacion)}>
+                                                                    {modulo.ubicacion} <Icons.Files size="25px" className='icon-text-copy' />
                                                                 </button>
                                                             </p>
                                                         </Col>

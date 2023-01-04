@@ -5,10 +5,9 @@ exports.insertAlquiler = (req, res) => {
         Alquiler.create(req.body)
             .then(response => {
                 response.todoOk = "Ok";
-                console.log(response)
                 res.json(response);
             }).catch(error => {
-                console.log(error);
+                console.error(error);
                 res.json(error);
             })
     } catch (error) {
@@ -69,13 +68,13 @@ exports.updateNewRenovarContrato = async (req, res) => {
         id_proyecto: req.body.id_proyecto,
         valor: req.body.valor,
         fecha_d_alquiler: req.body.fecha_d_alquiler,
-        fecha_h_alquiler: req.body.fecha_h_alquiler
+        fecha_h_alquiler: req.body.fecha_h_alquiler,
     }
 
     /*Si la fecha de inicio del aquiler es anterior a hoy entonces se debe actualizar el estado del modulo */
     if (new Date(newAlquiler.fecha_d_alquiler) <= new Date()) {
         if (newAlquiler.id_modulo) {
-            Modulo.update({ estado: 1 }, {
+            Modulo.update({ estado: 1, ubicacion: req.body.ubicacion }, {
                 where: {
                     id_modulo: newAlquiler.id_modulo
                 }
@@ -105,7 +104,7 @@ exports.updateNewRenovarContrato = async (req, res) => {
                     ]
                 }],
             }).then(response => {
-                Modulo.update({ estado: 1 }, {
+                Modulo.update({ estado: 1, ubicacion: req.body.ubicacion }, {
                     where: {
                         id_modulo: response.id_modulo_uno
                     }
@@ -115,7 +114,7 @@ exports.updateNewRenovarContrato = async (req, res) => {
                     res.json(err);
                 });
 
-                Modulo.update({ estado: 1 }, {
+                Modulo.update({ estado: 1, ubicacion: req.body.ubicacion }, {
                     where: {
                         id_modulo: response.id_modulo_dos
                     }

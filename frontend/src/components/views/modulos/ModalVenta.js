@@ -18,12 +18,11 @@ const ModalVenta = ({ titulo, show, setShow, submit }) => {
     
     const handleChangeForm = (e) => {
         const targetValue = e.target.value
-        console.log(targetValue)
+
         setVenta(targetValue)
     }
 
     const handleSubmit = () => {
-        console.log(venta)
         submit({
             vender: true, 
             valor: desformatNumber(venta)

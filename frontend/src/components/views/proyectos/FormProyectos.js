@@ -78,13 +78,12 @@ const FormProyectos = ({ close, updateProyecto, setUpdateProyectos }) => {
         } else if (targetName == 'cantAlquiler') {
             setCantAlquiler(targetValue);
             setShowDataAlquileres(true);
-        } else if (targetName.includes('fechaV') || targetName.includes('fechaI') || targetName.includes('id_modulo') || targetName.includes('monto')) {
+        } else if (targetName.includes('fechaV') || targetName.includes('fechaI') || targetName.includes('id_modulo') || targetName.includes('monto') || targetName.includes('ubicacion')) {
 
             const positionArray = targetName.split('-')[1];
 
             if (targetName.includes('id_modulo') || dataAlquiler['id_modulo-' + positionArray]) {
                 const moduloRev = modulos.find(modulo => modulo.id_modulo == targetValue || modulo.id_modulo == dataAlquiler['id_modulo-' + positionArray]);
-
 
                 if (moduloRev.alquilers.length > 0) {
                     /*Revisar que la fecha de I no se encuentre entre alguna de las fechas de I y F de cada alquiler que posea el modulo */
@@ -154,6 +153,7 @@ const FormProyectos = ({ close, updateProyecto, setUpdateProyectos }) => {
                     const auxAlquilerFV = dataAlquiler['fechaV-' + i];
                     const auxAlquilerIdM = dataAlquiler['id_modulo-' + i] || null;
                     const auxAlquilerIdMD = dataAlquiler['id_modulo_doble-' + i] || null;
+                    const auxAlquilerUbicacion = dataAlquiler['ubicacion-' + i];
                     let auxAlquilerMonto = dataAlquiler['monto-' + i];
 
                     const mesFI = auxAlquilerFI.slice(5, 7);
@@ -170,7 +170,8 @@ const FormProyectos = ({ close, updateProyecto, setUpdateProyectos }) => {
                         id_modulo_doble: auxAlquilerIdMD,
                         valor: auxAlquilerMonto.toNumber(),
                         fecha_d_alquiler: auxAlquilerFI,
-                        fecha_h_alquiler: auxAlquilerFV
+                        fecha_h_alquiler: auxAlquilerFV,
+                        ubicacion: auxAlquilerUbicacion
                     }
                 }
 
@@ -282,6 +283,13 @@ const FormProyectos = ({ close, updateProyecto, setUpdateProyectos }) => {
                                 <FloatingLabel label="Monto del Alquiler">
                                     <NumberFormat customInput={Form.Control} decimalSeparator={","} thousandSeparator={"."}
                                         onChange={handleChangeForm} name={"monto-" + i} required />
+                                </FloatingLabel>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col xs={12} sm={12}>
+                                <FloatingLabel label="Ubicación">
+                                    <Form.Control onChange={handleChangeForm} name={"ubicacion-" + i} type="text" required />
                                 </FloatingLabel>
                             </Col>
                         </Row>

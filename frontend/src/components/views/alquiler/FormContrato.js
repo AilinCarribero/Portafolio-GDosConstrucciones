@@ -41,6 +41,7 @@ const FormContrato = ({ alquiler, show, setShow, setAlquileres, actionContrato }
         fecha_d_alquiler: alquiler ? formatFechaISO(alquiler.fecha_h_alquiler) : formatFechaISO(new Date()),
         fecha_h_alquiler: alquiler ? formatFechaISO(alquiler.fecha_h_alquiler) : '',
         valor: actionContrato == "Modificar" ? alquiler.valor : '',
+        ubicacion: alquiler ? alquiler.modulo.ubicacion : ''
     });
 
     useEffect(() => {
@@ -140,7 +141,7 @@ const FormContrato = ({ alquiler, show, setShow, setAlquileres, actionContrato }
                 ToastComponent('error', resNewContrato.data.todoMal && resNewContrato.data.todoMal);
             }
         } catch (error) {
-            console.log(error);
+            console.error(error);
             ToastComponent('error');
         }
     }
@@ -169,7 +170,7 @@ const FormContrato = ({ alquiler, show, setShow, setAlquileres, actionContrato }
                             <Row>
                                 <Col xs={12} sm={12}>
                                     <FloatingLabel label="Módulo">
-                                        <Form.Select onChange={handleChangeForm} name="id_modulo" >
+                                        <Form.Select onChange={handleChangeForm} name="id_modulo" value={newContrato.id_modulo}>
                                             <option value=""> </option>
                                             {modulos.length > 0 ?
                                                 modulos.map((modulo) => (
@@ -187,7 +188,7 @@ const FormContrato = ({ alquiler, show, setShow, setAlquileres, actionContrato }
                                 </Col>
                                 <Col xs={12} sm={12}>
                                     <FloatingLabel label="Módulo Doble">
-                                        <Form.Select onChange={handleChangeForm} name="id_modulo_doble" >
+                                        <Form.Select onChange={handleChangeForm} name="id_modulo_doble" value={newContrato.id_modulo_doble} >
                                             <option value=""> </option>
                                             {modulosDobles.length > 0 ?
                                                 modulosDobles.map((moduloDoble) => (
@@ -219,6 +220,13 @@ const FormContrato = ({ alquiler, show, setShow, setAlquileres, actionContrato }
                                 <Form.Group className="mb-3">
                                     <FloatingLabel controlId="floatingInputGrid" label="Final">
                                         <Form.Control onChange={handleChangeForm} name="fecha_h_alquiler" type="date" value={newContrato.fecha_h_alquiler} required />
+                                    </FloatingLabel>
+                                </Form.Group>
+                            </Col>
+                            <Col xs={12} sm={12}>
+                                <Form.Group className="mb-3">
+                                    <FloatingLabel controlId="floatingInputGrid" label="Ubicación">
+                                        <Form.Control onChange={handleChangeForm} name="ubicacion" type="text" value={newContrato.ubicacion} required />
                                     </FloatingLabel>
                                 </Form.Group>
                             </Col>

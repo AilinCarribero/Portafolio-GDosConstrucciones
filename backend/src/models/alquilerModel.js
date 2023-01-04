@@ -29,7 +29,8 @@ module.exports = ( sequelize, type ) => {
         },
         fecha_h_alquiler: { 
             type: type.DATE,
-            defaultValue: '0000-00-00'
+            allowNull: true,
+            defaultValue: null
         }
     });
 }

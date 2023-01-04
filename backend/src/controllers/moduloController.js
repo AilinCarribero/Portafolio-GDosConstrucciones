@@ -290,8 +290,6 @@ exports.newModuloDoble = (req, res) => {
 
     data.vinculacion = true;
 
-    console.log(data)
-
     ModuloDoble.create(data).then(response => {
         //Editar el estado de vinculacion en los modulos
         //Modulo 1

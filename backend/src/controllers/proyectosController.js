@@ -34,113 +34,6 @@ const configFindAllProyectos = {
     order: [['id_estado', 'ASC'], ['fecha_f_proyecto', 'DESC'], [Alquiler, 'fecha_d_alquiler', 'ASC']]
 }
 
-const alquilerXMes = (alquileres) => {
-    const alquilerTotalXMes = {
-        enero: 0,
-        febrero: 0,
-        marzo: 0,
-        abril: 0,
-        mayo: 0,
-        junio: 0,
-        julio: 0,
-        agosto: 0,
-        setiembre: 0,
-        octubre: 0,
-        noviembre: 0,
-        diciembre: 0,
-    }
-
-    alquileres.map(alquiler => {
-        const fechaDesde = moment(alquiler.fecha_d_alquiler);
-        const fechaHasta = moment(alquiler.fecha_h_alquiler);
-        console.log(fechaDesde, fechaHasta)
-
-        const cantMeses = Math.abs(fechaHasta.diff(fechaDesde, 'month'));
-        const valorXMes = cantMeses ? new Decimal(alquiler.valor).div(cantMeses).toNumber() : alquiler.valor;
-        console.log(alquiler.valor, '/', cantMeses, '=', valorXMes);
-
-        for (let i = 0; i < cantMeses; i++) {
-            console.log(fechaDesde.get('month'));
-            switch (fechaDesde.get('month')) {
-                case 0:
-                    console.log('enero');
-                    alquilerTotalXMes.enero += valorXMes;
-                    fechaDesde.add(1, 'months').get('month');
-                    console.log(fechaDesde.get('month'));
-                    break;
-                case 1:
-                    console.log('febrero');
-                    alquilerTotalXMes.febrero += valorXMes;
-                    fechaDesde.add(1, 'months').get('month');
-                    console.log(fechaDesde.get('month'));
-                    break;
-                case 2:
-                    console.log('marzo');
-                    alquilerTotalXMes.marzo += valorXMes;
-                    fechaDesde.add(1, 'months').get('month');
-                    console.log(fechaDesde.get('month'));
-                    break;
-                case 3:
-                    console.log('abril');
-                    alquilerTotalXMes.abril += valorXMes;
-                    fechaDesde.add(1, 'months').get('month');
-                    console.log(fechaDesde.get('month'));
-                    break;
-                case 4:
-                    console.log('mayo');
-                    alquilerTotalXMes.mayo += valorXMes;
-                    fechaDesde.add(1, 'months').get('month');
-                    console.log(fechaDesde.get('month'));
-                    break;
-                case 5:
-                    console.log('junio');
-                    alquilerTotalXMes.junio += valorXMes;
-                    fechaDesde.add(1, 'months').get('month');
-                    console.log(fechaDesde.get('month'));
-                    break;
-                case 6:
-                    console.log('julio');
-                    alquilerTotalXMes.julio += valorXMes;
-                    fechaDesde.add(1, 'months').get('month');
-                    console.log(fechaDesde.get('month'));
-                    break;
-                case 7:
-                    console.log('agosto');
-                    alquilerTotalXMes.agosto += valorXMes;
-                    fechaDesde.add(1, 'months').get('month');
-                    console.log(fechaDesde.get('month'));
-                    break;
-                case 8:
-                    console.log('setiembre');
-                    alquilerTotalXMes.setiembre += valorXMes;
-                    fechaDesde.add(1, 'months').get('month');
-                    console.log(fechaDesde.get('month'));
-                    break;
-                case 9:
-                    console.log('octubre');
-                    alquilerTotalXMes.octubre += valorXMes;
-                    fechaDesde.add(1, 'months').get('month');
-                    console.log(fechaDesde.get('month'));
-                    break;
-                case 10:
-                    console.log('noviembre');
-                    alquilerTotalXMes.noviembre += valorXMes;
-                    fechaDesde.add(1, 'months').get('month');
-                    console.log(fechaDesde.get('month'));
-                    break;
-                case 11:
-                    console.log('diciembre');
-                    alquilerTotalXMes.diciembre += valorXMes;
-                    fechaDesde.add(1, 'months').get('month');
-                    console.log(fechaDesde.get('month'));
-                    break;
-            }
-        }
-    });
-
-    return (alquilerTotalXMes)
-}
-
 //listar todos los proyectos existentes
 exports.listProyectos = (req, res) => {
     Proyecto.findAll(
@@ -202,7 +95,7 @@ exports.insertProyecto = async (req, res) => {
                         /*Si el alquiler se guardo como corresponde el estado del modulo correspondiente al alquiler pasa a tener 
                         un estado de ocupado*/
                         if (alquiler.id_modulo) {
-                            Modulo.update({ estado: 1 }, {
+                            Modulo.update({ estado: 1, ubicacion: alquiler.ubicacion }, {
                                 where: {
                                     id_modulo: alquiler.id_modulo
                                 }

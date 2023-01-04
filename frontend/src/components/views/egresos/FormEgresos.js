@@ -266,7 +266,7 @@ const FormEgresos = ({ close, updateEgreso, setUpdateEgresos }) => {
 
                 resEgreso = await setUpdateEgreso(egreso);
             } catch (error) {
-                console.log(error);
+                console.error(error);
                 ToastComponent('error');
             }
         } else { //Agrega nuevo 
@@ -274,7 +274,7 @@ const FormEgresos = ({ close, updateEgreso, setUpdateEgresos }) => {
                 try {
                     resEgreso = await insertEgreso(auxEgresos);
                 } catch (error) {
-                    console.log(error);
+                    console.error(error);
                     ToastComponent('error');
                 }
             } else {
@@ -284,7 +284,7 @@ const FormEgresos = ({ close, updateEgreso, setUpdateEgresos }) => {
                     }
                     resEgreso = await insertEgreso(egreso);
                 } catch (error) {
-                    console.log(error);
+                    console.error(error);
                     ToastComponent('error');
                 }
             }

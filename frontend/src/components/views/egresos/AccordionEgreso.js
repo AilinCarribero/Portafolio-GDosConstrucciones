@@ -31,7 +31,6 @@ const AccordionEgreso = ({ egreso, setEgresos }) => {
             setEgresos(resEgreso.data);
         } else {
             resEgreso.data.todoMal ? ToastComponent('error', resEgreso.data.todoMal) : ToastComponent('error');
-            console.log(resEgreso)
         }
     }
 

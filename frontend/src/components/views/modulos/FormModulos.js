@@ -139,7 +139,7 @@ const FormModulos = ({ close, updateModulo, setUpdateModulo }) => {
         const targetCheck = e.target.checked;
         const targetType = e.target.type;
 
-        console.log(targetName, targetValue, targetCheck, targetType)
+        //console.log(targetName, targetValue, targetCheck, targetType)
 
         setCheckVenta(targetCheck);
 
@@ -220,7 +220,7 @@ const FormModulos = ({ close, updateModulo, setUpdateModulo }) => {
                     ToastComponent('error', resModulo.data.todoMal && resModulo.data.todoMal);
                 }
             } catch (error) {
-                console.log(error);
+                console.error(error);
             }
         }
     }

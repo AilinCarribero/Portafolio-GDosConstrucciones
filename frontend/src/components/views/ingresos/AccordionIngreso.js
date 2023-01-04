@@ -32,7 +32,6 @@ const AccordionIngreso = ({ ingreso, setIngresos }) => {
             setIngresos(resIngreso.data);
         } else {
             resIngreso.data.todoMal ? ToastComponent('error', resIngreso.data.todoMal) :  ToastComponent('error');
-            console.log(resIngreso);
         }
     }
 

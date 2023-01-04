@@ -14,7 +14,7 @@ export const configToken = async (token) => {
             }  
         }
     } else {
-        console.log('El token no existe');
+        console.error('El token no existe');
         ToastComponent('error','El token no existe')
     }
 }

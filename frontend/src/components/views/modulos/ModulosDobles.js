@@ -11,8 +11,6 @@ import { formatFecha, formatNumber, ToastComponent } from '../../../hooks/useUti
 const ModulosDobles = () => {
     const { modulosDobles } = useGetModulos();
 
-    console.log(modulosDobles);
-
     const handleCopy = (e, copy) => {
         e.preventDefault();
         navigator.clipboard.writeText(copy);

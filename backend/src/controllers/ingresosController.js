@@ -26,7 +26,6 @@ exports.insertIngreso = async (req, res) => {
                 response.todoOk = "Ok";
                 response.statusText = "Ok";
 
-                console.log(datos.length - 1 + ' - ' + i)
                 if (datos.length - 1 == i) {
                     res.json(response);
                 }

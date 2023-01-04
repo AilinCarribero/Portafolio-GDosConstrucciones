@@ -3,7 +3,7 @@ const router = express.Router();
 
 const { insertModulo, listModulos, changeVendido, updateModulo, getCantModulos, getModulosToken, deleteModuloId, newModuloDoble, getModulosDobles } = require('../controllers/moduloController');
 const { verifyToken, verifyBasicAuth } = require('../middlewares/authVerify');
-console.log(verifyToken)
+
 router.get('/', verifyToken, listModulos);
 router.get('/cantidad-modulos', verifyToken, getCantModulos);
 router.get('/:token', verifyBasicAuth, getModulosToken);
