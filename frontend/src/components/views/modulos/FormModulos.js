@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Card, Button, Row, FloatingLabel, Form, Col } from 'react-bootstrap';
 
 //Components
-import NumberFormat from 'react-number-format';
+import { NumericFormat } from 'react-number-format';
 
 //Redux
 import { useDispatch } from 'react-redux';
@@ -291,7 +291,7 @@ const FormModulos = ({ close, updateModulo, setUpdateModulo }) => {
                 <Col key={`vent_alto-${i}`} sm={5}>
                     <Form.Group className="mb-3">
                         <FloatingLabel label="Dimensión-Alto">
-                            <NumberFormat customInput={Form.Control} decimalSeparator={","} thousandSeparator={"."}
+                            <NumericFormat customInput={Form.Control} decimalSeparator={","} thousandSeparator={"."}
                                 onChange={handleChangeForm} name={`vent_alto-${i}`} value={modulo.vent_alto[i]} />
                         </FloatingLabel>
                     </Form.Group>
@@ -301,7 +301,7 @@ const FormModulos = ({ close, updateModulo, setUpdateModulo }) => {
                 <Col key={`vent_ancho-${i}`} sm={5}>
                     <Form.Group className="mb-3">
                         <FloatingLabel label="Dimensión-Ancho">
-                            <NumberFormat customInput={Form.Control} decimalSeparator={","} thousandSeparator={"."}
+                            <NumericFormat customInput={Form.Control} decimalSeparator={","} thousandSeparator={"."}
                                 onChange={handleChangeForm} name={`vent_ancho-${i}`} value={modulo.vent_ancho[i]} />
                         </FloatingLabel>
                     </Form.Group>
@@ -331,7 +331,7 @@ const FormModulos = ({ close, updateModulo, setUpdateModulo }) => {
                                 <Col sm={6}>
                                     <Form.Group className="mb-3">
                                         <FloatingLabel label="Costo">
-                                            <NumberFormat customInput={Form.Control} decimalSeparator={","} thousandSeparator={"."}
+                                            <NumericFormat customInput={Form.Control} decimalSeparator={","} thousandSeparator={"."}
                                                 onChange={handleChangeForm} name="costo" value={modulo.costo} />
                                         </FloatingLabel>
                                     </Form.Group>
@@ -343,7 +343,7 @@ const FormModulos = ({ close, updateModulo, setUpdateModulo }) => {
                                     <Col sm={6}>
                                         <Form.Group className="mb-3">
                                             <FloatingLabel label="Valor de Venta">
-                                                <NumberFormat customInput={Form.Control} decimalSeparator={","} thousandSeparator={"."}
+                                                <NumericFormat customInput={Form.Control} decimalSeparator={","} thousandSeparator={"."}
                                                     onChange={handleChangeForm} name="venta" value={modulo.venta} />
                                             </FloatingLabel>
                                         </Form.Group>
@@ -406,7 +406,7 @@ const FormModulos = ({ close, updateModulo, setUpdateModulo }) => {
                                 <Col sm={6}>
                                     <Form.Group className="mb-3">
                                         <FloatingLabel label="Ancho">
-                                            <NumberFormat customInput={Form.Control} decimalSeparator={","} thousandSeparator={"."}
+                                            <NumericFormat customInput={Form.Control} decimalSeparator={","} thousandSeparator={"."}
                                                 onChange={handleChangeForm} name="ancho" value={modulo.ancho} />
                                         </FloatingLabel>
                                     </Form.Group>
@@ -414,7 +414,7 @@ const FormModulos = ({ close, updateModulo, setUpdateModulo }) => {
                                 <Col sm={6}>
                                     <Form.Group className="mb-3">
                                         <FloatingLabel label="Largo">
-                                            <NumberFormat customInput={Form.Control} decimalSeparator={","} thousandSeparator={"."}
+                                            <NumericFormat customInput={Form.Control} decimalSeparator={","} thousandSeparator={"."}
                                                 onChange={handleChangeForm} name="largo" value={modulo.largo} />
                                         </FloatingLabel>
                                     </Form.Group>
@@ -442,7 +442,7 @@ const FormModulos = ({ close, updateModulo, setUpdateModulo }) => {
                                 <Col sm={12}>
                                     <Form.Group className="mb-3">
                                         <FloatingLabel label="UN Puertas">
-                                            <NumberFormat customInput={Form.Control} decimalSeparator={","} thousandSeparator={"."}
+                                            <NumericFormat customInput={Form.Control} decimalSeparator={","} thousandSeparator={"."}
                                                 onChange={handleChangeForm} name="puertas" value={modulo.puertas} />
                                         </FloatingLabel>
                                     </Form.Group>
@@ -450,7 +450,7 @@ const FormModulos = ({ close, updateModulo, setUpdateModulo }) => {
                                 <Col sm={12}>
                                     <Form.Group className="mb-3">
                                         <FloatingLabel label="UN Ventanas">
-                                            <NumberFormat customInput={Form.Control} decimalSeparator={","} thousandSeparator={"."}
+                                            <NumericFormat customInput={Form.Control} decimalSeparator={","} thousandSeparator={"."}
                                                 onChange={handleChangeForm} name="ventanas" value={modulo.ventanas} />
                                         </FloatingLabel>
                                     </Form.Group>

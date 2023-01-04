@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Col, Form, Modal, Row, FloatingLabel } from "react-bootstrap";
-import NumberFormat from 'react-number-format';
+import { NumericFormat } from 'react-number-format';
 
 //Hook
 import { desformatNumber } from '../../../hooks/useUtils';
@@ -38,7 +38,7 @@ const ModalVenta = ({ titulo, show, setShow, submit }) => {
                 <Row className="content-modal-mensaje">
                     <Form.Group>
                         <FloatingLabel label="Venta">
-                            <NumberFormat customInput={Form.Control} decimalSeparator={","} thousandSeparator={"."}
+                            <NumericFormat customInput={Form.Control} decimalSeparator={","} thousandSeparator={"."}
                                 onChange={handleChangeForm} name="venta" value={venta} />
                         </FloatingLabel>
                     </Form.Group>

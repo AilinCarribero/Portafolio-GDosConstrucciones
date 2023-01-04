@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Button, Form, Modal, Row, FloatingLabel, Col } from 'react-bootstrap'
-import NumberFormat from 'react-number-format';
+import { NumericFormat } from 'react-number-format';
 import Decimal from 'decimal.js-light';
 import { useParams } from 'react-router-dom';
 
@@ -234,7 +234,7 @@ const FormContrato = ({ alquiler, show, setShow, setAlquileres, actionContrato }
                         <Row>
                             <Col xs={12} sm={12}>
                                 <FloatingLabel label="Total del alquiler">
-                                    <NumberFormat customInput={Form.Control} decimalSeparator={","} thousandSeparator={"."}
+                                    <NumericFormat customInput={Form.Control} decimalSeparator={","} thousandSeparator={"."}
                                         onChange={handleChangeForm} name="valor" value={newContrato.valor} required />
                                 </FloatingLabel>
                             </Col>

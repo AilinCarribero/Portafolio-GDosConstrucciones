@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Card, Button, Row, FloatingLabel, Form, Col } from 'react-bootstrap';
-import NumberFormat from 'react-number-format';
+import { NumericFormat } from 'react-number-format';
 import Decimal from 'decimal.js-light';
 
 //Redux
@@ -281,7 +281,7 @@ const FormProyectos = ({ close, updateProyecto, setUpdateProyectos }) => {
                         <Row>
                             <Col xs={12} sm={12}>
                                 <FloatingLabel label="Monto del Alquiler">
-                                    <NumberFormat customInput={Form.Control} decimalSeparator={","} thousandSeparator={"."}
+                                    <NumericFormat customInput={Form.Control} decimalSeparator={","} thousandSeparator={"."}
                                         onChange={handleChangeForm} name={"monto-" + i} required />
                                 </FloatingLabel>
                             </Col>
@@ -368,7 +368,7 @@ const FormProyectos = ({ close, updateProyecto, setUpdateProyectos }) => {
                             {showCostoVenta && <>
                                 <Form.Group className="mb-3">
                                     <FloatingLabel label="Costo">
-                                        <NumberFormat customInput={Form.Control} decimalSeparator={","} thousandSeparator={"."}
+                                        <NumericFormat customInput={Form.Control} decimalSeparator={","} thousandSeparator={"."}
                                             onChange={handleChangeForm} name="costo" value={proyecto.costo} required />
                                     </FloatingLabel>
                                 </Form.Group>
@@ -387,7 +387,7 @@ const FormProyectos = ({ close, updateProyecto, setUpdateProyectos }) => {
                                 {showVenta &&
                                     <Form.Group className="mb-3">
                                         <FloatingLabel label="Venta">
-                                            <NumberFormat customInput={Form.Control} decimalSeparator={","} thousandSeparator={"."}
+                                            <NumericFormat customInput={Form.Control} decimalSeparator={","} thousandSeparator={"."}
                                                 onChange={handleChangeForm} name="venta" value={proyecto.venta} required />
                                         </FloatingLabel>
                                     </Form.Group>

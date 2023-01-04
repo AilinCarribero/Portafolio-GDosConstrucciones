@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Card, Button, Row, FloatingLabel, Form, Col } from 'react-bootstrap';
-import NumberFormat from 'react-number-format';
+import { NumericFormat } from 'react-number-format';
 
 //Hooks
 import { useGetFormasPagos } from '../../../hooks/useFormasPagos';
@@ -346,7 +346,7 @@ const FormEgresos = ({ close, updateEgreso, setUpdateEgresos }) => {
                         </Col>
                         <Col xs={6} sm={6}>
                             <FloatingLabel controlId="floatingInputGrid" label="Monto del Cheque">
-                                <NumberFormat customInput={Form.Control} decimalSeparator={","} thousandSeparator={"."}
+                                <NumericFormat customInput={Form.Control} decimalSeparator={","} thousandSeparator={"."}
                                     onChange={handleChangeForm} name={"monto" + i} required />
                             </FloatingLabel>
                         </Col>
@@ -454,7 +454,7 @@ const FormEgresos = ({ close, updateEgreso, setUpdateEgresos }) => {
                                     </Col>
                                     <Col xs={12} sm={12}>
                                         <FloatingLabel controlId="floatingInputGrid" label="Cantidad">
-                                            <NumberFormat customInput={Form.Control} decimalSeparator={","} thousandSeparator={"."}
+                                            <NumericFormat customInput={Form.Control} decimalSeparator={","} thousandSeparator={"."}
                                                 onChange={handleChangeForm} name={"cantidad"} value={egreso.cantidad} required />
                                         </FloatingLabel>
                                     </Col>
@@ -496,7 +496,7 @@ const FormEgresos = ({ close, updateEgreso, setUpdateEgresos }) => {
                                     </Row>
                                     {!showCheque &&
                                         <FloatingLabel label="Importe">
-                                            <NumberFormat customInput={Form.Control} decimalSeparator={","} thousandSeparator={"."}
+                                            <NumericFormat customInput={Form.Control} decimalSeparator={","} thousandSeparator={"."}
                                                 onChange={handleChangeForm} name={checkUSD == 0 ? "valor_pago" : "valor_usd"} value={checkUSD == 0 ? egreso.valor_pago : egreso.valor_usd} required />
                                         </FloatingLabel>
                                     }

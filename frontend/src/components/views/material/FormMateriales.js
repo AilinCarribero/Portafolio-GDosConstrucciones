@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Card, Col, Row, Form, FloatingLabel, Button } from "react-bootstrap";
 
 //Component
-import NumberFormat from 'react-number-format';
+import { NumericFormat } from 'react-number-format';
 import ValidacionMaterial from "../../utils/modal/validacion/ValidacionMaterial";
 
 //Hooks
@@ -276,7 +276,7 @@ const FormMateriales = ({ close, setStock }) => {
                         </Col>
                         <Col xs={6} sm={6}>
                             <FloatingLabel controlId="floatingInputGrid" label="Monto del Cheque">
-                                <NumberFormat customInput={Form.Control} decimalSeparator={","} thousandSeparator={"."}
+                                <NumericFormat customInput={Form.Control} decimalSeparator={","} thousandSeparator={"."}
                                     onChange={handleChangeForm} name={"monto" + i} required />
                             </FloatingLabel>
                         </Col>
@@ -314,7 +314,7 @@ const FormMateriales = ({ close, setStock }) => {
                         </Form.Group>
                         <Form.Group className="mb-3">
                             <FloatingLabel controlId="floatingInput" label="Valor Unitario" className="mb-3">
-                                <NumberFormat customInput={Form.Control} decimalSeparator={","} thousandSeparator={"."}
+                                <NumericFormat customInput={Form.Control} decimalSeparator={","} thousandSeparator={"."}
                                     onChange={handleChangeForm} name="valor_unidad" value={newMaterial.valor_unidad} required />
                             </FloatingLabel>
                         </Form.Group>
@@ -322,7 +322,7 @@ const FormMateriales = ({ close, setStock }) => {
                             <Col xs={6} sm={6}>
                                 <Form.Group className="mb-3">
                                     <FloatingLabel controlId="floatingInput" label="Cantidad" className="mb-3">
-                                        <NumberFormat customInput={Form.Control} decimalSeparator={","} thousandSeparator={"."}
+                                        <NumericFormat customInput={Form.Control} decimalSeparator={","} thousandSeparator={"."}
                                             onChange={handleChangeForm} name={"cantidad"} value={newMaterial.cantidad} required />
                                     </FloatingLabel>
                                 </Form.Group>

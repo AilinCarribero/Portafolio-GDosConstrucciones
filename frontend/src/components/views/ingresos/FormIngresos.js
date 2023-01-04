@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Card, Button, Row, FloatingLabel, Form, Col } from 'react-bootstrap';
-import NumberFormat from 'react-number-format';
+import { NumericFormat } from 'react-number-format';
 
 //Hooks
 import { useGetFormasCobro } from '../../../hooks/useFormasCobro';
@@ -268,7 +268,7 @@ const FormIngresos = ({ close, updateIngreso, setUpdateIngresos }) => {
                         </Col>
                         <Col xs={6} sm={6}>
                             <FloatingLabel controlId="floatingInputGrid" label="Monto del Cheque">
-                                <NumberFormat customInput={Form.Control} decimalSeparator={","} thousandSeparator={"."}
+                                <NumericFormat customInput={Form.Control} decimalSeparator={","} thousandSeparator={"."}
                                     onChange={handleChangeForm} name={"monto" + i} required />
                             </FloatingLabel>
                         </Col>
@@ -351,7 +351,7 @@ const FormIngresos = ({ close, updateIngreso, setUpdateIngresos }) => {
                                         </Col>
                                     </Row>
                                     <FloatingLabel label="Importe">
-                                        <NumberFormat customInput={Form.Control} decimalSeparator={","} thousandSeparator={"."}
+                                        <NumericFormat customInput={Form.Control} decimalSeparator={","} thousandSeparator={"."}
                                             onChange={handleChangeForm} name={checkUSD == 0 ? "valor_cobro" : "valor_usd"} value={checkUSD == 0 ? ingreso.valor_cobro : ingreso.valor_usd} required />
                                     </FloatingLabel>
                                 </Form.Group>
