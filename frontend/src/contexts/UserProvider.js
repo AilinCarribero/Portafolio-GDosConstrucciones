@@ -1,12 +1,12 @@
 import React,{ createContext, useState } from "react";
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { configToken } from "../services/apiServices";
 import Cookies from 'js-cookie';
 
 export const UserContext = createContext();
 
 const UserProvider = ({children}) => {
-    const history = useHistory();
+    const navigate = useNavigate();
 
     const stateValue = () => {
         const cookiesUser = Cookies.get('loggedAppUser');

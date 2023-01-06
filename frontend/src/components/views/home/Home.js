@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Card, Button, Row, FloatingLabel, Form, Col, FormGroup } from 'react-bootstrap';
 
 //Hooks
@@ -13,7 +13,7 @@ import { login } from '../../../services/apiAuth';
 import '../../../style/Home.scss';
 
 const Home = () => {
-    const history = useHistory();
+    const navigate = useNavigate();
     const { loginContext } = useUser();
     const [data, setData] = useState({
         correo: '',
@@ -46,7 +46,7 @@ const Home = () => {
 
                 loginContext(userResponse.data);
 
-                history.push("/");
+                navigate.push("/");
             } else {
                 ToastComponent('error', userResponse.data);
                 console.error('Error');

@@ -11,15 +11,18 @@ import { store } from './redux/store';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-toastify/dist/ReactToastify.css';
 import './style/Global.scss';
+import { BrowserRouter, Routes } from 'react-router-dom';
 
 ReactDOM.render(
-    <Provider store={store}>
-        <UserProvider>
-            <ProyectoProvider>
-                <ToastContainer />
-                <Routers />
-            </ProyectoProvider>
-        </UserProvider>
-    </Provider>
+    <BrowserRouter>
+        <Provider store={store}>
+            <UserProvider>
+                <ProyectoProvider>
+                    <ToastContainer />
+                    <Routers />
+                </ProyectoProvider>
+            </UserProvider>
+        </Provider>
+    </BrowserRouter>
     , document.getElementById('root'));
 

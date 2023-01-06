@@ -4,7 +4,6 @@ import { toast } from 'react-toastify';
 //Formatea el numero que se le pasa en formato moneda con no mas de 2 decimales para ser mostrados
 export const formatNumber = (numero) => {
     const numValido = numero ? parseFloat(numero) : 0;
-    console.log(numValido)
 
     const numFormat = Intl.NumberFormat("ES-AR", {
         style: "decimal",
