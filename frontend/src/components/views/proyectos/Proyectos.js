@@ -1,12 +1,14 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { isMobile } from 'react-device-detect';
 import { Row, Col, OverlayTrigger, Tooltip, Spinner } from 'react-bootstrap';
+import { useNavigate, useParams } from 'react-router-dom';
 
 //Componentes
 import CentrosCostos from './CentrosCostos';
 import Modulos from '../modulos/Modulos';
 import Materiales from '../material/Materiales';
 import ResumenContable from '../resumenContable/ResumenContable';
+import ModulosDobles from '../modulos/ModulosDobles';
 
 //Hooks
 import { formatNumber } from '../../../hooks/useUtils';
@@ -19,13 +21,15 @@ import { getProyectos } from '../../../redux/slice/Proyecto/thunks';
 //Css
 import '../../../style/Proyectos.scss';
 import '../../../style/CC.scss';
-import ModulosDobles from '../modulos/ModulosDobles';
 
 //Img-Incons
 //import SpinnerC from '../../utils/spinner/SpinnerC';
 
 const Proyectos = () => {
+    const { seccion } = useParams();
     const { user } = useUser();
+
+    const navigate = useNavigate();
 
     const dispatch = useDispatch();
 
@@ -34,12 +38,8 @@ const Proyectos = () => {
 
     //console.log(proyectos, 'Loading:'+activeLoading)
 
-    useEffect(() => {
-        dispatch(getProyectos());
-    }, [])
-
     const [spinner, setSpinner] = useState(activeLoading);
-    const [menu, setMenu] = useState(user.rango == "admin" || user.rango == "moderador" ? 'resumen' : 'proyectos');
+    const [menu, setMenu] = useState(user.rango == "admin" || user.rango == "moderador" ? seccion || 'resumen' : 'proyectos');
 
     const [totales, setTotales] = useState({
         egresosHoy: 0,
@@ -419,6 +419,7 @@ const Proyectos = () => {
 
         //console.log(targetName, targetValue, targetCheck);
         setMenu(targetName);
+        navigate(`/menu/${targetName}`)
     }
 
     return (<>

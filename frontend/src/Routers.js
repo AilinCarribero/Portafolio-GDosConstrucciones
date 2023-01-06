@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter, HashRouter, Redirect, Route, Routes } from 'react-router-dom';
 import { Container } from 'react-bootstrap';
 
@@ -20,6 +20,8 @@ import CentrosCostos from './components/views/proyectos/CentrosCostos';
 
 //Hooks
 import { useUser } from './hooks/useUser';
+import { useDispatch } from 'react-redux';
+import { getProyectos } from './redux/slice/Proyecto/thunks';
 
 //Contexts
 //import ProyectoProvider from './contexts/ProyectosProvider';
@@ -27,7 +29,12 @@ import { useUser } from './hooks/useUser';
 const Routers = () => {
     const { user } = useUser();
 
-    console.log(window.location);
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(getProyectos());
+    }, [])
+
     return (
         <>
             <NavbarComponent path={window.location.pathname} />
@@ -36,6 +43,7 @@ const Routers = () => {
                     <Route exact path="/" element={user.token ? <> <Proyectos /> </> : <Home />} />
                     {user.rango == 'admin' &&
                         <>
+                            <Route exact path="/menu/:seccion" element={<Proyectos />} />
                             <Route exact path="/ingresar/egreso" element={<FormEgresos />} />
                             <Route exact path="/ingresar/ingreso" element={<FormIngresos />} />
                             <Route exact path="/ingresar/proyecto" element={<FormProyectos />} />
@@ -48,10 +56,7 @@ const Routers = () => {
                             <Route exact path="/modulos/:id" element={<Modulos />} />
                             <Route exact path="/cc" element={<CentrosCostos />} /> 
                             <Route exact path="/ccp" element={<CentrosCostos />} />
-                            <Route exact path="/alquileres" element={<CentrosCostos />} />
                             <Route exact path="/alquileres/:id" element={<Alquileres />} />
-                            <Route exact path="/modulos" element={<CentrosCostos />} />
-                            <Route exact path="/materiales" element={<CentrosCostos />} />
                         </>
                     }
                     {user.rango == 'moderador' &&

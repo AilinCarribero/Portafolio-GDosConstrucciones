@@ -15,13 +15,15 @@ import '../../../style/Navbar.scss';
 //Img - Icons
 import * as Icons from 'react-bootstrap-icons';
 import logo from '../../../img/logowhitev2.png';
+import { getProyectos } from '../../../redux/slice/Proyecto/thunks';
+import { useDispatch } from 'react-redux';
 
 //Contexts
 //import ProyectoProvider from '../../../contexts/ProyectosProvider';
 
 const NavbarComponent = () => {
     const { logout, user } = useUser();
-
+    
     const [show, setShow] = useState(true);
 
     const handleShow = () => { setShow(!show); };
