@@ -46,7 +46,7 @@ const Home = () => {
 
                 loginContext(userResponse.data);
 
-                navigate.push("/");
+                navigate("/");
             } else {
                 ToastComponent('error', userResponse.data);
                 console.error('Error');

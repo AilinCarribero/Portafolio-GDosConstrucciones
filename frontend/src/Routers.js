@@ -40,40 +40,47 @@ const Routers = () => {
             <NavbarComponent path={window.location.pathname} />
             <Container fluid>
                 <Routes>
-                    <Route exact path="/" element={user.token ? <> <Proyectos /> </> : <Home />} />
-                    {user.rango == 'admin' &&
+                    {!user.token ?
+                        <Route exact path="/" element={<Home />} />
+                        :
                         <>
-                            <Route exact path="/menu/:seccion" element={<Proyectos />} />
-                            <Route exact path="/ingresar/egreso" element={<FormEgresos />} />
-                            <Route exact path="/ingresar/ingreso" element={<FormIngresos />} />
-                            <Route exact path="/ingresar/proyecto" element={<FormProyectos />} />
-                            <Route exact path="/ingresar/usuario" element={<FormUsuarios />} />
-                            <Route exact path="/ingresar/modulos" element={<FormModulos />} />
-                            <Route exact path="/usuarios" element={<Usuarios />} />
-                            <Route exact path="/modulos" element={<Modulos />} />
-                            <Route exact path="/egresos/:id" element={<Egresos />} />
-                            <Route exact path="/ingresos/:id" element={Ingresos} />
-                            <Route exact path="/modulos/:id" element={<Modulos />} />
-                            <Route exact path="/cc" element={<CentrosCostos />} /> 
-                            <Route exact path="/ccp" element={<CentrosCostos />} />
-                            <Route exact path="/alquileres/:id" element={<Alquileres />} />
+                            <Route exact path="/" element={<Proyectos />} />
+                            {user.rango == 'admin' &&
+                                <>
+                                    <Route exact path="/menu/:seccion" element={<Proyectos />} />
+                                    <Route exact path="/ingresar/egreso" element={<FormEgresos />} />
+                                    <Route exact path="/ingresar/ingreso" element={<FormIngresos />} />
+                                    <Route exact path="/ingresar/proyecto" element={<FormProyectos />} />
+                                    <Route exact path="/ingresar/usuario" element={<FormUsuarios />} />
+                                    <Route exact path="/ingresar/modulos" element={<FormModulos />} />
+                                    <Route exact path="/usuarios" element={<Usuarios />} />
+                                    <Route exact path="/modulos" element={<Modulos />} />
+                                    <Route exact path="/egresos/:id" element={<Egresos />} />
+                                    <Route exact path="/ingresos/:id" element={Ingresos} />
+                                    <Route exact path="/modulos/:id" element={<Modulos />} />
+                                    <Route exact path="/cc" element={<CentrosCostos />} />
+                                    <Route exact path="/ccp" element={<CentrosCostos />} />
+                                    <Route exact path="/alquileres/:id" element={<Alquileres />} />
+                                </>
+                            }
+                            {user.rango == 'moderador' &&
+                                <>
+                                    <Route exact path="/ingresar/egreso" element={FormEgresos} />
+                                    <Route exact path="/ingresar/ingreso" element={FormIngresos} />
+                                    <Route exact path="/egresos/:id" element={Egresos} />
+                                    <Route exact path="/ingresos/:id" element={Ingresos} />
+                                </>
+                            }
+                            {user.rango == 'usuario comun' &&
+                                <>
+                                    <Route exact path="/ingresar/egreso" element={FormEgresos} />
+                                    <Route exact path="/egresos/:id" element={Egresos} />
+                                </>
+                            }
                         </>
                     }
-                    {user.rango == 'moderador' &&
-                        <>
-                            <Route exact path="/ingresar/egreso" element={FormEgresos} />
-                            <Route exact path="/ingresar/ingreso" element={FormIngresos} />
-                            <Route exact path="/egresos/:id" element={Egresos} />
-                            <Route exact path="/ingresos/:id" element={Ingresos} />
-                        </>
-                    }
-                    {user.rango == 'usuario comun' &&
-                        <>
-                            <Route exact path="/ingresar/egreso" element={FormEgresos} />
-                            <Route exact path="/egresos/:id" element={Egresos} />
-                        </>
-                    }
-                    </Routes>
+                    <Route path="*" element={<Home />} />
+                </Routes>
             </Container>
         </>
     )
