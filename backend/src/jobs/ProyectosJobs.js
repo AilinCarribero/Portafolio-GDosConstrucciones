@@ -1,3 +1,4 @@
+const { default: Decimal } = require("decimal.js-light");
 const { Proyecto, Alquiler, Egreso, Modulo, Ingreso } = require("../../db");
 
 const configFindAllProyectos = {
@@ -74,12 +75,15 @@ exports.estadoProyectos = () => {
 
             //Si existen alquileres
             if (proyecto.alquilers.length > 0) {
+                let total_alquileres = new Decimal(0);
 
                 proyecto.alquilers.map(alquiler => {
+                    total_alquileres = total_alquileres.add(alquiler.valor);
+
                     if (proyecto.fecha_f_proyecto && (alquiler.fecha_h_alquiler > proyecto.fecha_f_proyecto)) {
 
                         if (alquiler.fecha_h_alquiler >= new Date()) {
-                            
+
                             if (proyecto.id_estado != 2) {
                                 Proyecto.update({ id_estado: 2, fecha_f_proyecto: alquiler.fecha_h_alquiler }, {
                                     where: {
@@ -93,7 +97,19 @@ exports.estadoProyectos = () => {
                             }
                         }
                     }
-                })
+                });
+
+                if (total_alquileres != proyecto.alquiler_total) {
+                    Proyecto.update({ alquiler_total: total_alquileres.toNumber() }, {
+                        where: {
+                            id_proyecto: proyecto.id_proyecto
+                        }
+                    }).then(response => {
+                        console.log(proyecto.id_proyecto + 'Se modifico el alquiler total')
+                    }).catch(err => {
+                        console.error(err);
+                    });
+                }
             }
         })
     }).catch(error => {

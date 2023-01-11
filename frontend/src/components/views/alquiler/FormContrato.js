@@ -38,7 +38,7 @@ const FormContrato = ({ alquiler, show, setShow, setAlquileres, actionContrato }
         nombre_modulo: alquiler ? (alquiler.modulo ? alquiler.modulo.nombre_modulo || `${alquiler.modulo.tipologia} - ${alquiler.modulo.id_modulo} - ${formatNumber(alquiler.modulo.ancho)} x ${formatNumber(alquiler.modulo.largo)} - ${alquiler.modulo.material_cerramiento}` : `OD - ${alquiler.modulo_doble.id_modulo_doble} - OS - ${alquiler.modulo_doble.id_modulo_uno} - OS - ${alquiler.modulo_doble.id_modulo_dos} `) : '',
         id_proyecto: id,
         alquiler_total: proyecto.alquiler_total,
-        fecha_d_alquiler: alquiler ? formatFechaISO(alquiler.fecha_h_alquiler) : formatFechaISO(new Date()),
+        fecha_d_alquiler: alquiler ? formatFechaISO(alquiler.fecha_d_alquiler) : formatFechaISO(new Date()),
         fecha_h_alquiler: alquiler ? formatFechaISO(alquiler.fecha_h_alquiler) : '',
         valor: actionContrato == "Modificar" ? alquiler.valor : '',
         ubicacion: alquiler ? alquiler.modulo.ubicacion : ''
