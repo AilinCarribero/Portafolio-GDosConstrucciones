@@ -1,4 +1,5 @@
-const { Alquiler, Modulo, Proyecto, ModuloDoble } = require("../../db")
+const { Alquiler, Modulo, Proyecto, ModuloDoble } = require("../../db");
+const Decimal = require('decimal.js-light');
 
 exports.insertAlquiler = (req, res) => {
     try {
@@ -55,9 +56,15 @@ exports.getAlquileresId = async (req, res) => {
 exports.updateNewRenovarContrato = async (req, res) => {
     const action = req.body.action;
 
+    let total_alquileres = new Decimal(0);
+
+    req.body.proyecto.alquilers.forEach(alquiler => {
+        total_alquileres = new Decimal(alquiler.valor).add(total_alquileres);
+    });
+
     const updateProyecto = {
         id_proyecto: req.body.id_proyecto,
-        alquiler_total: req.body.alquiler_total,
+        alquiler_total: total_alquileres.add(req.body.valor).toNumber(),
         fecha_f_proyecto: req.body.proyecto.fecha_f_proyecto ? (new Date(req.body.fecha_h_alquiler) >= new Date(req.body.proyecto.fecha_f_proyecto) ? new Date(req.body.fecha_h_alquiler).toISOString().slice(0, 10) : new Date(req.body.proyecto.fecha_f_proyecto).toISOString().slice(0, 10)) : null,
         id_estado: new Date(req.body.fecha_h_alquiler) >= new Date() ? 2 : 3
     }
