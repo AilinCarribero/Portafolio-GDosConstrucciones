@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Accordion, Row, Col, Button, OverlayTrigger, Tooltip, Form } from 'react-bootstrap';
+import { Accordion, Row, Col, Button, OverlayTrigger, Tooltip, Form, Spinner } from 'react-bootstrap';
 import ReactApexCharts from 'react-apexcharts';
 
 //Components
@@ -37,6 +37,7 @@ const Modulos = () => {
     const dispatch = useDispatch();
 
     const showModalUrlQr = useSelector(state => state.qrRedux.urlQr);
+    const loading = useSelector(state => state.moduloRedux.loading);
 
     const [infoModalVenta, setInfoModalVenta] = useState({
         titulo: '',
@@ -293,16 +294,16 @@ const Modulos = () => {
                     <Row>
                         <Col xs={12} md={4} className='content-section'>Total de Módulos: </Col>
                         <OverlayTrigger placement="bottom" overlay={<Tooltip>Módulos en total.</Tooltip>} >
-                            <Col xs={3} md={2} className='content-total-estado' id="total"> {cantModulos.total} </Col>
+                            <Col xs={3} md={2} className='content-total-estado' id="total"> {loading ? <Spinner animation="border" variant="light" size='sm' /> : cantModulos.total} </Col>
                         </OverlayTrigger>
                         <OverlayTrigger placement="bottom" overlay={<Tooltip>Módulos disponibles.</Tooltip>} >
-                            <Col xs={3} md={2} className='content-total-estado' id="disponible"> {cantModulos.disponibles} </Col>
+                            <Col xs={3} md={2} className='content-total-estado' id="disponible"> {loading ? <Spinner animation="border" variant="light" size='sm' /> : cantModulos.disponibles} </Col>
                         </OverlayTrigger>
                         <OverlayTrigger placement="bottom" overlay={<Tooltip>Módulos ocupados.</Tooltip>} >
-                            <Col xs={3} md={2} className='content-total-estado' id="ocupado"> {cantModulos.ocupados} </Col>
+                            <Col xs={3} md={2} className='content-total-estado' id="ocupado"> {loading ? <Spinner animation="border" variant="light" size='sm' /> : cantModulos.ocupados} </Col>
                         </OverlayTrigger>
                         <OverlayTrigger placement="bottom" overlay={<Tooltip>Módulos vendidos.</Tooltip>} >
-                            <Col xs={3} md={2} className='content-total-estado' id="vendido"> {cantModulos.vendidos} </Col>
+                            <Col xs={3} md={2} className='content-total-estado' id="vendido"> {loading ? <Spinner animation="border" variant="light" size='sm' /> : cantModulos.vendidos} </Col>
                         </OverlayTrigger>
                     </Row>
                 </Col>
@@ -322,215 +323,221 @@ const Modulos = () => {
         </Row>
 
         <div>
-            <Row>
-                <Accordion>
-                    {
-                        modulos && modulos.length > 0 &&
-                        modulos.map(modulo => (
-                            <Col key={modulo.id_modulo} className="accordion-modulos">
-                                <Accordion.Item eventKey={modulo.id_modulo}>
-                                    <Accordion.Header className="accordion-header-modulos">
-                                        <Row>
-                                            {modulo.estado == 0 &&
-                                                <OverlayTrigger placement="right" overlay={<Tooltip>Disponible {modulo.vinculado && 'vinculado'}.</Tooltip>} >
-                                                    <Col xs={1} md={1} id="disponible">
-                                                        {modulo.vinculado && <Icons.Diagram2Fill className='icon-vinculado' />}
-                                                    </Col>
-                                                </OverlayTrigger>
-                                            }
-                                            {modulo.estado == 1 &&
-                                                <OverlayTrigger placement="right" overlay={<Tooltip>Ocupado {modulo.vinculado && 'vinculado'}.</Tooltip>} >
-                                                    <Col xs={1} md={1} id="ocupado">
-                                                        {modulo.vinculado && <Icons.Diagram2Fill className='icon-vinculado' />}
-                                                    </Col>
-                                                </OverlayTrigger>
-                                            }
-                                            {modulo.estado == 2 &&
-                                                <OverlayTrigger placement="right" overlay={<Tooltip>Vendido {modulo.vinculado && 'vinculado'}.</Tooltip>} >
-                                                    <Col xs={1} md={1} id="vendido">
-                                                        {modulo.vinculado && <Icons.Diagram2Fill className='icon-vinculado' />}
-                                                    </Col>
-                                                </OverlayTrigger>
-                                            }
-                                            <Col xs={9} md={10} className="accordion-nombre-modulos">
-                                                {!modulo.tipologia ?
-                                                    modulo.nombre_modulo
-                                                    : `${modulo.tipologia} - ${modulo.id_modulo} - ${formatNumber(modulo.ancho)} x ${formatNumber(modulo.largo)} - ${modulo.material_cerramiento} `
+            {loading ?
+                <Row className='spinner-center-pag' >
+                    <Spinner animation="border" variant="dark" />
+                </Row>
+                :
+                <Row>
+                    <Accordion>
+                        {
+                            modulos && modulos.length > 0 &&
+                            modulos.map(modulo => (
+                                <Col key={modulo.id_modulo} className="accordion-modulos">
+                                    <Accordion.Item eventKey={modulo.id_modulo}>
+                                        <Accordion.Header className="accordion-header-modulos">
+                                            <Row>
+                                                {modulo.estado == 0 &&
+                                                    <OverlayTrigger placement="right" overlay={<Tooltip>Disponible {modulo.vinculado && 'vinculado'}.</Tooltip>} >
+                                                        <Col xs={1} md={1} id="disponible">
+                                                            {modulo.vinculado && <Icons.Diagram2Fill className='icon-vinculado' />}
+                                                        </Col>
+                                                    </OverlayTrigger>
                                                 }
-                                            </Col>
-                                            {user.rango == "admin" && modulo.estado != 2 &&
-                                                <Col className="content-buttons" >
-                                                    <Row>
-                                                        <Col xs={6} sm={6}>
-                                                            <Icons.CashCoin className="button-vender" onClick={() => vender(false, modulo.id_modulo)} />
+                                                {modulo.estado == 1 &&
+                                                    <OverlayTrigger placement="right" overlay={<Tooltip>Ocupado {modulo.vinculado && 'vinculado'}.</Tooltip>} >
+                                                        <Col xs={1} md={1} id="ocupado">
+                                                            {modulo.vinculado && <Icons.Diagram2Fill className='icon-vinculado' />}
                                                         </Col>
-                                                        <Col xs={6} sm={6}>
-                                                            <Icons.TrashFill className="button-delete" onClick={() => deleteModulo(modulo)} />
+                                                    </OverlayTrigger>
+                                                }
+                                                {modulo.estado == 2 &&
+                                                    <OverlayTrigger placement="right" overlay={<Tooltip>Vendido {modulo.vinculado && 'vinculado'}.</Tooltip>} >
+                                                        <Col xs={1} md={1} id="vendido">
+                                                            {modulo.vinculado && <Icons.Diagram2Fill className='icon-vinculado' />}
                                                         </Col>
-                                                    </Row>
+                                                    </OverlayTrigger>
+                                                }
+                                                <Col xs={9} md={10} className="accordion-nombre-modulos">
+                                                    {!modulo.tipologia ?
+                                                        modulo.nombre_modulo
+                                                        : `${modulo.tipologia} - ${modulo.id_modulo} - ${formatNumber(modulo.ancho)} x ${formatNumber(modulo.largo)} - ${modulo.material_cerramiento} `
+                                                    }
                                                 </Col>
-                                            }
-                                        </Row>
-                                    </Accordion.Header>
-                                    <Accordion.Body className='accordion-body-modulos'>
-                                        <Row>
-                                            <Col xs={12} md={6}>
-                                                <Row>
-                                                    <Col xs={1} md={1}></Col>
-                                                    <Col xs={11} md={11}><p> Costo: ${formatNumber(modulo.costo)}</p></Col>
-                                                </Row>
-                                            </Col>
-                                            {modulo.estado == 2 &&
-                                                <Col xs={12} md={6}>
-                                                    <Row>
-                                                        <Col xs={1} md={1}></Col>
-                                                        <Col xs={11} md={11}><p> Venta: ${formatNumber(modulo.venta)}</p></Col>
-                                                    </Row>
-                                                </Col>
-                                            }
-                                            <Col xs={12} md={6}>
-                                                <Row>
-                                                    <Col xs={1} md={1}></Col>
-                                                    <Col xs={11} md={11}><p> Fecha de creación: {formatFecha(modulo.fecha_creacion)}</p></Col>
-                                                </Row>
-                                            </Col>
-                                            {modulo.fecha_venta && (modulo.fecha_venta >= modulo.fecha_creacion && modulo.fecha_venta) &&
-                                                <Col xs={12} md={6}>
-                                                    <Row>
-                                                        <Col xs={1} md={1}></Col>
-                                                        <Col xs={11} md={11}><p> Fecha de Venta: {formatFecha(modulo.fecha_venta)}</p></Col>
-                                                    </Row>
-                                                </Col>
-                                            }
-                                            <Col xs={12} md={6}>
-                                                <Row>
-                                                    <Col xs={1} md={1}></Col>
-                                                    <Col xs={11} md={11}><p> Dimensión: {`Ancho: ${formatNumber(modulo.ancho)} / Largo: ${formatNumber(modulo.largo)}`}</p></Col>
-                                                </Row>
-                                            </Col>
-                                            <Col xs={12} md={6}>
-                                                <Row>
-                                                    <Col xs={1} md={1}></Col>
-                                                    <Col xs={11} md={11}><p> Tipologia: {searchTipologia(modulo.tipologia)}</p></Col>
-                                                </Row>
-                                            </Col>
-                                            <Col xs={12} md={6}>
-                                                <Row>
-                                                    <Col xs={1} md={1}></Col>
-                                                    <Col xs={11} md={11}><p> Material de Cerramiento: {modulo.material_cerramiento === "PUR" ? 'PUR (Poliuretano)' : (modulo.material_cerramiento === 'EPS' ? 'EPS (Poliestireno)' : modulo.material_cerramiento)}</p></Col>
-                                                </Row>
-                                            </Col>
-                                            <Col xs={12} md={6}>
-                                                <Row>
-                                                    <Col xs={1} md={1}></Col>
-                                                    <Col xs={11} md={11}><p> Colores: {`Exterior: ${modulo.col_exterior} - Interior: ${modulo.col_interior}`}</p></Col>
-                                                </Row>
-                                            </Col>
-                                            <Col xs={12} md={6}>
-                                                <Row>
-                                                    <Col xs={1} md={1}></Col>
-                                                    <Col xs={11} md={11}><p> Material del Piso: {modulo.material_piso}</p></Col>
-                                                </Row>
-                                            </Col>
-                                            <Col xs={12} md={6}>
-                                                <Row>
-                                                    <Col xs={1} md={1}></Col>
-                                                    <Col xs={11} md={11}><p> Equipamiento: {modulo.equipamiento}</p></Col>
-                                                </Row>
-                                            </Col>
-                                            <Col xs={12} md={6}>
-                                                <Row>
-                                                    <Col xs={1} md={1}></Col>
-                                                    <Col xs={11} md={11}>
-                                                        <p>Carpinteria: Puertas: {modulo.puertas}</p>
-                                                        <p>Ventanas: {modulo.ventanas} {modulo.vent_alto && (Array.isArray(modulo.vent_alto.split('-')) ? 'con dimensiones: ' + renderTextDimensiones(modulo.vent_alto.split('-'), modulo.vent_ancho.split('-')) : `con dimensión ${formatNumber(modulo.vent_alto)} x ${formatNumber(modulo.vent_ancho)}`)}</p>
-                                                    </Col>
-                                                </Row>
-                                            </Col>
-                                            <Col xs={12} md={6}>
-                                                <Row>
-                                                    <Col xs={1} md={1}></Col>
-                                                    <Col xs={11} md={11}><p> Instalación Eléctrica: {modulo.inst_electrica ? <Icons.CheckSquareFill color='#05be40' /> : <Icons.XSquareFill color='#ce0000' />}</p></Col>
-                                                </Row>
-                                                <Row>
-                                                    <Col xs={1} md={1}></Col>
-                                                    <Col xs={11} md={11}><p> Instalación Sanitaria: {modulo.inst_sanitaria ? <Icons.CheckSquareFill color='#05be40' /> : <Icons.XSquareFill color='#ce0000' />}</p></Col>
-                                                </Row>
-                                                <Row>
-                                                    <Col xs={1} md={1}></Col>
-                                                    <Col xs={11} md={11}><p> Instalaciones Especiales: {modulo.inst_especiales ? <Icons.CheckSquareFill color='#05be40' /> : <Icons.XSquareFill color='#ce0000' />}</p></Col>
-                                                </Row>
-                                            </Col>
-                                            {modulo.descripcion &&
-                                                <Col xs={12} md={12} className="col-12-accordion">
-                                                    <Row>
-                                                        <Col xs={12} md={12}><p>Descripción: {modulo.descripcion}</p></Col>
-                                                    </Row>
-                                                </Col>
-                                            }
-                                            {modulo.url_qr &&
-                                                <Col xs={12} md={12} className="col-12-accordion">
-                                                    <Row>
-                                                        <Col className='url-qr' xs={12} md={12}>
-                                                            <p>URL del QR:
-                                                                <button type='button' className='button-copy-modulo' onClick={(e) => handleCopy(e, modulo.url_qr)}>
-                                                                    {modulo.url_qr} <Icons.Files size="25px" className='icon-text-copy' />
-                                                                </button>
-                                                            </p>
-                                                        </Col>
-                                                    </Row>
-                                                </Col>
-                                            }
-                                            {modulo.ubicacion &&
-                                                <Col xs={12} md={12} className="col-12-accordion">
-                                                    <Row>
-                                                        <Col className='url-qr' xs={12} md={12}>
-                                                            <p> Ubicación:
-                                                                <button type='button' className='button-copy-modulo' onClick={(e) => handleCopy(e, modulo.ubicacion)}>
-                                                                    {modulo.ubicacion} <Icons.Files size="25px" className='icon-text-copy' />
-                                                                </button>
-                                                            </p>
-                                                        </Col>
-                                                    </Row>
-                                                </Col>
-                                            }
-                                        </Row>
-                                        {modulo.alquilers.length > 0 && <Row>
-                                            <Col xs={12} md={12} >
-                                                <Row className="accordion-border-top">
-                                                    <Col xs={11} md={11}><p className="accordion-title-section">Trazabilidad</p></Col>
-                                                </Row>
-                                            </Col>
-                                            <ReactApexCharts options={options} series={formatDataTimeLine(modulo.alquilers)} type="rangeBar" height={140} />
-                                        </Row>
-                                        }
-                                        {user.rango == 'admin' &&
-                                            <Row className="border-top">
-                                                <Col xs={12} md={12}>
-                                                    <p className="accordion-title-section">Acciones</p>
-                                                </Col>
-                                                <Col xs={12} md={6}>
-                                                    <button className="button-action" onClick={() => updateModalModulo(modulo)}>
+                                                {user.rango == "admin" && modulo.estado != 2 &&
+                                                    <Col className="content-buttons" >
                                                         <Row>
-                                                            <Col xs={1} md={1} className='icon-action'>
-                                                                <Icons.PencilSquare size={19} />
+                                                            <Col xs={6} sm={6}>
+                                                                <Icons.CashCoin className="button-vender" onClick={() => vender(false, modulo.id_modulo)} />
                                                             </Col>
-                                                            <Col xs={10} md={10} className='text-action'>
-                                                                Modificar
+                                                            <Col xs={6} sm={6}>
+                                                                <Icons.TrashFill className="button-delete" onClick={() => deleteModulo(modulo)} />
                                                             </Col>
                                                         </Row>
-                                                    </button>
-                                                </Col>
+                                                    </Col>
+                                                }
                                             </Row>
-                                        }
-                                    </Accordion.Body>
-                                </Accordion.Item>
-                            </Col>
-                        ))
+                                        </Accordion.Header>
+                                        <Accordion.Body className='accordion-body-modulos'>
+                                            <Row>
+                                                <Col xs={12} md={6}>
+                                                    <Row>
+                                                        <Col xs={1} md={1}></Col>
+                                                        <Col xs={11} md={11}><p> Costo: ${formatNumber(modulo.costo)}</p></Col>
+                                                    </Row>
+                                                </Col>
+                                                {modulo.estado == 2 &&
+                                                    <Col xs={12} md={6}>
+                                                        <Row>
+                                                            <Col xs={1} md={1}></Col>
+                                                            <Col xs={11} md={11}><p> Venta: ${formatNumber(modulo.venta)}</p></Col>
+                                                        </Row>
+                                                    </Col>
+                                                }
+                                                <Col xs={12} md={6}>
+                                                    <Row>
+                                                        <Col xs={1} md={1}></Col>
+                                                        <Col xs={11} md={11}><p> Fecha de creación: {formatFecha(modulo.fecha_creacion)}</p></Col>
+                                                    </Row>
+                                                </Col>
+                                                {modulo.fecha_venta && (modulo.fecha_venta >= modulo.fecha_creacion && modulo.fecha_venta) &&
+                                                    <Col xs={12} md={6}>
+                                                        <Row>
+                                                            <Col xs={1} md={1}></Col>
+                                                            <Col xs={11} md={11}><p> Fecha de Venta: {formatFecha(modulo.fecha_venta)}</p></Col>
+                                                        </Row>
+                                                    </Col>
+                                                }
+                                                <Col xs={12} md={6}>
+                                                    <Row>
+                                                        <Col xs={1} md={1}></Col>
+                                                        <Col xs={11} md={11}><p> Dimensión: {`Ancho: ${formatNumber(modulo.ancho)} / Largo: ${formatNumber(modulo.largo)}`}</p></Col>
+                                                    </Row>
+                                                </Col>
+                                                <Col xs={12} md={6}>
+                                                    <Row>
+                                                        <Col xs={1} md={1}></Col>
+                                                        <Col xs={11} md={11}><p> Tipologia: {searchTipologia(modulo.tipologia)}</p></Col>
+                                                    </Row>
+                                                </Col>
+                                                <Col xs={12} md={6}>
+                                                    <Row>
+                                                        <Col xs={1} md={1}></Col>
+                                                        <Col xs={11} md={11}><p> Material de Cerramiento: {modulo.material_cerramiento === "PUR" ? 'PUR (Poliuretano)' : (modulo.material_cerramiento === 'EPS' ? 'EPS (Poliestireno)' : modulo.material_cerramiento)}</p></Col>
+                                                    </Row>
+                                                </Col>
+                                                <Col xs={12} md={6}>
+                                                    <Row>
+                                                        <Col xs={1} md={1}></Col>
+                                                        <Col xs={11} md={11}><p> Colores: {`Exterior: ${modulo.col_exterior} - Interior: ${modulo.col_interior}`}</p></Col>
+                                                    </Row>
+                                                </Col>
+                                                <Col xs={12} md={6}>
+                                                    <Row>
+                                                        <Col xs={1} md={1}></Col>
+                                                        <Col xs={11} md={11}><p> Material del Piso: {modulo.material_piso}</p></Col>
+                                                    </Row>
+                                                </Col>
+                                                <Col xs={12} md={6}>
+                                                    <Row>
+                                                        <Col xs={1} md={1}></Col>
+                                                        <Col xs={11} md={11}><p> Equipamiento: {modulo.equipamiento}</p></Col>
+                                                    </Row>
+                                                </Col>
+                                                <Col xs={12} md={6}>
+                                                    <Row>
+                                                        <Col xs={1} md={1}></Col>
+                                                        <Col xs={11} md={11}>
+                                                            <p>Carpinteria: Puertas: {modulo.puertas}</p>
+                                                            <p>Ventanas: {modulo.ventanas} {modulo.vent_alto && (Array.isArray(modulo.vent_alto.split('-')) ? 'con dimensiones: ' + renderTextDimensiones(modulo.vent_alto.split('-'), modulo.vent_ancho.split('-')) : `con dimensión ${formatNumber(modulo.vent_alto)} x ${formatNumber(modulo.vent_ancho)}`)}</p>
+                                                        </Col>
+                                                    </Row>
+                                                </Col>
+                                                <Col xs={12} md={6}>
+                                                    <Row>
+                                                        <Col xs={1} md={1}></Col>
+                                                        <Col xs={11} md={11}><p> Instalación Eléctrica: {modulo.inst_electrica ? <Icons.CheckSquareFill color='#05be40' /> : <Icons.XSquareFill color='#ce0000' />}</p></Col>
+                                                    </Row>
+                                                    <Row>
+                                                        <Col xs={1} md={1}></Col>
+                                                        <Col xs={11} md={11}><p> Instalación Sanitaria: {modulo.inst_sanitaria ? <Icons.CheckSquareFill color='#05be40' /> : <Icons.XSquareFill color='#ce0000' />}</p></Col>
+                                                    </Row>
+                                                    <Row>
+                                                        <Col xs={1} md={1}></Col>
+                                                        <Col xs={11} md={11}><p> Instalaciones Especiales: {modulo.inst_especiales ? <Icons.CheckSquareFill color='#05be40' /> : <Icons.XSquareFill color='#ce0000' />}</p></Col>
+                                                    </Row>
+                                                </Col>
+                                                {modulo.descripcion &&
+                                                    <Col xs={12} md={12} className="col-12-accordion">
+                                                        <Row>
+                                                            <Col xs={12} md={12}><p>Descripción: {modulo.descripcion}</p></Col>
+                                                        </Row>
+                                                    </Col>
+                                                }
+                                                {modulo.url_qr &&
+                                                    <Col xs={12} md={12} className="col-12-accordion">
+                                                        <Row>
+                                                            <Col className='url-qr' xs={12} md={12}>
+                                                                <p>URL del QR:
+                                                                    <button type='button' className='button-copy-modulo' onClick={(e) => handleCopy(e, modulo.url_qr)}>
+                                                                        {modulo.url_qr} <Icons.Files size="25px" className='icon-text-copy' />
+                                                                    </button>
+                                                                </p>
+                                                            </Col>
+                                                        </Row>
+                                                    </Col>
+                                                }
+                                                {modulo.ubicacion &&
+                                                    <Col xs={12} md={12} className="col-12-accordion">
+                                                        <Row>
+                                                            <Col className='url-qr' xs={12} md={12}>
+                                                                <p> Ubicación:
+                                                                    <button type='button' className='button-copy-modulo' onClick={(e) => handleCopy(e, modulo.ubicacion)}>
+                                                                        {modulo.ubicacion} <Icons.Files size="25px" className='icon-text-copy' />
+                                                                    </button>
+                                                                </p>
+                                                            </Col>
+                                                        </Row>
+                                                    </Col>
+                                                }
+                                            </Row>
+                                            {modulo.alquilers.length > 0 && <Row>
+                                                <Col xs={12} md={12} >
+                                                    <Row className="accordion-border-top">
+                                                        <Col xs={11} md={11}><p className="accordion-title-section">Trazabilidad</p></Col>
+                                                    </Row>
+                                                </Col>
+                                                <ReactApexCharts options={options} series={formatDataTimeLine(modulo.alquilers)} type="rangeBar" height={140} />
+                                            </Row>
+                                            }
+                                            {user.rango == 'admin' &&
+                                                <Row className="border-top">
+                                                    <Col xs={12} md={12}>
+                                                        <p className="accordion-title-section">Acciones</p>
+                                                    </Col>
+                                                    <Col xs={12} md={6}>
+                                                        <button className="button-action" onClick={() => updateModalModulo(modulo)}>
+                                                            <Row>
+                                                                <Col xs={1} md={1} className='icon-action'>
+                                                                    <Icons.PencilSquare size={19} />
+                                                                </Col>
+                                                                <Col xs={10} md={10} className='text-action'>
+                                                                    Modificar
+                                                                </Col>
+                                                            </Row>
+                                                        </button>
+                                                    </Col>
+                                                </Row>
+                                            }
+                                        </Accordion.Body>
+                                    </Accordion.Item>
+                                </Col>
+                            ))
 
-                    }
-                </Accordion>
-            </Row>
+                        }
+                    </Accordion>
+                </Row>
+            }
         </div >
     </>)
 }

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Accordion, Row, Col, Button } from 'react-bootstrap';
+import { Accordion, Row, Col, Button, Spinner } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import Decimal from 'decimal.js-light';
 
@@ -14,9 +14,12 @@ import { useGetProyectos } from '../../../hooks/useProyectos';
 
 //Img-Icons
 import * as Icons from 'react-bootstrap-icons';
+import { useSelector } from 'react-redux';
 
 const CentrosCostos = ({ proyectos, mostrar, setProyectos }) => {
     const { user } = useUser();
+
+    const loading = useSelector(state => state.proyectoRedux.loading);
 
     const [proyectosMostrar, setProyectosMostrar] = useState([]);
 
@@ -174,14 +177,20 @@ const CentrosCostos = ({ proyectos, mostrar, setProyectos }) => {
             */}
         </Row>
 
-        <Accordion>
-            {
-                proyectosMostrar &&
-                proyectosMostrar.map(proyecto => (
-                    <AccordionCentroCosto key={proyecto.id_proyecto} proyecto={proyecto} setProyectos={setProyectos} />
-                ))
-            }
-        </Accordion>
+        {loading ?
+            <Row className='spinner-center-pag' >
+                <Spinner animation="border" variant="dark" />
+            </Row>
+            :
+            <Accordion>
+                {
+                    proyectosMostrar &&
+                    proyectosMostrar.map(proyecto => (
+                        <AccordionCentroCosto key={proyecto.id_proyecto} proyecto={proyecto} setProyectos={setProyectos} />
+                    ))
+                }
+            </Accordion>
+        }
     </>)
 }
 

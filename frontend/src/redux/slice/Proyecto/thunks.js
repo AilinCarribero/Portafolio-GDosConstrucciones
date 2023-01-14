@@ -108,8 +108,10 @@ export const getProyectos = () => (dispatch) => {
         }
 
         dispatch(setProyectos(payload));
+        dispatch(activeLoading(false));
     }).catch(err => {
         console.error(err);
+        dispatch(activeLoading(false));
     });
 }
 

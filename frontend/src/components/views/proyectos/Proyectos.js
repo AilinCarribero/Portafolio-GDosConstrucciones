@@ -37,8 +37,6 @@ const Proyectos = () => {
     const activeLoading = useSelector(state => state.proyectoRedux.loading);
 
     //console.log(proyectos, 'Loading:'+activeLoading)
-
-    const [spinner, setSpinner] = useState(activeLoading);
     const [menu, setMenu] = useState(user.rango == "admin" || user.rango == "moderador" ? seccion || 'resumen' : 'proyectos');
 
     const [totales, setTotales] = useState({
@@ -404,7 +402,6 @@ const Proyectos = () => {
             CCEEgreso: auxCCEE,
             CCEIngreso: auxCCEI,
         })
-        setSpinner(false);
     }
 
     //Si existe alguna modificacion en los proyectos se debe recalcular todos
@@ -424,7 +421,6 @@ const Proyectos = () => {
 
     return (<>
         <div>
-            {spinner && <Spinner animation="border" variant="dark" />}
             <Row className="menu-inicio">
                 {(user.rango == "admin" || user.rango == "moderador") && <>
                     <Col>

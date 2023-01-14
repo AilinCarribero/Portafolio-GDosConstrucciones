@@ -11,9 +11,12 @@ export const moduloSlice = createSlice({
         setCantidadModulos: (state, action) => {
             state.cantidades = action.payload;
         },
+        changeLoading: (state, action) => {
+            state.loading = action.payload;
+        }
     }
 })
 
-export const { setCantidadModulos } = moduloSlice.actions;
+export const { setCantidadModulos, changeLoading } = moduloSlice.actions;
 
 export default moduloSlice.reducer;
