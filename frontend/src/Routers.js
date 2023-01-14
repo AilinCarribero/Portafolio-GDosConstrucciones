@@ -33,7 +33,7 @@ const Routers = () => {
 
     useEffect(() => {
         dispatch(getProyectos());
-    }, [])
+    }, [user.token])
 
     return (
         <>
