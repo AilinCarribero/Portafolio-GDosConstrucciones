@@ -6,11 +6,12 @@ import { Link } from 'react-router-dom';
 import ModalFormulario from '../../utils/modal/formularios/ModalFormulario';
 
 //Hooks
-import { formatFecha, formatNumber } from '../../../hooks/useUtils';
+import { calcDifDias, formatFecha, formatNumber } from '../../../hooks/useUtils';
 import { useUser } from '../../../hooks/useUser';
 
 //Img-Icons
 import * as Icons from 'react-bootstrap-icons';
+import moment from 'moment';
 
 const AccordionCentrosCostos = ({ proyecto, setProyectos }) => {
     const { user } = useUser();
@@ -92,6 +93,9 @@ const AccordionCentrosCostos = ({ proyecto, setProyectos }) => {
                 }
 
                 <Col xs={5} md={5}>{proyecto.id_proyecto}</Col>
+                {proyecto.fecha_f_proyecto && 
+                    <Col xs={2} md={2}>Dias restantes: {calcDifDias(new Date(), proyecto.fecha_f_proyecto)}</Col>
+                }
                 {/*(user.rango == "admin" || user.rango == "moderador") && !proyecto.id_proyecto.includes('CCC') && !proyecto.id_proyecto.includes('CCE') &&
                         <Col xs={4} md={3}> Resto: ${formatNumber(ingresosProyecto(proyecto.ingresos) - egresosProyecto(proyecto.egresos))} / USD${formatNumber(ingresosUSDProyecto(proyecto.ingresos) - egresosUSDProyecto(proyecto.egresos))}</Col>
                     */}

@@ -82,7 +82,7 @@ exports.estadoProyectos = () => {
 
                     if (proyecto.fecha_f_proyecto && (alquiler.fecha_h_alquiler > proyecto.fecha_f_proyecto)) {
 
-                        if (alquiler.fecha_h_alquiler >= new Date()) {
+                        if (alquiler.fecha_h_alquiler >= new Date() && alquiler.fecha_h_alquiler >= new Date()) {
 
                             if (proyecto.id_estado != 2) {
                                 Proyecto.update({ id_estado: 2, fecha_f_proyecto: alquiler.fecha_h_alquiler }, {
@@ -97,8 +97,55 @@ exports.estadoProyectos = () => {
                             }
                         }
                     }
+
+                    if (!proyecto.fecha_f_proyecto) {
+
+                        if (alquiler.fecha_h_alquiler >= new Date() && alquiler.fecha_d_alquiler <= new Date()) {
+
+                            if (proyecto.id_estado != 2) {
+                                Proyecto.update({ id_estado: 2, fecha_f_proyecto: alquiler.fecha_h_alquiler }, {
+                                    where: {
+                                        id_proyecto: proyecto.id_proyecto
+                                    }
+                                }).then(response => {
+                                    console.log(proyecto.id_proyecto + ' Estado actualizado a "En proceso" y fecha final actualizada a la fecha de finalizacion del alquiler mas distante')
+                                }).catch(err => {
+                                    console.error(err);
+                                })
+                            }
+                        }
+
+                        if (alquiler.fecha_h_alquiler < new Date()) {
+
+                            if (proyecto.id_estado != 3) {
+                                Proyecto.update({ id_estado: 3, fecha_f_proyecto: alquiler.fecha_h_alquiler }, {
+                                    where: {
+                                        id_proyecto: proyecto.id_proyecto
+                                    }
+                                }).then(response => {
+                                    console.log(proyecto.id_proyecto + ' Estado actualizado a "Finalizado" y fecha final actualizada a la fecha de finalizacion del alquiler mas distante')
+                                }).catch(err => {
+                                    console.error(err);
+                                })
+                            }
+                        }
+                    }
+
+                    //Nos aseguramos que la fecha de finalizacion de un proyecto este actualizada con respecto a la ultima fecha de finalizacion de un alquiler
+                    if(!proyecto.fecha_f_proyecto || alquiler.fecha_h_alquiler > proyecto.fecha_f_proyecto) {
+                        Proyecto.update({fecha_f_proyecto: alquiler.fecha_h_alquiler }, {
+                            where: {
+                                id_proyecto: proyecto.id_proyecto
+                            }
+                        }).then(response => {
+                            console.log(proyecto.id_proyecto + ' Fecha final actualizada a la fecha de finalizacion del alquiler mas distante')
+                        }).catch(err => {
+                            console.error(err);
+                        })
+                    }
                 });
 
+                //Nos aseguramos de que el total de alquileres este bien calculado
                 if (total_alquileres != proyecto.alquiler_total) {
                     Proyecto.update({ alquiler_total: total_alquileres.toNumber() }, {
                         where: {

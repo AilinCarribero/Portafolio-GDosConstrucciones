@@ -31,7 +31,7 @@ const configFindAllProyectos = {
     }, {
         model: Ingreso
     }],
-    order: [['id_estado', 'ASC'], ['fecha_f_proyecto', 'DESC'], [Alquiler, 'fecha_d_alquiler', 'ASC']]
+    order: [['id_estado', 'ASC'], ['fecha_f_proyecto', 'ASC'], [Alquiler, 'fecha_d_alquiler', 'ASC']]
 }
 
 //listar todos los proyectos existentes

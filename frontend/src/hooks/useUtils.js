@@ -166,7 +166,6 @@ export const calcularValorXMes = (fechaInicio, cantMeses, valorXMes) => {
     })
 }
 
-
 export const formatNameMes = (numMes) => {
     switch (numMes) {
         case 0:
@@ -203,4 +202,13 @@ export const calcDifMeses = (inicio, fin) => {
     const cantMeses = Math.abs(fechaHasta.diff(fechaDesde, 'month'));
 
     return cantMeses === 0 ? 1 : cantMeses;
+}
+
+export const calcDifDias = (inicio, fin) => {
+    const fechaDesde = moment(inicio);
+    const fechaHasta = moment(fin);
+
+    const cantMeses = fechaHasta.diff(fechaDesde, 'days') > 0 ? fechaHasta.diff(fechaDesde, 'days') : 0;
+
+    return cantMeses;
 }
