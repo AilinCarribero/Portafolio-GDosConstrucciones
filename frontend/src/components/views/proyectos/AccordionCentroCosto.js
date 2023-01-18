@@ -93,8 +93,8 @@ const AccordionCentrosCostos = ({ proyecto, setProyectos }) => {
                 }
 
                 <Col xs={5} md={5}>{proyecto.id_proyecto}</Col>
-                {proyecto.fecha_f_proyecto && 
-                    <Col xs={2} md={2} className={ calcDifDias(new Date(), proyecto.fecha_f_proyecto) > 0 && calcDifDias(new Date(), proyecto.fecha_f_proyecto) <= 15 ? "text-for-finish" : ""} >
+                {proyecto.fecha_f_proyecto && calcDifDias(new Date(), proyecto.fecha_f_proyecto) > 0 && 
+                    <Col xs={2} md={2} className={calcDifDias(new Date(), proyecto.fecha_f_proyecto) <= 15 ? "text-for-finish" : ""} >
                         Dias restantes: {calcDifDias(new Date(), proyecto.fecha_f_proyecto)}
                     </Col>
                 }
