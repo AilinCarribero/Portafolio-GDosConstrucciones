@@ -94,7 +94,9 @@ const AccordionCentrosCostos = ({ proyecto, setProyectos }) => {
 
                 <Col xs={5} md={5}>{proyecto.id_proyecto}</Col>
                 {proyecto.fecha_f_proyecto && 
-                    <Col xs={2} md={2}>Dias restantes: {calcDifDias(new Date(), proyecto.fecha_f_proyecto)}</Col>
+                    <Col xs={2} md={2} className={ calcDifDias(new Date(), proyecto.fecha_f_proyecto) > 0 && calcDifDias(new Date(), proyecto.fecha_f_proyecto) <= 15 ? "text-for-finish" : ""} >
+                        Dias restantes: {calcDifDias(new Date(), proyecto.fecha_f_proyecto)}
+                    </Col>
                 }
                 {/*(user.rango == "admin" || user.rango == "moderador") && !proyecto.id_proyecto.includes('CCC') && !proyecto.id_proyecto.includes('CCE') &&
                         <Col xs={4} md={3}> Resto: ${formatNumber(ingresosProyecto(proyecto.ingresos) - egresosProyecto(proyecto.egresos))} / USD${formatNumber(ingresosUSDProyecto(proyecto.ingresos) - egresosUSDProyecto(proyecto.egresos))}</Col>
