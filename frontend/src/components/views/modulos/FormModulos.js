@@ -35,6 +35,7 @@ const FormModulos = ({ close, updateModulo, setUpdateModulo }) => {
     const [modulo, setModulo] = useState({
         nombre_modulo: updateModulo.nombre_modulo ? updateModulo.nombre_modulo : '',
         costo: updateModulo.costo ? updateModulo.costo : '',
+        costo_usd: updateModulo.costo_usd ? updateModulo.costo_usd : '',
         venta: updateModulo.venta ? updateModulo.venta : '',
         fecha_creacion: updateModulo.fecha_creacion ? new Date(updateModulo.fecha_creacion).toISOString().slice(0, 10) : new Date().toISOString().slice(0, 10),
         fecha_venta: updateModulo.fecha_venta ? new Date(updateModulo.fecha_venta).toISOString().slice(0, 10) : '',
@@ -160,6 +161,7 @@ const FormModulos = ({ close, updateModulo, setUpdateModulo }) => {
             auxModulo = {
                 ...modulo,
                 costo: desformatNumber(modulo.costo),
+                costo_usd: desformatNumber(modulo.costo_usd),
                 venta: desformatNumber(modulo.venta),
                 ancho: desformatNumber(modulo.ancho),
                 largo: desformatNumber(modulo.largo),
@@ -188,6 +190,7 @@ const FormModulos = ({ close, updateModulo, setUpdateModulo }) => {
                     setModulo({
                         nombre_modulo: '',
                         costo: '',
+                        costo_usd: '',
                         venta: '',
                         fecha_creacion: new Date().toISOString().slice(0, 10),
                         fecha_venta: '',
@@ -330,9 +333,17 @@ const FormModulos = ({ close, updateModulo, setUpdateModulo }) => {
                             <Row>
                                 <Col sm={6}>
                                     <Form.Group className="mb-3">
-                                        <FloatingLabel label="Costo">
+                                        <FloatingLabel label="Costo ARG">
                                             <NumericFormat customInput={Form.Control} decimalSeparator={","} thousandSeparator={"."}
                                                 onChange={handleChangeForm} name="costo" value={modulo.costo} />
+                                        </FloatingLabel>
+                                    </Form.Group>
+                                </Col>
+                                <Col sm={6}>
+                                    <Form.Group className="mb-3">
+                                        <FloatingLabel label="Costo USD">
+                                            <NumericFormat customInput={Form.Control} decimalSeparator={","} thousandSeparator={"."}
+                                                onChange={handleChangeForm} name="costo_usd" value={modulo.costo_usd} />
                                         </FloatingLabel>
                                     </Form.Group>
                                 </Col>

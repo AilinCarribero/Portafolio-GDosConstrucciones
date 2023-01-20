@@ -29,7 +29,7 @@ const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, proces
     dialect: 'mysql',
     define: {
         freezeTableName: true,
-        alter: false, // cuando se realice un cambio en algun modelo o relacion pasar a true
+        alter: true, // cuando se realice un cambio en algun modelo o relacion pasar a true
         modelName: 'singularName'
     },
 });
@@ -73,6 +73,7 @@ sequelize.sync({ force: false, logging: false }).then(() => {
     Proyecto.hasMany(Alquiler, { foreignKey: 'id_proyecto', targetKey: 'id_proyecto' });
     Proyecto.hasMany(Egreso, { foreignKey: 'id_proyecto', targetKey: 'id_proyecto' });
     Proyecto.hasMany(Ingreso, { foreignKey: 'id_proyecto', targetKey: 'id_proyecto' });
+    Egreso.belongsTo(Proyecto, { foreignKey: 'id_proyecto', targetKey: 'id_proyecto' });
     Egreso.belongsTo(FormaPago, { foreignKey: 'id_forma_pago', targetKey: 'id_forma_pago' });
     Egreso.belongsTo(Auth, { foreignKey: 'id_user', targetKey: 'id_user' });
     Egreso.belongsTo(AnalisisCosto, { foreignKey: 'id_analisis_costo', targetKey: 'id_analisis_costo' });

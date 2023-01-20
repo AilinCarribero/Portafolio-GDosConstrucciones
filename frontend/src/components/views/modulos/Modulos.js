@@ -383,7 +383,7 @@ const Modulos = () => {
                                                 <Col xs={12} md={6}>
                                                     <Row>
                                                         <Col xs={1} md={1}></Col>
-                                                        <Col xs={11} md={11}><p> Costo: ${formatNumber(modulo.costo)}</p></Col>
+                                                        <Col xs={11} md={11}><p> Costo: {modulo.costo ? `$${formatNumber(modulo.costo)}` : ''}  {modulo.costo_usd ? `USD$${formatNumber(modulo.costo_usd)}` : ''}</p></Col>
                                                     </Row>
                                                 </Col>
                                                 {modulo.estado == 2 &&

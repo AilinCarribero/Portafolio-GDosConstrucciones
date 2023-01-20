@@ -12,7 +12,8 @@ module.exports = ( sequelize, type ) => {
         },
         fecha_diferido_pago: { 
             type: type.DATE,
-            defaultValue: '0000-00-00'
+            allowNull: true,
+            defaultValue: null
         },
         id_forma_pago: {
             type: type.INTEGER,

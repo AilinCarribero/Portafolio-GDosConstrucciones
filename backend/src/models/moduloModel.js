@@ -19,6 +19,10 @@ module.exports = ( sequelize, type ) => {
             type:type.DOUBLE,
             defaultValue: 0
         },
+        costo_usd: {
+            type:type.DOUBLE,
+            defaultValue: 0
+        },
         venta: {
             type:type.DOUBLE,
             defaultValue: 0
