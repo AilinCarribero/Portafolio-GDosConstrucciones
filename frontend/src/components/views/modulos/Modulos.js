@@ -47,6 +47,7 @@ const Modulos = () => {
     const [cantModulos, setCantModulos] = useState({
         total: 0,
         disponibles: 0,
+        en_espera: 0,
         ocupados: 0,
         vendidos: 0
     });
@@ -78,6 +79,7 @@ const Modulos = () => {
 
     useEffect(() => {
         let auxDisponibles = 0;
+        let auxEnEspera = 0;
         let auxOcupados = 0;
         let auxVendidos = 0;
 
@@ -92,12 +94,16 @@ const Modulos = () => {
                 case 2:
                     auxVendidos += 1;
                     break;
+                case 3:
+                    auxEnEspera += 1;
+                    break;
             }
         });
 
         setCantModulos({
             total: modulos.length,
             disponibles: auxDisponibles,
+            en_espera: auxEnEspera,
             ocupados: auxOcupados,
             vendidos: auxVendidos
         })
@@ -105,6 +111,7 @@ const Modulos = () => {
         dispatch(setCantidadModulos({
             total: modulos.length,
             disponibles: auxDisponibles,
+            en_espera: auxEnEspera,
             ocupados: auxOcupados,
             vendidos: auxVendidos
         }));
@@ -299,6 +306,9 @@ const Modulos = () => {
                         <OverlayTrigger placement="bottom" overlay={<Tooltip>Módulos disponibles.</Tooltip>} >
                             <Col xs={3} md={2} className='content-total-estado' id="disponible"> {loading ? <Spinner animation="border" variant="light" size='sm' /> : cantModulos.disponibles} </Col>
                         </OverlayTrigger>
+                        <OverlayTrigger placement="bottom" overlay={<Tooltip>Módulos en espera.</Tooltip>} >
+                            <Col xs={3} md={2} className='content-total-estado' id="en-espera"> {loading ? <Spinner animation="border" variant="light" size='sm' /> : cantModulos.en_espera} </Col>
+                        </OverlayTrigger>
                         <OverlayTrigger placement="bottom" overlay={<Tooltip>Módulos ocupados.</Tooltip>} >
                             <Col xs={3} md={2} className='content-total-estado' id="ocupado"> {loading ? <Spinner animation="border" variant="light" size='sm' /> : cantModulos.ocupados} </Col>
                         </OverlayTrigger>
@@ -354,6 +364,13 @@ const Modulos = () => {
                                                 {modulo.estado == 2 &&
                                                     <OverlayTrigger placement="right" overlay={<Tooltip>Vendido {modulo.vinculado && 'vinculado'}.</Tooltip>} >
                                                         <Col xs={1} md={1} id="vendido">
+                                                            {modulo.vinculado && <Icons.Diagram2Fill className='icon-vinculado' />}
+                                                        </Col>
+                                                    </OverlayTrigger>
+                                                }
+                                                {modulo.estado == 3 &&
+                                                    <OverlayTrigger placement="right" overlay={<Tooltip>En Espera {modulo.vinculado && 'vinculado'}.</Tooltip>} >
+                                                        <Col xs={1} md={1} id="en-espera">
                                                             {modulo.vinculado && <Icons.Diagram2Fill className='icon-vinculado' />}
                                                         </Col>
                                                     </OverlayTrigger>

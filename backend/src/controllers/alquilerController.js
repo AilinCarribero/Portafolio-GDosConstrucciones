@@ -78,7 +78,8 @@ exports.updateNewRenovarContrato = async (req, res) => {
         fecha_h_alquiler: req.body.fecha_h_alquiler,
     }
 
-    /*Si la fecha de inicio del aquiler es anterior a hoy entonces se debe actualizar el estado del modulo */
+    /*Si la fecha de inicio del aquiler es anterior a hoy entonces se debe actualizar el estado del modulo a alquilado, sino tiene que quedar en espera */
+    /*  0 => Libre / 1 => Alquilado / 2 => Vendido / 3 => En espera */
     if (new Date(newAlquiler.fecha_d_alquiler) <= new Date()) {
         if (newAlquiler.id_modulo) {
             Modulo.update({ estado: 1, ubicacion: req.body.ubicacion }, {

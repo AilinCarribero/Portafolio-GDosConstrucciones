@@ -90,6 +90,12 @@ const ResumenContable = ({ Totales }) => {
                         {loadingModulos ? <Spinner animation="border" variant="light" size='sm' /> : `${formatNumber(cantidadesModulos.disponibles)}`}
                     </Col>
                 </Row>
+                <Row>
+                    <Col xs={6} md={6} >En Espera:</Col>
+                    <Col xs={6} md={6} >
+                        {loadingModulos ? <Spinner animation="border" variant="light" size='sm' /> : `${formatNumber(cantidadesModulos.en_espera)}`}
+                    </Col>
+                </Row>
             </Col>
         </Row>
     )

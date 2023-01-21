@@ -22,6 +22,11 @@
     background-color: #ce0000;
 }
 
+#en-espera {
+    @extend .accordion-estado-modulos;
+    background-color: #ff9100;
+}
+
 .content-total-modulos-estados {
     #total {
         @extend .accordion-estado-modulos;

@@ -95,7 +95,7 @@ exports.insertProyecto = async (req, res) => {
                         /*Si el alquiler se guardo como corresponde el estado del modulo correspondiente al alquiler pasa a tener 
                         un estado de ocupado*/
                         if (alquiler.id_modulo) {
-                            Modulo.update({ estado: 1, ubicacion: alquiler.ubicacion }, {
+                            Modulo.update({ estado: alquiler.fecha_d_alquiler < new Date() ? 1 : 3, ubicacion: alquiler.ubicacion }, {
                                 where: {
                                     id_modulo: alquiler.id_modulo
                                 }
@@ -136,12 +136,12 @@ exports.insertProyecto = async (req, res) => {
                                 raw: true
                             }).then(modulo_doble => {
                                 /*Si hasta aqui no hay errores debe actualizar los estados de los modulos de la oficina doble*/
-                                Modulo.update({ estado: 1 }, {
+                                Modulo.update({ estado: alquiler.fecha_d_alquiler < new Date() ? 1 : 3, ubicacion: alquiler.ubicacion }, {
                                     where: {
                                         id_modulo: modulo_doble.id_modulo_uno
                                     }
                                 }).then(result => {
-                                    Modulo.update({ estado: 1 }, {
+                                    Modulo.update({ estado: alquiler.fecha_d_alquiler < new Date() ? 1 : 3, ubicacion: alquiler.ubicacion }, {
                                         where: {
                                             id_modulo: modulo_doble.id_modulo_dos
                                         }

@@ -19,7 +19,7 @@ exports.insertModulo = (req, res) => {
     req.body.nombre_modulo = !req.body.nombre_modulo ? null : req.body.nombre_modulo;
     req.body.ventanas = !req.body.ventanas ? 0 : req.body.ventanas;
     req.body.puertas = !req.body.puertas ? 0 : req.body.puertas;
-    /*  0 => Libre / 1 => Alquilado / 2 => Vendido */
+    /*  0 => Libre / 1 => Alquilado / 2 => Vendido / 3 => En espera  */
     req.body.estado = !req.body.estado ? 0 : req.body.estado;
 
     req.body.equipamiento = req.body.equipamiento ? req.body.equipamiento.toString() : '';
@@ -199,6 +199,7 @@ exports.getCantModulos = (req, res) => {
     try {
         Modulo.findAll(findAllModulos).then(response => {
             let auxDisponibles = 0;
+            let auxEnEspera = 0;
             let auxOcupados = 0;
             let auxVendidos = 0;
 
@@ -213,12 +214,16 @@ exports.getCantModulos = (req, res) => {
                     case 2:
                         auxVendidos += 1;
                         break;
+                    case 3:
+                        auxEnEspera += 1;
+                        break;
                 }
             });
 
             const cantModulos = {
                 total: response.length,
                 disponibles: auxDisponibles,
+                en_espera: auxEnEspera,
                 ocupados: auxOcupados,
                 vendidos: auxVendidos
             }
