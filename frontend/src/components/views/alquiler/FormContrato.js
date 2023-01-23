@@ -19,7 +19,7 @@ import { useResponse } from '../../../hooks/useResponse';
 //Service
 import { postNewRenovarUpdateContrato } from '../../../services/apiAlquileres';
 
-const FormContrato = ({ alquiler, show, setShow, setAlquileres, actionContrato }) => {
+const FormContrato = ({ alquiler, show, setShow, setAlquileres, actionContrato, idProyecto }) => {
     const dispatch = useDispatch();
 
     const { id } = useParams();
@@ -27,7 +27,7 @@ const FormContrato = ({ alquiler, show, setShow, setAlquileres, actionContrato }
     const { response } = useResponse();
 
     const proyectos = useSelector(state => state.proyectoRedux.proyectos);
-    const proyecto = proyectos.find(proyecto => proyecto.id_proyecto == id);
+    const proyecto = proyectos.find(proyecto => proyecto.id_proyecto === id || proyecto.id_proyecto === idProyecto );
 
     const [newContrato, setNewContrato] = useState({
         id_alquiler: alquiler ? alquiler.id_alquiler : '',
@@ -36,7 +36,7 @@ const FormContrato = ({ alquiler, show, setShow, setAlquileres, actionContrato }
         alquiler: alquiler ? alquiler : '',
         proyecto: proyecto,
         nombre_modulo: alquiler ? (alquiler.modulo ? alquiler.modulo.nombre_modulo || `${alquiler.modulo.tipologia} - ${alquiler.modulo.id_modulo} - ${formatNumber(alquiler.modulo.ancho)} x ${formatNumber(alquiler.modulo.largo)} - ${alquiler.modulo.material_cerramiento}` : `OD - ${alquiler.modulo_doble.id_modulo_doble} - OS - ${alquiler.modulo_doble.id_modulo_uno} - OS - ${alquiler.modulo_doble.id_modulo_dos} `) : '',
-        id_proyecto: id,
+        id_proyecto: id || idProyecto,
         alquiler_total: proyecto.alquiler_total,
         fecha_d_alquiler: alquiler ? formatFechaISO(alquiler.fecha_d_alquiler) : formatFechaISO(new Date()),
         fecha_h_alquiler: alquiler ? formatFechaISO(alquiler.fecha_h_alquiler) : '',

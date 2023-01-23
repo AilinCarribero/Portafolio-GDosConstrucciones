@@ -12,11 +12,18 @@ import { useUser } from '../../../hooks/useUser';
 //Img-Icons
 import * as Icons from 'react-bootstrap-icons';
 import moment from 'moment';
+import { useGetAlquileresId } from '../../../hooks/useAlquileres';
+import FormContrato from '../alquiler/FormContrato';
 
 const AccordionCentrosCostos = ({ proyecto, setProyectos }) => {
     const { user } = useUser();
+    const { setAlquileres } = useGetAlquileresId();
 
     const [showFormUpdate, setShowFormUpdate] = useState(false);
+    const [showModalFormContrato, setShowModalFormContrato] = useState(false);
+
+    const [actionContrato, setActionContrato] = useState();
+    const [idProyecto, setIdProyecto] = useState();
 
     const updateProyecto = () => {
         setShowFormUpdate(true);
@@ -70,8 +77,15 @@ const AccordionCentrosCostos = ({ proyecto, setProyectos }) => {
         return (auxIngresosProyecto)
     }
 
+    const modalFormContrato = (action, id) => {
+        setShowModalFormContrato(true);
+        setIdProyecto(id)
+        setActionContrato(action);
+    }
+
     return (<>
         {showFormUpdate && <ModalFormulario formulario={'proyecto'} informacion={proyecto} show={showFormUpdate} setShow={setShowFormUpdate} updateNew={setProyectos} />}
+        {showModalFormContrato && <FormContrato idProyecto={idProyecto} show={showModalFormContrato} setShow={setShowModalFormContrato} setAlquileres={setAlquileres} actionContrato={actionContrato} />}
 
         <Accordion.Item eventKey={proyecto.id_proyecto} className={proyecto.id_centro_costo == 1 || proyecto.id_centro_costo == 3 ? 'accordionCC' : 'content-accordion'}>
             <Accordion.Header>
@@ -178,7 +192,7 @@ const AccordionCentrosCostos = ({ proyecto, setProyectos }) => {
                         <Col xs={12} md={12}>
                             <p className="accordion-title-section">Acciones</p>
                         </Col>
-                        <Col xs={6} md={6}>
+                        <Col xs={12} md={3}>
                             <button className="button-action" onClick={() => updateProyecto()}>
                                 <Row>
                                     <Col xs={1} md={1} className='icon-action'>
@@ -186,6 +200,18 @@ const AccordionCentrosCostos = ({ proyecto, setProyectos }) => {
                                     </Col>
                                     <Col xs={10} md={10} className='text-action'>
                                         Modificar
+                                    </Col>
+                                </Row>
+                            </button>
+                        </Col>
+                        <Col xs={12} md={3}>
+                            <button className="button-action" onClick={() => modalFormContrato('Nuevo', proyecto.id_proyecto)}>
+                                <Row>
+                                    <Col xs={1} md={1} className='icon-action'>
+                                        <Icons.PencilSquare size={19} />
+                                    </Col>
+                                    <Col xs={10} md={10} className='text-action'>
+                                        Agregar alquiler
                                     </Col>
                                 </Row>
                             </button>
