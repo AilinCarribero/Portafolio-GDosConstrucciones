@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom';
-import { Accordion, Row, Col, ModalBody, Spinner } from 'react-bootstrap';
+import { Accordion, Row, Col, ModalBody, Spinner, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import Decimal from 'decimal.js-light';
 import moment from 'moment';
 
@@ -61,10 +61,10 @@ const Alquileres = () => {
                         <Icons.Plus className="icon-button" size={19} /> Agregar Contrato
                     </button>
                 </Col>
-                <Col className='text-resumen-alquileres'><b>Total:</b> ${proyecto && formatNumber(proyecto.totalAlquiler)}</Col>
-                <Col className='text-resumen-alquileres'><b>{formatTextMix(mesAnterior)}:</b> ${proyecto && formatNumber(proyecto.totalAlquilerXMes[mesAnterior])}</Col>
-                <Col className='text-resumen-alquileres'><b>{formatTextMix(mesActual)}:</b> ${proyecto && formatNumber(proyecto.totalAlquilerXMes[mesActual])}</Col>
-                <Col className='text-resumen-alquileres'><b>{formatTextMix(mesPosterior)}:</b> ${proyecto && formatNumber(proyecto.totalAlquilerXMes[mesPosterior])}</Col>
+                <Col className='text-resumen-alquileres'><b>Total:</b> {loadingProyectos ? <Spinner animation="border" variant="dark" size='sm' /> : proyecto && `$${formatNumber(proyecto.totalAlquiler)}`}</Col>
+                <Col className='text-resumen-alquileres'><b>{formatTextMix(mesAnterior)}:</b> {loadingProyectos ? <Spinner animation="border" variant="dark" size='sm' /> : proyecto && `$${formatNumber(proyecto.totalAlquilerXMes[mesAnterior])}`}</Col>
+                <Col className='text-resumen-alquileres'><b>{formatTextMix(mesActual)}:</b> {loadingProyectos ? <Spinner animation="border" variant="dark" size='sm' /> : proyecto && `$${formatNumber(proyecto.totalAlquilerXMes[mesActual])}`}</Col>
+                <Col className='text-resumen-alquileres'><b>{formatTextMix(mesPosterior)}:</b> {loadingProyectos ? <Spinner animation="border" variant="dark" size='sm' /> : proyecto && `$${formatNumber(proyecto.totalAlquilerXMes[mesPosterior])}`}</Col>
             </Row>
         </Row>
         {loadingProyectos ?
@@ -82,12 +82,12 @@ const Alquileres = () => {
                                         <Accordion.Item eventKey={alquiler.id_alquiler}>
                                             <Accordion.Header>
                                                 {new Date(alquiler.fecha_d_alquiler) <= new Date() && new Date() <= new Date(alquiler.fecha_h_alquiler) ?
-                                                    <Col xs={2} md={2} id="activo"></Col>
+                                                    <OverlayTrigger placement="bottom" overlay={<Tooltip>Activo.</Tooltip>} ><Col xs={2} md={2} id="activo"></Col></OverlayTrigger>
                                                     :
                                                     (new Date() >= new Date(alquiler.fecha_h_alquiler) ?
-                                                        <Col xs={2} md={2} className="state-finish"></Col>
+                                                        <OverlayTrigger placement="bottom" overlay={<Tooltip>Finalizado.</Tooltip>} ><Col xs={2} md={2} className="state-finish"></Col></OverlayTrigger>
                                                         :
-                                                        <Col xs={2} md={2} id="no-activo"></Col>
+                                                        <OverlayTrigger placement="bottom" overlay={<Tooltip>En espera.</Tooltip>} ><Col xs={2} md={2} id="no-activo"></Col></OverlayTrigger>
                                                     )
                                                 }
                                                 <Col className="acordion-title" xs={4} md={3}>

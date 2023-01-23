@@ -168,6 +168,8 @@ export const calcularValorXMes = (fechaInicio, cantMeses, valorXMes) => {
 
 export const formatNameMes = (numMes) => {
     switch (numMes) {
+        case -1:
+            return 'diciembre';
         case 0:
             return 'enero';
         case 1:
@@ -192,6 +194,8 @@ export const formatNameMes = (numMes) => {
             return 'noviembre';
         case 11:
             return 'diciembre';
+        case 12:
+            return 'enero';
     }
 }
 
