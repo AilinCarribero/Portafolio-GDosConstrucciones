@@ -11,3 +11,8 @@ frontend/Dockerfile
 cuerre/.env
 /cuerre/node_modules
 cuerre/node_modules
+
+docker-compose.yml
+docker-compose
+
+.persistent
