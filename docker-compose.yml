@@ -20,10 +20,11 @@ services:
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
     ports:
       - "8081:80"
     environment:
-      PMA_HOST: mysql
+      PMA_ARBITRARY: 1
       MYSQL_USER: user.admin
       MYSQL_PASSWORD: user.admin.gdc.db
       MYSQL_ROOT_PASSWORD: user.admin.gdc.db
