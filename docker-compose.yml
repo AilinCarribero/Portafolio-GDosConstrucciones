@@ -1,35 +1,6 @@
 version: "3.9"
 
 services:
-  mysql:
-    image: mysql:8.0
-    container_name: mysql
-    restart: always
-    ports: 
-      - "3310:3306"
-    environment:
-      MYSQL_ROOT: root
-      MYSQL_DATABASE: gdosconstruccionesdb
-      MYSQL_USER: user.admin
-      MYSQL_PASSWORD: user.admin.gdc.db
-      MYSQL_ROOT_PASSWORD: user.admin.gdc.db
-    volumes:
-      - ./dump:/docker-entrypoint-initdb.d
-      - ./conf:/etc/mysql/conf.d
-      - .persistent:/var/lib/mysql:rw
-
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    ports:
-      - "8081:80"
-    environment:
-      PMA_HOST: mysql
-      MYSQL_USER: user.admin
-      MYSQL_PASSWORD: user.admin.gdc.db
-      MYSQL_ROOT_PASSWORD: user.admin.gdc.db
-    links:
-      - mysql
-
   nodejsapp:
     container_name: nodejsapp
     restart: always
