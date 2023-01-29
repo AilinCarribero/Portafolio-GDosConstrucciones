@@ -7,7 +7,7 @@ services:
     command: --default-authentication-plugin=mysql_native_password
     restart: always
     ports: 
-      - "3310:3306"
+      - "3307:3306"
     environment:
       MYSQL_DATABASE: gdosconstruccionesdb
       MYSQL_ROOT: root
