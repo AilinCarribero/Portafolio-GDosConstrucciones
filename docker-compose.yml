@@ -4,9 +4,10 @@ services:
   mysql:
     image: mysql:8.0
     container_name: mysql
+    command: --default-authentication-plugin=mysql_native_password
     restart: always
     ports: 
-      - "3306:3306"
+      - "3310:3306"
     environment:
       MYSQL_ROOT: root
       MYSQL_DATABASE: gdosconstruccionesdb
@@ -24,7 +25,7 @@ services:
     ports:
       - "8081:80"
     environment:
-      PMA_ARBITRARY: 1
+      PMA_HOST: mysql
       MYSQL_USER: user.admin
       MYSQL_PASSWORD: user.admin.gdc.db
       MYSQL_ROOT_PASSWORD: user.admin.gdc.db
@@ -34,6 +35,8 @@ services:
   nodejsapp:
     container_name: nodejsapp
     restart: always
+    depends_on:
+      - mysql
     build: ./backend
     ports: 
       - "5001:5001"
