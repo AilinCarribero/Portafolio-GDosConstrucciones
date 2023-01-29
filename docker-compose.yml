@@ -88,6 +88,9 @@ services:
       - VIRTUAL_HOST=gestion.gdosconstrucciones.com.ar, cuerre.gdosconstrucciones.com.ar
       - LETSENCRYPT_HOST=gestion.gdosconstrucciones.com.ar, cuerre.gdosconstrucciones.com.ar
     restart: always
+    volumes:
+      - ./certbot/www:/var/www/certbot/:ro
+      - ./certbot/conf/:/etc/nginx/ssl/:ro
 
   nginx-proxy:
     image: jwilder/nginx-proxy
@@ -113,6 +116,12 @@ services:
         - /var/run/docker.sock:/var/run/docker.sock:ro
         - vhostd:/etc/nginx/vhost.d
         - html:/usr/share/nginx/html
+
+  certbot:
+    image: certbot/certbot:latest
+    volumes:
+      - ./certbot/www/:/var/www/certbot/:rw
+      - ./certbot/conf/:/etc/letsencrypt/:rw
 
 volumes:
   certs:
