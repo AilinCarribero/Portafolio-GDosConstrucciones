@@ -6,7 +6,7 @@ services:
     container_name: mysqlgdc
     command: --default-authentication-plugin=mysql_native_password
     restart: always
-    ports: 
+    ports:
       - "3310:3306"
     environment:
       MYSQL_DATABASE: gdosconstruccionesdb
@@ -36,7 +36,7 @@ services:
     container_name: nodejsapp
     restart: always
     build: ./backend
-    ports: 
+    ports:
       - "5001:5001"
     depends_on:
       mysqlgdc:
@@ -44,7 +44,7 @@ services:
     volumes:
       - ./backend:/usr/src/app/backend
       - /usr/src/app/node_modules
-    links: 
+    links:
       - mysqlgdc
 
   reactjsapp:
@@ -53,9 +53,9 @@ services:
     tty: true
     restart: always
     build: ./frontend
-    ports: 
+    ports:
       - "5000:3000"
-    volumes: 
+    volumes:
       - ./frontend:/usr/src/app/frontend
     links:
       - nodejsapp
@@ -66,9 +66,9 @@ services:
     tty: true
     restart: always
     build: ./cuerre
-    ports: 
+    ports:
       - "5002:3002"
-    volumes: 
+    volumes:
       - ./cuerre:/usr/src/app/cuerre
     links:
       - nodejsapp
@@ -85,8 +85,8 @@ services:
       - nginx-proxy
       - letsencrypt
     environment:
-      - VIRTUAL_HOST=gestion.gdosconstrucciones.com.ar, cuerre.gdosconstrucciones.com.ar
-      - LETSENCRYPT_HOST=gestion.gdosconstrucciones.com.ar, cuerre.gdosconstrucciones.com.ar
+      - VIRTUAL_HOST=gestion.gdosconstrucciones.com.ar, cuerre.gdosconstrucciones.com.ar, bd.gdosconstrucciones.com.ar
+      - LETSENCRYPT_HOST=gestion.gdosconstrucciones.com.ar, cuerre.gdosconstrucciones.com.ar, bd.gdosconstrucciones.com.ar
     restart: always
 
   nginx-proxy:
@@ -96,23 +96,23 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-        - /var/run/docker.sock:/tmp/docker.sock:ro
-        - certs:/etc/nginx/certs:ro
-        - vhostd:/etc/nginx/vhost.d
-        - html:/usr/share/nginx/html
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - certs:/etc/nginx/certs:ro
+      - vhostd:/etc/nginx/vhost.d
+      - html:/usr/share/nginx/html
     labels:
-        - com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy
+      - com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy
 
   letsencrypt:
-      image: jrcs/letsencrypt-nginx-proxy-companion
-      restart: always
-      environment:
-          - NGINX_PROXY_CONTAINER=nginx-proxy
-      volumes:
-        - certs:/etc/nginx/certs:rw
-        - /var/run/docker.sock:/var/run/docker.sock:ro
-        - vhostd:/etc/nginx/vhost.d
-        - html:/usr/share/nginx/html
+    image: jrcs/letsencrypt-nginx-proxy-companion
+    restart: always
+    environment:
+      - NGINX_PROXY_CONTAINER=nginx-proxy
+    volumes:
+      - certs:/etc/nginx/certs:rw
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - vhostd:/etc/nginx/vhost.d
+      - html:/usr/share/nginx/html
 
 volumes:
   certs:
