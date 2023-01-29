@@ -22,9 +22,6 @@ services:
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     container_name: phpmyadmin
-    depends_on:
-      mysqlgdc:
-        condition: service_started
     ports:
       - "8081:80"
     environment:
@@ -81,9 +78,6 @@ services:
     build: ./nginx
     ports:
       - "8080:80"
-    depends_on:
-      nodejsapp:
-        condition: service_started
     links:
       - reactjscuerre
       - nodejsapp
@@ -101,9 +95,6 @@ services:
     ports:
       - "80:80"
       - "443:443"
-    depends_on:
-      nodejsapp:
-        condition: service_started
     volumes:
         - /var/run/docker.sock:/tmp/docker.sock:ro
         - certs:/etc/nginx/certs:ro
@@ -115,9 +106,6 @@ services:
   letsencrypt:
       image: jrcs/letsencrypt-nginx-proxy-companion
       restart: always
-      depends_on:
-        nodejsapp:
-          condition: service_started
       environment:
           - NGINX_PROXY_CONTAINER=nginx-proxy
       volumes:
