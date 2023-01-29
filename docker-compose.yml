@@ -116,8 +116,8 @@ services:
       image: jrcs/letsencrypt-nginx-proxy-companion
       restart: always
       depends_on:
-      nodejsapp:
-        condition: service_started
+        nodejsapp:
+          condition: service_started
       environment:
           - NGINX_PROXY_CONTAINER=nginx-proxy
       volumes:
