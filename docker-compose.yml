@@ -15,8 +15,8 @@ services:
       MYSQL_PASSWORD: user.admin.gdc.db
       MYSQL_ROOT_PASSWORD: user.admin.gdc.db
     volumes:
-      - dump:/docker-entrypoint-initdb.d
-      - conf:/etc/mysql/conf.d
+      - ./dump:/docker-entrypoint-initdb.d
+      - ./conf:/etc/mysql/conf.d
       - .persistent:/var/lib/mysql:rw
 
   phpmyadmin:
