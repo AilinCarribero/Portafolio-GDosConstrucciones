@@ -33,7 +33,7 @@ const Alquileres = () => {
     const proyectos = useSelector(state => state.proyectoRedux.proyectos);
     const loadingProyectos = useSelector(state => state.proyectoRedux.loading);
 
-    const [proyecto, setProyecto] = useState(proyectos.find(proyecto => proyecto.id_proyecto.trim() === id));
+    const [proyecto, setProyecto] = useState(proyectos.find(proyecto => proyecto.id_proyecto.trim() === id.trim()));
 
     console.log(proyecto)
     const [renovarAlquiler, setRenovarAlquiler] = useState([]);
@@ -42,7 +42,7 @@ const Alquileres = () => {
     const [showModalFormContrato, setShowModalFormContrato] = useState(false);
 
     useEffect(() => {
-        setProyecto(proyectos.find(proyecto => proyecto.id_proyecto.trim() === id));
+        setProyecto(proyectos.find(proyecto => proyecto.id_proyecto.trim() === id.trim()));
     }, [proyectos])
 
     const modalFormContrato = (action, alquiler) => {

@@ -27,7 +27,7 @@ const FormContrato = ({ alquiler, show, setShow, setAlquileres, actionContrato, 
     const { response } = useResponse();
 
     const proyectos = useSelector(state => state.proyectoRedux.proyectos);
-    const proyecto = proyectos.find(proyecto => proyecto.id_proyecto.trim() === id || proyecto.id_proyecto.trim() === idProyecto );
+    const proyecto = proyectos.find(proyecto => proyecto.id_proyecto.trim() === id.trim() || proyecto.id_proyecto.trim() === idProyecto.trim() );
 
     const [newContrato, setNewContrato] = useState({
         id_alquiler: alquiler ? alquiler.id_alquiler : '',
