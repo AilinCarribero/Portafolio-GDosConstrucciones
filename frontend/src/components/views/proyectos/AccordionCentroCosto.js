@@ -1,19 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import { Accordion, Row, Col, Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import React, { useState } from 'react';
+import { Accordion, Row, Col, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import moment from 'moment';
 
 //Components
 import ModalFormulario from '../../utils/modal/formularios/ModalFormulario';
+import FormContrato from '../alquiler/FormContrato';
 
 //Hooks
 import { calcDifDias, formatFecha, formatNumber } from '../../../hooks/useUtils';
 import { useUser } from '../../../hooks/useUser';
+import { useGetAlquileresId } from '../../../hooks/useAlquileres';
 
 //Img-Icons
 import * as Icons from 'react-bootstrap-icons';
-import moment from 'moment';
-import { useGetAlquileresId } from '../../../hooks/useAlquileres';
-import FormContrato from '../alquiler/FormContrato';
 
 const AccordionCentrosCostos = ({ proyecto, setProyectos }) => {
     const { user } = useUser();

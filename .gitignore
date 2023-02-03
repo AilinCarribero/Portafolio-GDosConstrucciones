@@ -12,4 +12,4 @@ cuerre/.env
 /cuerre/node_modules
 cuerre/node_modules
 
-.persistent
+/bd

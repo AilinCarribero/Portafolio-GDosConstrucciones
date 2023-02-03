@@ -9,13 +9,13 @@ export const useGetAlquileresId = (id) => {
     const [mesAlquiler, setMesAlquiler] = useState([]);
     const [totalAlquiler, setTotalAlquiler] = useState([]);
 
-    useEffect(() => {
+    /*useEffect(() => {
         (async () => {
             const resAlquileres = await getAlquileresId(id);
             cobroMensual(resAlquileres);
             setAlquileres(resAlquileres);
         })()
-    }, [])
+    }, [])*/
 
     const cobroMensual = (alquileres) => {
         let total = 0;
