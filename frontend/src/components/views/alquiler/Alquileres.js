@@ -35,7 +35,6 @@ const Alquileres = () => {
 
     const [proyecto, setProyecto] = useState(proyectos.find(proyecto => proyecto.id_proyecto.trim() === id.trim()));
 
-    console.log(proyecto)
     const [renovarAlquiler, setRenovarAlquiler] = useState([]);
     const [actionContrato, setActionContrato] = useState();
     //console.log(alquileres, mesAlquiler, totalAlquiler);

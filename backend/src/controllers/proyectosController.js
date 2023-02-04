@@ -70,6 +70,7 @@ exports.insertProyecto = async (req, res) => {
             raw: true
         }) : '';
 
+        //Armamos el id de proyecto
         if (centro_costo[0].siglas_cc) {
             id_proyecto = centro_costo[0].siglas_cc;
 
@@ -84,12 +85,12 @@ exports.insertProyecto = async (req, res) => {
             return res.json('No se encontro el centro de costos');
         }
 
-        req.body.id_proyecto = id_proyecto;
+        req.body.id_proyecto = id_proyecto.trim();
 
         Proyecto.create(req.body).then(result => {
             req.body.alquileres ?
                 req.body.alquileres.forEach((alquiler, i) => {
-                    alquiler.id_proyecto = id_proyecto;
+                    alquiler.id_proyecto = id_proyecto.trim();
                     //Una vez guardado el proyecto guardamos los alquileres relacionados con el proyecto
                     Alquiler.create(alquiler).then(result => {
                         /*Si el alquiler se guardo como corresponde el estado del modulo correspondiente al alquiler pasa a tener 
