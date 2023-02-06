@@ -27,7 +27,7 @@ const FormContrato = ({ alquiler, show, setShow, setAlquileres, actionContrato, 
     const { response } = useResponse();
 
     const proyectos = useSelector(state => state.proyectoRedux.proyectos);
-    const proyecto = proyectos.find(proyecto => proyecto.id_proyecto.trim() === id.trim() || proyecto.id_proyecto.trim() === idProyecto.trim() );
+    const proyecto = proyectos.find(id ? proyecto => proyecto.id_proyecto.trim() === id.trim() : proyecto.id_proyecto.trim() === idProyecto.trim() );
 
     const [newContrato, setNewContrato] = useState({
         id_alquiler: alquiler ? alquiler.id_alquiler : '',
@@ -154,7 +154,7 @@ const FormContrato = ({ alquiler, show, setShow, setAlquileres, actionContrato, 
 
             return (
                 <option key={idModulo} value={idModulo}>
-                    {modulo.nombre_modulo || `${modulo.tipologia} - ${formatNumber(modulo.ancho)} x ${formatNumber(modulo.largo)} - ${modulo.material_cerramiento} - ${idModulo}`}
+                    {modulo.nombre_modulo || `${modulo.tipologia} - ${idModulo} - ${formatNumber(modulo.ancho)} x ${formatNumber(modulo.largo)} - ${modulo.material_cerramiento}`}
                 </option>
             )
         }
@@ -176,7 +176,7 @@ const FormContrato = ({ alquiler, show, setShow, setAlquileres, actionContrato, 
                                                 modulos.map((modulo) => (
                                                     modulo.estado === 0 ?
                                                         <option key={modulo.id_modulo} value={modulo.id_modulo}>
-                                                            {modulo.nombre_modulo || `${modulo.tipologia} - ${formatNumber(modulo.ancho)} x ${formatNumber(modulo.largo)} - ${modulo.material_cerramiento} - ${modulo.id_modulo}`}
+                                                            {modulo.nombre_modulo  || `${modulo.tipologia} - ${modulo.id_modulo} - ${formatNumber(modulo.ancho)} x ${formatNumber(modulo.largo)} - ${modulo.material_cerramiento}`}
                                                         </option>
                                                         :
                                                         findModuloAlquiler(modulo.id_modulo)
