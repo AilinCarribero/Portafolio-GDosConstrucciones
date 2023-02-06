@@ -39,9 +39,9 @@ const NavbarComponent = () => {
         if (user.token) {
             return (<>
                 {/*Si no esta en la url de proyectos no se debe mostrar el boton de filtros*/}
-                <Nav.Item className="filtros" onClick={handleShow} >
+                {/*<Nav.Item className="filtros" onClick={handleShow} >
                     <Icons.FunnelFill className="icon-filtros" size="25px" />
-                </Nav.Item>
+                </Nav.Item>*/}
                 <Nav.Item className="url-qr-navbar" onClick={() => handleRedirectQR()} >
                     <Icons.Tools className="icon" size="20px" /> QR
                 </Nav.Item>
@@ -61,7 +61,6 @@ const NavbarComponent = () => {
     return (<>
         <Navbar className="navbar">
             {user.rango == 'admin' && <Sidenav />}
-            {user.rango == 'moderador' && <Sidenav />}
             <Container>
                 <Link to="/">
                     <Image src={logo} className="align-top img" alt="GDos Construcciones" />

@@ -144,20 +144,19 @@ const CentrosCostos = ({ proyectos, mostrar, setProyectos }) => {
                             <Icons.Plus className="icon-button" size={19} /> Egreso
                         </button>
                     </Col>*/}
-                    {user.rango == 'admin' &&
+                    {(user.rango == 'admin' || user.rango == "moderador") && <>
                         <Col xs={6} sm={6} md={4}>
                             <button className="button-agregar" onClick={() => setShowFormSelccion('proyecto')} variant="dark">
                                 <Icons.Plus className="icon-button" size={19} /> Proyecto
                             </button>
                         </Col>
-                    }
-                    {/*(user.rango == "admin" || user.rango == "moderador") && <>
                         <Col xs={6} sm={6} md={4}>
                             <button className="button-agregar" onClick={() => setShowFormSelccion('ingreso')} variant="dark" >
                                 <Icons.Plus className="icon-button" size={19} /> Ingreso
                             </button>
                         </Col>
-                        {user.rango == 'admin' &&
+                    </>}
+                    {/*{user.rango == 'admin' &&
                             <Col xs={6} sm={6} md={4}>
                                 <button className="button-agregar" onClick={() => setShowFormSelccion('proyecto')} variant="dark">
                                     <Icons.Plus className="icon-button" size={19} /> Proyecto

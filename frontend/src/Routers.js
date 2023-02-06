@@ -65,6 +65,11 @@ const Routers = () => {
                             }
                             {user.rango == 'moderador' &&
                                 <>
+                                    <Route exact path="/menu/:seccion" element={<Proyectos />} />
+                                    <Route exact path="/cc" element={<CentrosCostos />} />
+                                    <Route exact path="/ccp" element={<CentrosCostos />} />
+                                    <Route exact path="/alquileres/:id" element={<Alquileres />} />
+                                    <Route exact path="/ingresar/proyecto" element={<FormProyectos />} />
                                     <Route exact path="/ingresar/egreso" element={FormEgresos} />
                                     <Route exact path="/ingresar/ingreso" element={FormIngresos} />
                                     <Route exact path="/egresos/:id" element={Egresos} />

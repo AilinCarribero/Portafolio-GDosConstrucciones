@@ -37,7 +37,7 @@ const Proyectos = () => {
     const activeLoading = useSelector(state => state.proyectoRedux.loading);
 
     //console.log(proyectos, 'Loading:'+activeLoading)
-    const [menu, setMenu] = useState(user.rango == "admin" || user.rango == "moderador" ? seccion || 'resumen' : 'proyectos');
+    const [menu, setMenu] = useState(user.rango == "admin" ? seccion || 'resumen' : 'proyectos');
 
     const [totales, setTotales] = useState({
         egresosHoy: 0,
@@ -422,27 +422,41 @@ const Proyectos = () => {
     return (<>
         <div>
             <Row className="menu-inicio">
+                {user.rango == "admin" &&
+                    <>
+                        <Col>
+                            <button className={menu == 'resumen' ? 'menu-inicio-button-active' : 'menu-inicio-button-off'} onClick={handleButton} name="resumen">Resumen</button>
+                        </Col>
+                        <Col>
+                            <button className={menu == 'proyectos' ? 'menu-inicio-button-active' : 'menu-inicio-button-off'} onClick={handleButton} name="proyectos">Proyectos</button>
+                        </Col>
+                        <Col>
+                            <button className={menu == 'alquileres' ? 'menu-inicio-button-active' : 'menu-inicio-button-off'} onClick={handleButton} name="alquileres">Alquileres</button>
+                        </Col>
+                        <Col>
+                            <button className={menu == 'modulos' ? 'menu-inicio-button-active' : 'menu-inicio-button-off'} onClick={handleButton} name="modulos">Módulos</button>
+                        </Col>
+                        <Col>
+                            <button className={menu == 'modulos-dobles' ? 'menu-inicio-button-active' : 'menu-inicio-button-off'} onClick={handleButton} name="modulos-dobles">Módulos Dobles</button>
+                        </Col>
+                    </>
+                }
+                {user.rango == "moderador" &&
+                    <>
+                        <Col>
+                            <button className={menu == 'proyectos' ? 'menu-inicio-button-active' : 'menu-inicio-button-off'} onClick={handleButton} name="proyectos">Proyectos</button>
+                        </Col>
+                        <Col>
+                            <button className={menu == 'alquileres' ? 'menu-inicio-button-active' : 'menu-inicio-button-off'} onClick={handleButton} name="alquileres">Alquileres</button>
+                        </Col>
+                    </>
+                }
                 {(user.rango == "admin" || user.rango == "moderador") && <>
-                    <Col>
-                        <button className={menu == 'resumen' ? 'menu-inicio-button-active' : 'menu-inicio-button-off'} onClick={handleButton} name="resumen">Resumen</button>
-                    </Col>
                     {/* <Col>
                         <button className={menu == 'ccc-cce' ? 'menu-inicio-button-active' : 'menu-inicio-button-off'} onClick={handleButton} name="ccc-cce">CCC y CCE</button>
                     </Col>*/}
                 </>}
-                <Col>
-                    <button className={menu == 'proyectos' ? 'menu-inicio-button-active' : 'menu-inicio-button-off'} onClick={handleButton} name="proyectos">Proyectos</button>
-                </Col>
-                <Col>
-                    <button className={menu == 'alquileres' ? 'menu-inicio-button-active' : 'menu-inicio-button-off'} onClick={handleButton} name="alquileres">Alquileres</button>
-                </Col>
                 {user.rango == 'admin' && <>
-                    <Col>
-                        <button className={menu == 'modulos' ? 'menu-inicio-button-active' : 'menu-inicio-button-off'} onClick={handleButton} name="modulos">Módulos</button>
-                    </Col>
-                    <Col>
-                        <button className={menu == 'modulos-dobles' ? 'menu-inicio-button-active' : 'menu-inicio-button-off'} onClick={handleButton} name="modulos-dobles">Módulos Dobles</button>
-                    </Col>
                 </>}
                 {/*<Col>
                     <button className={menu == 'materiales' ? 'menu-inicio-button-active' : 'menu-inicio-button-off'} onClick={handleButton} name="materiales">Materiales</button>
@@ -457,8 +471,8 @@ const Proyectos = () => {
                                 <CentrosCostos proyectos={proyectos} setProyectos={'dispatch(getProyectos())'} mostrar={menu} />
                                 : <ModulosDobles />
                             : <Modulos />
-                        : (user.rango == "admin" || user.rango == "moderador") &&
-                        <ResumenContable Totales={totales} />
+                        : user.rango == "admin" ?
+                        <ResumenContable Totales={totales} /> : <CentrosCostos proyectos={proyectos} setProyectos={'dispatch(getProyectos())'} mostrar={menu} />
                 }
             </Row>
         </div >

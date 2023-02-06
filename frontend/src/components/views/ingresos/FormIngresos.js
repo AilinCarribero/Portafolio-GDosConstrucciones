@@ -38,7 +38,7 @@ const FormIngresos = ({ close, updateIngreso, setUpdateIngresos }) => {
         valor_usd: updateIngreso ? updateIngreso.valor_usd : 0,
         fecha_diferido_cobro: (updateIngreso && new Date(updateIngreso.fecha_diferido_cobro).toISOString().slice(0, 10) >  new Date(updateIngreso.fecha_cobro).toISOString().slice(0, 10)) ? new Date(updateIngreso.fecha_diferido_cobro).toISOString().slice(0, 10) : '',
         observaciones: updateIngreso ? updateIngreso.observaciones : '',
-        centro_costo: updateIngreso ? updateIngreso.forma_cobro.id_centro_costo : '',
+        centro_costo: updateIngreso ? updateIngreso.forma_cobro.id_centro_costo : 2,
         id_forma_cobro: updateIngreso ? updateIngreso.id_forma_cobro : ''
     })
 
@@ -52,7 +52,7 @@ const FormIngresos = ({ close, updateIngreso, setUpdateIngresos }) => {
     const [checkUSD, setCheckUSD] = useState(updateIngreso && updateIngreso.valor_usd ? 1 : 0);
 
     //Eventos para mostrar partes del formulario
-    const [showProyecto, setShowProyecto] = useState(updateIngreso && updateIngreso.id_proyecto ? true : false);
+    const [showProyecto, setShowProyecto] = useState(ingreso.id_proyecto || ingreso.centro_costo ? true : false);
     const [showFC, setShowFC] = useState(false);
     const [showCuotas, setShowCuotas] = useState(false);
     const [showFechaDif, setShowFechaDif] = useState(updateIngreso && ingreso.fecha_diferido_cobro ? true : false);
@@ -289,7 +289,7 @@ const FormIngresos = ({ close, updateIngreso, setUpdateIngresos }) => {
                             {!updateIngreso &&
                                 <Form.Group className="mb-3" >
                                     <FloatingLabel label="Eligue el tipo de Centro de Costo">
-                                        <Form.Select onChange={handleChangeForm} name="centro_costo" value={ingreso.centro_costo} required >
+                                        <Form.Select onChange={handleChangeForm} name="centro_costo" value={ingreso.centro_costo} required disabled>
                                             <option value=""> </option>
                                             {
                                                 centroCosto.map((centro_costo) => (
