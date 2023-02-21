@@ -15,7 +15,7 @@ import { insertIngreso, setUpdateIngreso } from '../../../services/apiIngresos';
 //Componentes
 import ValidacionIngreso from '../../utils/modal/validacion/ValidacionIngreso';
 
-//Cass
+//Css
 import './Ingresos.css';
 
 const FormIngresos = ({ close, updateIngreso, setUpdateIngresos }) => {

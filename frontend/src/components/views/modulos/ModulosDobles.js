@@ -59,8 +59,7 @@ const ModulosDobles = () => {
                                 <Accordion.Header className="accordion-header-modulos">
                                     <Row>
                                         <Col xs={9} md={10} className="accordion-nombre-modulos">
-                                            {`OD - ${moduloDoble.id_modulo_doble} - OS - ${moduloDoble.id_modulo_uno} - OS - ${moduloDoble.id_modulo_dos} `
-                                            }
+                                            {`OD - ${moduloDoble.id_modulo_doble} - OS - ${moduloDoble.id_modulo_uno} - OS - ${moduloDoble.id_modulo_dos} ` }
                                         </Col>
                                     </Row>
                                 </Accordion.Header>

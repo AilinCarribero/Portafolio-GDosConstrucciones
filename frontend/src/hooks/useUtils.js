@@ -10,7 +10,7 @@ export const formatNumber = (numero) => {
         minimumFractionDigits: 1,
         maximumFractionDigits: 2
     }).format(numValido);
-    
+
     return numFormat
 }
 
@@ -43,16 +43,18 @@ export const ToastComponent = (estado, mensaje) => {
 }
 
 //Formatea la fecha para mostrarse en el orden dd-mm-aaaa
-export const formatFecha = (fecha) => {
-    const momentFecha = moment(fecha);
-    const fechaFormat = momentFecha.add('1', 'days').format("DD-MM-YYYY");
-
-    return fechaFormat
+export const formatFechaISO = (fecha) => {
+    if (fecha) {
+        const newFecha = new Date(fecha).toISOString().slice(0, 10);
+        return newFecha;
+    }
 }
 
-export const formatFechaISO = (fecha) => {
-    const newFecha = new Date(fecha).toISOString().slice(0, 10);
-    return newFecha;
+export const formatFecha = (fecha) => {
+    const momentFecha = moment(fecha);
+    const fechaFormat = momentFecha.format("DD-MM-YYYY");
+
+    return fechaFormat
 }
 
 export const formatTextMix = (text) => {

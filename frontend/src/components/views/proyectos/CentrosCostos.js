@@ -151,8 +151,8 @@ const CentrosCostos = ({ proyectos, mostrar, setProyectos }) => {
                             </button>
                         </Col>
                         <Col xs={6} sm={6} md={4}>
-                            <button className="button-agregar" onClick={() => setShowFormSelccion('ingreso')} variant="dark" >
-                                <Icons.Plus className="icon-button" size={19} /> Ingreso
+                            <button className="button-agregar" onClick={() => setShowFormSelccion('ingresoAlquiler')} variant="dark" >
+                                <Icons.Plus className="icon-button" size={19} /> Ingreso a un Alquiler
                             </button>
                         </Col>
                     </>}
