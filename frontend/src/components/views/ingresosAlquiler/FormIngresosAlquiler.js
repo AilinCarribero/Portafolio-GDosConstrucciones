@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { Card, Button, Row, FloatingLabel, Form, Col } from 'react-bootstrap';
 import { NumericFormat } from 'react-number-format';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import moment from 'moment';
 
 //Hooks
 import { useGetFormasCobro } from '../../../hooks/useFormasCobro';
 import { useGetProyectos } from '../../../hooks/useProyectos';
 import { useUser } from '../../../hooks/useUser';
-import { desformatNumber, formatFecha, formatNumber, ToastComponent } from '../../../hooks/useUtils';
+import { desformatNumber, formatFecha, formatFechaISO, formatNumber, ToastComponent } from '../../../hooks/useUtils';
 import { useGetCentroCosto } from '../../../hooks/useCentroCosto';
 import { useResponse } from '../../../hooks/useResponse';
 
@@ -16,17 +17,20 @@ import { insertApiIngresoAlquiler } from '../../../services/apiIngresoAlquiler';
 
 //Componentes
 import ValidacionIngresoAlquiler from '../../utils/modal/validacion/ValidacionIngresoAlquiler';
+import { getProyectos } from '../../../redux/slice/Proyecto/thunks';
 
 //Css
 
-const FormIngresosAlquiler = ({ close, updateIngresoAlquiler, setUpdateIngresosAlquiler }) => {
+const FormIngresosAlquiler = ({ close, updateIngresoAlquiler }) => {
     const { user } = useUser();
+
+    const dispatch = useDispatch();
     const { response } = useResponse();
 
     const proyectos = useSelector(state => state.proyectoRedux.proyectos);
 
     const [dataIngreso, setDataIngreso] = useState({
-        id_proyecto: '',
+        id_proyecto: updateIngresoAlquiler ? updateIngresoAlquiler.id_proyecto : '',
         id_alquiler: '',
         nombre_modulo: '',
         nombre_modulo_doble: '',
@@ -36,6 +40,7 @@ const FormIngresosAlquiler = ({ close, updateIngresoAlquiler, setUpdateIngresosA
         valor_arg: '',
         valor_usd: '',
         observaciones: '',
+        factura: '',
         id_user: user.id,
     });
 
@@ -70,6 +75,15 @@ const FormIngresosAlquiler = ({ close, updateIngresoAlquiler, setUpdateIngresosA
                     valor_usd: 0
                 }))
             }
+        } if(targetName === 'id_alquiler') {
+            const alquiler = proyectos.find(proyectoFind => proyectoFind.id_proyecto === dataIngreso.id_proyecto).alquilers.find(alquilerFind => alquilerFind.id_alquiler == targetValue);
+
+            setDataIngreso(prevDataIngreso => ({
+                ...prevDataIngreso,
+                fecha_desde_cobro: formatFechaISO(alquiler.fecha_d_alquiler),
+                fecha_hasta_cobro: formatFechaISO(alquiler.fecha_h_alquiler),
+                [targetName]: targetValue,
+            }))
         } else {
             setDataIngreso(prevDataIngreso => ({
                 ...prevDataIngreso,
@@ -128,9 +142,13 @@ const FormIngresosAlquiler = ({ close, updateIngresoAlquiler, setUpdateIngresosA
                     valor_arg: '',
                     valor_usd: '',
                     observaciones: '',
+                    factura: '',
+                    id_user: '',
                 })
 
                 setShowModal(false);
+                dispatch(getProyectos());
+
                 close();
             } else {
                 ToastComponent('error', resIngresoAlquiler.data.todoMal && resIngresoAlquiler.data.todoMal);
@@ -200,12 +218,12 @@ const FormIngresosAlquiler = ({ close, updateIngresoAlquiler, setUpdateIngresosA
                                 </Form.Group>
                             }
                             <Form.Group className="mb-3">
-                                <FloatingLabel controlId="floatingInputGrid" label="Fecha Desde">
+                                <FloatingLabel controlId="floatingInputGrid" label="Fecha Desde Donde se va a Cobrar">
                                     <Form.Control onChange={handleChangeForm} name="fecha_desde_cobro" type="date" value={dataIngreso.fecha_desde_cobro} required />
                                 </FloatingLabel>
                             </Form.Group>
                             <Form.Group className="mb-3">
-                                <FloatingLabel controlId="floatingInputGrid" label="Fecha Hasta">
+                                <FloatingLabel controlId="floatingInputGrid" label="Fecha Hasta Donde se va a Cobrar">
                                     <Form.Control onChange={handleChangeForm} name="fecha_hasta_cobro" type="date" value={dataIngreso.fecha_hasta_cobro} required />
                                 </FloatingLabel>
                             </Form.Group>
@@ -224,8 +242,13 @@ const FormIngresosAlquiler = ({ close, updateIngresoAlquiler, setUpdateIngresosA
                                 </FloatingLabel>
                             </Form.Group>
                             <Form.Group className="mb-3">
+                                <FloatingLabel controlId="floatingInputGrid" label="Factura Tipo N°">
+                                    <Form.Control onChange={handleChangeForm} name="factura" value={dataIngreso.factura} type="text" required />
+                                </FloatingLabel>
+                            </Form.Group>
+                            <Form.Group className="mb-3">
                                 <FloatingLabel controlId="floatingInputGrid" label="Detalle">
-                                    <Form.Control onChange={handleChangeForm} name="observaciones" type="text" />
+                                    <Form.Control onChange={handleChangeForm} name="observaciones" value={dataIngreso.observaciones} type="text" />
                                 </FloatingLabel>
                             </Form.Group>
 

@@ -22,7 +22,7 @@
     }
 
     .button-agregar {
-        width: 100%; 
+        width: 100%;
         margin-top: 5px;
         margin-bottom: 5px;
         padding-top: 5px;
@@ -54,5 +54,78 @@
 
     .acordion-title-number {
         font-size: 12px;
+    }
+
+    .row-table {
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+}
+
+.state-cobrado {
+    background-color: #05be40 !important;
+}
+
+.state-por-cobrar {
+    background-color: #c20000 !important;
+}
+
+.content-encabezado {
+    height: 130px;
+
+    .content-title {
+        position: relative;
+        height: 20px;
+    }
+
+    .conten-buttons-agregar {
+        font-size: 14px;
+
+        .button-agregar {
+            width: 100%;
+            padding-top: 5px;
+            padding-bottom: 5px;
+            margin-top: 5px;
+            border-radius: 10px;
+            font-size: 14px;
+            border: solid 1px #ffffff;
+            background-color: #ffffff;
+            color: #000000;
+
+            .icon-button {
+                margin-bottom: 2px;
+                margin-right: 2px;
+                margin-left: -10px;
+            }
+
+            &:hover {
+                background-color: #b3b3b4;
+            }
+        }
+
+        .content-referencia {
+            position: relative;
+            padding-top: 12px;
+            padding-bottom: 12px;
+            font-weight: bold;
+            display: flex;
+            justify-content: center;
+
+            .cubo {
+                margin-right: 5px;
+                width: 20px;
+                height: 20px;
+            }
+
+            .referencia-pagado {
+                @extend .state-cobrado;
+                @extend .cubo;
+            }
+
+            .referencia-falta {
+                @extend .state-por-cobrar;
+                @extend .cubo;
+            }
+        }
     }
 }

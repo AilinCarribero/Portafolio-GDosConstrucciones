@@ -76,3 +76,82 @@ export const useGetAlquileresId = (id) => {
 
     return { alquileres, mesAlquiler, totalAlquiler, CalcMesesAlquiler, setAlquileres }
 }
+
+export const useAlquileres = () => {
+    const yearHere = new Date().getFullYear();
+    const monthHere = new Date().getMonth();
+
+    const ingresoAlquilerXMes = (ingresos) => {
+        if (ingresos.length > 0) {
+            let mes = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
+            ingresos.map(ingreso => {
+                const inicioPago = ingreso.fecha_desde_cobro;
+                const finPago = ingreso.fecha_hasta_cobro;
+
+                const fecha = moment(inicioPago).add(1, 'days');
+
+                const fechaDesde = moment(inicioPago);
+                const fechaHasta = moment(finPago);
+
+                const cantMeses = Math.ceil(fechaHasta.diff(fechaDesde, 'month')) + 1;
+
+                for (let i = 0; i < cantMeses; i++) {
+                    /* En caso de que el año sea igual al actual pasa directo sino tiene que ver que el mes del siguiente año sea menor al mes anterior al actual 
+                    Esto se hace para verificar que no estamos mostrando un valor que no se va a cobrar al mes actual ya que corresponde al mismo mes pero de otro año*/
+                    if (fecha.get('year') === yearHere || (yearHere < fecha.get('year') && fecha.get('month') < (monthHere - 1))) {
+                        
+                        const month = fecha.get('month') + 1;
+
+                        switch (month) {
+                            case 1:
+                                mes[0] += 1;
+                                break;
+                            case 2:
+                                mes[1] += 1;
+                                break;
+                            case 3:
+                                mes[2] += 1;
+                                break;
+                            case 4:
+                                mes[3] += 1;
+                                break;
+                            case 5:
+                                mes[4] += 1;
+                                break;
+                            case 6:
+                                mes[5] += 1;
+                                break;
+                            case 7:
+                                mes[6] += 1;
+                                break;
+                            case 8:
+                                mes[7] += 1;
+                                break;
+                            case 9:
+                                mes[8] += 1;
+                                break;
+                            case 10:
+                                mes[9] += 1;
+                                break;
+                            case 11:
+                                mes[10] += 1;
+                                break;
+                            case 12:
+                                mes[11] += 1;
+                                break;
+                        }
+                    }
+                    
+                    fecha.add(1, 'months').get('month');
+                }
+            });
+
+            return mes;
+        }
+
+        return [];
+    }
+
+    return { ingresoAlquilerXMes, yearHere, monthHere }
+}

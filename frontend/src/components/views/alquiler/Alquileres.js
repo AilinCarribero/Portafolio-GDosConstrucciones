@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom';
-import { Accordion, Row, Col, ModalBody, Spinner, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Accordion, Row, Col, ModalBody, Spinner, OverlayTrigger, Tooltip, Table } from 'react-bootstrap';
 import Decimal from 'decimal.js-light';
 import moment from 'moment';
 
@@ -9,11 +9,12 @@ import { useSelector } from 'react-redux';
 
 //Components
 import FormContrato from './FormContrato';
+import ModalFormulario from '../../utils/modal/formularios/ModalFormulario';
 
 //Hooks
 import { formatFecha, formatNameMes, formatNumber, formatTextMix } from '../../../hooks/useUtils';
 import { useUser } from '../../../hooks/useUser';
-import { useGetAlquileresId } from '../../../hooks/useAlquileres';
+import { useAlquileres, useGetAlquileresId } from '../../../hooks/useAlquileres';
 
 //Img-Icons
 import * as Icons from 'react-bootstrap-icons';
@@ -28,6 +29,7 @@ const Alquileres = () => {
 
     const { id } = useParams();
     const { user } = useUser();
+    const { ingresoAlquilerXMes, yearHere, monthHere } = useAlquileres();
     const { CalcMesesAlquiler, setAlquileres } = useGetAlquileresId(id);
 
     const proyectos = useSelector(state => state.proyectoRedux.proyectos);
@@ -39,11 +41,12 @@ const Alquileres = () => {
     const [actionContrato, setActionContrato] = useState();
     //console.log(alquileres, mesAlquiler, totalAlquiler);
     const [showModalFormContrato, setShowModalFormContrato] = useState(false);
+    const [showModalFormIngresoAlquiler, setShowModalFormIngresoAlquiler] = useState(false);
 
     useEffect(() => {
         setProyecto(proyectos.find(proyecto => proyecto.id_proyecto.trim() === id.trim()));
     }, [proyectos])
-
+    console.log(proyecto)
     const modalFormContrato = (action, alquiler) => {
         setShowModalFormContrato(true);
         setRenovarAlquiler(alquiler);
@@ -51,20 +54,32 @@ const Alquileres = () => {
     }
 
     return (<>
+        <ModalFormulario formulario={'ingresoAlquiler'} show={showModalFormIngresoAlquiler} informacion={proyecto} setShow={setShowModalFormIngresoAlquiler} />
         {showModalFormContrato && <FormContrato alquiler={renovarAlquiler} show={showModalFormContrato} setShow={setShowModalFormContrato} setAlquileres={setAlquileres} actionContrato={actionContrato} />}
 
         <Row>
             <Col xs={12} md={8} className="titulo-alquileres-vista">{id}</Col>
             <Row className='content-resumen-alquileres'>
-                <Col>
-                    <button className="button-agregar" onClick={() => modalFormContrato('Nuevo')} variant="dark">
-                        <Icons.Plus className="icon-button" size={19} /> Agregar Contrato
-                    </button>
-                </Col>
-                <Col className='text-resumen-alquileres'><b>Total:</b> {loadingProyectos ? <Spinner animation="border" variant="dark" size='sm' /> : proyecto && `$${formatNumber(proyecto.totalAlquiler)}`}</Col>
-                <Col className='text-resumen-alquileres'><b>{formatTextMix(mesAnterior)}:</b> {loadingProyectos ? <Spinner animation="border" variant="dark" size='sm' /> : proyecto && `$${formatNumber(proyecto.totalAlquilerXMes[mesAnterior])}`}</Col>
-                <Col className='text-resumen-alquileres'><b>{formatTextMix(mesActual)}:</b> {loadingProyectos ? <Spinner animation="border" variant="dark" size='sm' /> : proyecto && `$${formatNumber(proyecto.totalAlquilerXMes[mesActual])}`}</Col>
-                <Col className='text-resumen-alquileres'><b>{formatTextMix(mesPosterior)}:</b> {loadingProyectos ? <Spinner animation="border" variant="dark" size='sm' /> : proyecto && `$${formatNumber(proyecto.totalAlquilerXMes[mesPosterior])}`}</Col>
+                {user.rango === 'moderador' &&
+                    <Col md={3}>
+                        <button className="button-agregar" onClick={() => setShowModalFormIngresoAlquiler(true)} variant="dark">
+                            <Icons.Plus className="icon-button" size={19} /> Ingreso a un Alquiler
+                        </button>
+                    </Col>
+                }
+                {user.rango === 'admin' &&
+                    <>
+                        <Col>
+                            <button className="button-agregar" onClick={() => modalFormContrato('Nuevo')} variant="dark">
+                                <Icons.Plus className="icon-button" size={19} /> Agregar Contrato
+                            </button>
+                        </Col>
+                        <Col className='text-resumen-alquileres'><b>Total:</b> {loadingProyectos ? <Spinner animation="border" variant="dark" size='sm' /> : proyecto && `$${formatNumber(proyecto.totalAlquiler)}`}</Col>
+                        <Col className='text-resumen-alquileres'><b>{formatTextMix(mesAnterior)}:</b> {loadingProyectos ? <Spinner animation="border" variant="dark" size='sm' /> : proyecto && `$${formatNumber(proyecto.totalAlquilerXMes[mesAnterior])}`}</Col>
+                        <Col className='text-resumen-alquileres'><b>{formatTextMix(mesActual)}:</b> {loadingProyectos ? <Spinner animation="border" variant="dark" size='sm' /> : proyecto && `$${formatNumber(proyecto.totalAlquilerXMes[mesActual])}`}</Col>
+                        <Col className='text-resumen-alquileres'><b>{formatTextMix(mesPosterior)}:</b> {loadingProyectos ? <Spinner animation="border" variant="dark" size='sm' /> : proyecto && `$${formatNumber(proyecto.totalAlquilerXMes[mesPosterior])}`}</Col>
+                    </>
+                }
             </Row>
         </Row>
         {loadingProyectos ?
@@ -106,6 +121,37 @@ const Alquileres = () => {
                                                     <Col xs={12} md={6}>Fecha de inicio: <b>:</b> {formatFecha(alquiler.fecha_d_alquiler)}</Col>
                                                     <Col xs={12} md={6}>Fecha de fin: <b>:</b> {formatFecha(alquiler.fecha_h_alquiler)} </Col>
                                                 </Row>
+                                                {alquiler.ingreso_alquilers.length > 0 &&
+                                                    <Row className='row-table'>
+                                                        <Table striped bordered hover>
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Ene</th>
+                                                                    <th>Feb</th>
+                                                                    <th>Mar</th>
+                                                                    <th>Abr</th>
+                                                                    <th>May</th>
+                                                                    <th>Jun</th>
+                                                                    <th>Jul</th>
+                                                                    <th>Ago</th>
+                                                                    <th>Sep</th>
+                                                                    <th>Oct</th>
+                                                                    <th>Nov</th>
+                                                                    <th>Dic</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr>
+                                                                    {
+                                                                        ingresoAlquilerXMes(alquiler.ingreso_alquilers).map((mes, i) =>
+                                                                            <td className={mes >= 1 ? 'state-cobrado' : ((moment(alquiler.fecha_d_alquiler).get('year') == yearHere && moment(alquiler.fecha_d_alquiler).add(1, 'days').get('month') <= i) && (moment(alquiler.fecha_h_alquiler).get('year') >= yearHere && moment(alquiler.fecha_h_alquiler).add(1, 'days').get('month') >= i) ? 'state-por-cobrar' : '')} key={i}></td>
+                                                                        )
+                                                                    }
+                                                                </tr>
+                                                            </tbody>
+                                                        </Table>
+                                                    </Row>
+                                                }
                                                 {user.rango == 'admin' &&
                                                     <Row className="border-top">
                                                         <Col xs={12} md={12}>

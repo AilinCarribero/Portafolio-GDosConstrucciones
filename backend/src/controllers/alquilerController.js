@@ -1,4 +1,4 @@
-const { Alquiler, Modulo, Proyecto, ModuloDoble } = require("../../db");
+const { Alquiler, Modulo, Proyecto, ModuloDoble, IngresoAlquiler } = require("../../db");
 const Decimal = require('decimal.js-light');
 
 exports.insertAlquiler = (req, res) => {
@@ -39,6 +39,8 @@ exports.getAlquileresId = async (req, res) => {
             model: Proyecto
         }, {
             model: ModuloDoble
+        }, {
+            model: IngresoAlquiler
         }],
         where: {
             id_proyecto: idProyecto

@@ -107,7 +107,7 @@ const AccordionCentrosCostos = ({ proyecto, setProyectos }) => {
                 }
 
                 <Col xs={5} md={5}>{proyecto.id_proyecto}</Col>
-                {proyecto.fecha_f_proyecto && calcDifDias(new Date(), proyecto.fecha_f_proyecto) > 0 && 
+                {proyecto.fecha_f_proyecto && calcDifDias(new Date(), proyecto.fecha_f_proyecto) > 0 &&
                     <Col xs={2} md={2} className={calcDifDias(new Date(), proyecto.fecha_f_proyecto) <= 15 ? "text-for-finish" : ""} >
                         Dias restantes: {calcDifDias(new Date(), proyecto.fecha_f_proyecto)}
                     </Col>
@@ -119,12 +119,13 @@ const AccordionCentrosCostos = ({ proyecto, setProyectos }) => {
             <Accordion.Body>
                 <Row>
                     {proyecto.id_centro_costo == 2 && (user.rango == "admin") && <>
-                        {proyecto.venta > 0 && <Col xs={12} md={6}>
-                            <Row>
-                                <Col xs={1} md={1}></Col>
-                                <Col xs={11} md={11}><p> Venta: ${formatNumber(proyecto.venta)}</p></Col>
-                            </Row>
-                        </Col>}
+                        {proyecto.venta > 0 &&
+                            <Col xs={12} md={6}>
+                                <Row>
+                                    <Col xs={1} md={1}></Col>
+                                    <Col xs={11} md={11}><p> Venta: ${formatNumber(proyecto.venta)}</p></Col>
+                                </Row>
+                            </Col>}
                         {proyecto.costo > 0 &&
                             <Col xs={12} md={6}>
                                 <Row>
@@ -133,17 +134,37 @@ const AccordionCentrosCostos = ({ proyecto, setProyectos }) => {
                                 </Row>
                             </Col>
                         }
-                        {proyecto.alquiler_total > 0 && (user.rango == "admin") &&
-                            <Col xs={12} md={6}>
-                                <Row>
-                                    <Col xs={1} md={1}>
-                                        {proyecto.alquilers.length > 0 && <Link to={`/alquileres/${proyecto.id_proyecto}`}> <Icons.BoxArrowInRight className="icon-detalle" /> </Link>}
-                                    </Col>
-                                    <Col xs={11} md={11}><p> Total por Alquileres: ${formatNumber(proyecto.alquiler_total)}</p></Col>
-                                </Row>
-                            </Col>
-                        }
                     </>}
+                    {proyecto.alquiler_total > 0 && (user.rango === "admin") &&
+                        <Col xs={12} md={6}>
+                            <Row>
+                                <Col xs={1} md={1}>
+                                    {proyecto.alquilers.length > 0 && <Link to={`/alquileres/${proyecto.id_proyecto}`}> <Icons.BoxArrowInRight className="icon-detalle" /> </Link>}
+                                </Col>
+                                <Col xs={11} md={11}><p> Total por Alquileres: ${formatNumber(proyecto.alquiler_total)}</p></Col>
+                            </Row>
+                        </Col>
+                    }
+                    {proyecto.alquiler_total > 0 && (user.rango === "moderador") &&
+                        <Col xs={12} md={6}>
+                            <Row>
+                                <Col xs={1} md={1}>
+                                    {proyecto.alquilers.length > 0 && <Link to={`/alquileres/${proyecto.id_proyecto}`}> <Icons.BoxArrowInRight className="icon-detalle" /> </Link>}
+                                </Col>
+                                <Col xs={11} md={11}><p>Alquileres</p></Col>
+                            </Row>
+                        </Col>
+                    }
+                    {proyecto.alquiler_total > 0 && (user.rango === "admin" || user.rango === "moderador") &&
+                        <Col xs={12} md={6}>
+                            <Row>
+                                <Col xs={1} md={1}>
+                                    {proyecto.alquilers.length > 0 && <Link to={`/alquileres/ingresos/${proyecto.id_proyecto}`}> <Icons.BoxArrowInRight className="icon-detalle" /> </Link>}
+                                </Col>
+                                <Col xs={11} md={11}><p>Ingresos</p></Col>
+                            </Row>
+                        </Col>
+                    }
                 </Row>
                 <Row>
                     {/*<Col xs={12} md={6}>

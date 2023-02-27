@@ -47,7 +47,7 @@ const CentrosCostos = ({ proyectos, mostrar, setProyectos }) => {
                     }
 
                     if (mostrar == 'proyectos' && proyecto.id_proyecto.includes('CCP') && proyecto.alquiler_total <= 0) {
-                        proyecto.egresos.map(egreso => {
+                        /*proyecto.egresos.map(egreso => {
                             if (egreso.valor_usd) {
                                 auxEgresosUSD = auxEgresosUSD.add(egreso.valor_usd);
                             } else {
@@ -61,7 +61,7 @@ const CentrosCostos = ({ proyectos, mostrar, setProyectos }) => {
                             } else {
                                 auxIngresos = auxIngresos.add(ingreso.valor_cobro);
                             }
-                        });
+                        });*/
 
                         setTotales({
                             egresos: auxEgresos,
@@ -72,7 +72,7 @@ const CentrosCostos = ({ proyectos, mostrar, setProyectos }) => {
 
                         return proyecto
                     } else if (mostrar == 'alquileres' && proyecto.id_proyecto.includes('CCP') && proyecto.alquiler_total > 0) {
-                        proyecto.egresos.map(egreso => {
+                        /*proyecto.egresos.map(egreso => {
                             if (egreso.valor_usd) {
                                 auxEgresosUSD = auxEgresosUSD.add(egreso.valor_usd);
                             } else {
@@ -86,7 +86,7 @@ const CentrosCostos = ({ proyectos, mostrar, setProyectos }) => {
                             } else {
                                 auxIngresos = auxIngresos.add(ingreso.valor_cobro);
                             }
-                        });
+                        });*/
 
                         setTotales({
                             egresos: auxEgresos,
@@ -97,7 +97,7 @@ const CentrosCostos = ({ proyectos, mostrar, setProyectos }) => {
 
                         return proyecto
                     } else if (mostrar == 'ccc-cce' && (proyecto.id_proyecto.includes('CCC') || proyecto.id_proyecto.includes('CCE'))) {
-                        proyecto.egresos.map(egreso => {
+                        /*proyecto.egresos.map(egreso => {
                             if (egreso.valor_usd) {
                                 auxEgresosUSD = auxEgresosUSD.add(egreso.valor_usd);
                             } else {
@@ -111,7 +111,7 @@ const CentrosCostos = ({ proyectos, mostrar, setProyectos }) => {
                             } else {
                                 auxIngresos = auxIngresos.add(ingreso.valor_cobro);
                             }
-                        });
+                        });*/
 
                         setTotales({
                             egresos: auxEgresos,

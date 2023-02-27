@@ -51,8 +51,16 @@ export const formatFechaISO = (fecha) => {
 }
 
 export const formatFecha = (fecha) => {
+    console.log(fecha, fecha.length)
+    
     const momentFecha = moment(fecha);
-    const fechaFormat = momentFecha.format("DD-MM-YYYY");
+    let fechaFormat = '';
+
+    if (fecha.length > 10) {
+        fechaFormat = momentFecha.add(1, 'days').format("DD-MM-YYYY");
+    } else {
+        fechaFormat = momentFecha.format("DD-MM-YYYY");
+    }
 
     return fechaFormat
 }

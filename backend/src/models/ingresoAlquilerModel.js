@@ -24,6 +24,10 @@ module.exports = ( sequelize, type ) => {
         },
         valor_arg: type.DOUBLE,
         valor_usd: type.DOUBLE,
+        factura: {
+            type: type.STRING(100),
+            defaultValue: null
+        },
         observaciones: type.STRING(100),
     });
 }

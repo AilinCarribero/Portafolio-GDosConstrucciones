@@ -37,7 +37,7 @@ const Proyectos = () => {
     const activeLoading = useSelector(state => state.proyectoRedux.loading);
 
     //console.log(proyectos, 'Loading:'+activeLoading)
-    const [menu, setMenu] = useState(user.rango == "admin" ? seccion || 'resumen' : 'proyectos');
+    const [menu, setMenu] = useState(user.rango === "admin" ? seccion || 'resumen' :  seccion || 'proyectos');
 
     const [totales, setTotales] = useState({
         egresosHoy: 0,
@@ -132,7 +132,7 @@ const Proyectos = () => {
                         })
                     }
 
-                    if (proyecto.id_unidad_negocio == '1') {
+                    /*if (proyecto.id_unidad_negocio == '1') {
                         proyecto.egresos.map(egreso => {
                             if (egreso.id_proyecto == proyecto.id_proyecto && egreso.id_analisis_costo != 11) {
                                 auxPPE += parseFloat(egreso.valor_pago);
@@ -174,6 +174,7 @@ const Proyectos = () => {
                             }
                         });
                     }
+
                     if (proyecto.id_unidad_negocio == '2') {
                         proyecto.egresos.map(egreso => {
                             if (egreso.id_proyecto == proyecto.id_proyecto && egreso.id_analisis_costo != 11) {
@@ -216,6 +217,7 @@ const Proyectos = () => {
                             }
                         });
                     }
+
                     if (proyecto.id_unidad_negocio == '3') {
                         proyecto.egresos.map(egreso => {
                             if (egreso.id_proyecto == proyecto.id_proyecto && egreso.id_analisis_costo != 11) {
@@ -257,11 +259,11 @@ const Proyectos = () => {
                                 }
                             }
                         });
-                    }
+                    }*/
                 } else if (proyecto.id_centro_costo == '1') {
-                    proyecto.egresos.map(egreso => {
+                    /*proyecto.egresos.map(egreso => {
                         if (egreso.id_proyecto == proyecto.id_proyecto && egreso.id_analisis_costo != 12) {
-                            /*if (egreso.analisis_costo == 'Bienes de Uso' || egreso.analisis_costo == 'Gastos de Empresa') {
+                            if (egreso.analisis_costo == 'Bienes de Uso' || egreso.analisis_costo == 'Gastos de Empresa') {
                                 const partesIguales = parseFloat(egreso.valor_pago) / 3;
                                 auxDE += parseFloat(partesIguales);
                                 auxME += parseFloat(partesIguales);
@@ -270,7 +272,7 @@ const Proyectos = () => {
                                 proyecto.id_unidad_negocio == '1' && (auxPPE += parseFloat(egreso.valor_pago));
                                 proyecto.id_unidad_negocio == '2' && (auxDE += parseFloat(egreso.valor_pago));
                                 proyecto.id_unidad_negocio == '3' && (auxME += parseFloat(egreso.valor_pago));
-                            }*/
+                            }
                             auxCCCE += parseFloat(egreso.valor_pago);
                             auxTotalEgresos += parseFloat(egreso.valor_pago);
                             auxTotalUSDE += !egreso.valor_usd ? 0 : parseFloat(egreso.valor_usd)
@@ -309,9 +311,9 @@ const Proyectos = () => {
                                 auxTotalUSDIHoy += !ingreso.valor_usd ? 0 : parseFloat(ingreso.valor_usd);
                             }
                         }
-                    });
+                    }); */
                 } else if (proyecto.id_centro_costo == '3') {
-                    proyecto.egresos.map(egreso => {
+                    /*proyecto.egresos.map(egreso => {
                         if (egreso.id_proyecto == proyecto.id_proyecto) {
                             auxCCEE += parseFloat(egreso.valor_pago)
                             auxTotalEgresos += parseFloat(egreso.valor_pago);
@@ -351,7 +353,7 @@ const Proyectos = () => {
                                 auxTotalUSDIHoy += !ingreso.valor_usd ? 0 : parseFloat(ingreso.valor_usd);
                             }
                         }
-                    });
+                    });*/
                 }
             })
         } else {

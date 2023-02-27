@@ -28,10 +28,6 @@ const configFindAllProyectos = {
                 ]
             }],
         }]
-    }, {
-        model: Egreso
-    }, {
-        model: Ingreso
     }],
     order: [['id_estado', 'ASC'], ['fecha_f_proyecto', 'ASC'], [Alquiler, 'fecha_d_alquiler', 'ASC']]
 }

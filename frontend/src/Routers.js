@@ -22,6 +22,7 @@ import CentrosCostos from './components/views/proyectos/CentrosCostos';
 import { useUser } from './hooks/useUser';
 import { useDispatch } from 'react-redux';
 import { getProyectos } from './redux/slice/Proyecto/thunks';
+import IngresosAlquiler from './components/views/ingresosAlquiler/IngresosAlquiler';
 
 //Contexts
 //import ProyectoProvider from './contexts/ProyectosProvider';
@@ -48,19 +49,15 @@ const Routers = () => {
                             {user.rango == 'admin' &&
                                 <>
                                     <Route exact path="/menu/:seccion" element={<Proyectos />} />
-                                    <Route exact path="/ingresar/egreso" element={<FormEgresos />} />
-                                    <Route exact path="/ingresar/ingreso" element={<FormIngresos />} />
-                                    <Route exact path="/ingresar/proyecto" element={<FormProyectos />} />
                                     <Route exact path="/ingresar/usuario" element={<FormUsuarios />} />
-                                    <Route exact path="/ingresar/modulos" element={<FormModulos />} />
                                     <Route exact path="/usuarios" element={<Usuarios />} />
                                     <Route exact path="/modulos" element={<Modulos />} />
-                                    <Route exact path="/egresos/:id" element={<Egresos />} />
-                                    <Route exact path="/ingresos/:id" element={Ingresos} />
                                     <Route exact path="/modulos/:id" element={<Modulos />} />
                                     <Route exact path="/cc" element={<CentrosCostos />} />
                                     <Route exact path="/ccp" element={<CentrosCostos />} />
                                     <Route exact path="/alquileres/:id" element={<Alquileres />} />
+                                    <Route exact path="/alquileres/ingresos/:id" element={<IngresosAlquiler />} />
+                                    <Route exact path="/alquileres/:id/ingresos/:idALquiler" element={<IngresosAlquiler />} />
                                 </>
                             }
                             {user.rango == 'moderador' &&
@@ -69,11 +66,8 @@ const Routers = () => {
                                     <Route exact path="/cc" element={<CentrosCostos />} />
                                     <Route exact path="/ccp" element={<CentrosCostos />} />
                                     <Route exact path="/alquileres/:id" element={<Alquileres />} />
-                                    <Route exact path="/ingresar/proyecto" element={<FormProyectos />} />
-                                    <Route exact path="/ingresar/egreso" element={FormEgresos} />
-                                    <Route exact path="/ingresar/ingreso" element={FormIngresos} />
-                                    <Route exact path="/egresos/:id" element={Egresos} />
-                                    <Route exact path="/ingresos/:id" element={Ingresos} />
+                                    <Route exact path="/alquileres/ingresos/:id" element={<IngresosAlquiler />} />
+                                    <Route exact path="/alquileres/:id/ingresos/:idALquiler" element={<IngresosAlquiler />} />
                                 </>
                             }
                             {user.rango == 'usuario comun' &&
