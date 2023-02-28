@@ -46,7 +46,7 @@ const Alquileres = () => {
     useEffect(() => {
         setProyecto(proyectos.find(proyecto => proyecto.id_proyecto.trim() === id.trim()));
     }, [proyectos])
-    console.log(proyecto)
+
     const modalFormContrato = (action, alquiler) => {
         setShowModalFormContrato(true);
         setRenovarAlquiler(alquiler);

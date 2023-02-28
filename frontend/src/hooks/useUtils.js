@@ -51,8 +51,6 @@ export const formatFechaISO = (fecha) => {
 }
 
 export const formatFecha = (fecha) => {
-    console.log(fecha, fecha.length)
-    
     const momentFecha = moment(fecha);
     let fechaFormat = '';
 
