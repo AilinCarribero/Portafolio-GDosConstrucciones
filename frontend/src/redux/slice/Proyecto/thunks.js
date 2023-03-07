@@ -45,15 +45,17 @@ export const getProyectos = () => (dispatch) => {
                 }
 
                 proyecto.alquilers.map(alquiler => {
+                    console.log(alquiler.fecha_d_alquiler, alquiler.fecha_h_alquiler)
                     const fechaDesde = moment(alquiler.fecha_d_alquiler);
                     const fechaHasta = moment(alquiler.fecha_h_alquiler);
 
-                    const cantMeses = Math.ceil(fechaHasta.diff(fechaDesde, 'month'));
-
+                    const cantMeses = Math.ceil(fechaHasta.diff(fechaDesde, 'month')) + 1;
+console.log(cantMeses)
                     const valorXMes = cantMeses ? new Decimal(alquiler.valor).div(cantMeses).toNumber() : alquiler.valor;
 
                     const valorTotalXMes = calcularValorXMes(fechaDesde, cantMeses, valorXMes);
-
+console.log(valorTotalXMes)
+console.log('----------------------------')
                     total = new Decimal(total).add(alquiler.valor).toNumber();
 
                     if(new Date(alquiler.fecha_d_alquiler) <= new Date() && new Date() <= new Date(alquiler.fecha_h_alquiler)) {
