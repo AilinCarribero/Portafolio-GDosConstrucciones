@@ -12,7 +12,7 @@ import { getProyectos } from '../../../redux/slice/Proyecto/thunks';
 import ValidacionNewContrato from '../../utils/modal/validacion/ValidacionNewContrato';
 
 //Hooks
-import { calcDifMeses, desformatNumber, formatFechaISO, formatNumber, ToastComponent } from '../../../hooks/useUtils';
+import { calcCantMeses, calcDifMeses, desformatNumber, formatFechaISO, formatNumber, ToastComponent } from '../../../hooks/useUtils';
 import { useGetModulos } from '../../../hooks/useModulos';
 import { useResponse } from '../../../hooks/useResponse';
 
@@ -208,7 +208,7 @@ const FormContrato = ({ alquiler, show, setShow, setAlquileres, actionContrato, 
                         <Row>
                             <Col xs={12} sm={12} >Fechas del contrato</Col>
                             <Col xs={12} sm={12} className="text-descripcion-agregar">
-                                Cantidad de meses: {calcDifMeses(newContrato.fecha_d_alquiler, newContrato.fecha_h_alquiler)}
+                                Cantidad de meses: {calcCantMeses(newContrato.fecha_d_alquiler, newContrato.fecha_h_alquiler)}
                             </Col>
                             <Col xs={12} sm={6}>
                                 <Form.Group className="mb-3">

@@ -9,6 +9,7 @@ import ModalFormulario from '../../utils/modal/formularios/ModalFormulario';
 
 //Hooks
 import { useUser } from '../../../hooks/useUser';
+import { calcCantMeses } from '../../../hooks/useUtils';
 
 //Icons
 import * as Icons from 'react-bootstrap-icons';
@@ -45,7 +46,7 @@ const IngresosAlquiler = () => {
                 const fechaDesde = moment(inicioPago);
                 const fechaHasta = moment(finPago);
 
-                const cantMeses = Math.ceil(fechaHasta.diff(fechaDesde, 'month')) + 1;
+                const cantMeses = calcCantMeses(fechaDesde, fechaHasta);
 
                 for (let i = 0; i < cantMeses; i++) {
                     /* En caso de que el año sea igual al actual pasa directo sino tiene que ver que el mes del siguiente año sea menor al mes anterior al actual 

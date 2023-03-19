@@ -207,15 +207,6 @@ export const formatNameMes = (numMes) => {
     }
 }
 
-export const calcDifMeses = (inicio, fin) => {
-    const fechaDesde = moment(inicio);
-    const fechaHasta = moment(fin);
-
-    const cantMeses = Math.abs(fechaHasta.diff(fechaDesde, 'month'));
-
-    return cantMeses === 0 ? 1 : cantMeses;
-}
-
 export const calcDifDias = (inicio, fin) => {
     const fechaDesde = moment(inicio);
     const fechaHasta = moment(fin);
@@ -223,4 +214,13 @@ export const calcDifDias = (inicio, fin) => {
     const cantMeses = fechaHasta.diff(fechaDesde, 'days') > 0 ? fechaHasta.diff(fechaDesde, 'days') : 0;
 
     return cantMeses;
+}
+
+export const calcCantMeses = (desde, hasta) => {
+    const fechaDesde = moment(desde);
+    const fechaHasta = moment(hasta);
+
+    const cantMeses = Math.ceil(fechaHasta.diff(fechaDesde, 'month')) + 1;
+
+    return cantMeses === 0 ? 1 : cantMeses;
 }

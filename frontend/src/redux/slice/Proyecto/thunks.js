@@ -1,7 +1,7 @@
 import Decimal from "decimal.js-light";
 import moment from "moment";
 import { useSelector } from "react-redux";
-import { calcularValorXMes } from "../../../hooks/useUtils";
+import { calcCantMeses, calcularValorXMes } from "../../../hooks/useUtils";
 import { getApiProyectos } from "../../../services/apiProyectos";
 import { setProyectos, changeFiltros, activeLoading, removeFiltros } from "./proyectoSlice";
 
@@ -45,17 +45,17 @@ export const getProyectos = () => (dispatch) => {
                 }
 
                 proyecto.alquilers.map(alquiler => {
-                    console.log(alquiler.fecha_d_alquiler, alquiler.fecha_h_alquiler)
+                    //console.log(alquiler.fecha_d_alquiler, alquiler.fecha_h_alquiler)
                     const fechaDesde = moment(alquiler.fecha_d_alquiler);
                     const fechaHasta = moment(alquiler.fecha_h_alquiler);
 
-                    const cantMeses = Math.ceil(fechaHasta.diff(fechaDesde, 'month')) + 1;
-console.log(cantMeses)
+                    const cantMeses = calcCantMeses(fechaDesde, fechaHasta);
+//console.log(cantMeses)
                     const valorXMes = cantMeses ? new Decimal(alquiler.valor).div(cantMeses).toNumber() : alquiler.valor;
 
                     const valorTotalXMes = calcularValorXMes(fechaDesde, cantMeses, valorXMes);
-console.log(valorTotalXMes)
-console.log('----------------------------')
+//console.log(valorTotalXMes)
+//console.log('----------------------------')
                     total = new Decimal(total).add(alquiler.valor).toNumber();
 
                     if(new Date(alquiler.fecha_d_alquiler) <= new Date() && new Date() <= new Date(alquiler.fecha_h_alquiler)) {
@@ -76,8 +76,6 @@ console.log('----------------------------')
                         noviembre: new Decimal(auxTotalesXMesXProyecto.noviembre).add(valorTotalXMes.noviembre).toNumber(),
                         diciembre: new Decimal(auxTotalesXMesXProyecto.diciembre).add(valorTotalXMes.diciembre).toNumber()
                     }
-
-
                 });
 
                 proyecto.totalAlquiler = total;

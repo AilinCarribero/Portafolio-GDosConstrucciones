@@ -21,6 +21,7 @@ import * as Icons from 'react-bootstrap-icons';
 
 //Css
 import '../../../style/Alquiler.scss';
+import GraficIngresosAlquileres from '../ingresosAlquiler/GraficIngresosAlquileres';
 
 const Alquileres = () => {
     const mesActual = formatNameMes(moment().month());
@@ -60,7 +61,7 @@ const Alquileres = () => {
         <Row>
             <Col xs={12} md={8} className="titulo-alquileres-vista">{id}</Col>
             <Row className='content-resumen-alquileres'>
-                {user.rango === 'moderador' &&
+                {(user.rango === 'moderador') &&
                     <Col md={3}>
                         <button className="button-agregar" onClick={() => setShowModalFormIngresoAlquiler(true)} variant="dark">
                             <Icons.Plus className="icon-button" size={19} /> Ingreso a un Alquiler
@@ -72,6 +73,11 @@ const Alquileres = () => {
                         <Col>
                             <button className="button-agregar" onClick={() => modalFormContrato('Nuevo')} variant="dark">
                                 <Icons.Plus className="icon-button" size={19} /> Agregar Contrato
+                            </button>
+                        </Col>
+                        <Col>
+                            <button className="button-agregar" onClick={() => setShowModalFormIngresoAlquiler(true)} variant="dark">
+                                <Icons.Plus className="icon-button" size={19} /> Ingreso a un Alquiler
                             </button>
                         </Col>
                         <Col className='text-resumen-alquileres'><b>Total:</b> {loadingProyectos ? <Spinner animation="border" variant="dark" size='sm' /> : proyecto && `$${formatNumber(proyecto.totalAlquiler)}`}</Col>
@@ -118,8 +124,9 @@ const Alquileres = () => {
                                             </Accordion.Header>
                                             <Accordion.Body>
                                                 <Row>
-                                                    <Col xs={12} md={6}>Fecha de inicio: <b>:</b> {formatFecha(alquiler.fecha_d_alquiler)}</Col>
-                                                    <Col xs={12} md={6}>Fecha de fin: <b>:</b> {formatFecha(alquiler.fecha_h_alquiler)} </Col>
+                                                    <Col xs={12} md={4}>Fecha de inicio: <b>:</b> {formatFecha(alquiler.fecha_d_alquiler)}</Col>
+                                                    <Col xs={12} md={4}>Fecha de fin: <b>:</b> {formatFecha(alquiler.fecha_h_alquiler)} </Col>
+                                                    <Col xs={12} md={4}>Valor por mes: <b>:</b> ${formatNumber(alquiler.valor/CalcMesesAlquiler(alquiler.fecha_d_alquiler, alquiler.fecha_h_alquiler))} </Col>
                                                 </Row>
                                                 {alquiler.ingreso_alquilers.length > 0 &&
                                                     <Row className='row-table'>
@@ -152,6 +159,9 @@ const Alquileres = () => {
                                                         </Table>
                                                     </Row>
                                                 }
+                                                {/*alquiler.ingreso_alquilers.length > 0 &&
+                                                    <GraficIngresosAlquileres alquiler={alquiler} ingresoAlquiler={alquiler.ingreso_alquilers} />
+                                            */}
                                                 {user.rango == 'admin' &&
                                                     <Row className="border-top">
                                                         <Col xs={12} md={12}>
@@ -168,7 +178,8 @@ const Alquileres = () => {
                                                                     </Col>
                                                                 </Row>
                                                             </button>
-                                                        </Col><Col xs={6} md={6}>
+                                                        </Col>
+                                                        <Col xs={6} md={6}>
                                                             <button className="button-action" onClick={() => modalFormContrato('Modificar', alquiler)}>
                                                                 <Row>
                                                                     <Col xs={1} md={1} className='icon-action'>
@@ -176,6 +187,18 @@ const Alquileres = () => {
                                                                     </Col>
                                                                     <Col xs={10} md={10} className='text-action'>
                                                                         Modificar Contrato
+                                                                    </Col>
+                                                                </Row>
+                                                            </button>
+                                                        </Col>
+                                                        <Col xs={6} md={6}>
+                                                            <button className="button-action" onClick={() => setShowModalFormIngresoAlquiler(true)}>
+                                                                <Row>
+                                                                    <Col xs={1} md={1} className='icon-action'>
+                                                                        <Icons.Plus size={19} />
+                                                                    </Col>
+                                                                    <Col xs={10} md={10} className='text-action'>
+                                                                        Agregar un Ingreso
                                                                     </Col>
                                                                 </Row>
                                                             </button>

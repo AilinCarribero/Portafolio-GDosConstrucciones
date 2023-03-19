@@ -2,7 +2,7 @@ import Decimal from "decimal.js-light";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { getAlquileresId } from "../services/apiAlquileres";
-import { calcularValorXMes } from "./useUtils";
+import { calcCantMeses, calcularValorXMes } from "./useUtils";
 
 export const useGetAlquileresId = (id) => {
     const [alquileres, setAlquileres] = useState([]);
@@ -69,7 +69,7 @@ export const useGetAlquileresId = (id) => {
         const fechaDesde = moment(inicio);
         const fechaHasta = moment(fin);
 
-        const cantMeses = Math.abs(fechaHasta.diff(fechaDesde, 'month'));
+        const cantMeses = calcCantMeses(fechaDesde, fechaHasta);
 
         return cantMeses === 0 ? 1 : cantMeses;
     }
@@ -94,7 +94,7 @@ export const useAlquileres = () => {
                 const fechaDesde = moment(inicioPago);
                 const fechaHasta = moment(finPago);
 
-                const cantMeses = Math.ceil(fechaHasta.diff(fechaDesde, 'month')) + 1;
+                const cantMeses = calcCantMeses(fechaDesde, fechaHasta);
 
                 for (let i = 0; i < cantMeses; i++) {
                     /* En caso de que el año sea igual al actual pasa directo sino tiene que ver que el mes del siguiente año sea menor al mes anterior al actual 
