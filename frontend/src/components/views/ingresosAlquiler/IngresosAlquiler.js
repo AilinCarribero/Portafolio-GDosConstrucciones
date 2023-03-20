@@ -13,6 +13,7 @@ import { calcCantMeses } from '../../../hooks/useUtils';
 
 //Icons
 import * as Icons from 'react-bootstrap-icons';
+import GraficIngresosAlquileres from './GraficIngresosAlquileres';
 
 const IngresosAlquiler = () => {
     const { id } = useParams();
@@ -52,7 +53,7 @@ const IngresosAlquiler = () => {
                     /* En caso de que el año sea igual al actual pasa directo sino tiene que ver que el mes del siguiente año sea menor al mes anterior al actual 
                     Esto se hace para verificar que no estamos mostrando un valor que no se va a cobrar al mes actual ya que corresponde al mismo mes pero de otro año*/
                     if (fecha.get('year') === yearHere || (yearHere < fecha.get('year') && fecha.get('month') < (monthHere - 1))) {
-                        
+
                         const month = fecha.get('month') + 1;
 
                         switch (month) {
@@ -94,7 +95,7 @@ const IngresosAlquiler = () => {
                                 break;
                         }
                     }
-                    
+
                     fecha.add(1, 'months').get('month');
                 }
             });
@@ -125,16 +126,6 @@ const IngresosAlquiler = () => {
                         </button>
                     </Col>
                 </>}
-                <Col xs={6} sm={6} md={1} className='content-referencia'>
-                    <Row>
-                        <div className='referencia-pagado'></div> Pagado
-                    </Row>
-                </Col>
-                <Col xs={6} sm={6} md={1} className='content-referencia'>
-                    <Row>
-                        <div className='referencia-falta'></div> Falta pagar
-                    </Row>
-                </Col>
             </Row>
         </Row>
         <Row>
@@ -143,37 +134,22 @@ const IngresosAlquiler = () => {
                     <Spinner animation="border" variant="dark" />
                 </Row>
                 :
-                <Table striped bordered hover>
-                    <thead>
-                        <tr>
-                            <th>Módulo</th>
-                            <th>Ene</th>
-                            <th>Feb</th>
-                            <th>Mar</th>
-                            <th>Abr</th>
-                            <th>May</th>
-                            <th>Jun</th>
-                            <th>Jul</th>
-                            <th>Ago</th>
-                            <th>Sep</th>
-                            <th>Oct</th>
-                            <th>Nov</th>
-                            <th>Dic</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {proyecto && proyecto.alquilers.length > 0 && proyecto.alquilers.map(alquiler =>
-                            <tr key={alquiler.id_alquiler}>
-                                <td>{`${alquiler.modulo.tipologia}-${alquiler.modulo.id_modulo}`}</td>
-                                {
-                                    ingresoAlquilerXMes(alquiler.ingreso_alquilers).map((mes, i) =>
-                                        <td className={mes >= 1 ? 'state-cobrado' : ( (moment(alquiler.fecha_d_alquiler).get('year') == yearHere && moment(alquiler.fecha_d_alquiler).add(1, 'days').get('month') <= i) && ( moment(alquiler.fecha_h_alquiler).get('year') >= yearHere && moment(alquiler.fecha_h_alquiler).add(1, 'days').get('month') >= i )? 'state-por-cobrar' : '')} key={i}></td>
-                                    )
-                                }
-                            </tr>
-                        )}
-                    </tbody>
-                </Table>
+                proyecto && proyecto.alquilers.length > 0 && proyecto.alquilers.map(alquiler =>
+                    <Row key={alquiler.id_alquiler} className='separacion-seccion'>
+                        <Col xs={12} sm={12}>
+                            <b>{`${alquiler.modulo.tipologia}-${alquiler.modulo.id_modulo}`}</b>
+                        </Col>
+                        {alquiler.ingreso_alquilers.length <= 0 ?
+                            <Col xs={12} sm={12}>
+                                No hay ingresos
+                            </Col>
+                            :
+                            <Col xs={12} sm={12}>
+                                <GraficIngresosAlquileres alquiler={alquiler} ingresoAlquiler={alquiler.ingreso_alquilers} />
+                            </Col>
+                        }
+                    </Row>
+                )
             }
         </Row>
     </>)

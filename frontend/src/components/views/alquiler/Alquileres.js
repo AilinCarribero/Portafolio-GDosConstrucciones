@@ -129,39 +129,8 @@ const Alquileres = () => {
                                                     <Col xs={12} md={4}>Valor por mes: <b>:</b> ${formatNumber(alquiler.valor/CalcMesesAlquiler(alquiler.fecha_d_alquiler, alquiler.fecha_h_alquiler))} </Col>
                                                 </Row>
                                                 {alquiler.ingreso_alquilers.length > 0 &&
-                                                    <Row className='row-table'>
-                                                        <Table striped bordered hover>
-                                                            <thead>
-                                                                <tr>
-                                                                    <th>Ene</th>
-                                                                    <th>Feb</th>
-                                                                    <th>Mar</th>
-                                                                    <th>Abr</th>
-                                                                    <th>May</th>
-                                                                    <th>Jun</th>
-                                                                    <th>Jul</th>
-                                                                    <th>Ago</th>
-                                                                    <th>Sep</th>
-                                                                    <th>Oct</th>
-                                                                    <th>Nov</th>
-                                                                    <th>Dic</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                <tr>
-                                                                    {
-                                                                        ingresoAlquilerXMes(alquiler.ingreso_alquilers).map((mes, i) =>
-                                                                            <td className={mes >= 1 ? 'state-cobrado' : ((moment(alquiler.fecha_d_alquiler).get('year') == yearHere && moment(alquiler.fecha_d_alquiler).add(1, 'days').get('month') <= i) && (moment(alquiler.fecha_h_alquiler).get('year') >= yearHere && moment(alquiler.fecha_h_alquiler).add(1, 'days').get('month') >= i) ? 'state-por-cobrar' : '')} key={i}></td>
-                                                                        )
-                                                                    }
-                                                                </tr>
-                                                            </tbody>
-                                                        </Table>
-                                                    </Row>
-                                                }
-                                                {/*alquiler.ingreso_alquilers.length > 0 &&
                                                     <GraficIngresosAlquileres alquiler={alquiler} ingresoAlquiler={alquiler.ingreso_alquilers} />
-                                            */}
+                                                }
                                                 {user.rango == 'admin' &&
                                                     <Row className="border-top">
                                                         <Col xs={12} md={12}>
