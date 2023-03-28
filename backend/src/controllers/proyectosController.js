@@ -8,9 +8,9 @@ const configFindAllProyectos = {
         model: Alquiler,
         include: [{
             model: Modulo
-        },{
+        }, {
             model: IngresoAlquiler
-        },{
+        }, {
             model: ModuloDoble,
             include: [{
                 model: Modulo,
@@ -113,47 +113,59 @@ exports.insertProyecto = async (req, res) => {
                                 return res.json(error);
                             });
                         } else if (alquiler.id_modulo_doble) {
-                            ModuloDoble.findOne({
-                                where: {
-                                    id_modulo_doble: alquiler.id_modulo_doble
-                                },
-                                include: [{
-                                    model: Modulo,
-                                    as: 'moduloUno',
-                                    include: [{
-                                        model: Alquiler
-                                    },
-                                    ]
-                                }, {
-                                    model: Modulo,
-                                    as: 'moduloDos',
-                                    include: [{
-                                        model: Alquiler
-                                    },
-                                    ]
-                                }],
-                                raw: true
-                            }).then(modulo_doble => {
-                                /*Si hasta aqui no hay errores debe actualizar los estados de los modulos de la oficina doble*/
-                                Modulo.update({ estado: alquiler.fecha_d_alquiler < new Date() ? 1 : 3, ubicacion: alquiler.ubicacion }, {
+                                ModuloDoble.findOne({
                                     where: {
-                                        id_modulo: modulo_doble.id_modulo_uno
-                                    }
-                                }).then(result => {
-                                    Modulo.update({ estado: alquiler.fecha_d_alquiler < new Date() ? 1 : 3, ubicacion: alquiler.ubicacion }, {
+                                        id_modulo_doble: alquiler.id_modulo_doble
+                                    },
+                                    include: [{
+                                        model: Modulo,
+                                        as: 'moduloUno',
+                                        include: [{
+                                            model: Alquiler
+                                        },
+                                        ]
+                                    }, {
+                                        model: Modulo,
+                                        as: 'moduloDos',
+                                        include: [{
+                                            model: Alquiler
+                                        },
+                                        ]
+                                    }],
+                                    raw: true
+                                }).then(modulo_doble => {
+                                    ModuloDoble.update({ estado: new Date(alquiler.fecha_d_alquiler) < new Date() ? 1 : 3 }, {
                                         where: {
-                                            id_modulo: modulo_doble.id_modulo_dos
+                                            id_modulo_doble: modulo_doble.id_modulo_doble
+                                        }
+                                    }).then(response => {}).catch(err => {
+                                        err.todoMal = "Error al actualizar el estado del módulo doble";
+                                        console.error(err)
+                                    });
+
+                                    /*Si hasta aqui no hay errores debe actualizar los estados de los modulos de la oficina doble*/
+                                    Modulo.update({ estado: new Date(alquiler.fecha_d_alquiler) < new Date() ? 1 : 3, ubicacion: alquiler.ubicacion }, {
+                                        where: {
+                                            id_modulo: modulo_doble.id_modulo_uno
                                         }
                                     }).then(result => {
-                                        /*Si hasta aqui no hay errores se fija si es el ultimo alquiler que se guardo. De ser asi responde que todo
-                                        esta bien */
-                                        if (i == (countAlquileres - 1)) {
-                                            Proyecto.findAll(configFindAllProyectos).then(response => {
-                                                res.json(response);
-                                            }).catch(error => {
-                                                res.json(error);
-                                            });
-                                        }
+                                        Modulo.update({ estado: new Date(alquiler.fecha_d_alquiler) < new Date() ? 1 : 3, ubicacion: alquiler.ubicacion }, {
+                                            where: {
+                                                id_modulo: modulo_doble.id_modulo_dos
+                                            }
+                                        }).then(result => {
+                                            /*Si hasta aqui no hay errores se fija si es el ultimo alquiler que se guardo. De ser asi responde que todo esta bien */
+                                            if (i == (countAlquileres - 1)) {
+                                                Proyecto.findAll(configFindAllProyectos).then(response => {
+                                                    res.json(response);
+                                                }).catch(error => {
+                                                    res.json(error);
+                                                });
+                                            }
+                                        }).catch(error => {
+                                            console.error(error);
+                                            return res.json(error);
+                                        });
                                     }).catch(error => {
                                         console.error(error);
                                         return res.json(error);
@@ -162,11 +174,7 @@ exports.insertProyecto = async (req, res) => {
                                     console.error(error);
                                     return res.json(error);
                                 });
-                            }).catch(error => {
-                                console.error(error);
-                                return res.json(error);
-                            });
-                        } 
+                        }
                     }).catch(error => {
                         console.error(error);
                         return res.json(error);

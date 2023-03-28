@@ -19,6 +19,12 @@ module.exports = ( sequelize, type ) => {
             type: type.BOOLEAN,
             allowNull: true,
             defaultValue: false
+        }, 
+        estado: {
+            type: type.INTEGER,
+            allowNull: true,
+            defaultValue: 0,
+            isNumeric: true
         }
     });
 }

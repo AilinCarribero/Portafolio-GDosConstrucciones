@@ -337,6 +337,8 @@ exports.newModuloDoble = (req, res) => {
 exports.getModulosDobles = (req, res) => {
     ModuloDoble.findAll({
         include: [{
+            model: Alquiler
+        }, {
             model: Modulo,
             as: 'moduloUno',
             include: [{

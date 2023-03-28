@@ -94,49 +94,58 @@ exports.updateNewRenovarContrato = async (req, res) => {
                 res.json(err);
             });
         } else {
-            ModuloDoble.findOne({
+            ModuloDoble.update({ estado: 1 }, {
                 where: {
                     id_modulo_doble: newAlquiler.id_modulo_doble
-                },
-                include: [{
-                    model: Modulo,
-                    as: 'moduloUno',
-                    include: [{
-                        model: Alquiler
-                    },
-                    ]
-                }, {
-                    model: Modulo,
-                    as: 'moduloDos',
-                    include: [{
-                        model: Alquiler
-                    },
-                    ]
-                }],
+                }
             }).then(response => {
-                Modulo.update({ estado: 1, ubicacion: req.body.ubicacion }, {
+                ModuloDoble.findOne({
                     where: {
-                        id_modulo: response.id_modulo_uno
-                    }
-                }).then(response => { }).catch(err => {
-                    err.todoMal = "Error al actualizar el estado del módulo";
-                    console.error(err)
-                    res.json(err);
-                });
+                        id_modulo_doble: newAlquiler.id_modulo_doble
+                    },
+                    include: [{
+                        model: Modulo,
+                        as: 'moduloUno',
+                        include: [{
+                            model: Alquiler
+                        },
+                        ]
+                    }, {
+                        model: Modulo,
+                        as: 'moduloDos',
+                        include: [{
+                            model: Alquiler
+                        },
+                        ]
+                    }],
+                }).then(response => {
+                    Modulo.update({ estado: 1, ubicacion: req.body.ubicacion }, {
+                        where: {
+                            id_modulo: response.id_modulo_uno
+                        }
+                    }).then(response => { }).catch(err => {
+                        err.todoMal = "Error al actualizar el estado del módulo";
+                        console.error(err)
+                        res.json(err);
+                    });
 
-                Modulo.update({ estado: 1, ubicacion: req.body.ubicacion }, {
-                    where: {
-                        id_modulo: response.id_modulo_dos
-                    }
-                }).then(response => { }).catch(err => {
-                    err.todoMal = "Error al actualizar el estado del módulo";
-                    console.error(err)
+                    Modulo.update({ estado: 1, ubicacion: req.body.ubicacion }, {
+                        where: {
+                            id_modulo: response.id_modulo_dos
+                        }
+                    }).then(response => { }).catch(err => {
+                        err.todoMal = "Error al actualizar el estado del módulo";
+                        console.error(err)
+                        res.json(err);
+                    });
+                }).catch(err => {
+                    console.error(err);
                     res.json(err);
-                });
+                })
             }).catch(err => {
-                console.error(err);
-                res.json(err);
-            })
+                err.todoMal = "Error al actualizar el estado del módulo doble";
+                console.error(err)
+            });
         }
     }
 
