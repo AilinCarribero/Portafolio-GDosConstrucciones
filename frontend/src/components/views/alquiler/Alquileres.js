@@ -12,7 +12,7 @@ import FormContrato from './FormContrato';
 import ModalFormulario from '../../utils/modal/formularios/ModalFormulario';
 
 //Hooks
-import { formatFecha, formatNameMes, formatNumber, formatTextMix } from '../../../hooks/useUtils';
+import { calcCantMeses, formatFecha, formatNameMes, formatNumber, formatTextMix } from '../../../hooks/useUtils';
 import { useUser } from '../../../hooks/useUser';
 import { useAlquileres, useGetAlquileresId } from '../../../hooks/useAlquileres';
 
@@ -54,6 +54,75 @@ const Alquileres = () => {
         setActionContrato(action);
     }
 
+    const determinarDeuda = (desde, hasta, ingresos) => {
+        const here = moment(new Date());
+
+        let estado = '';
+        let pagado = true;
+
+        const desdeAM = moment(desde).format("YYYY-MM");
+        const hastaAM = moment(hasta).format("YYYY-MM");
+
+        const cantMeses = calcCantMeses(desde, hasta);
+
+        let arrayMesesAlquiler = [];
+
+        const d = moment(desdeAM);
+
+        for(let i = 0; i < cantMeses; i++) {
+            arrayMesesAlquiler[i] = {
+                mes: d.format("YYYY-MM"),
+                pagado: false
+            };
+
+            d.add(1, 'months');
+        }
+
+        ingresos.forEach(ingreso => {
+            const cantMesesIngreso = calcCantMeses(ingreso.fecha_desde_cobro, ingreso.fecha_hasta_cobro);
+
+            const dI = moment(ingreso.fecha_desde_cobro);
+
+            for(let i = 0; i < cantMesesIngreso; i++) {
+                arrayMesesAlquiler.forEach((alquiler, index) => {
+                    if(alquiler.mes == dI.format("YYYY-MM")) {
+                        arrayMesesAlquiler[index].pagado = true;
+                    }
+                })
+
+                dI.add(1, 'months');
+            }
+        });
+
+        /*
+        Pagado alquiler.pagado && hoy > hastaAM
+        Cancelado alquiler.pagado && hoy < hastaAM
+        Debiendo !alquiler.pagado && hoy > hastaAM
+        Pendientes !alquiler.pagado && hoy < hastaAM
+        */
+        arrayMesesAlquiler.forEach(alquiler => {
+            if(!alquiler.pagado) {
+                pagado = false;
+            }
+        });
+
+        if(!pagado) {
+            if(here.format("YYYY-MM") <= hastaAM) {
+                estado = <OverlayTrigger placement="bottom" overlay={<Tooltip>Pendiente de Pago.</Tooltip>} ><Col xs={2} md={2} id="pago-pendiente"><Icons.Cash size={15} className='state-icon' /></Col></OverlayTrigger>;
+            } else {
+                estado = <OverlayTrigger placement="bottom" overlay={<Tooltip>Debiendo.</Tooltip>} ><Col xs={2} md={2} id="pago-debiendo"><Icons.Cash size={15} className='state-icon' /></Col></OverlayTrigger>;
+            }
+        } else {
+            if(here.format("YYYY-MM") <= hastaAM) {
+                estado = <OverlayTrigger placement="bottom" overlay={<Tooltip>Cancelado.</Tooltip>} ><Col xs={2} md={2} id="pago-cancelado"><Icons.Cash size={15} className='state-icon' /></Col></OverlayTrigger>;
+            } else {
+                estado = <OverlayTrigger placement="bottom" overlay={<Tooltip>Pagado.</Tooltip>} ><Col xs={2} md={2} id="pago-pagado"><Icons.Cash size={15} className='state-icon' /></Col></OverlayTrigger>;
+            }
+        }
+
+        return estado;
+    }
+    
     return (<>
         <ModalFormulario formulario={'ingresoAlquiler'} show={showModalFormIngresoAlquiler} informacion={proyecto} setShow={setShowModalFormIngresoAlquiler} />
         {showModalFormContrato && <FormContrato alquiler={renovarAlquiler} show={showModalFormContrato} setShow={setShowModalFormContrato} setAlquileres={setAlquileres} actionContrato={actionContrato} />}
@@ -111,6 +180,7 @@ const Alquileres = () => {
                                                         <OverlayTrigger placement="bottom" overlay={<Tooltip>En espera.</Tooltip>} ><Col xs={2} md={2} id="no-activo"></Col></OverlayTrigger>
                                                     )
                                                 }
+                                                {determinarDeuda(alquiler.fecha_d_alquiler,alquiler.fecha_h_alquiler,alquiler.ingreso_alquilers)}
                                                 <Col className="acordion-title" xs={4} md={3}>
                                                     <b>
                                                         {alquiler.modulo ?

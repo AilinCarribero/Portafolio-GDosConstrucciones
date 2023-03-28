@@ -130,6 +130,59 @@
     @extend .state-pendiente;
 }
 
+
+/*-------------------- Estado de Pagos -----------------------*/
+.state-pago {
+    width: 25px;
+    height: 25px;
+    border-radius: 40px;
+    display: flex;
+    margin-right: 10px;
+}
+
+.icon-pago {
+    color: white;
+    margin: auto;
+    align-items: center;
+    justify-content: center;
+}
+
+#pago-pendiente {
+    @extend .state-pago;
+    background-color: #ffc904;
+
+    .state-icon {
+        @extend .icon-pago;
+    }
+}
+
+#pago-debiendo {
+    @extend .state-pago;
+    background-color: #c20000;
+
+    .state-icon {
+        @extend .icon-pago;
+    }
+}
+
+#pago-cancelado {
+    @extend .state-pago;
+    background-color: #058abe;
+
+    .state-icon {
+        @extend .icon-pago;
+    }
+}
+
+#pago-pagado {
+    @extend .state-pago;
+    background-color: #05be40;
+
+    .state-icon {
+        @extend .icon-pago;
+    }
+}
+
 /*------------------- Resumenes -----------------------*/
 .content-resumen-sec-buttons {
     width: 97.5%;
@@ -250,6 +303,6 @@ a {
 
 /*-------------------------Secciones---------------------------*/
 .separacion-seccion {
-    border-top: 1px solid #000000 ;
+    border-top: 1px solid #000000;
     padding-top: 15px;
 }
