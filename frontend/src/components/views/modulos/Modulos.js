@@ -28,6 +28,7 @@ import '../../../style/Modulos.scss';
 
 //Img-Icons
 import * as Icons from 'react-bootstrap-icons';
+import GraficTrazabilidadModulo from './GraficTrazabilidadModulo';
 
 const Modulos = () => {
     const { response } = useResponse();
@@ -485,14 +486,14 @@ const Modulos = () => {
                                                     </Row>
                                                 </Col>
                                                 {modulo.descripcion &&
-                                                    <Col xs={12} md={12} className="col-12-accordion">
+                                                    <Col xs={12} md={11} className="col-12-accordion">
                                                         <Row>
                                                             <Col xs={12} md={12}><p>Descripción: {modulo.descripcion}</p></Col>
                                                         </Row>
                                                     </Col>
                                                 }
                                                 {modulo.url_qr &&
-                                                    <Col xs={12} md={12} className="col-12-accordion">
+                                                    <Col xs={12} md={11} className="col-12-accordion">
                                                         <Row>
                                                             <Col className='url-qr' xs={12} md={12}>
                                                                 <p>URL del QR:
@@ -505,7 +506,7 @@ const Modulos = () => {
                                                     </Col>
                                                 }
                                                 {modulo.ubicacion &&
-                                                    <Col xs={12} md={12} className="col-12-accordion">
+                                                    <Col xs={12} md={11} className="col-12-accordion">
                                                         <Row>
                                                             <Col className='url-qr' xs={12} md={12}>
                                                                 <p> Ubicación:
@@ -518,14 +519,15 @@ const Modulos = () => {
                                                     </Col>
                                                 }
                                             </Row>
-                                            {modulo.alquilers.length > 0 && <Row>
-                                                <Col xs={12} md={12} >
-                                                    <Row className="accordion-border-top">
-                                                        <Col xs={11} md={11}><p className="accordion-title-section">Trazabilidad</p></Col>
-                                                    </Row>
-                                                </Col>
-                                                <ReactApexCharts options={options} series={formatDataTimeLine(modulo.alquilers)} type="rangeBar" height={140} />
-                                            </Row>
+                                            {modulo.alquilers.length > 0 &&
+                                                <Row>
+                                                    <Col xs={12} md={12} >
+                                                        <Row className="accordion-border-top">
+                                                            <Col xs={11} md={11}><p className="accordion-title-section">Trazabilidad</p></Col>
+                                                        </Row>
+                                                    </Col>
+                                                    <GraficTrazabilidadModulo alquileres={modulo.alquilers} />
+                                                </Row>
                                             }
                                             {user.rango == 'admin' &&
                                                 <Row className="border-top">

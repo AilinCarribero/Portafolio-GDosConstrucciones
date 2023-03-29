@@ -27,7 +27,7 @@ const FormContrato = ({ alquiler, show, setShow, setAlquileres, actionContrato, 
     const { response } = useResponse();
 
     const proyectos = useSelector(state => state.proyectoRedux.proyectos);
-    const proyecto = proyectos.find(id ? proyecto => proyecto.id_proyecto.trim() === id.trim() : proyecto.id_proyecto.trim() === idProyecto.trim() );
+    const proyecto = proyectos.find(id ? proyecto => proyecto.id_proyecto.trim() === id.trim() : proyecto.id_proyecto.trim() === idProyecto.trim());
 
 
     const [newContrato, setNewContrato] = useState({
@@ -158,8 +158,23 @@ const FormContrato = ({ alquiler, show, setShow, setAlquileres, actionContrato, 
                     {modulo.nombre_modulo || `${modulo.tipologia} - ${idModulo} - ${formatNumber(modulo.ancho)} x ${formatNumber(modulo.largo)} - ${modulo.material_cerramiento}`}
                 </option>
             )
-        }
+        } 
     }
+
+    const findModuloDobleAlquiler = (idModuloDoble) => {
+        const moduloFind = proyecto.alquilers.find(moduloAlquiler => idModuloDoble == moduloAlquiler.id_modulo_doble);
+    
+        if (moduloFind) {
+            const moduloDoble = moduloFind.modulo_doble;
+
+            return (
+                <option key={idModuloDoble} value={idModuloDoble}>
+                    {`OD - ${moduloDoble.id_modulo_doble} - OS - ${moduloDoble.id_modulo_uno} - OS - ${moduloDoble.id_modulo_dos} `}
+                </option>
+            )
+        } 
+    }
+
 
     return (
         <Modal show={show} onHide={handleClose} animation={false}>
@@ -177,12 +192,12 @@ const FormContrato = ({ alquiler, show, setShow, setAlquileres, actionContrato, 
                                                 modulos.map((modulo) => (
                                                     modulo.estado === 0 ?
                                                         <option key={modulo.id_modulo} value={modulo.id_modulo}>
-                                                            {modulo.nombre_modulo  || `${modulo.tipologia} - ${modulo.id_modulo} - ${formatNumber(modulo.ancho)} x ${formatNumber(modulo.largo)} - ${modulo.material_cerramiento}`}
+                                                            {modulo.nombre_modulo || `${modulo.tipologia} - ${modulo.id_modulo} - ${formatNumber(modulo.ancho)} x ${formatNumber(modulo.largo)} - ${modulo.material_cerramiento}`}
                                                         </option>
                                                         :
                                                         findModuloAlquiler(modulo.id_modulo)
                                                 ))
-                                                : <option>NO HAY MÓDULOS DISPONIBLES</option>
+                                                : <option key='null-modulo'>NO HAY MÓDULOS DISPONIBLES</option>
                                             }
                                         </Form.Select>
                                     </FloatingLabel>
@@ -193,12 +208,18 @@ const FormContrato = ({ alquiler, show, setShow, setAlquileres, actionContrato, 
                                             <option value=""> </option>
                                             {modulosDobles.length > 0 ?
                                                 modulosDobles.map((moduloDoble) => (
-                                                    moduloDoble.vinculacion === true &&
-                                                    <option key={moduloDoble.id_modulo_doble} value={moduloDoble.id_modulo_doble}>
-                                                        {`OD - ${moduloDoble.id_modulo_doble} - OS - ${moduloDoble.id_modulo_uno} - OS - ${moduloDoble.id_modulo_dos} `}
-                                                    </option>
+                                                    moduloDoble.vinculacion === true ? (
+                                                        moduloDoble.estado === 0 ?
+                                                            <option key={moduloDoble.id_modulo_doble} value={moduloDoble.id_modulo_doble}>
+                                                                {`OD - ${moduloDoble.id_modulo_doble} - OS - ${moduloDoble.id_modulo_uno} - OS - ${moduloDoble.id_modulo_dos} `}
+                                                            </option>
+                                                            :
+                                                            findModuloDobleAlquiler(moduloDoble.id_modulo_doble)
+                                                    )
+                                                    :
+                                                    <option key='null-modulo-doble'>NO HAY MÓDULOS DOBLES DISPONIBLES</option>
                                                 ))
-                                                : <option>NO HAY MÓDULOS DOBLES DISPONIBLES</option>
+                                                : <option key='null-modulo-doble'>NO HAY MÓDULOS DOBLES DISPONIBLES</option>
                                             }
                                         </Form.Select>
                                     </FloatingLabel>

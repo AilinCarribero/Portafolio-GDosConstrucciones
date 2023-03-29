@@ -1,5 +1,5 @@
 import React from 'react';
-import { Accordion, Col, Row, Spinner } from 'react-bootstrap';
+import { Accordion, Col, OverlayTrigger, Row, Spinner, Tooltip } from 'react-bootstrap';
 
 //Hooks
 import { useGetModulos } from '../../../hooks/useModulos';
@@ -8,6 +8,7 @@ import { useGetModulos } from '../../../hooks/useModulos';
 import * as Icons from 'react-bootstrap-icons';
 import { formatFecha, formatNumber, ToastComponent } from '../../../hooks/useUtils';
 import { useSelector } from 'react-redux';
+import GraficTrazabilidadModulo from './GraficTrazabilidadModulo';
 
 const ModulosDobles = () => {
     const { modulosDobles } = useGetModulos();
@@ -16,6 +17,7 @@ const ModulosDobles = () => {
 
     const handleCopy = (e, copy) => {
         e.preventDefault();
+        
         navigator.clipboard.writeText(copy);
         ToastComponent('success', "Se copió correctamente");
     }
@@ -58,8 +60,36 @@ const ModulosDobles = () => {
                             <Accordion.Item eventKey={moduloDoble.id_modulo_doble}>
                                 <Accordion.Header className="accordion-header-modulos">
                                     <Row>
+                                        {moduloDoble.estado == 0 &&
+                                            <OverlayTrigger placement="right" overlay={<Tooltip>Disponible {moduloDoble.vinculacion && 'vinculado'}.</Tooltip>} >
+                                                <Col xs={1} md={1} id="disponible">
+                                                    {moduloDoble.vinculacion && <Icons.Diagram2Fill className='icon-vinculado' />}
+                                                </Col>
+                                            </OverlayTrigger>
+                                        }
+                                        {moduloDoble.estado == 1 &&
+                                            <OverlayTrigger placement="right" overlay={<Tooltip>Ocupado {moduloDoble.vinculacion && 'vinculado'}.</Tooltip>} >
+                                                <Col xs={1} md={1} id="ocupado">
+                                                    {moduloDoble.vinculacion && <Icons.Diagram2Fill className='icon-vinculado' />}
+                                                </Col>
+                                            </OverlayTrigger>
+                                        }
+                                        {moduloDoble.estado == 2 &&
+                                            <OverlayTrigger placement="right" overlay={<Tooltip>Vendido {moduloDoble.vinculacion && 'vinculado'}.</Tooltip>} >
+                                                <Col xs={1} md={1} id="vendido">
+                                                    {moduloDoble.vinculacion && <Icons.Diagram2Fill className='icon-vinculado' />}
+                                                </Col>
+                                            </OverlayTrigger>
+                                        }
+                                        {moduloDoble.estado == 3 &&
+                                            <OverlayTrigger placement="right" overlay={<Tooltip>En Espera {moduloDoble.vinculacion && 'vinculado'}.</Tooltip>} >
+                                                <Col xs={1} md={1} id="en-espera">
+                                                    {moduloDoble.vinculacion && <Icons.Diagram2Fill className='icon-vinculado' />}
+                                                </Col>
+                                            </OverlayTrigger>
+                                        }
                                         <Col xs={9} md={10} className="accordion-nombre-modulos">
-                                            {`OD - ${moduloDoble.id_modulo_doble} - OS - ${moduloDoble.id_modulo_uno} - OS - ${moduloDoble.id_modulo_dos} ` }
+                                            {`OD - ${moduloDoble.id_modulo_doble} - OS - ${moduloDoble.id_modulo_uno} - OS - ${moduloDoble.id_modulo_dos} `}
                                         </Col>
                                     </Row>
                                 </Accordion.Header>
@@ -292,15 +322,16 @@ const ModulosDobles = () => {
                                             </Col>
                                         }
                                     </Row>
-                                    {/*moduloDoble.alquilers.length > 0 && <Row>
-                                    <Col xs={12} md={12} >
-                                        <Row className="accordion-border-top">
-                                            <Col xs={11} md={11}><p className="accordion-title-section">Trazabilidad</p></Col>
+                                    {moduloDoble.alquilers.length > 0 &&
+                                        <Row>
+                                            <Col xs={12} md={12} >
+                                                <Row className="accordion-border-top">
+                                                    <Col xs={11} md={11}><p className="accordion-title-section">Trazabilidad</p></Col>
+                                                </Row>
+                                            </Col>
+                                            <GraficTrazabilidadModulo alquileres={moduloDoble.alquilers} />
                                         </Row>
-                                    </Col>
-                                    <ReactApexCharts options={options} series={formatDataTimeLine(moduloDoble.alquilers)} type="rangeBar" height={140} />
-                                </Row>
-                                */ }
+                                    }
                                 </Accordion.Body>
                             </Accordion.Item>
                         </Col>
