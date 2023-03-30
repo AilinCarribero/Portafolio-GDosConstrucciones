@@ -94,13 +94,7 @@ const Alquileres = () => {
                 dI.add(1, 'months');
             }
         });
-
-        /*
-        Pagado alquiler.pagado && hoy > hastaAM
-        Cancelado alquiler.pagado && hoy < hastaAM
-        Debiendo !alquiler.pagado && hoy > hastaAM
-        Pendientes !alquiler.pagado && hoy < hastaAM
-        */
+        
         arrayMesesAlquiler.forEach(alquiler => {
             if (!alquiler.pagado) {
                 pagado = false;
