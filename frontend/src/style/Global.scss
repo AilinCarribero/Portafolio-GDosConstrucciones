@@ -149,15 +149,6 @@
 
 #pago-pendiente {
     @extend .state-pago;
-    background-color: #ffc904;
-
-    .state-icon {
-        @extend .icon-pago;
-    }
-}
-
-#pago-debiendo {
-    @extend .state-pago;
     background-color: #c20000;
 
     .state-icon {
@@ -167,16 +158,16 @@
 
 #pago-cancelado {
     @extend .state-pago;
-    background-color: #058abe;
+    background-color: #05be40;
 
     .state-icon {
         @extend .icon-pago;
     }
 }
 
-#pago-pagado {
+#pago-parcial {
     @extend .state-pago;
-    background-color: #05be40;
+    background-color: #058abe;
 
     .state-icon {
         @extend .icon-pago;

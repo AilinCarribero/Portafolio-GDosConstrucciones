@@ -30,7 +30,7 @@ const ResumenContable = ({ Totales }) => {
     
     return (
         <Row className="content-resumen">
-            <Col xs={12} md={4} className="content-section" >
+            {/*<Col xs={12} md={4} className="content-section" >
                 Proyectos
                 <Row>
                     <Col xs={6} md={6} >
@@ -48,8 +48,8 @@ const ResumenContable = ({ Totales }) => {
                         {loadingProyectos ? <Spinner animation="border" variant="light" size='sm' /> : `$${formatNumber(Totales.ventas)}`}
                     </Col>
                 </Row>
-            </Col>
-            <Col xs={12} md={4} className="content-section" >
+            </Col>*/}
+            <Col xs={12} md={6} className="content-section" >
                 Alquileres
                 <Row>
                     <Col xs={6} md={6} >Acumulado:</Col>
@@ -70,7 +70,7 @@ const ResumenContable = ({ Totales }) => {
                     </Col>
                 </Row>
             </Col>
-            <Col xs={12} md={4} className="content-section" >
+            <Col xs={12} md={6} className="content-section" >
                 Módulos
                 <Row>
                     <Col xs={6} md={6} >Cantidad de Unidades:</Col>

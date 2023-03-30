@@ -59,6 +59,7 @@ const Alquileres = () => {
 
         let estado = '';
         let pagado = true;
+        let min1Pagado = false; 
 
         const desdeAM = moment(desde).format("YYYY-MM");
         const hastaAM = moment(hasta).format("YYYY-MM");
@@ -69,7 +70,7 @@ const Alquileres = () => {
 
         const d = moment(desdeAM);
 
-        for(let i = 0; i < cantMeses; i++) {
+        for (let i = 0; i < cantMeses; i++) {
             arrayMesesAlquiler[i] = {
                 mes: d.format("YYYY-MM"),
                 pagado: false
@@ -83,9 +84,9 @@ const Alquileres = () => {
 
             const dI = moment(ingreso.fecha_desde_cobro);
 
-            for(let i = 0; i < cantMesesIngreso; i++) {
+            for (let i = 0; i < cantMesesIngreso; i++) {
                 arrayMesesAlquiler.forEach((alquiler, index) => {
-                    if(alquiler.mes == dI.format("YYYY-MM")) {
+                    if (alquiler.mes == dI.format("YYYY-MM")) {
                         arrayMesesAlquiler[index].pagado = true;
                     }
                 })
@@ -101,28 +102,26 @@ const Alquileres = () => {
         Pendientes !alquiler.pagado && hoy < hastaAM
         */
         arrayMesesAlquiler.forEach(alquiler => {
-            if(!alquiler.pagado) {
+            if (!alquiler.pagado) {
                 pagado = false;
+            } else {
+                min1Pagado = true;
             }
         });
 
-        if(!pagado) {
-            if(here.format("YYYY-MM") <= hastaAM) {
+        if (!pagado) {
+            if (!min1Pagado) {
                 estado = <OverlayTrigger placement="bottom" overlay={<Tooltip>Pendiente de Pago.</Tooltip>} ><Col xs={2} md={2} id="pago-pendiente"><Icons.Cash size={15} className='state-icon' /></Col></OverlayTrigger>;
             } else {
-                estado = <OverlayTrigger placement="bottom" overlay={<Tooltip>Debiendo.</Tooltip>} ><Col xs={2} md={2} id="pago-debiendo"><Icons.Cash size={15} className='state-icon' /></Col></OverlayTrigger>;
+                estado = <OverlayTrigger placement="bottom" overlay={<Tooltip>Pago parcial.</Tooltip>} ><Col xs={2} md={2} id="pago-parcial"><Icons.Cash size={15} className='state-icon' /></Col></OverlayTrigger>;
             }
         } else {
-            if(here.format("YYYY-MM") <= hastaAM) {
-                estado = <OverlayTrigger placement="bottom" overlay={<Tooltip>Cancelado.</Tooltip>} ><Col xs={2} md={2} id="pago-cancelado"><Icons.Cash size={15} className='state-icon' /></Col></OverlayTrigger>;
-            } else {
-                estado = <OverlayTrigger placement="bottom" overlay={<Tooltip>Pagado.</Tooltip>} ><Col xs={2} md={2} id="pago-pagado"><Icons.Cash size={15} className='state-icon' /></Col></OverlayTrigger>;
-            }
+            estado = <OverlayTrigger placement="bottom" overlay={<Tooltip>Pago Cancelado.</Tooltip>} ><Col xs={2} md={2} id="pago-cancelado"><Icons.Cash size={15} className='state-icon' /></Col></OverlayTrigger>;
         }
 
         return estado;
     }
-    
+
     return (<>
         <ModalFormulario formulario={'ingresoAlquiler'} show={showModalFormIngresoAlquiler} informacion={proyecto} setShow={setShowModalFormIngresoAlquiler} />
         {showModalFormContrato && <FormContrato alquiler={renovarAlquiler} show={showModalFormContrato} setShow={setShowModalFormContrato} setAlquileres={setAlquileres} actionContrato={actionContrato} />}
@@ -180,7 +179,7 @@ const Alquileres = () => {
                                                         <OverlayTrigger placement="bottom" overlay={<Tooltip>En espera.</Tooltip>} ><Col xs={2} md={2} id="no-activo"></Col></OverlayTrigger>
                                                     )
                                                 }
-                                                {determinarDeuda(alquiler.fecha_d_alquiler,alquiler.fecha_h_alquiler,alquiler.ingreso_alquilers)}
+                                                {determinarDeuda(alquiler.fecha_d_alquiler, alquiler.fecha_h_alquiler, alquiler.ingreso_alquilers)}
                                                 <Col className="acordion-title" xs={4} md={3}>
                                                     <b>
                                                         {alquiler.modulo ?
@@ -196,7 +195,7 @@ const Alquileres = () => {
                                                 <Row>
                                                     <Col xs={12} md={4}>Fecha de inicio: <b>:</b> {formatFecha(alquiler.fecha_d_alquiler)}</Col>
                                                     <Col xs={12} md={4}>Fecha de fin: <b>:</b> {formatFecha(alquiler.fecha_h_alquiler)} </Col>
-                                                    <Col xs={12} md={4}>Valor por mes: <b>:</b> ${formatNumber(alquiler.valor/CalcMesesAlquiler(alquiler.fecha_d_alquiler, alquiler.fecha_h_alquiler))} </Col>
+                                                    <Col xs={12} md={4}>Valor por mes: <b>:</b> ${formatNumber(alquiler.valor / CalcMesesAlquiler(alquiler.fecha_d_alquiler, alquiler.fecha_h_alquiler))} </Col>
                                                 </Row>
                                                 {alquiler.ingreso_alquilers.length > 0 &&
                                                     <GraficIngresosAlquileres alquiler={alquiler} ingresoAlquiler={alquiler.ingreso_alquilers} />
