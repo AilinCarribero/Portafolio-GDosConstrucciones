@@ -217,8 +217,14 @@
 
         .input-text-search {
             width: 60vw;
-            margin-top: 3.5px;
+            margin-top: 4px;
             border-radius: 10px;
+        }
+
+        @media only screen and (hover: none) and (pointer: coarse) {
+            .input-text-search {
+                width: 100%;
+            }
         }
     }
 }

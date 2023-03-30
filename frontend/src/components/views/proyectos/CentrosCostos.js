@@ -116,17 +116,17 @@ const CentrosCostos = ({ proyectos, mostrar, setProyectos }) => {
                         </button>
                     </Col>*/}
                     {(user.rango == 'admin' || user.rango == "moderador") && <>
-                        <Col xs={6} sm={6} md={4}>
+                        <Col xs={12} sm={6} md={4}>
                             <button className="button-agregar" onClick={() => setShowFormSelccion('proyecto')} variant="dark">
                                 <Icons.Plus className="icon-button" size={19} /> Proyecto
                             </button>
                         </Col>
-                        <Col xs={6} sm={6} md={4}>
+                        <Col xs={12} sm={6} md={4}>
                             <button className="button-agregar" onClick={() => setShowFormSelccion('ingresoAlquiler')} variant="dark" >
                                 <Icons.Plus className="icon-button" size={19} /> Ingreso a un Alquiler
                             </button>
                         </Col>
-                        <Col xs={6} sm={6} md={4}>
+                        <Col xs={12} sm={6} md={4}>
                             <Form.Control className='input-text-search' onChange={buscarProyecto} name="search" type="text" value={search} placeholder='Buscar' />
                         </Col>
                     </>}
