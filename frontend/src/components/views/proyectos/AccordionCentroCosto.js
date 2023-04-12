@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Accordion, Row, Col, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
@@ -18,6 +18,8 @@ import * as Icons from 'react-bootstrap-icons';
 const AccordionCentrosCostos = ({ proyecto, setProyectos }) => {
     const { user } = useUser();
     const { setAlquileres } = useGetAlquileresId();
+
+    const [diasRestAlquileres, setDiasRestAlquileres] = useState([]);
 
     const [showFormUpdate, setShowFormUpdate] = useState(false);
     const [showModalFormContrato, setShowModalFormContrato] = useState(false);
@@ -83,6 +85,20 @@ const AccordionCentrosCostos = ({ proyecto, setProyectos }) => {
         setActionContrato(action);
     }
 
+    useEffect(() => {
+        let arrayAux = [];
+
+        proyecto.alquilers.map((alquiler, i) => {
+            if (calcDifDias(new Date(), alquiler.fecha_h_alquiler)) {
+                arrayAux[i] = calcDifDias(new Date(), alquiler.fecha_h_alquiler);
+            }
+        });
+
+        setDiasRestAlquileres(arrayAux.sort((a, b) => a - b));
+
+        return () => { }
+    }, [])
+
     return (<>
         {showFormUpdate && <ModalFormulario formulario={'proyecto'} informacion={proyecto} show={showFormUpdate} setShow={setShowFormUpdate} updateNew={setProyectos} />}
         {showModalFormContrato && <FormContrato idProyecto={idProyecto} show={showModalFormContrato} setShow={setShowModalFormContrato} setAlquileres={setAlquileres} actionContrato={actionContrato} />}
@@ -107,11 +123,16 @@ const AccordionCentrosCostos = ({ proyecto, setProyectos }) => {
                 }
 
                 <Col xs={5} md={5}>{proyecto.id_proyecto}</Col>
-                {proyecto.fecha_f_proyecto && calcDifDias(new Date(), proyecto.fecha_f_proyecto) > 0 &&
+                {proyecto.fecha_f_proyecto && calcDifDias(new Date(), proyecto.fecha_f_proyecto) > 0 && <>
                     <Col xs={2} md={2} className={calcDifDias(new Date(), proyecto.fecha_f_proyecto) <= 15 ? "text-for-finish" : ""} >
                         Dias restantes: {calcDifDias(new Date(), proyecto.fecha_f_proyecto)}
                     </Col>
-                }
+                    {diasRestAlquileres[0] && diasRestAlquileres[0] != calcDifDias(new Date(), proyecto.fecha_f_proyecto) &&
+                        <Col xs={2} md={2} className={diasRestAlquileres[0] <= 15 ? "text-for-finish" : ""} >
+                            Próximo vencimiento: {diasRestAlquileres[0]}
+                        </Col>
+                    }
+                </>}
                 {/*(user.rango == "admin" || user.rango == "moderador") && !proyecto.id_proyecto.includes('CCC') && !proyecto.id_proyecto.includes('CCE') &&
                         <Col xs={4} md={3}> Resto: ${formatNumber(ingresosProyecto(proyecto.ingresos) - egresosProyecto(proyecto.egresos))} / USD${formatNumber(ingresosUSDProyecto(proyecto.ingresos) - egresosUSDProyecto(proyecto.egresos))}</Col>
                     */}
