@@ -7,9 +7,10 @@ COPY ["package.json", "package-lock.json" , "/app/cuerre/"]
 ENV REACT_APP_REST=https://gestion.gdosconstrucciones.com.ar/api/
 ENV PORT=3002
 
+RUN npm config set registry http://registry.npmjs.org/
 RUN npm config set fetch-retry-mintimeout 20000
 RUN npm config set fetch-retry-maxtimeout 120000
-RUN npm install -d
+RUN npm install
  
 COPY [".", "/app/cuerre/"]
 
