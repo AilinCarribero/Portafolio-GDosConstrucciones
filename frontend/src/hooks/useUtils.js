@@ -211,7 +211,7 @@ export const calcDifDias = (inicio, fin) => {
     const fechaDesde = moment(inicio);
     const fechaHasta = moment(fin);
 
-    const cantMeses = fechaHasta.diff(fechaDesde, 'days') > 0 ? fechaHasta.diff(fechaDesde, 'days') : 0;
+    const cantMeses = fechaHasta.diff(fechaDesde, 'days') + 1 > 0 ? fechaHasta.diff(fechaDesde, 'days') + 1 : 0;
 
     return cantMeses;
 }
