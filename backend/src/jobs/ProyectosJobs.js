@@ -1,5 +1,6 @@
 const { default: Decimal } = require("decimal.js-light");
 const { Proyecto, Alquiler, Egreso, Modulo, Ingreso } = require("../../db");
+const moment = require('moment');
 
 const configFindAllProyectos = {
     include: [{
@@ -105,6 +106,19 @@ exports.estadoProyectos = () => {
                         }
                     }
                 });
+
+                //Nos aseguramos de que las fechas de finalizacion de los proyectos no sean diferenetes a las fechas del ultimos alquiler a vencer
+                if (moment(proyecto.fecha_f_proyecto).format("DD-MM-YYYY") !== moment(proyecto.alquilers[0].fecha_h_alquiler).format("DD-MM-YYYY")) {
+                    Proyecto.update({ fecha_f_proyecto: proyecto.alquilers[0].fecha_h_alquiler }, {
+                        where: {
+                            id_proyecto: proyecto.id_proyecto
+                        }
+                    }).then(response => {
+                        console.log(proyecto.id_proyecto + ` Fecha final ${moment(proyecto.fecha_f_proyecto).format("DD-MM-YYYY")} actualizada a la fecha ${moment(proyecto.alquilers[0].fecha_h_alquiler).format("DD-MM-YYYY")} del alquiler mas distante`)
+                    }).catch(err => {
+                        console.error(err);
+                    })
+                }
 
                 //Nos aseguramos de que el total de alquileres este bien calculado
                 if (total_alquileres != proyecto.alquiler_total) {
