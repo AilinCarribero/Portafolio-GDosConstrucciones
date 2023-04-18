@@ -8,8 +8,10 @@ frontend/.env
 frontend/node_modules
 frontend/Dockerfile
 
-cuerre/.env
+/cuerre/.env
 /cuerre/node_modules
 cuerre/node_modules
+/cuerre/package-lock.json
+cuerre/package-lock.json
 
 /bd
