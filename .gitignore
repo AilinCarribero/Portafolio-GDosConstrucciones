@@ -11,7 +11,5 @@ frontend/Dockerfile
 /cuerre/.env
 /cuerre/node_modules
 cuerre/node_modules
-/cuerre/package-lock.json
-cuerre/package-lock.json
 
 /bd
