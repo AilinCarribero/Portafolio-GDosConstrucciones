@@ -8,7 +8,7 @@ ENV REACT_APP_REST=https://gestion.gdosconstrucciones.com.ar/api/
 
 RUN npm config set fetch-retry-mintimeout 20000
 RUN npm config set fetch-retry-maxtimeout 120000
-RUN npm install
+RUN npm install --save
  
 COPY [".", "/app/frontend/"]
 
