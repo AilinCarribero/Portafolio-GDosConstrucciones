@@ -6,6 +6,8 @@ COPY ["package.json", "package-lock.json" , "/app/frontend/"]
 
 ENV REACT_APP_REST=https://gestion.gdosconstrucciones.com.ar/api/
 
+RUN npm config set fetch-retry-mintimeout 20000
+RUN npm config set fetch-retry-maxtimeout 120000
 RUN npm install
  
 COPY [".", "/app/frontend/"]
