@@ -9,7 +9,7 @@ ENV PORT=3002
 
 RUN npm config set fetch-retry-mintimeout 20000
 RUN npm config set fetch-retry-maxtimeout 120000
-RUN npm install --save
+RUN npm install -d
  
 COPY [".", "/app/cuerre/"]
 
