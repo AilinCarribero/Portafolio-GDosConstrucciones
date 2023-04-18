@@ -26,6 +26,19 @@ exports.estadoProyectos = () => {
             //Si existen alquileres
             if (proyecto.alquilers.length > 0) {
                 let total_alquileres = new Decimal(0);
+                
+                //Nos aseguramos de que las fechas de finalizacion de los proyectos no sean diferenetes a las fechas del ultimos alquiler a vencer
+                if (!proyecto.fecha_f_proyecto || moment(proyecto.fecha_f_proyecto).format("DD-MM-YYYY") !== moment(proyecto.alquilers[0].fecha_h_alquiler).format("DD-MM-YYYY")) {
+                    Proyecto.update({ fecha_f_proyecto: proyecto.alquilers[0].fecha_h_alquiler }, {
+                        where: {
+                            id_proyecto: proyecto.id_proyecto
+                        }
+                    }).then(response => {
+                        console.log(proyecto.id_proyecto + ` Fecha final ${moment(proyecto.fecha_f_proyecto).format("DD-MM-YYYY")} actualizada a la fecha ${moment(proyecto.alquilers[0].fecha_h_alquiler).format("DD-MM-YYYY")} del alquiler mas distante`)
+                    }).catch(err => {
+                        console.error(err);
+                    })
+                }
 
                 proyecto.alquilers.map(alquiler => {
                     total_alquileres = total_alquileres.add(alquiler.valor);
@@ -106,19 +119,6 @@ exports.estadoProyectos = () => {
                         }
                     }
                 });
-
-                //Nos aseguramos de que las fechas de finalizacion de los proyectos no sean diferenetes a las fechas del ultimos alquiler a vencer
-                if (moment(proyecto.fecha_f_proyecto).format("DD-MM-YYYY") !== moment(proyecto.alquilers[0].fecha_h_alquiler).format("DD-MM-YYYY")) {
-                    Proyecto.update({ fecha_f_proyecto: proyecto.alquilers[0].fecha_h_alquiler }, {
-                        where: {
-                            id_proyecto: proyecto.id_proyecto
-                        }
-                    }).then(response => {
-                        console.log(proyecto.id_proyecto + ` Fecha final ${moment(proyecto.fecha_f_proyecto).format("DD-MM-YYYY")} actualizada a la fecha ${moment(proyecto.alquilers[0].fecha_h_alquiler).format("DD-MM-YYYY")} del alquiler mas distante`)
-                    }).catch(err => {
-                        console.error(err);
-                    })
-                }
 
                 //Nos aseguramos de que el total de alquileres este bien calculado
                 if (total_alquileres != proyecto.alquiler_total) {
