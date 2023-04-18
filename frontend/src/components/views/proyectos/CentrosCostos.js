@@ -54,7 +54,7 @@ const CentrosCostos = ({ proyectos, mostrar, setProyectos }) => {
                     } else if (mostrar == 'ccc-cce' && (proyecto.id_proyecto.includes('CCC') || proyecto.id_proyecto.includes('CCE'))) {
                         return proyecto
                     }
-                })
+                }).sort((a, b) => a.diasRestAlquileres - b.diasRestAlquileres)
             );
         }
     }, [proyectos, mostrar]);

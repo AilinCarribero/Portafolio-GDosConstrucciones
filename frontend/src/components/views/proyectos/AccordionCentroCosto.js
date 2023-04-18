@@ -19,8 +19,6 @@ const AccordionCentrosCostos = ({ proyecto, setProyectos }) => {
     const { user } = useUser();
     const { setAlquileres } = useGetAlquileresId();
 
-    const [diasRestAlquileres, setDiasRestAlquileres] = useState([]);
-
     const [showFormUpdate, setShowFormUpdate] = useState(false);
     const [showModalFormContrato, setShowModalFormContrato] = useState(false);
 
@@ -85,20 +83,6 @@ const AccordionCentrosCostos = ({ proyecto, setProyectos }) => {
         setActionContrato(action);
     }
 
-    useEffect(() => {
-        let arrayAux = [];
-
-        proyecto.alquilers.map((alquiler, i) => {
-            if (calcDifDias(new Date(), alquiler.fecha_h_alquiler)) {
-                arrayAux[i] = calcDifDias(new Date(), alquiler.fecha_h_alquiler);
-            }
-        });
-
-        setDiasRestAlquileres(arrayAux.sort((a, b) => a - b));
-
-        return () => { }
-    }, [])
-
     return (<>
         {showFormUpdate && <ModalFormulario formulario={'proyecto'} informacion={proyecto} show={showFormUpdate} setShow={setShowFormUpdate} updateNew={setProyectos} />}
         {showModalFormContrato && <FormContrato idProyecto={idProyecto} show={showModalFormContrato} setShow={setShowModalFormContrato} setAlquileres={setAlquileres} actionContrato={actionContrato} />}
@@ -127,9 +111,9 @@ const AccordionCentrosCostos = ({ proyecto, setProyectos }) => {
                     <Col xs={2} md={2} className={calcDifDias(new Date(), proyecto.fecha_f_proyecto) <= 15 ? "text-for-finish" : ""} >
                         Dias restantes: {calcDifDias(new Date(), proyecto.fecha_f_proyecto)}
                     </Col>
-                    {diasRestAlquileres[0] && diasRestAlquileres[0] != calcDifDias(new Date(), proyecto.fecha_f_proyecto) &&
-                        <Col xs={2} md={2} className={diasRestAlquileres[0] <= 15 ? "text-for-finish" : ""} >
-                            Próximo vencimiento: {diasRestAlquileres[0]}
+                    {proyecto.diasRestAlquileres && proyecto.diasRestAlquileres != calcDifDias(new Date(), proyecto.fecha_f_proyecto) &&
+                        <Col xs={2} md={2} className={proyecto.diasRestAlquileres <= 15 ? "text-for-finish" : ""} >
+                            Próximo vencimiento: {proyecto.diasRestAlquileres}
                         </Col>
                     }
                 </>}

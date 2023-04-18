@@ -1,7 +1,7 @@
 import Decimal from "decimal.js-light";
 import moment from "moment";
 import { useSelector } from "react-redux";
-import { calcCantMeses, calcularValorXMes } from "../../../hooks/useUtils";
+import { calcCantMeses, calcDifDias, calcularValorXMes } from "../../../hooks/useUtils";
 import { getApiProyectos } from "../../../services/apiProyectos";
 import { setProyectos, changeFiltros, activeLoading, removeFiltros } from "./proyectoSlice";
 
@@ -26,7 +26,7 @@ export const getProyectos = () => (dispatch) => {
             diciembre: 0,
         }
 
-        proyectos.map(proyecto => {
+        const newProyectos = proyectos.map(proyecto => {
             if (proyecto.alquilers.length > 0) {
                 let total = 0;
                 let auxTotalesXMesXProyecto = {
@@ -45,20 +45,18 @@ export const getProyectos = () => (dispatch) => {
                 }
 
                 proyecto.alquilers.map(alquiler => {
-                    //console.log(alquiler.fecha_d_alquiler, alquiler.fecha_h_alquiler)
                     const fechaDesde = moment(alquiler.fecha_d_alquiler);
                     const fechaHasta = moment(alquiler.fecha_h_alquiler);
 
                     const cantMeses = calcCantMeses(fechaDesde, fechaHasta);
-//console.log(cantMeses)
+
                     const valorXMes = cantMeses ? new Decimal(alquiler.valor).div(cantMeses).toNumber() : alquiler.valor;
 
                     const valorTotalXMes = calcularValorXMes(fechaDesde, cantMeses, valorXMes);
-//console.log(valorTotalXMes)
-//console.log('----------------------------')
+
                     total = new Decimal(total).add(alquiler.valor).toNumber();
 
-                    if(new Date(alquiler.fecha_d_alquiler) <= new Date() && new Date() <= new Date(alquiler.fecha_h_alquiler)) {
+                    if (new Date(alquiler.fecha_d_alquiler) <= new Date() && new Date() <= new Date(alquiler.fecha_h_alquiler)) {
                         totalVigente = new Decimal(totalVigente).add(alquiler.valor).toNumber();
                     }
 
@@ -96,12 +94,26 @@ export const getProyectos = () => (dispatch) => {
                     noviembre: new Decimal(totalAlquileresXMes.noviembre).add(auxTotalesXMesXProyecto.noviembre).toNumber(),
                     diciembre: new Decimal(totalAlquileresXMes.diciembre).add(auxTotalesXMesXProyecto.diciembre).toNumber()
                 }
-                
+
+                //Calculamos cuantos dias quedan para que finalice el proximo contrato
+                let arrayAux = [];
+
+                proyecto.alquilers.map((alquiler, i) => {
+                    if (calcDifDias(new Date(), alquiler.fecha_h_alquiler)) {
+                        arrayAux[i] = calcDifDias(new Date(), alquiler.fecha_h_alquiler);
+                    }
+                });
+
+                const diasRestAlquileres = {diasRestAlquileres: arrayAux.sort((a, b) => a - b)[0]};
+
+                return { ...proyecto, ...diasRestAlquileres }
+            } else {
+                return proyecto
             }
         });
-
+        
         const payload = {
-            proyectos: proyectos,
+            proyectos: newProyectos,
             totalAlquileres: totalAlquileres,
             totalAlquileresXMes: totalAlquileresXMes,
             totalVigente: totalVigente
