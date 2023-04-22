@@ -1,4 +1,5 @@
 const { Alquiler, Modulo, ModuloDoble } = require("../../db");
+const moment = require('moment');
 
 exports.estadoModulos = () => {
     Modulo.findAll({
@@ -22,7 +23,10 @@ exports.estadoModulos = () => {
                 if (modulo.estado != 2) {
                     if (modulo.alquilers.length > 0) {
                         //Si la fecha esta entre la de inicio y la final
-                        if (modulo.estado == 0 && modulo.alquilers[0].fecha_d_alquiler <= new Date() && modulo.alquilers[0].fecha_h_alquiler >= new Date()) {
+                        if (modulo.estado != 1 
+                            && moment(modulo.alquilers[0].fecha_d_alquiler).format('YYYY-MM-DD') <= moment(new Date()).format('YYYY-MM-DD') 
+                            && moment(modulo.alquilers[0].fecha_h_alquiler).format('YYYY-MM-DD') >= moment(new Date()).format('YYYY-MM-DD')
+                        ) {
                             Modulo.update({ estado: 1 }, {
                                 where: {
                                     id_modulo: modulo.id_modulo
@@ -34,7 +38,7 @@ exports.estadoModulos = () => {
                             })
 
                             //Si la fecha de finalizacion es menor a la actual
-                        } else if (modulo.estado == 1 && modulo.alquilers[0].fecha_h_alquiler < new Date()) {
+                        } else if (modulo.estado != 0 && moment(modulo.alquilers[0].fecha_h_alquiler).format('YYYY-MM-DD') < moment(new Date()).format('YYYY-MM-DD')) {
                             Modulo.update({ estado: 0 }, {
                                 where: {
                                     id_modulo: modulo.id_modulo
@@ -46,11 +50,13 @@ exports.estadoModulos = () => {
                             })
 
                             //Si la fecha de inicio es mayor a la actual
-                        } else if (modulo.alquilers[0].fecha_d_alquiler > new Date()) {
+                        } else if (moment(modulo.alquilers[0].fecha_d_alquiler).format('YYYY-MM-DD') > moment(new Date()).format('YYYY-MM-DD')) {
                             /* Si la ultima fecha de inicio es mayor a la actual debe revisar el otro alquiler, si no existe entonces esta en "en espera", sino debe revisar si 
                             la fecha actual esta en este alquiler, sino revisar el siguiente */
                             for (let i = modulo.alquilers.length - 1; i >= 0; i--) {
-                                if (modulo.alquilers[i].fecha_d_alquiler <= new Date() && modulo.alquilers[i].fecha_h_alquiler >= new Date()) {
+                                if (moment(modulo.alquilers[i].fecha_d_alquiler).format('YYYY-MM-DD') <= moment(new Date()).format('YYYY-MM-DD') 
+                                    && moment(modulo.alquilers[i].fecha_h_alquiler).format('YYYY-MM-DD') >= moment(new Date()).format('YYYY-MM-DD')
+                                ) {
                                     if (modulo.estado != 1) {
                                         Modulo.update({ estado: 1 }, {
                                             where: {
@@ -64,7 +70,7 @@ exports.estadoModulos = () => {
                                     }
 
                                     break;
-                                } else if (modulo.alquilers[i].fecha_d_alquiler > new Date()) {
+                                } else if (moment(modulo.alquilers[i].fecha_d_alquiler).format('YYYY-MM-DD') > moment(new Date()).format('YYYY-MM-DD')) {
                                     if (modulo.estado != 3) {
                                         Modulo.update({ estado: 3 }, {
                                             where: {
@@ -82,7 +88,7 @@ exports.estadoModulos = () => {
                             }
                         }
                     } else {
-                        if (modulo.estado == 1) {
+                        if (modulo.estado != 0) {
                             Modulo.update({ estado: 0 }, {
                                 where: {
                                     id_modulo: modulo.id_modulo
@@ -130,8 +136,6 @@ exports.estadoModulosDobles = () => {
             - Leer el primer alquiler que llega
             - Analizar de acuerdo a los datos del primer alquiler que estado corresponde
             */
-console.log(moduloDoble.estado, moduloDoble.moduloUno.estado, moduloDoble.moduloDos.estado)
-            /*  0 => Libre / 1 => Alquilado / 2 => Vendido / 3 => En espera  */
 
             if(moduloDoble.estado != moduloDoble.moduloUno.estado || moduloDoble.estado != moduloDoble.moduloDos.estado) {
                 Modulo.update({ estado: moduloDoble.estado }, {
@@ -155,6 +159,7 @@ console.log(moduloDoble.estado, moduloDoble.moduloUno.estado, moduloDoble.modulo
                 });
             }
 
+            /*  0 => Libre / 1 => Alquilado / 2 => Vendido / 3 => En espera  */
             if (moduloDoble.estado != 2) {
                 if (moduloDoble.alquilers.length > 0) {
                     //Si la fecha esta entre la de inicio y la final
