@@ -13,3 +13,6 @@ frontend/Dockerfile
 cuerre/node_modules
 
 /bd
+/.persistent
+/dump
+/conf

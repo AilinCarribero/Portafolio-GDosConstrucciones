@@ -78,6 +78,9 @@ services:
     build: ./nginx
     ports:
       - "8080:80"
+    depends_on:
+      reactjsapp:
+        condition: service_started
     links:
       - reactjscuerre
       - nodejsapp
@@ -85,9 +88,12 @@ services:
       - nginx-proxy
       - letsencrypt
     environment:
+      - DOCKER_USERNAME=ailin97
+      - DOCKER_PASSWORD=dckr_pat_mLcHEiMN0yi3Goz7rlYYZhjqMpI
       - VIRTUAL_HOST=gestion.gdosconstrucciones.com.ar, cuerre.gdosconstrucciones.com.ar, bd.gdosconstrucciones.com.ar
       - LETSENCRYPT_HOST=gestion.gdosconstrucciones.com.ar, cuerre.gdosconstrucciones.com.ar, bd.gdosconstrucciones.com.ar
     restart: always
+    
 
   nginx-proxy:
     image: jwilder/nginx-proxy

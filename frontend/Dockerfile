@@ -5,14 +5,16 @@ WORKDIR /app/frontend/
 COPY ["package.json", "package-lock.json" , "/app/frontend/"]
 
 ENV REACT_APP_REST=https://gestion.gdosconstrucciones.com.ar/api/
-
-RUN npm install
  
+RUN npm ci
+RUN echo "-------------npm install completed successfully"
+
 COPY [".", "/app/frontend/"]
 
-EXPOSE 3000
+#RUN npm run build
+#RUN echo "--------------------npm run build completed successfully"
 
-#RUN CI= npm run build
+EXPOSE 3000
 
 #CMD [ "react-scripts", "build" ]
 CMD ["npm", "start"]
