@@ -34,9 +34,34 @@ const configFindAllProyectos = {
 
 //listar todos los proyectos existentes
 exports.listProyectos = (req, res) => {
-    Proyecto.findAll(
-        configFindAllProyectos
-    ).then(response => {
+    Proyecto.findAll({
+        include: [{
+            model: Alquiler,
+            include: [{
+                model: Modulo
+            }, {
+                model: IngresoAlquiler
+            }, {
+                model: ModuloDoble,
+                include: [{
+                    model: Modulo,
+                    as: 'moduloUno',
+                    include: [{
+                        model: Alquiler
+                    },
+                    ]
+                }, {
+                    model: Modulo,
+                    as: 'moduloDos',
+                    include: [{
+                        model: Alquiler
+                    },
+                    ]
+                }],
+            }]
+        }],
+        order: [['id_estado', 'ASC'], ['fecha_f_proyecto', 'ASC'], [Alquiler, 'fecha_h_alquiler', 'ASC']]
+    }).then(response => {
         res.json(response);
     }).catch(error => {
         res.json(error);
