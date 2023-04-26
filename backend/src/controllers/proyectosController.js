@@ -60,7 +60,7 @@ exports.listProyectos = (req, res) => {
                 }],
             }]
         }],
-        order: [['id_estado', 'ASC'], ['fecha_f_proyecto', 'ASC'], [Alquiler, 'fecha_h_alquiler', 'ASC']]
+        order: [['id_estado', 'ASC'], ['fecha_f_proyecto', 'ASC'], [Alquiler, 'fecha_h_alquiler', 'DESC']]
     }).then(response => {
         res.json(response);
     }).catch(error => {
