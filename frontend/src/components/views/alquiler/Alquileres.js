@@ -5,14 +5,14 @@ import Decimal from 'decimal.js-light';
 import moment from 'moment';
 
 //Redux
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 //Components
 import FormContrato from './FormContrato';
 import ModalFormulario from '../../utils/modal/formularios/ModalFormulario';
 
 //Hooks
-import { calcCantMeses, formatFecha, formatNameMes, formatNumber, formatTextMix } from '../../../hooks/useUtils';
+import { ToastComponent, calcCantMeses, formatFecha, formatNameMes, formatNumber, formatTextMix } from '../../../hooks/useUtils';
 import { useUser } from '../../../hooks/useUser';
 import { useAlquileres, useGetAlquileresId } from '../../../hooks/useAlquileres';
 
@@ -22,14 +22,20 @@ import * as Icons from 'react-bootstrap-icons';
 //Css
 import '../../../style/Alquiler.scss';
 import GraficIngresosAlquileres from '../ingresosAlquiler/GraficIngresosAlquileres';
+import { useResponse } from '../../../hooks/useResponse';
+import Alerta from '../../utils/modal/validacion/Alerta';
+import { deleteApiContrato } from '../../../services/apiAlquileres';
+import { getProyectos } from '../../../redux/slice/Proyecto/thunks';
 
 const Alquileres = () => {
+    const dispatch = useDispatch();
     const mesActual = formatNameMes(moment().month());
     const mesAnterior = formatNameMes(moment().month() - 1);
     const mesPosterior = formatNameMes(moment().month() + 1);
 
     const { id } = useParams();
     const { user } = useUser();
+    const { response } = useResponse();
     const { ingresoAlquilerXMes, yearHere, monthHere } = useAlquileres();
     const { CalcMesesAlquiler, setAlquileres } = useGetAlquileresId(id);
 
@@ -43,6 +49,13 @@ const Alquileres = () => {
     //console.log(alquileres, mesAlquiler, totalAlquiler);
     const [showModalFormContrato, setShowModalFormContrato] = useState(false);
     const [showModalFormIngresoAlquiler, setShowModalFormIngresoAlquiler] = useState(false);
+    const [showAlerta, setShowAlerta] = useState(false);
+
+    const [alerta, setAlerta] = useState({
+        titulo: '',
+        mensaje: '',
+        data: ''
+    });
 
     useEffect(() => {
         setProyecto(proyectos.find(proyecto => proyecto.id_proyecto.trim() === id.trim()));
@@ -116,8 +129,39 @@ const Alquileres = () => {
         return estado;
     }
 
+    const deleteContrato = (alquiler, setDelete) => {
+        setAlerta({
+            titulo: 'Eliminar módulo',
+            mensaje: `¿Desea eliminar el alquiler del módulo ${alquiler.modulo ? 
+                    alquiler.modulo.nombre_modulo || `${alquiler.modulo.tipologia} - ${alquiler.modulo.id_modulo} - ${formatNumber(alquiler.modulo.ancho)} x ${formatNumber(alquiler.modulo.largo)} - ${alquiler.modulo.material_cerramiento}`
+                    : `OD - ${alquiler.modulo_doble.id_modulo_doble} - OS - ${alquiler.modulo_doble.id_modulo_uno} - OS - ${alquiler.modulo_doble.id_modulo_dos} `}? 
+                    Recuerde que si lo elimina no podrá recuperarlo`,
+            data: alquiler
+        });
+
+        setShowAlerta(true);
+
+        if (setDelete) {
+            deleteApiContrato(alquiler.id_alquiler, alquiler).then(resAlquiler => {
+                const res = response(resAlquiler);
+
+                if (res) {
+                    ToastComponent('success', 'Se eliminó correctamente');
+                    dispatch(getProyectos());
+                } else {
+                    ToastComponent('error', resAlquiler.data.todoMal && resAlquiler.data.todoMal);
+                }
+            }).catch(err => {
+                console.error(err);
+
+                ToastComponent('error', err.data.todoMal && err.data.todoMal);
+            })
+        }
+    }
+
     return (<>
         <ModalFormulario formulario={'ingresoAlquiler'} show={showModalFormIngresoAlquiler} informacion={proyecto} setShow={setShowModalFormIngresoAlquiler} />
+        <Alerta titulo={alerta.titulo} mensaje={alerta.mensaje} show={showAlerta} setShow={setShowAlerta} submit={deleteContrato} data={alerta.data} />
         {showModalFormContrato && <FormContrato alquiler={renovarAlquiler} show={showModalFormContrato} setShow={setShowModalFormContrato} setAlquileres={setAlquileres} actionContrato={actionContrato} />}
 
         <Row>
@@ -231,6 +275,18 @@ const Alquileres = () => {
                                                                     </Col>
                                                                     <Col xs={10} md={10} className='text-action'>
                                                                         Agregar un Ingreso
+                                                                    </Col>
+                                                                </Row>
+                                                            </button>
+                                                        </Col>
+                                                        <Col xs={6} md={6}>
+                                                            <button className="button-action" onClick={() => deleteContrato(alquiler)}>
+                                                                <Row>
+                                                                    <Col xs={1} md={1} className='icon-action'>
+                                                                        <Icons.TrashFill size={19} />
+                                                                    </Col>
+                                                                    <Col xs={10} md={10} className='text-action'>
+                                                                        Eliminar contrato
                                                                     </Col>
                                                                 </Row>
                                                             </button>

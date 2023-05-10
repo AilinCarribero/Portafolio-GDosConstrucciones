@@ -11,3 +11,9 @@ export const postNewRenovarUpdateContrato = async (data) => {
     const response = await axios.post(API+`alquiler/ren-agr-upd/contrato`, data, servisTokenConfig);
     return response;
 }
+
+export const deleteApiContrato = async (id, data) => {
+    const response = await axios.post(API+`alquiler/delete/${id}`, data, servisTokenConfig);
+
+    return response;
+}

@@ -234,3 +234,31 @@ exports.updateNewRenovarContrato = async (req, res) => {
         res.json(err);
     })
 }
+
+
+exports.deleteContrato = async (req, res) => {
+    const id = req.params.id;
+    const data = req.body;
+
+    Alquiler.destroy({
+        where: {
+            id_alquiler: id
+        },
+        include: [{
+            model: Modulo
+        }, {
+            model: Proyecto
+        }, {
+            model: ModuloDoble
+        }]
+    }).then(response => {
+        response.statusText = "Ok";
+        response.status = 200;
+        res.json(response);
+    }).catch(err => {
+        err.todoMal = "Error al eliminar el alquiler";
+        console.error(err);
+        res.json(err);
+        throw err;
+    });
+}
