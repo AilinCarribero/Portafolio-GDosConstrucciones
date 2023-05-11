@@ -17,7 +17,7 @@ COPY [".", "/app/frontend/"]
 EXPOSE 3000
 
 #CMD [ "react-scripts", "build" ]
-CMD ["npm", "start"]
+CMD ["npm", "run", "devstart"]
 
 #CMD ["npm", "run", "build"]
 
