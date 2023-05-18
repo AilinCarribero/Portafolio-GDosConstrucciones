@@ -19,6 +19,8 @@ import { useGetModulos } from '../../../hooks/useModulos';
 //Css
 import './Proyectos.css';
 import { useResponse } from '../../../hooks/useResponse';
+import { useCliente } from '../../../hooks/useCliente';
+import { postApiNewCliente } from '../../../services/apiClientes';
 
 const FormProyectos = ({ close, updateProyecto, setUpdateProyectos }) => {
     const newDate = new Date();
@@ -32,6 +34,7 @@ const FormProyectos = ({ close, updateProyecto, setUpdateProyectos }) => {
         id_centro_costo: updateProyecto ? updateProyecto.id_centro_costo : 2,
         id_unidad_negocio: updateProyecto ? updateProyecto.id_unidad_negocio : '',
         cliente: updateProyecto ? updateProyecto.cliente : '',
+        id_cliente: updateProyecto ? updateProyecto.id_cliente : '',
         costo: updateProyecto ? updateProyecto.costo : '',
         venta: updateProyecto ? updateProyecto.venta : '',
         alquiler_total: updateProyecto ? updateProyecto.alquiler_total : 0,
@@ -44,6 +47,7 @@ const FormProyectos = ({ close, updateProyecto, setUpdateProyectos }) => {
     const { centroCosto } = useGetCentroCosto();
     const { unidadNegocio } = useGetUnidadNegocio();
     const { modulos, modulosDobles } = useGetModulos();
+    const { clientes } = useCliente();
 
     const { response } = useResponse();
 
@@ -52,6 +56,7 @@ const FormProyectos = ({ close, updateProyecto, setUpdateProyectos }) => {
     const [showVenta, setShowVenta] = useState(updateProyecto && updateProyecto.id_centro_costo == 2 ? true : false);
     const [showAlquiler, setShowAlquiler] = useState(false);
     const [showDataAlquileres, setShowDataAlquileres] = useState(false);
+    const [showNewCliente, setShowNewCliente] = useState(false);
 
     //Variables a usar
     const [checkCondicion, setCheckCondicion] = useState();
@@ -89,7 +94,7 @@ const FormProyectos = ({ close, updateProyecto, setUpdateProyectos }) => {
                     /*Revisar que la fecha de I no se encuentre entre alguna de las fechas de I y F de cada alquiler que posea el modulo */
                     /*Revisar que la fecha de F no se encuentre entre alguna de las fechas de I y F de cada alquiler que posea el modulo */
                     moduloRev.alquilers.map(alquiler => {
-                        
+
                         if (dataAlquiler['fechaI-' + positionArray] || targetName == `fechaI-${positionArray}`) {
                             const fechaI = new Date(targetName == `fechaI-${positionArray}` ? targetValue : dataAlquiler['fechaI-' + positionArray]);
 
@@ -184,6 +189,20 @@ const FormProyectos = ({ close, updateProyecto, setUpdateProyectos }) => {
                 auxProyecto = { ...proyecto }
             }
 
+            if (proyecto.cliente) {
+                try {
+                    const resCliente = await postApiNewCliente({nombre: proyecto.cliente});
+
+                    const resResponse = response(resCliente);
+
+                    if (resResponse) {
+                        ToastComponent('success', 'El cliente fue guardado correctamente');
+                    }
+                } catch (err) {
+                    console.error(err);
+                }
+            }
+            
             try {
                 if (updateProyecto) {
                     try {
@@ -210,6 +229,7 @@ const FormProyectos = ({ close, updateProyecto, setUpdateProyectos }) => {
                         id_centro_costo: '',
                         id_unidad_negocio: '',
                         cliente: '',
+                        id_cliente: '',
                         costo: '',
                         venta: '',
                         alquiler_total: '',
@@ -235,13 +255,22 @@ const FormProyectos = ({ close, updateProyecto, setUpdateProyectos }) => {
         }
     }
 
+    const handleNewCliente = (e) => {
+        const targetName = e.target.name;
+        const targetValue = e.target.value;
+        const targetCheck = e.target.checked;
+
+        console.log(targetCheck)
+        setShowNewCliente(targetCheck)
+    }
+
     const dataAlquilerForm = () => {
         if (showDataAlquileres == true) {
             let rows = [];
 
             for (let i = 0; i < cantAlquiler; i++) {
                 rows.push(
-                    <Row key={`data-modulo-${i+1}`}>
+                    <Row key={`data-modulo-${i + 1}`}>
                         <Row>
                             <Col xs={12} sm={12}>
                                 <FloatingLabel label="Módulo">
@@ -357,10 +386,30 @@ const FormProyectos = ({ close, updateProyecto, setUpdateProyectos }) => {
                                         </Col>
                                     </Row>
                                     <Row>
-                                        <Col sm={12}>
-                                            <FloatingLabel label="Cliente">
-                                                <Form.Control onChange={handleChangeForm} name="cliente" type="text" value={proyecto.cliente} />
-                                            </FloatingLabel>
+                                        {!showNewCliente ?
+                                            <Col sm={12}>
+                                                <FloatingLabel label="Cliente Existente">
+                                                    <Form.Select onChange={handleChangeForm} name="id_cliente" value={proyecto.id_cliente} required >
+                                                        <option value="" > </option>
+                                                        {clientes.length > 0 &&
+                                                            clientes.map((cliente) => (
+                                                                <option key={cliente.id_cliente} value={cliente.id_cliente}>
+                                                                    {cliente.nombre}
+                                                                </option>
+                                                            ))
+                                                        }
+                                                    </Form.Select>
+                                                </FloatingLabel>
+                                            </Col>
+                                            :
+                                            <Col sm={12}>
+                                                <FloatingLabel label="Nuevo Cliente">
+                                                    <Form.Control onChange={handleChangeForm} name="cliente" type="text" value={proyecto.cliente} />
+                                                </FloatingLabel>
+                                            </Col>
+                                        }
+                                        <Col xs={12} sm={12} className='' >
+                                            <Form.Check className='form-check-switch-new-cliente' onChange={handleNewCliente} label="Nuevo cliente" name="showNewCliente" type="switch" checked={showNewCliente} />
                                         </Col>
                                     </Row>
                                 </Form.Group>

@@ -39,14 +39,17 @@ const Sidenav = () => {
         <Nav className="justify-content-end flex-grow-1 pe-3">
           <Link className="text-link fondo-link" to="/" onClick={handleClose} >Inicio</Link>
           {/*<Link className="text-link fondo-link" to="/" onClick={handleClose} >Indices</Link>*/}
-          {user.rango == 'admin' && <Link className="text-link fondo-link" to="/usuarios" onClick={handleClose} >Usuarios</Link>}
-          <button className="dropdown-content text-link fondo-link" onClick={handleShowDrop}>
-            Agregar
-            <Icons.CaretDownFill className='icon-drop' />
-          </button>
-          { showDrop && <>
-            {user.rango == 'admin' && <Link className="text-link dropdown-link" to="/ingresar/usuario" onClick={handleClose} >Usuario</Link>}
+          {user.rango == 'admin' && <>
+            <Link className="text-link fondo-link" to="/usuarios" onClick={handleClose} >Usuarios</Link>
+            <Link className="text-link fondo-link" to="/clientes" onClick={handleClose} >Clientes</Link>
           </>}
+          {/*showDrop && <>
+            <button className="dropdown-content text-link fondo-link" onClick={handleShowDrop}>
+              Agregar
+              <Icons.CaretDownFill className='icon-drop' />
+            </button>
+            {user.rango == 'admin' && <Link className="text-link dropdown-link" to="/ingresar/usuario" onClick={handleClose} >Usuario</Link>}
+          </>*/}
         </Nav>
       </Offcanvas.Body>
     </Offcanvas>

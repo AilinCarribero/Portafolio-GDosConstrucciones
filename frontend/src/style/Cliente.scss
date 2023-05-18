@@ -1,0 +1,67 @@
+.conten-buttons-agregar {
+    font-size: 14px;
+    margin-top: 15px !important;
+
+    .button-agregar {
+        width: 100%;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        margin-top: 5px;
+        border-radius: 10px;
+        font-size: 14px;
+        border: solid 1px #ffffff;
+        background-color: #ffffff;
+        color: #000000;
+
+        .icon-button {
+            margin-bottom: 2px;
+            margin-right: 2px;
+            margin-left: -10px;
+        }
+
+        &:hover {
+            background-color: #b3b3b4;
+        }
+    }
+
+    .input-text-search {
+        width: 60vw;
+        margin-top: 4px;
+        border-radius: 10px;
+    }
+
+    @media only screen and (hover: none) and (pointer: coarse) {
+        .input-text-search {
+            width: 100%;
+        }
+    }
+}
+
+.conteiner-cards-clientes {
+    margin-top: 20px !important;
+    
+    .col-card-cliente {
+        height: 100%;
+        padding-bottom: 5px;
+
+        .card-content-cliente {
+            max-width: 100%;
+
+            .card-title-cliente {
+                padding-bottom: 8px;
+                text-align: center;
+                border-bottom: 1px #d4d4d4 solid;
+            }
+
+            .card-footer-cliente {
+                background-color: #ffffff;
+            }
+        }
+    }
+}
+
+/*Form*/
+.label-title-cliente {
+    font-size: 20px;
+    font-weight: bold;
+}

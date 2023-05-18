@@ -1,4 +1,4 @@
-const { CentroCosto, UnidadNegocio, Alquiler, Proyecto, Modulo, Egreso, Ingreso, ModuloDoble, IngresoAlquiler } = require('../../db');
+const { CentroCosto, UnidadNegocio, Alquiler, Proyecto, Modulo, Egreso, Ingreso, ModuloDoble, IngresoAlquiler, Cliente } = require('../../db');
 const { formatStringToNumber } = require('../utils/numbers');
 const Decimal = require('decimal.js-light');
 const moment = require('moment');
@@ -78,6 +78,21 @@ exports.insertProyecto = async (req, res) => {
     req.body.alquiler_total = !req.body.alquiler_total ? 0 : formatStringToNumber(req.body.alquiler_total);
     req.body.fecha_f_proyecto = !req.body.fecha_f_proyecto ? null : req.body.fecha_f_proyecto;
 
+    //Definimos el estado del proyecto
+    if (!req.body.fecha_f_proyecto) {
+        if (new Date(req.body.fecha_i_proyecto) > new Date()) {
+            req.body.id_estado = 1;
+        } else if (new Date(req.body.fecha_i_proyecto) < new Date()) {
+            req.body.id_estado = 2;
+        }
+    } else {
+        if (new Date(req.body.fecha_f_proyecto) < new Date()) {
+            req.body.id_estado = 3;
+        } else if (new Date(req.body.fecha_i_proyecto) < new Date() && new Date(req.body.fecha_f_proyecto) > new Date()) {
+            req.body.id_estado = 2;
+        }
+    }
+
     try {
         const centro_costo = req.body.id_centro_costo ? await CentroCosto.findAll({
             where: {
@@ -93,15 +108,33 @@ exports.insertProyecto = async (req, res) => {
             raw: true
         }) : '';
 
+        let cliente = [];
         //Armamos el id de proyecto
         if (centro_costo[0].siglas_cc) {
             id_proyecto = centro_costo[0].siglas_cc;
 
             if (unidad_negocio[0].siglas_uc) {
                 id_proyecto = id_proyecto + '-' + unidad_negocio[0].siglas_uc;
-
+                
                 if (req.body.cliente) {
-                    id_proyecto = id_proyecto + '-' + req.body.cliente
+                    id_proyecto = id_proyecto + '-' + req.body.cliente;
+                    cliente = await Cliente.findOne({
+                        where: {
+                            nombre: req.body.cliente
+                        },
+                        raw: true
+                    });
+
+                    req.body.id_cliente = cliente.id_cliente;
+                } else if (req.body.id_cliente) {
+                    cliente = await Cliente.findOne({
+                        where: {
+                            id_cliente: req.body.id_cliente
+                        },
+                        raw: true
+                    });
+
+                    id_proyecto = id_proyecto + '-' + cliente.nombre;
                 }
             }
         } else {
@@ -138,59 +171,55 @@ exports.insertProyecto = async (req, res) => {
                                 return res.json(error);
                             });
                         } else if (alquiler.id_modulo_doble) {
-                                ModuloDoble.findOne({
-                                    where: {
-                                        id_modulo_doble: alquiler.id_modulo_doble
-                                    },
+                            ModuloDoble.findOne({
+                                where: {
+                                    id_modulo_doble: alquiler.id_modulo_doble
+                                },
+                                include: [{
+                                    model: Modulo,
+                                    as: 'moduloUno',
                                     include: [{
-                                        model: Modulo,
-                                        as: 'moduloUno',
-                                        include: [{
-                                            model: Alquiler
-                                        },
-                                        ]
-                                    }, {
-                                        model: Modulo,
-                                        as: 'moduloDos',
-                                        include: [{
-                                            model: Alquiler
-                                        },
-                                        ]
-                                    }],
-                                    raw: true
-                                }).then(modulo_doble => {
-                                    ModuloDoble.update({ estado: new Date(alquiler.fecha_d_alquiler) < new Date() ? 1 : 3 }, {
-                                        where: {
-                                            id_modulo_doble: modulo_doble.id_modulo_doble
-                                        }
-                                    }).then(response => {}).catch(err => {
-                                        err.todoMal = "Error al actualizar el estado del módulo doble";
-                                        console.error(err)
-                                    });
+                                        model: Alquiler
+                                    },
+                                    ]
+                                }, {
+                                    model: Modulo,
+                                    as: 'moduloDos',
+                                    include: [{
+                                        model: Alquiler
+                                    },
+                                    ]
+                                }],
+                                raw: true
+                            }).then(modulo_doble => {
+                                ModuloDoble.update({ estado: new Date(alquiler.fecha_d_alquiler) < new Date() ? 1 : 3 }, {
+                                    where: {
+                                        id_modulo_doble: modulo_doble.id_modulo_doble
+                                    }
+                                }).then(response => { }).catch(err => {
+                                    err.todoMal = "Error al actualizar el estado del módulo doble";
+                                    console.error(err)
+                                });
 
-                                    /*Si hasta aqui no hay errores debe actualizar los estados de los modulos de la oficina doble*/
+                                /*Si hasta aqui no hay errores debe actualizar los estados de los modulos de la oficina doble*/
+                                Modulo.update({ estado: new Date(alquiler.fecha_d_alquiler) < new Date() ? 1 : 3, ubicacion: alquiler.ubicacion }, {
+                                    where: {
+                                        id_modulo: modulo_doble.id_modulo_uno
+                                    }
+                                }).then(result => {
                                     Modulo.update({ estado: new Date(alquiler.fecha_d_alquiler) < new Date() ? 1 : 3, ubicacion: alquiler.ubicacion }, {
                                         where: {
-                                            id_modulo: modulo_doble.id_modulo_uno
+                                            id_modulo: modulo_doble.id_modulo_dos
                                         }
                                     }).then(result => {
-                                        Modulo.update({ estado: new Date(alquiler.fecha_d_alquiler) < new Date() ? 1 : 3, ubicacion: alquiler.ubicacion }, {
-                                            where: {
-                                                id_modulo: modulo_doble.id_modulo_dos
-                                            }
-                                        }).then(result => {
-                                            /*Si hasta aqui no hay errores se fija si es el ultimo alquiler que se guardo. De ser asi responde que todo esta bien */
-                                            if (i == (countAlquileres - 1)) {
-                                                Proyecto.findAll(configFindAllProyectos).then(response => {
-                                                    res.json(response);
-                                                }).catch(error => {
-                                                    res.json(error);
-                                                });
-                                            }
-                                        }).catch(error => {
-                                            console.error(error);
-                                            return res.json(error);
-                                        });
+                                        /*Si hasta aqui no hay errores se fija si es el ultimo alquiler que se guardo. De ser asi responde que todo esta bien */
+                                        if (i == (countAlquileres - 1)) {
+                                            Proyecto.findAll(configFindAllProyectos).then(response => {
+                                                res.json(response);
+                                            }).catch(error => {
+                                                res.json(error);
+                                            });
+                                        }
                                     }).catch(error => {
                                         console.error(error);
                                         return res.json(error);
@@ -199,6 +228,10 @@ exports.insertProyecto = async (req, res) => {
                                     console.error(error);
                                     return res.json(error);
                                 });
+                            }).catch(error => {
+                                console.error(error);
+                                return res.json(error);
+                            });
                         }
                     }).catch(error => {
                         console.error(error);

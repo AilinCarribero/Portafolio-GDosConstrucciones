@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Accordion, Row, Col, Button, Spinner, Form, FloatingLabel } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import Decimal from 'decimal.js-light';
+import { useSelector } from 'react-redux';
 
 //Components
 import ModalFormulario from '../../utils/modal/formularios/ModalFormulario';
@@ -14,7 +15,6 @@ import { useGetProyectos } from '../../../hooks/useProyectos';
 
 //Img-Icons
 import * as Icons from 'react-bootstrap-icons';
-import { useSelector } from 'react-redux';
 
 const CentrosCostos = ({ proyectos, mostrar, setProyectos }) => {
     const { user } = useUser();

@@ -21,7 +21,8 @@ const StockMovimientoModel = require('./src/models/stockMovimientoModel');
 const UnidadNegocioModel = require('./src/models/unidadNegocioModel');
 const TokenModel = require('./src/models/tokenModel');
 const ModuloDobleModel = require('./src/models/moduloDobleModel');
-const ingresoAlquilerModel = require('./src/models/ingresoAlquilerModel');
+const IngresoAlquilerModel = require('./src/models/ingresoAlquilerModel');
+const ClienteModel = require('./src/models/clienteModel');
 
 //Declaro la base de datos
 const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASSWORD, {
@@ -30,7 +31,7 @@ const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, proces
     dialect: 'mysql',
     define: {
         freezeTableName: true,
-        alter: false, // cuando se realice un cambio en algun modelo o relacion pasar a true
+        alter: true, // cuando se realice un cambio en algun modelo o relacion pasar a true
         modelName: 'singularName'
     },
 });
@@ -56,7 +57,8 @@ const StockMovimiento = StockMovimientoModel(sequelize, Sequelize);
 const UnidadNegocio = UnidadNegocioModel(sequelize, Sequelize);
 const Token = TokenModel(sequelize, Sequelize);
 const ModuloDoble = ModuloDobleModel(sequelize, Sequelize);
-const IngresoAlquiler = ingresoAlquilerModel(sequelize, Sequelize);
+const IngresoAlquiler = IngresoAlquilerModel(sequelize, Sequelize);
+const Cliente = ClienteModel(sequelize, Sequelize);
 
 /*Conecto con la base de datos, verifico que esten los modelos creados, si no lo estan los crea 
  logging tiene que pasar a true cuando se mande a produccion */
@@ -81,6 +83,7 @@ sequelize.sync({ force: false, logging: false }).then(() => {
     Proyecto.hasMany(Egreso, { foreignKey: 'id_proyecto', targetKey: 'id_proyecto' });
     Proyecto.hasMany(Ingreso, { foreignKey: 'id_proyecto', targetKey: 'id_proyecto' });  
     Proyecto.hasMany(IngresoAlquiler, { foreignKey: 'id_proyecto', targetKey: 'id_proyecto' });
+    Proyecto.hasMany(Cliente, { foreignKey: 'id_cliente', targetKey: 'id_cliente' });
 
     Egreso.belongsTo(Proyecto, { foreignKey: 'id_proyecto', targetKey: 'id_proyecto' });
     Egreso.belongsTo(FormaPago, { foreignKey: 'id_forma_pago', targetKey: 'id_forma_pago' });
@@ -106,6 +109,8 @@ sequelize.sync({ force: false, logging: false }).then(() => {
     IngresoAlquiler.belongsTo(Proyecto, { foreignKey: 'id_proyecto', targetKey: 'id_proyecto' });
     IngresoAlquiler.belongsTo(Alquiler, { foreignKey: 'id_alquiler', targetKey: 'id_alquiler' });
     
+    Cliente.hasMany(Proyecto, { foreignKey: 'id_cliente', targetKey: 'id_cliente' });
+
     console.log('La sincronizacion con la base de datos ' + process.env.DB_NAME + ' fue un exito');
 }).catch(err => {
     console.error(err)
@@ -113,5 +118,6 @@ sequelize.sync({ force: false, logging: false }).then(() => {
 
 module.exports = {
     Alquiler, AnalisisCosto, Auth, CentroCosto, ComprobantePago, DetalleAC, Egreso, Estado, FormaCobro, FormaPago,
-    Indice, Ingreso, Modulo, Proyecto, Rango, Stock, StockMovimiento, UnidadNegocio, Token, ModuloDoble, IngresoAlquiler
+    Indice, Ingreso, Modulo, Proyecto, Rango, Stock, StockMovimiento, UnidadNegocio, Token, ModuloDoble, IngresoAlquiler, 
+    Cliente
 }

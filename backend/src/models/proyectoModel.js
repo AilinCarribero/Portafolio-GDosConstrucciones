@@ -13,6 +13,10 @@ module.exports = (sequelize, type) => {
             isNumeric: true,
         },
         cliente: type.STRING(100),
+        id_cliente: {
+            type: type.INTEGER,
+            isNumeric: true,
+        },
         costo: {
             type: type.DOUBLE,
             defaultValue: 0

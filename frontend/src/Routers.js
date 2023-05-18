@@ -17,12 +17,13 @@ import FormModulos from './components/views/modulos/FormModulos';
 import Modulos from './components/views/modulos/Modulos';
 import Alquileres from './components/views/alquiler/Alquileres';
 import CentrosCostos from './components/views/proyectos/CentrosCostos';
+import IngresosAlquiler from './components/views/ingresosAlquiler/IngresosAlquiler';
+import Clientes from './components/views/cliente/Clientes';
 
 //Hooks
 import { useUser } from './hooks/useUser';
 import { useDispatch } from 'react-redux';
 import { getProyectos } from './redux/slice/Proyecto/thunks';
-import IngresosAlquiler from './components/views/ingresosAlquiler/IngresosAlquiler';
 
 //Contexts
 //import ProyectoProvider from './contexts/ProyectosProvider';
@@ -58,6 +59,7 @@ const Routers = () => {
                                     <Route exact path="/alquileres/:id" element={<Alquileres />} />
                                     <Route exact path="/alquileres/ingresos/:id" element={<IngresosAlquiler />} />
                                     <Route exact path="/alquileres/:id/ingresos/:idALquiler" element={<IngresosAlquiler />} />
+                                    <Route exact path="/clientes" element={<Clientes />} />
                                 </>
                             }
                             {user.rango == 'moderador' &&

@@ -59,3 +59,14 @@
         }
     }
 }
+
+.form-check-switch-new-cliente {
+    text-align: left;
+    font-size: 13px;
+    color: #7e7e7e;
+
+    .form-check-input:checked {
+        background-color: #000000;
+        border-color: #000000;
+    }
+}

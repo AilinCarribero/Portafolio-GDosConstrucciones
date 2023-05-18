@@ -30,6 +30,7 @@ app.use('/api/alquiler', require('./src/router/alquilerRoute'));
 app.use('/api/stock', require('./src/router/stockRoute'));
 app.use('/api/token', require('./src/router/tokenRoute'));
 app.use('/api/ingreso-alquiler', require('./src/router/ingresoAlquilerRoute'));
+app.use('/api/cliente', require('./src/router/clienteRoute'));
 
 // port
 const port = process.env.PORT || 5030 ;
