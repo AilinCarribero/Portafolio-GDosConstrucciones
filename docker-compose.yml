@@ -114,9 +114,6 @@ services:
 
   letsencrypt:
     image: jrcs/letsencrypt-nginx-proxy-companion
-    depends_on:
-      nginx:
-        condition: service_started
     restart: always
     environment:
       - NGINX_PROXY_CONTAINER=nginx-proxy
