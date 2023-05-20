@@ -81,7 +81,7 @@ const FormCliente = ({ close, updateCliente, setUpdateClientes }) => {
                     {!close && <Card.Header className="title-form" >Ingrese un Nuevo Cliente</Card.Header>}
                     <Card.Body>
                         <Form noValidate validated={validated} onSubmit={handleSubmitForm} >
-                            {updateCliente ?
+                            {updateCliente.nombre ?
                                 <Form.Group className="mb-3">
                                     <Form.Label className="label-title-cliente">{cliente.nombre}</Form.Label>
                                 </Form.Group>

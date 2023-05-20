@@ -101,6 +101,9 @@ services:
     ports:
       - "80:80"
       - "443:443"
+    depends_on:
+      nginx:
+        condition: service_started
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock:ro
       - certs:/etc/nginx/certs:ro
@@ -111,6 +114,9 @@ services:
 
   letsencrypt:
     image: jrcs/letsencrypt-nginx-proxy-companion
+    depends_on:
+      nginx:
+        condition: service_started
     restart: always
     environment:
       - NGINX_PROXY_CONTAINER=nginx-proxy

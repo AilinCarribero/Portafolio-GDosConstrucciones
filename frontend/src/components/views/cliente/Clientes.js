@@ -18,7 +18,6 @@ const Clientes = () => {
   const [updateCliente, setUpdateCliente] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  console.log(clientes)
   const [showForm, setShowForm] = useState(false);
 
   useEffect(() => {
@@ -41,13 +40,18 @@ const Clientes = () => {
     setShowForm(true);
   }
 
+  const showFormNewCliente = () => {
+    setUpdateCliente([]);
+    setShowForm(true);
+  }
+
   return (<>
     <ModalFormulario formulario={'cliente'} show={showForm} setShow={setShowForm} updateNew={setClientes} informacion={updateCliente} />
 
     <Row className="conten-buttons-agregar">
       {(user.rango == 'admin') && <>
         <Col xs={12} sm={6} md={3} lg={2}>
-          <button className="button-agregar" onClick={() => setShowForm(true)} variant="dark">
+          <button className="button-agregar" onClick={() => showFormNewCliente()} variant="dark">
             <Icons.Plus className="icon-button" size={19} /> Nuevo Cliente
           </button>
         </Col>
