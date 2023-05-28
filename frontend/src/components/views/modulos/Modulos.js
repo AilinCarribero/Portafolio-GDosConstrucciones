@@ -187,7 +187,8 @@ const Modulos = () => {
         if (data && data.vender) {
             const dataSend = {
                 id: idModulo,
-                venta: data.valor
+                venta: data.valor,
+                cliente: data.cliente
             }
 
             const responseVendido = await setVendido(dataSend);
@@ -398,6 +399,13 @@ const Modulos = () => {
                                         </Accordion.Header>
                                         <Accordion.Body className='accordion-body-modulos'>
                                             <Row>
+                                                {(modulo.fecha_venta && modulo.cliente) &&
+                                                    <Col xs={12} md={11} className="col-12-accordion">
+                                                        <Row>
+                                                            <Col xs={12} md={12}><p> <b>Vendido a</b>: {modulo.cliente}</p></Col>
+                                                        </Row>
+                                                    </Col>
+                                                }
                                                 <Col xs={12} md={6}>
                                                     <Row>
                                                         <Col xs={1} md={1}></Col>

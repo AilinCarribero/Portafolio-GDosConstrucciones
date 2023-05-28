@@ -256,11 +256,8 @@ const FormProyectos = ({ close, updateProyecto, setUpdateProyectos }) => {
     }
 
     const handleNewCliente = (e) => {
-        const targetName = e.target.name;
-        const targetValue = e.target.value;
         const targetCheck = e.target.checked;
 
-        console.log(targetCheck)
         setShowNewCliente(targetCheck)
     }
 

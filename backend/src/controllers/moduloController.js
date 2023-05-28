@@ -108,6 +108,7 @@ exports.changeVendido = (req, res) => {
                 estado: 2,
                 venta: req.body.venta,
                 token_modulo: tokenModulo,
+                cliente: req.body.cliente,
                 url_qr: url_qr,
                 fecha_venta: new Date().toISOString().slice(0, 10)
             }, {
