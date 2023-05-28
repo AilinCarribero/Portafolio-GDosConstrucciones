@@ -55,6 +55,12 @@
 
             .card-footer-cliente {
                 background-color: #ffffff;
+                padding-left: 0;
+                padding-right: 0;
+
+                .button-action {
+                    margin-left: 15px;
+                }
             }
         }
     }

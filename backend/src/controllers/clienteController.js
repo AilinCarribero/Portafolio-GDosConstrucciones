@@ -1,4 +1,4 @@
-const { Cliente } = require("../../db");
+const { Cliente, Proyecto } = require("../../db");
 
 exports.getClientes = (req, res) => {
     try {
@@ -79,4 +79,45 @@ exports.updateCliente = (req, res) => {
     } else {
         return res.json('No existe el id del cliente');
     }
+}
+
+exports.deleteCliente = (req, res) => {
+    const id_cliente = req.params.id;
+    console.log(id_cliente)
+    /* 
+        Eliminar cliente
+        Buscar e eliminar proyectos con id del cliente eliminado
+     */
+
+    Proyecto.destroy({
+        where: {
+            id_cliente: id_cliente
+        }
+    }).then(proyectos => {
+        console.log(proyectos)
+
+        Cliente.destroy({
+            where: {
+                id_cliente: id_cliente
+            }
+        }).then(cliente => {
+            console.log(cliente)
+    
+            Cliente.findAll().then(response => {
+                res.json(response);
+            }).catch(err => {
+                console.error(err);
+                err.todoMal = "Error inesperado al encontrar clientes";
+                return res.json(err);
+            });
+        }).catch(err => {
+            console.error(err);
+            console.error('Error al eliminar el cliente')
+            return res.json(err);
+        })
+    }).catch(err => {
+        console.error(err);
+        console.error('Error al eliminar proyectos')
+        return res.json(err);
+    })
 }

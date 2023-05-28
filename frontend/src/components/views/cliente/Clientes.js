@@ -8,17 +8,31 @@ import * as Icons from 'react-bootstrap-icons';
 
 //Css
 import '../../../style/Cliente.scss';
-import { getApiClientes } from '../../../services/apiClientes';
+import { getApiClientes, getApiDeleteCliente } from '../../../services/apiClientes';
 import { ToastComponent } from '../../../hooks/useUtils';
+import Alerta from '../../utils/modal/validacion/Alerta';
+import { useResponse } from '../../../hooks/useResponse';
+import { useDispatch } from 'react-redux';
+import { getProyectos } from '../../../redux/slice/Proyecto/thunks';
 
 const Clientes = () => {
   const { user } = useUser();
+  const { response } = useResponse();
+
+  const dispatch = useDispatch();
 
   const [clientes, setClientes] = useState([]);
   const [updateCliente, setUpdateCliente] = useState([]);
   const [loading, setLoading] = useState(false);
 
   const [showForm, setShowForm] = useState(false);
+  const [showAlerta, setShowAlerta] = useState(false);
+
+  const [alerta, setAlerta] = useState({
+    titulo: '',
+    mensaje: '',
+    data: ''
+  });
 
   useEffect(() => {
     setLoading(true);
@@ -40,6 +54,34 @@ const Clientes = () => {
     setShowForm(true);
   }
 
+  const deleteCliente = (cliente, setDelete) => {
+    setAlerta({
+      titulo: 'Eliminar Cliente',
+      mensaje: `¿Está seguro de eliminar el cliente ${cliente.nombre}? Se eliminarán todos los proyectos asociados a dicho cliente.`,
+      data: cliente
+    });
+
+    setShowAlerta(true);
+
+    if (setDelete) {
+      getApiDeleteCliente(cliente.id_cliente).then(resCliente => {
+        const res = response(resCliente);
+        if (res) {
+          setClientes(resCliente.data);
+          ToastComponent('success', 'Se eliminó correctamente');
+
+          dispatch(getProyectos());
+        } else {
+          ToastComponent('error', resCliente.data.todoMal && resCliente.data.todoMal);
+        }
+      }).catch(err => {
+        console.error(err);
+
+        ToastComponent('error', err.data.todoMal && err.data.todoMal);
+      })
+    }
+  }
+
   const showFormNewCliente = () => {
     setUpdateCliente([]);
     setShowForm(true);
@@ -47,6 +89,7 @@ const Clientes = () => {
 
   return (<>
     <ModalFormulario formulario={'cliente'} show={showForm} setShow={setShowForm} updateNew={setClientes} informacion={updateCliente} />
+    <Alerta titulo={alerta.titulo} mensaje={alerta.mensaje} show={showAlerta} setShow={setShowAlerta} submit={deleteCliente} data={alerta.data} />
 
     <Row className="conten-buttons-agregar">
       {(user.rango == 'admin') && <>
@@ -75,7 +118,7 @@ const Clientes = () => {
               </Card.Body>
               <Card.Footer className='card-footer-cliente'>
                 <Row>
-                  <Col>
+                  <Col xs={12} md={6}>
                     <button className="button-action" onClick={() => updateModalCliente(cliente)}>
                       <Row>
                         <Col xs={1} md={1} className='icon-action'>
@@ -83,6 +126,18 @@ const Clientes = () => {
                         </Col>
                         <Col xs={10} md={10} className='text-action'>
                           Modificar
+                        </Col>
+                      </Row>
+                    </button>
+                  </Col>
+                  <Col xs={12} md={6}>
+                    <button className="button-action" onClick={() => deleteCliente(cliente)}>
+                      <Row>
+                        <Col xs={1} md={1} className='icon-action'>
+                          <Icons.TrashFill size={19} />
+                        </Col>
+                        <Col xs={10} md={10} className='text-action'>
+                          Eliminar
                         </Col>
                       </Row>
                     </button>

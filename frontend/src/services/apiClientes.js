@@ -18,3 +18,9 @@ export const postApiUpdateCliente = async (data) => {
 
     return response;
 }
+
+export const getApiDeleteCliente = async (id_cliente) => {
+    const response = await axios.get(API+`cliente/delete/${id_cliente}`, servisTokenConfig);
+
+    return response;
+}
