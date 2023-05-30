@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import ModalFormulario from '../../utils/modal/formularios/ModalFormulario';
-import { Card, Col, Row, Spinner } from 'react-bootstrap';
+import { Card, Col, Form, Row, Spinner } from 'react-bootstrap';
 import { useUser } from '../../../hooks/useUser';
 
 //Icons
@@ -24,6 +24,7 @@ const Clientes = () => {
   const [clientes, setClientes] = useState([]);
   const [updateCliente, setUpdateCliente] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [search, setSearch] = useState();
 
   const [showForm, setShowForm] = useState(false);
   const [showAlerta, setShowAlerta] = useState(false);
@@ -87,6 +88,39 @@ const Clientes = () => {
     setShowForm(true);
   }
 
+  const buscarCliente = (e) => {
+    const targetName = e.target.name;
+    const targetValue = e.target.value;
+
+    setSearch(targetValue);
+
+    if (targetValue) {
+      setLoading(true);
+
+      const clienteFilter = clientes.filter(cliente => {
+        if (cliente.nombre.toLowerCase().includes(targetValue.toLowerCase())) {
+          return cliente
+        }
+      });
+
+      setClientes(clienteFilter);
+      setLoading(false);
+    } else {
+      setLoading(true);
+
+      getApiClientes().then(res => {
+        setClientes(res.data);
+
+        setLoading(false);
+      }).catch(err => {
+        ToastComponent('error', 'Ocurrio un error al querer cargar los clientes')
+        console.error(err);
+
+        setLoading(false);
+      });
+    }
+  }
+
   return (<>
     <ModalFormulario formulario={'cliente'} show={showForm} setShow={setShowForm} updateNew={setClientes} informacion={updateCliente} />
     <Alerta titulo={alerta.titulo} mensaje={alerta.mensaje} show={showAlerta} setShow={setShowAlerta} submit={deleteCliente} data={alerta.data} />
@@ -97,6 +131,9 @@ const Clientes = () => {
           <button className="button-agregar" onClick={() => showFormNewCliente()} variant="dark">
             <Icons.Plus className="icon-button" size={19} /> Nuevo Cliente
           </button>
+        </Col>
+        <Col xs={12} sm={6} md={9} lg={10}>
+          <Form.Control className='input-text-search' onChange={buscarCliente} name="search" type="text" value={search} placeholder='Buscar' />
         </Col>
       </>}
     </Row>
