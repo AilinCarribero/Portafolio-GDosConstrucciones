@@ -9,11 +9,11 @@ services:
     ports:
       - "3310:3306"
     environment:
-      MYSQL_DATABASE: gdosconstruccionesdb
+      MYSQL_DATABASE: gdcdb
       MYSQL_ROOT: root
-      MYSQL_USER: user.admin
-      MYSQL_PASSWORD: user.admin.gdc.db
-      MYSQL_ROOT_PASSWORD: user.admin.gdc.db
+      MYSQL_USER: user.ailin
+      MYSQL_PASSWORD: user.gdc.db
+      MYSQL_ROOT_PASSWORD: user.gdc.db
     volumes:
       - ./dump:/docker-entrypoint-initdb.d
       - ./conf:/etc/mysql/conf.d
@@ -25,10 +25,10 @@ services:
     ports:
       - "8081:80"
     environment:
-      PMA_HOST: mysqlgdc
-      MYSQL_USER: user.admin
-      MYSQL_PASSWORD: user.admin.gdc.db
-      MYSQL_ROOT_PASSWORD: user.admin.gdc.db
+      PMA_HOST: gdcdb
+      MYSQL_USER: user.ailin
+      MYSQL_PASSWORD: user.gdc.db
+      MYSQL_ROOT_PASSWORD: user.gdc.db
     links:
       - mysqlgdc
 
@@ -37,7 +37,7 @@ services:
     restart: always
     build: ./backend
     ports:
-      - "5001:5001"
+      - "5000:5000"
     depends_on:
       mysqlgdc:
         condition: service_started
@@ -67,7 +67,7 @@ services:
     restart: always
     build: ./cuerre
     ports:
-      - "5002:3002"
+      - "5001:3001"
     volumes:
       - ./cuerre:/usr/src/app/cuerre
     links:
@@ -90,8 +90,8 @@ services:
     environment:
       - DOCKER_USERNAME=ailin97
       - DOCKER_PASSWORD=dckr_pat_mLcHEiMN0yi3Goz7rlYYZhjqMpI
-      - VIRTUAL_HOST=gestion.gdosconstrucciones.com.ar, cuerre.gdosconstrucciones.com.ar, bd.gdosconstrucciones.com.ar
-      - LETSENCRYPT_HOST=gestion.gdosconstrucciones.com.ar, cuerre.gdosconstrucciones.com.ar, bd.gdosconstrucciones.com.ar
+      - VIRTUAL_HOST=gdc.carribero.com.ar, gdccuerre.carribero.com.ar, bdgdc.carribero.com.ar
+      - LETSENCRYPT_HOST=gdc.carribero.com.ar, gdccuerre.carribero.com.ar, bdgdc.carribero.com.ar
     restart: always
     
 

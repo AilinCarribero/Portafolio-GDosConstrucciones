@@ -4,7 +4,7 @@ WORKDIR /app/frontend/
 
 COPY ["package.json", "package-lock.json" , "/app/frontend/"]
 
-ENV REACT_APP_REST=https://gestion.gdosconstrucciones.com.ar/api/
+ENV REACT_APP_REST=https://gdc.carribero.com.ar/api/
  
 RUN npm ci
 RUN echo "-------------npm install completed successfully"
