@@ -1,9 +1,9 @@
 version: "3.9"
 
 services:
-  mysqlgdc:
+  mysqlgdcport:
     image: mysql
-    container_name: mysqlgdc
+    container_name: mysqlgdcport
     command: --default-authentication-plugin=mysql_native_password
     restart: always
     ports:
@@ -11,7 +11,7 @@ services:
     environment:
       MYSQL_DATABASE: gdcdb
       MYSQL_ROOT: root
-      MYSQL_USER: user.ailin
+      MYSQL_USER: user.root
       MYSQL_PASSWORD: user.gdc.db
       MYSQL_ROOT_PASSWORD: user.gdc.db
     volumes:
@@ -25,12 +25,12 @@ services:
     ports:
       - "8081:80"
     environment:
-      PMA_HOST: gdcdb
-      MYSQL_USER: user.ailin
+      PMA_HOST: mysqlgdcport
+      MYSQL_USER: user.root
       MYSQL_PASSWORD: user.gdc.db
       MYSQL_ROOT_PASSWORD: user.gdc.db
     links:
-      - mysqlgdc
+      - mysqlgdcport
 
   nodejsapp:
     container_name: nodejsapp
@@ -39,13 +39,13 @@ services:
     ports:
       - "5000:5000"
     depends_on:
-      mysqlgdc:
+      mysqlgdcport:
         condition: service_started
     volumes:
       - ./backend:/usr/src/app/backend
       - /usr/src/app/node_modules
     links:
-      - mysqlgdc
+      - mysqlgdcport
 
   reactjsapp:
     container_name: reactjsapp
@@ -54,22 +54,9 @@ services:
     restart: always
     build: ./frontend
     ports:
-      - "5000:3000"
+      - "5001:3000"
     volumes:
       - ./frontend:/usr/src/app/frontend
-    links:
-      - nodejsapp
-
-  reactjscuerre:
-    container_name: reactjscuerre
-    stdin_open: true
-    tty: true
-    restart: always
-    build: ./cuerre
-    ports:
-      - "5001:3001"
-    volumes:
-      - ./cuerre:/usr/src/app/cuerre
     links:
       - nodejsapp
 
@@ -82,7 +69,6 @@ services:
       reactjsapp:
         condition: service_started
     links:
-      - reactjscuerre
       - nodejsapp
       - reactjsapp
       - nginx-proxy
@@ -90,8 +76,8 @@ services:
     environment:
       - DOCKER_USERNAME=ailin97
       - DOCKER_PASSWORD=dckr_pat_mLcHEiMN0yi3Goz7rlYYZhjqMpI
-      - VIRTUAL_HOST=gdc.carribero.com.ar, gdccuerre.carribero.com.ar, bdgdc.carribero.com.ar
-      - LETSENCRYPT_HOST=gdc.carribero.com.ar, gdccuerre.carribero.com.ar, bdgdc.carribero.com.ar
+      - VIRTUAL_HOST=gdc.carribero.com.ar, bdgdc.carribero.com.ar
+      - LETSENCRYPT_HOST=gdc.carribero.com.ar, bdgdc.carribero.com.ar
     restart: always
     
 

@@ -4,11 +4,11 @@ COPY ["package.json", "/app/backend/"]
 
 WORKDIR /app/backend/
 
-ENV DB_HOST=mysqlgdc
+ENV DB_HOST=mysqlgdcport
 ENV DB_PORT=3306
-ENV DB_PASSWORD=user.gdc.db
-ENV DB_USER=root
 ENV DB_NAME=gdcdb
+ENV DB_USER=root
+ENV DB_PASSWORD=user.gdc.db
 
 ENV JWT_SECRET=secreto
 ENV JWT_TIME_EXPIRED=7d
