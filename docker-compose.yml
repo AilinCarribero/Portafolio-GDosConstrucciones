@@ -76,8 +76,8 @@ services:
     environment:
       - DOCKER_USERNAME=ailin97
       - DOCKER_PASSWORD=dckr_pat_mLcHEiMN0yi3Goz7rlYYZhjqMpI
-      - VIRTUAL_HOST=gdc.carribero.com.ar, bdgdc.carribero.com.ar
-      - LETSENCRYPT_HOST=gdc.carribero.com.ar, bdgdc.carribero.com.ar
+      - VIRTUAL_HOST=portafoliogdc.carribero.com.ar, portafoliobdgdc.carribero.com.ar
+      - LETSENCRYPT_HOST=portafoliogdc.carribero.com.ar, portafoliobdgdc.carribero.com.ar
     restart: always
     
 
