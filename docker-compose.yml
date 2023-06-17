@@ -1,36 +1,36 @@
 version: "3.9"
 
 services:
-  mysqlgdcport:
-    image: mysql
-    container_name: mysqlgdcport
-    command: --default-authentication-plugin=mysql_native_password
-    restart: always
-    ports:
-      - "3310:3306"
-    environment:
-      MYSQL_DATABASE: gdcdb
-      MYSQL_ROOT: root
-      MYSQL_USER: user.root
-      MYSQL_PASSWORD: user.gdc.db
-      MYSQL_ROOT_PASSWORD: user.gdc.db
-    volumes:
-      - ./dump:/docker-entrypoint-initdb.d
-      - ./conf:/etc/mysql/conf.d
-      - .persistent:/var/lib/mysql:rw
+  #mysqlgdcport:
+  #   image: mysql
+  #   container_name: mysqlgdcport
+  #   command: --default-authentication-plugin=mysql_native_password
+  #   restart: always
+  #   ports:
+  #     - "3310:3306"
+  #   environment:
+  #     MYSQL_DATABASE: gdcdb
+  #     MYSQL_ROOT: root
+  #     MYSQL_USER: user.root
+  #     MYSQL_PASSWORD: user.gdc.db
+  #     MYSQL_ROOT_PASSWORD: user.gdc.db
+  #   volumes:
+  #     - ./dump:/docker-entrypoint-initdb.d
+  #     - ./conf:/etc/mysql/conf.d
+  #     - .persistent:/var/lib/mysql:rw
 
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    container_name: phpmyadmin
-    ports:
-      - "8081:80"
-    environment:
-      PMA_HOST: mysqlgdcport
-      MYSQL_USER: user.root
-      MYSQL_PASSWORD: user.gdc.db
-      MYSQL_ROOT_PASSWORD: user.gdc.db
-    links:
-      - mysqlgdcport
+  #phpmyadmin:
+  #  image: phpmyadmin/phpmyadmin
+  #  container_name: phpmyadmin
+  #  ports:
+  #    - "8081:80"
+  #  environment:
+  #    PMA_HOST: mysqlgdcport
+  #    MYSQL_USER: user.root
+  #    MYSQL_PASSWORD: user.gdc.db
+  #    MYSQL_ROOT_PASSWORD: user.gdc.db
+  #  links:
+  #    - mysqlgdcport
 
   nodejsapp:
     container_name: nodejsapp
@@ -38,14 +38,14 @@ services:
     build: ./backend
     ports:
       - "5000:5000"
-    depends_on:
-      mysqlgdcport:
-        condition: service_started
+    #depends_on:
+    #  mysqlgdcport:
+    #    condition: service_started
     volumes:
       - ./backend:/usr/src/app/backend
       - /usr/src/app/node_modules
-    links:
-      - mysqlgdcport
+    #links:
+    # - mysqlgdcport
 
   reactjsapp:
     container_name: reactjsapp
@@ -76,8 +76,8 @@ services:
     environment:
       - DOCKER_USERNAME=ailin97
       - DOCKER_PASSWORD=dckr_pat_mLcHEiMN0yi3Goz7rlYYZhjqMpI
-      - VIRTUAL_HOST=portafoliogdc.carribero.com.ar, portafoliobdgdc.carribero.com.ar
-      - LETSENCRYPT_HOST=portafoliogdc.carribero.com.ar, portafoliobdgdc.carribero.com.ar
+      - VIRTUAL_HOST=portafoliogdc.carribero.com.ar
+      - LETSENCRYPT_HOST=portafoliogdc.carribero.com.ar
     restart: always
     
 

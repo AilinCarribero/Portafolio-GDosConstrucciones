@@ -1,7 +1,5 @@
-const { CentroCosto, UnidadNegocio, Alquiler, Proyecto, Modulo, Egreso, Ingreso, ModuloDoble, IngresoAlquiler, Cliente } = require('../../db');
+const { CentroCosto, UnidadNegocio, Alquiler, Proyecto, Modulo, ModuloDoble, IngresoAlquiler, Cliente } = require('../../db');
 const { formatStringToNumber } = require('../utils/numbers');
-const Decimal = require('decimal.js-light');
-const moment = require('moment');
 
 const configFindAllProyectos = {
     include: [{

@@ -7,17 +7,10 @@ const AuthModel = require('./src/models/authModel');
 const CentroCostoModel = require('./src/models/centroCostoModel');
 const ComprobantePagoModel = require('./src/models/comprobantePagoModel');
 const DetalleACModel = require('./src/models/detalleACModel');
-const EgresoModel = require('./src/models/egresoModel');
 const EstadoModel = require('./src/models/estadoModel');
-const FormaCobroModel = require('./src/models/formaCobroModel');
-const FormaPagoModel = require('./src/models/formaPagoModel');
-const IndiceModel = require('./src/models/indiceModel');
-const IngresoModel = require('./src/models/ingresoModel');
 const ModuloModel = require('./src/models/moduloModel');
 const ProyectoModel = require('./src/models/proyectoModel');
 const RangoModel = require('./src/models/rangoModel');
-const StockModel = require('./src/models/stockModel');
-const StockMovimientoModel = require('./src/models/stockMovimientoModel');
 const UnidadNegocioModel = require('./src/models/unidadNegocioModel');
 const TokenModel = require('./src/models/tokenModel');
 const ModuloDobleModel = require('./src/models/moduloDobleModel');
@@ -43,17 +36,10 @@ const Auth = AuthModel(sequelize, Sequelize);
 const CentroCosto = CentroCostoModel(sequelize, Sequelize);
 const ComprobantePago = ComprobantePagoModel(sequelize, Sequelize);
 const DetalleAC = DetalleACModel(sequelize, Sequelize);
-const Egreso = EgresoModel(sequelize, Sequelize);
 const Estado = EstadoModel(sequelize, Sequelize);
-const FormaCobro = FormaCobroModel(sequelize, Sequelize);
-const FormaPago = FormaPagoModel(sequelize, Sequelize);
-const Indice = IndiceModel(sequelize, Sequelize);
-const Ingreso = IngresoModel(sequelize, Sequelize);
 const Modulo = ModuloModel(sequelize, Sequelize);
 const Proyecto = ProyectoModel(sequelize, Sequelize);
 const Rango = RangoModel(sequelize, Sequelize);
-const Stock = StockModel(sequelize, Sequelize);
-const StockMovimiento = StockMovimientoModel(sequelize, Sequelize);
 const UnidadNegocio = UnidadNegocioModel(sequelize, Sequelize);
 const Token = TokenModel(sequelize, Sequelize);
 const ModuloDoble = ModuloDobleModel(sequelize, Sequelize);
@@ -65,8 +51,6 @@ const Cliente = ClienteModel(sequelize, Sequelize);
 sequelize.sync({ force: false, logging: false }).then(() => {
     //Relaciones
     Auth.belongsTo(Rango, { foreignKey: 'id_rango', targetKey: 'id_rango' });
-    Auth.hasMany(Stock, { foreignKey: 'id_user', targetKey: 'id_user' });
-    Auth.hasMany(StockMovimiento, { foreignKey: 'id_user', targetKey: 'id_user' });
 
     Rango.belongsTo(Auth, { foreignKey: 'id_rango', targetKey: 'id_rango' });
 
@@ -79,28 +63,9 @@ sequelize.sync({ force: false, logging: false }).then(() => {
     Modulo.hasMany(ModuloDoble, { foreignKey: 'id_modulo_uno', targetKey: 'id_modulo' });
     Modulo.hasMany(ModuloDoble, { foreignKey: 'id_modulo_dos', targetKey: 'id_modulo' });
 
-    Proyecto.hasMany(Alquiler, { foreignKey: 'id_proyecto', targetKey: 'id_proyecto' });
-    Proyecto.hasMany(Egreso, { foreignKey: 'id_proyecto', targetKey: 'id_proyecto' });
-    Proyecto.hasMany(Ingreso, { foreignKey: 'id_proyecto', targetKey: 'id_proyecto' });  
+    Proyecto.hasMany(Alquiler, { foreignKey: 'id_proyecto', targetKey: 'id_proyecto' }); 
     Proyecto.hasMany(IngresoAlquiler, { foreignKey: 'id_proyecto', targetKey: 'id_proyecto' });
     Proyecto.hasMany(Cliente, { foreignKey: 'id_cliente', targetKey: 'id_cliente' });
-
-    Egreso.belongsTo(Proyecto, { foreignKey: 'id_proyecto', targetKey: 'id_proyecto' });
-    Egreso.belongsTo(FormaPago, { foreignKey: 'id_forma_pago', targetKey: 'id_forma_pago' });
-    Egreso.belongsTo(Auth, { foreignKey: 'id_user', targetKey: 'id_user' });
-    Egreso.belongsTo(AnalisisCosto, { foreignKey: 'id_analisis_costo', targetKey: 'id_analisis_costo' });
-    Egreso.belongsTo(ComprobantePago, { foreignKey: 'id_comprobante_pago', targetKey: 'id_comprobante_pago' });
-    Egreso.belongsTo(Stock, { foreignKey: 'id_stock', targetKey: 'id_stock' });
-
-    Ingreso.belongsTo(FormaCobro, { foreignKey: 'id_forma_cobro', targetKey: 'id_forma_cobro' });
-    Ingreso.belongsTo(Auth, { foreignKey: 'id_user', targetKey: 'id_user' });
-
-    Stock.hasMany(Egreso, { foreignKey: 'id_stock', targetKey: 'id_stock' });
-    Stock.belongsTo(Auth, { foreignKey: 'id_user', targetKey: 'id_user' });
-    Stock.hasMany(StockMovimiento, {foreignKey: 'id_stock', targetKey: 'id_stock'});
-
-    StockMovimiento.belongsTo(Stock, {foreignKey: 'id_stock', targetKey: 'id_stock'});
-    StockMovimiento.belongsTo(Auth, { foreignKey: 'id_user', targetKey: 'id_user' });
 
     ModuloDoble.belongsTo(Modulo, { as: 'moduloUno', foreignKey: 'id_modulo_uno', targetKey: 'id_modulo' });
     ModuloDoble.belongsTo(Modulo, { as: 'moduloDos', foreignKey: 'id_modulo_dos', targetKey: 'id_modulo' });
@@ -117,7 +82,6 @@ sequelize.sync({ force: false, logging: false }).then(() => {
 })
 
 module.exports = {
-    Alquiler, AnalisisCosto, Auth, CentroCosto, ComprobantePago, DetalleAC, Egreso, Estado, FormaCobro, FormaPago,
-    Indice, Ingreso, Modulo, Proyecto, Rango, Stock, StockMovimiento, UnidadNegocio, Token, ModuloDoble, IngresoAlquiler, 
-    Cliente
+    Alquiler, AnalisisCosto, Auth, CentroCosto, ComprobantePago, DetalleAC, Estado, Modulo, Proyecto, Rango, UnidadNegocio, Token, 
+    ModuloDoble, IngresoAlquiler, Cliente
 }

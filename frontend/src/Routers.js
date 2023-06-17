@@ -1,19 +1,13 @@
 import React, { useEffect } from 'react';
-import { BrowserRouter, HashRouter, Redirect, Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import { Container } from 'react-bootstrap';
 
 //Views Components
 import Home from './components/views/home/Home';
-import FormEgresos from './components/views/egresos/FormEgresos';
-import FormIngresos from './components/views/ingresos/FormIngresos';
 import NavbarComponent from './components/marco/navbar/Navbar';
 import Proyectos from './components/views/proyectos/Proyectos';
-import FormProyectos from './components/views/proyectos/FormProyectos';
 import FormUsuarios from './components/views/usuarios/FormUsuarios';
 import Usuarios from './components/views/usuarios/Usuarios';
-import Egresos from './components/views/egresos/Egresos';
-import Ingresos from './components/views/ingresos/Ingresos';
-import FormModulos from './components/views/modulos/FormModulos';
 import Modulos from './components/views/modulos/Modulos';
 import Alquileres from './components/views/alquiler/Alquileres';
 import CentrosCostos from './components/views/proyectos/CentrosCostos';
@@ -74,8 +68,7 @@ const Routers = () => {
                             }
                             {user.rango == 'usuario comun' &&
                                 <>
-                                    <Route exact path="/ingresar/egreso" element={FormEgresos} />
-                                    <Route exact path="/egresos/:id" element={Egresos} />
+                                    
                                 </>
                             }
                         </>
