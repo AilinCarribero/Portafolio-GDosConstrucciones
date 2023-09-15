@@ -1,17 +1,38 @@
 .content-data {
     position: relative;
-    width: 98vw;
-    max-width: 98vw;
-    left: 1vw;
+    display: flex;
+    width: 100%;
+    max-width: 100%;
+    left: 0;
+    right: 0;
+    margin-right: 0 !important;
+    padding-right: 0 !important;
+    padding-left: 10px;
+
+    div {
+        margin: 0;
+        padding: 0;
+    }
+
+    .row {
+        padding: 0;
+        margin: 0;
+    }
 
     .content-resumen {
-        width: 100vw;
+        width: 100%;
         background-color: #000000;
         padding-bottom: 5px;
-        margin-left: 0px;
+        margin-left: 18px;
+        margin-top: 10px;
         color: #ffffff;
         text-align: center;
         font-size: 16px;
+
+        @media only screen and (hover: none) and (pointer: coarse) {
+            margin: auto;
+            margin-top: 10px;
+        }
 
         .content-section {
             padding-top: 10px;
@@ -47,14 +68,110 @@
             border-left: #ffffff solid 1px;
         }
 
-        @media only screen and (hover: none) and (pointer: coarse){
-            .border-mobile-right{
+        @media only screen and (hover: none) and (pointer: coarse) {
+            .border-mobile-right {
                 border-right: transparent !important;
-            } 
-        
-            .border-mobile-bot{
+            }
+
+            .border-mobile-bot {
                 padding-bottom: 5px;
                 border-bottom: solid 1.5px white;
+            }
+        }
+    }
+
+    .accordion {
+        width: 100%;
+        right: 0;
+
+        @media only screen and (hover: none) and (pointer: coarse) {
+            padding-right: 0;
+            margin-right: 0;
+            margin-left: 5px;
+        }
+
+        .accordion-body {
+            padding: 10px;
+        }
+        
+        .accordion-border-top {
+            border-top: 1px solid rgb(223, 222, 222);
+            padding-top: 5px;
+        }
+
+        .border-top {
+            padding: 10px 20px 15px 20px;
+        }
+
+        .accordion-title-section {
+            font-size: 15px;
+            font-weight: bold;
+            margin-bottom: 3px;
+        }
+    }
+
+    /*------------------- Resumenes -----------------------*/
+    .content-resumen-sec-buttons {
+        position: relative;
+        width: 100%;
+        background-color: #dddcdc;
+        border: 1px solid #ffffff;
+        padding-bottom: 5px;
+        margin-left: 0;
+        margin-right: 0;
+        padding-left: 0;
+        padding-right: 0;
+        color: #000000;
+        text-align: center;
+        font-size: 14px;
+
+        @media only screen and (hover: none) and (pointer: coarse) {
+            margin-left: 2vw;
+        }
+
+        .content-section {
+            font-weight: 500;
+            padding-top: 11px;
+        }
+
+        .conten-buttons-agregar {
+            font-size: 14px;
+            padding-left: 20px !important;
+            padding-right: 20px !important;
+            padding-bottom: 15px !important;
+
+            .button-agregar {
+                width: 100%;
+                padding-top: 5px;
+                padding-bottom: 5px;
+                margin-top: 5px;
+                border-radius: 10px;
+                font-size: 14px;
+                border: solid 1px #ffffff;
+                background-color: #ffffff;
+                color: #000000;
+
+                .icon-button {
+                    margin-bottom: 2px;
+                    margin-right: 2px;
+                    margin-left: -10px;
+                }
+
+                &:hover {
+                    background-color: #b3b3b4;
+                }
+            }
+
+            .input-text-search {
+                width: 58vw;
+                margin-top: 4px;
+                border-radius: 10px;
+            }
+
+            @media only screen and (hover: none) and (pointer: coarse) {
+                .input-text-search {
+                    width: 100%;
+                }
             }
         }
     }

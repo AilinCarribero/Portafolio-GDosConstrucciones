@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Row, Spinner } from 'react-bootstrap';
+import { Spinner } from 'react-bootstrap';
 
 const SpinnerC = (props) => {
     const [ estado, setEstado ] = useState(props.estado);

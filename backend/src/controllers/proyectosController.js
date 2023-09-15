@@ -1,5 +1,7 @@
-const { CentroCosto, UnidadNegocio, Alquiler, Proyecto, Modulo, ModuloDoble, IngresoAlquiler, Cliente } = require('../../db');
+const { CentroCosto, UnidadNegocio, Alquiler, Proyecto, Modulo, Egreso, Ingreso, ModuloDoble, IngresoAlquiler, Cliente } = require('../../db');
 const { formatStringToNumber } = require('../utils/numbers');
+const Decimal = require('decimal.js-light');
+const moment = require('moment');
 
 const configFindAllProyectos = {
     include: [{
@@ -113,7 +115,7 @@ exports.insertProyecto = async (req, res) => {
 
             if (unidad_negocio[0].siglas_uc) {
                 id_proyecto = id_proyecto + '-' + unidad_negocio[0].siglas_uc;
-                
+
                 if (req.body.cliente) {
                     id_proyecto = id_proyecto + '-' + req.body.cliente;
                     cliente = await Cliente.findOne({
@@ -287,4 +289,39 @@ exports.updateProyecto = async (req, res) => {
 //Eliminar proyecto
 exports.deleteProyecto = async (req, res) => {
     const idProyecto = req.params.id.toString().replace(/\%20/g, ' ');
+
+    Proyecto.destroy({
+        where: {
+            id_proyecto: idProyecto
+        },
+        include: [{
+            model: Alquiler,
+            include: [{
+                model: Modulo
+            }, {
+                model: IngresoAlquiler
+            }, {
+                model: ModuloDoble,
+                include: [{
+                    model: Modulo,
+                    as: 'moduloUno',
+                    include: [{
+                        model: Alquiler
+                    },
+                    ]
+                }, {
+                    model: Modulo,
+                    as: 'moduloDos',
+                    include: [{
+                        model: Alquiler
+                    },
+                    ]
+                }],
+            }]
+        }]
+    }).then(response => {
+        res.json(response);
+    }).catch(error => {
+        res.json(error);
+    });
 }

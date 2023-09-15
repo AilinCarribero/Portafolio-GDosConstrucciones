@@ -8,7 +8,7 @@ import { calcCantMeses, formatFecha, formatNumber } from '../../../hooks/useUtil
 const GraficIngresosAlquileres = ({ alquiler, ingresoAlquiler }) => {
     const cantMeses = calcCantMeses(alquiler.fecha_d_alquiler, alquiler.fecha_h_alquiler);
 
-    const valXMesAlquiler = formatNumber(alquiler.valor/cantMeses);
+    const valXMesAlquiler = formatNumber(alquiler.valor / cantMeses);
     /*Inicio de configuracion de grafica */
     const options = {
         chart: {
@@ -35,13 +35,19 @@ const GraficIngresosAlquileres = ({ alquiler, ingresoAlquiler }) => {
             position: 'right'
         },
         tooltip: {
-            theme: false,
+            enabled: true,
+            theme: 'dark',
             custom: function (opts) {
                 const fromYear = formatFecha(opts.y1)
                 const toYear = formatFecha(opts.y2)
-                const values = opts.ctx.rangeBar.getTooltipValues(opts).seriesName;
+                const values = opts.w.globals.seriesNames[opts.seriesIndex];
 
-                return ('<div class="range-bar-tooltip"><div id="range-bar-tooltip-title">' + values + '</div> <div id="range-bar-tooltip-fecha">' + fromYear + ' - ' + toYear + ' </div><div id="range-bar-tooltip-fecha"> Valor: $' + valXMesAlquiler + ' </div></div>')
+                return (
+                    `<div class="range-bar-tooltip">
+                        <div id="range-bar-tooltip-title"> ${values} </div> 
+                        <div id="range-bar-tooltip-fecha"> ${fromYear} al ${toYear}</div>
+                        <div id="range-bar-tooltip-fecha"> Valor: $${valXMesAlquiler}</div>
+                    </div>`)
             }
         }
     }
@@ -70,6 +76,7 @@ const GraficIngresosAlquileres = ({ alquiler, ingresoAlquiler }) => {
                 const fI = moment(fechaFor);
                 const fF = moment(fechaFor).add(1, 'months');
 
+                /*Si fecha de inicio es menor o igual a la fecha final y la fecha de inicio es igual a la fecha del for */
                 if (fechaID.format("YYYY-MM") <= fechaIH.format("YYYY-MM") && fechaID.format("MM-YYYY") === fechaFor.format("MM-YYYY")) {
                     arrayTablaPagado.data.push({
                         x: fechaFor.get('year').toString(),
@@ -82,11 +89,11 @@ const GraficIngresosAlquileres = ({ alquiler, ingresoAlquiler }) => {
                     fechaID.add(1, 'months')
                 } else {
                     let flag = true;
-                    
+
                     arrayTablaPagado.data.forEach(dataP => {
                         const dataFormatPY0 = moment(dataP.y[0]).format("YYYY-MM");
                         const dataFormatPY1 = moment(dataP.y[1]).format("YYYY-MM");
-                        
+
                         if (fI.format("YYYY-MM") == dataFormatPY0 || fF.format("YYYY-MM") == dataFormatPY1) {
                             flag = false;
                         }
@@ -95,13 +102,13 @@ const GraficIngresosAlquileres = ({ alquiler, ingresoAlquiler }) => {
                     arrayTablaNoPagado.data.forEach((dataNoP, i) => {
                         const dataFormatNPY0 = moment(dataNoP.y[0]).format("YYYY-MM");
                         const dataFormatNPY1 = moment(dataNoP.y[1]).format("YYYY-MM");
-                        
+
                         if (fI.format("YYYY-MM") == dataFormatNPY0 || fF.format("YYYY-MM") == dataFormatNPY1) {
                             flag = false;
                         }
                     });
 
-                    if(flag) {
+                    if (flag) {
                         arrayTablaNoPagado.data.push({
                             x: fechaFor.get('year').toString(),
                             y: [
@@ -117,7 +124,7 @@ const GraficIngresosAlquileres = ({ alquiler, ingresoAlquiler }) => {
         arrayTablaPagado.data.forEach(dataP => {
             const dataFormatPY0 = moment(dataP.y[0]).format("YYYY-MM");
             const dataFormatPY1 = moment(dataP.y[1]).format("YYYY-MM");
-            
+
             arrayTablaNoPagado.data.forEach((dataNoP, i) => {
                 const dataFormatNPY0 = moment(dataNoP.y[0]).format("YYYY-MM");
                 const dataFormatNPY1 = moment(dataNoP.y[1]).format("YYYY-MM");

@@ -4,7 +4,7 @@ WORKDIR /app/cuerre/
 
 COPY ["package.json", "package-lock.json" , "/app/cuerre/"]
 
-ENV REACT_APP_REST=https://gdc.carribero.com.ar/api/
+ENV REACT_APP_REST=https://gestion.gdosconstrucciones.com.ar/api/
 ENV PORT=3002
 
 RUN npm install

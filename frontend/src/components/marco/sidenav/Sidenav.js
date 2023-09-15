@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Offcanvas, Nav, Button, Image, NavDropdown } from 'react-bootstrap';
+import { Offcanvas, Nav, Button, Image } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 //Hooks
@@ -41,15 +41,10 @@ const Sidenav = () => {
           {/*<Link className="text-link fondo-link" to="/" onClick={handleClose} >Indices</Link>*/}
           {user.rango == 'admin' && <>
             <Link className="text-link fondo-link" to="/usuarios" onClick={handleClose} >Usuarios</Link>
+          </>}
+          {(user.rango == 'admin' || user.rango == 'moderador') && <>
             <Link className="text-link fondo-link" to="/clientes" onClick={handleClose} >Clientes</Link>
           </>}
-          {/*showDrop && <>
-            <button className="dropdown-content text-link fondo-link" onClick={handleShowDrop}>
-              Agregar
-              <Icons.CaretDownFill className='icon-drop' />
-            </button>
-            {user.rango == 'admin' && <Link className="text-link dropdown-link" to="/ingresar/usuario" onClick={handleClose} >Usuario</Link>}
-          </>*/}
         </Nav>
       </Offcanvas.Body>
     </Offcanvas>

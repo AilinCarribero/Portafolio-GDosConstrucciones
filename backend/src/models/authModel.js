@@ -6,11 +6,17 @@ module.exports = ( sequelize, type ) => {
             autoIncrement: true
         },
         nombre_apellido: type.STRING(60),
+        usr_login: {
+            type: type.STRING(60)
+        },
         correo: {
             type: type.STRING(100),
             validator: {
                 isEmail: true
             }
+        },
+        telefono: {
+            type: type.STRING(35)
         },
         contrasegna: type.STRING(300),
         id_rango: {

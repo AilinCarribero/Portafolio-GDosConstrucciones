@@ -217,10 +217,10 @@ export const calcDifDias = (inicio, fin) => {
 }
 
 export const calcCantMeses = (desde, hasta) => {
-    const fechaDesde = moment(desde);
-    const fechaHasta = moment(hasta);
+    const fechaDesde = moment(desde).format("YYYY-MM");
+    const fechaHasta = hasta ? moment(hasta).format("YYYY-MM") : fechaDesde;
 
-    const cantMeses = Math.ceil(fechaHasta.diff(fechaDesde, 'month')) + 1;
+    const cantMeses = Math.ceil(moment(fechaHasta).diff(fechaDesde, 'month') + 1);
 
     return cantMeses === 0 ? 1 : cantMeses;
 }

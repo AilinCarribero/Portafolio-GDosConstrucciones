@@ -1,17 +1,23 @@
 import React from 'react';
 import { Accordion, Col, OverlayTrigger, Row, Spinner, Tooltip } from 'react-bootstrap';
 
+//Componentes
+import GraficTrazabilidadModulo from './GraficTrazabilidadModulo';
+
+//Redux
+import { useSelector } from 'react-redux';
+
 //Hooks
 import { useGetModulos } from '../../../hooks/useModulos';
+import { formatFecha, formatNumber, ToastComponent } from '../../../hooks/useUtils';
+import { useUser } from '../../../hooks/useUser';
 
 //Img-Icons
 import * as Icons from 'react-bootstrap-icons';
-import { formatFecha, formatNumber, ToastComponent } from '../../../hooks/useUtils';
-import { useSelector } from 'react-redux';
-import GraficTrazabilidadModulo from './GraficTrazabilidadModulo';
 
 const ModulosDobles = () => {
     const { modulosDobles } = useGetModulos();
+    const { user } = useUser();
 
     const loading = useSelector(state => state.moduloRedux.loading);
 
@@ -322,7 +328,7 @@ const ModulosDobles = () => {
                                             </Col>
                                         }
                                     </Row>
-                                    {moduloDoble.alquilers.length > 0 &&
+                                    {(user.rango == 'admin' || user.rango == 'moderador') && moduloDoble.alquilers.length > 0 &&
                                         <Row>
                                             <Col xs={12} md={12} >
                                                 <Row className="accordion-border-top">

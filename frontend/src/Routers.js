@@ -41,7 +41,7 @@ const Routers = () => {
                         :
                         <>
                             <Route exact path="/" element={<Proyectos />} />
-                            {user.rango == 'admin' &&
+                            {user.rango === 'admin' &&
                                 <>
                                     <Route exact path="/menu/:seccion" element={<Proyectos />} />
                                     <Route exact path="/ingresar/usuario" element={<FormUsuarios />} />
@@ -56,19 +56,23 @@ const Routers = () => {
                                     <Route exact path="/clientes" element={<Clientes />} />
                                 </>
                             }
-                            {user.rango == 'moderador' &&
+                            {user.rango === 'moderador' &&
                                 <>
                                     <Route exact path="/menu/:seccion" element={<Proyectos />} />
-                                    <Route exact path="/cc" element={<CentrosCostos />} />
-                                    <Route exact path="/ccp" element={<CentrosCostos />} />
                                     <Route exact path="/alquileres/:id" element={<Alquileres />} />
                                     <Route exact path="/alquileres/ingresos/:id" element={<IngresosAlquiler />} />
                                     <Route exact path="/alquileres/:id/ingresos/:idALquiler" element={<IngresosAlquiler />} />
+                                    <Route exact path="/clientes" element={<Clientes />} />
                                 </>
                             }
-                            {user.rango == 'usuario comun' &&
+                            {user.rango === 'usuario comun' &&
                                 <>
-                                    
+                                </>
+                            }
+                            {user.rango === 'taller' &&
+                                <>
+                                    <Route exact path="/menu/modulos" element={<Proyectos />} />
+                                    <Route exact path="/menu/modulos-dobles" element={<Proyectos />} />
                                 </>
                             }
                         </>

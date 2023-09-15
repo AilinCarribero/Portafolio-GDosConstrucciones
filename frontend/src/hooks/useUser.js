@@ -12,13 +12,17 @@ export const useUser = () => {
 }
 
 export const useGetUser = () => {
-    const [ user, setUser ] = useState([]);
+    const [ users, setUsers ] = useState([]);
+    const [ showSpinner, setShowSpinner ] = useState(false);
 
     useEffect(() => {
         (async () => {
+            setShowSpinner(true);
             const resGetUser = await getUser();
-            setUser(resGetUser);
+            
+            setShowSpinner(false);
+            setUsers(resGetUser);
         })()
     }, [])
-    return { user, setUser }
+    return { users, setUsers, showSpinner, setShowSpinner }
 }

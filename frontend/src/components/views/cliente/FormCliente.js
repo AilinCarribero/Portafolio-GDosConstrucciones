@@ -1,14 +1,20 @@
 import React, { useState } from 'react';
-import { Button, Col, FloatingLabel, Form, Card, Row } from 'react-bootstrap';
+import { Button, Col, FloatingLabel, Form, Card, Row, Spinner } from 'react-bootstrap';
 import { PatternFormat } from 'react-number-format';
+
+//Hooks
 import { ToastComponent } from '../../../hooks/useUtils';
-import { postApiNewCliente, postApiUpdateCliente } from '../../../services/apiClientes';
 import { useResponse } from '../../../hooks/useResponse';
+
+//Service
+import { postApiNewCliente, postApiUpdateCliente } from '../../../services/apiClientes';
 
 const FormCliente = ({ close, updateCliente, setUpdateClientes }) => {
     const { response } = useResponse();
     const [cliente, setCliente] = useState({
         nombre: updateCliente.nombre ? updateCliente.nombre : '',
+        razon_social: updateCliente.razon_social ? updateCliente.razon_social : '',
+        cuit_cuil: updateCliente.cuit_cuil ? updateCliente.cuit_cuil : '',
         correo: updateCliente.correo ? updateCliente.correo : '',
         telefono: updateCliente.telefono && updateCliente.telefono != 0 ? updateCliente.telefono : '',
         direccion: updateCliente.direccion ? updateCliente.direccion : '',
@@ -16,6 +22,7 @@ const FormCliente = ({ close, updateCliente, setUpdateClientes }) => {
 
     //Variables de validacion
     const [validated, setValidated] = useState(false);
+    const [showSpinner, setShowSpinner] = useState(false);
 
     const handleChangeForm = (e) => {
         const targetName = e.target.name;
@@ -41,8 +48,9 @@ const FormCliente = ({ close, updateCliente, setUpdateClientes }) => {
             let resApi = [];
 
             try {
+                setShowSpinner(true);
                 if (updateCliente && updateCliente.id_cliente) {
-                    const newDataCliente = {...cliente, id_cliente: updateCliente.id_cliente};
+                    const newDataCliente = { ...cliente, id_cliente: updateCliente.id_cliente };
 
                     resApi = await postApiUpdateCliente(newDataCliente);
                 } else {
@@ -59,16 +67,23 @@ const FormCliente = ({ close, updateCliente, setUpdateClientes }) => {
                     setCliente({
                         id_cliente: '',
                         nombre: '',
+                        razon_social: '',
+                        cuit_cuil: '',
                         correo: '',
                         telefono: '',
                         direccion: '',
                     })
 
                     setValidated(false);
+                    setShowSpinner(false);
                     close();
+                } else {
+                    setShowSpinner(false);
+                    ToastComponent('error', resApi.data.name === 'SequelizeUniqueConstraintError' ? 'El cuit/cuil ya existe' : 'No se pudieron guardar los datos del cliente');
                 }
             } catch (err) {
                 ToastComponent('error', 'No se pudieron guardar los datos del cliente');
+                setShowSpinner(false);
                 console.error(err);
             }
         }
@@ -83,17 +98,41 @@ const FormCliente = ({ close, updateCliente, setUpdateClientes }) => {
                         <Form noValidate validated={validated} onSubmit={handleSubmitForm} >
                             {updateCliente.nombre ?
                                 <Form.Group className="mb-3">
-                                    <Form.Label className="label-title-cliente">{cliente.nombre}</Form.Label>
+                                    <Form.Label className="label-title-cliente">{`${cliente.nombre} ${cliente.razon_social && `- ${cliente.razon_social}`}`}</Form.Label>
                                 </Form.Group>
-                                :
+                                : <>
+                                    <Col sm={12} >
+                                        <Form.Group className="mb-3">
+                                            <FloatingLabel label="Nombre del Cliente">
+                                                <Form.Control onChange={handleChangeForm} name="nombre" type="text" value={cliente.nombre} required />
+                                            </FloatingLabel>
+                                        </Form.Group>
+                                    </Col>
+                                    <Col sm={12} >
+                                        <Form.Group className="mb-3">
+                                            <FloatingLabel label="Razon Social del Cliente">
+                                                <Form.Control onChange={handleChangeForm} name="razon_social" type="text" value={cliente.razon_social} />
+                                            </FloatingLabel>
+                                        </Form.Group>
+                                    </Col>
+                                </>
+                            }
+                            {(!updateCliente.razon_social && updateCliente.nombre) &&
                                 <Col sm={12} >
                                     <Form.Group className="mb-3">
-                                        <FloatingLabel label="Nombre del Cliente">
-                                            <Form.Control onChange={handleChangeForm} name="nombre" type="text" value={cliente.nombre} required />
+                                        <FloatingLabel label="Razon Social del Cliente">
+                                            <Form.Control onChange={handleChangeForm} name="razon_social" type="text" value={cliente.razon_social} />
                                         </FloatingLabel>
                                     </Form.Group>
                                 </Col>
                             }
+                            <Col sm={12} >
+                                <Form.Group className="mb-3">
+                                    <FloatingLabel label="Cuit/Cuil del Cliente">
+                                        <Form.Control onChange={handleChangeForm} name="cuit_cuil" type="text" value={cliente.cuit_cuil} />
+                                    </FloatingLabel>
+                                </Form.Group>
+                            </Col>
                             <Col sm={12} >
                                 <Form.Group className="mb-3">
                                     <FloatingLabel label="E-mail del Cliente">
@@ -116,8 +155,8 @@ const FormCliente = ({ close, updateCliente, setUpdateClientes }) => {
                                     </FloatingLabel>
                                 </Form.Group>
                             </Col>
-                            <Button className="button-submit" variant="dark" type="submit">
-                                Guardar
+                            <Button className="button-submit" variant="dark" type="submit" disabled={showSpinner} >
+                                {showSpinner ? <Spinner animation="border" variant="light" size='sm' /> : "Guardar"}
                             </Button>
                         </Form>
                     </Card.Body>

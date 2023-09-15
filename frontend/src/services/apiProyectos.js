@@ -16,3 +16,9 @@ export const setUpdateProyecto = async (proyecto) => {
     const response = await axios.post(API+'proyectos/update', proyecto, servisTokenConfig);
     return response;
 }
+
+export const getApiDeleteProyectos = async (id_proyecto) => {
+    const responde = await axios.get(`${API}proyectos/delete/${id_proyecto}`, servisTokenConfig);
+
+    return responde
+}

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Card, Button, Row, FloatingLabel, Form, Col } from 'react-bootstrap';
+import { Card, Button, Row, FloatingLabel, Form, Col, Spinner } from 'react-bootstrap';
 import { NumericFormat } from 'react-number-format';
 import Decimal from 'decimal.js-light';
 
@@ -9,18 +9,18 @@ import { getProyectos } from '../../../redux/slice/Proyecto/thunks';
 
 //Servicios
 import { insertProyecto, setUpdateProyecto } from '../../../services/apiProyectos';
+import { postApiNewCliente } from '../../../services/apiClientes';
 
 //Hooks
 import { useGetCentroCosto } from '../../../hooks/useCentroCosto';
 import { useGetUnidadNegocio } from '../../../hooks/useUnidadNegocio';
-import { desformatNumber, formatFecha, formatNumber, ToastComponent } from '../../../hooks/useUtils';
+import { desformatNumber, formatNumber, ToastComponent } from '../../../hooks/useUtils';
 import { useGetModulos } from '../../../hooks/useModulos';
-
-//Css
-import './Proyectos.css';
 import { useResponse } from '../../../hooks/useResponse';
 import { useCliente } from '../../../hooks/useCliente';
-import { postApiNewCliente } from '../../../services/apiClientes';
+
+//Css
+import '../../../style/Proyectos.scss';
 
 const FormProyectos = ({ close, updateProyecto, setUpdateProyectos }) => {
     const newDate = new Date();
@@ -57,6 +57,7 @@ const FormProyectos = ({ close, updateProyecto, setUpdateProyectos }) => {
     const [showAlquiler, setShowAlquiler] = useState(false);
     const [showDataAlquileres, setShowDataAlquileres] = useState(false);
     const [showNewCliente, setShowNewCliente] = useState(false);
+    const [showSpinner, setShowSpinner] = useState(false);
 
     //Variables a usar
     const [checkCondicion, setCheckCondicion] = useState();
@@ -70,8 +71,6 @@ const FormProyectos = ({ close, updateProyecto, setUpdateProyectos }) => {
         const targetName = e.target.name;
         const targetValue = e.target.value;
         const targetCheck = e.target.checked;
-
-        //console.log(targetName + ' - ' + targetValue + ' - ' + targetCheck + ' - ' + e.target.type)
 
         if (targetCheck) {
             if (targetName == 'condicion') {
@@ -145,6 +144,7 @@ const FormProyectos = ({ close, updateProyecto, setUpdateProyectos }) => {
 
         if (form.checkValidity() === true) {
             let resProyecto = [];
+            setShowSpinner(true);
 
             if (dataAlquiler && cantAlquiler > 0) {
                 /*
@@ -196,9 +196,11 @@ const FormProyectos = ({ close, updateProyecto, setUpdateProyectos }) => {
                     const resResponse = response(resCliente);
 
                     if (resResponse) {
+                        setShowSpinner(false);
                         ToastComponent('success', 'El cliente fue guardado correctamente');
                     }
                 } catch (err) {
+                    setShowSpinner(false);
                     console.error(err);
                 }
             }
@@ -210,6 +212,7 @@ const FormProyectos = ({ close, updateProyecto, setUpdateProyectos }) => {
 
                         resProyecto = await setUpdateProyecto(proyecto);
                     } catch (error) {
+                        setShowSpinner(false);
                         console.error(error);
                         ToastComponent('error');
                     }
@@ -237,6 +240,8 @@ const FormProyectos = ({ close, updateProyecto, setUpdateProyectos }) => {
                         fecha_f_proyecto: '',
                         id_estado: '1'
                     });
+                    
+                    setShowSpinner(false);
                     setValidated(false);
                     setCheckCondicion();
                     setDataAlquiler([]);
@@ -247,9 +252,11 @@ const FormProyectos = ({ close, updateProyecto, setUpdateProyectos }) => {
                     setShowDataAlquileres(false);
                     close();
                 } else {
+                    setShowSpinner(false);
                     ToastComponent('error');
                 }
             } catch (error) {
+                setShowSpinner(false);
                 console.error(error);
             }
         }
@@ -271,7 +278,7 @@ const FormProyectos = ({ close, updateProyecto, setUpdateProyectos }) => {
                         <Row>
                             <Col xs={12} sm={12}>
                                 <FloatingLabel label="Módulo">
-                                    <Form.Select onChange={handleChangeForm} name={"id_modulo" + '-' + i} >
+                                    <Form.Select onChange={handleChangeForm} name={"id_modulo" + '-' + i}  required={dataAlquiler["id_modulo_doble" + '-' + i] ? false : true}>
                                         <option value=""> </option>
                                         {modulos.length > 0 ?
                                             modulos.map((modulo) => (
@@ -289,7 +296,7 @@ const FormProyectos = ({ close, updateProyecto, setUpdateProyectos }) => {
                             </Col>
                             <Col xs={12} sm={12}>
                                 <FloatingLabel label="Módulo Doble">
-                                    <Form.Select onChange={handleChangeForm} name={"id_modulo_doble" + '-' + i} >
+                                    <Form.Select onChange={handleChangeForm} name={"id_modulo_doble" + '-' + i} required={dataAlquiler["id_modulo" + '-' + i] ? false : true}>
                                         <option value=""> </option>
                                         {modulosDobles.length > 0 ?
                                             modulosDobles.map((moduloDoble) => (
@@ -461,8 +468,8 @@ const FormProyectos = ({ close, updateProyecto, setUpdateProyectos }) => {
                                     <Form.Control onChange={handleChangeForm} name="fecha_f_proyecto" type="date" value={proyecto.fecha_f_proyecto} />
                                 </FloatingLabel>
                             </Form.Group>
-                            <Button className="button-submit" variant="dark" type="submit">
-                                Guardar
+                            <Button className="button-submit" variant="dark" type="submit" disabled={showSpinner}>
+                                {showSpinner ? <Spinner animation="border" variant="light" size='sm' /> : "Guardar"}
                             </Button>
                         </Form>
                     </Card.Body>

@@ -1,31 +1,32 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom';
-import { Accordion, Row, Col, ModalBody, Spinner, OverlayTrigger, Tooltip, Table } from 'react-bootstrap';
-import Decimal from 'decimal.js-light';
+import { Accordion, Row, Col, Spinner, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import moment from 'moment';
 
 //Redux
 import { useDispatch, useSelector } from 'react-redux';
+import { getProyectos } from '../../../redux/slice/Proyecto/thunks';
 
 //Components
 import FormContrato from './FormContrato';
 import ModalFormulario from '../../utils/modal/formularios/ModalFormulario';
+import GraficIngresosAlquileres from '../ingresosAlquiler/GraficIngresosAlquileres';
 
 //Hooks
 import { ToastComponent, calcCantMeses, formatFecha, formatNameMes, formatNumber, formatTextMix } from '../../../hooks/useUtils';
 import { useUser } from '../../../hooks/useUser';
-import { useAlquileres, useGetAlquileresId } from '../../../hooks/useAlquileres';
+import { useGetAlquileresId } from '../../../hooks/useAlquileres';
+import { useResponse } from '../../../hooks/useResponse';
+import Alerta from '../../utils/modal/validacion/Alerta';
 
 //Img-Icons
 import * as Icons from 'react-bootstrap-icons';
 
+//Service
+import { deleteApiContrato } from '../../../services/apiAlquileres';
+
 //Css
 import '../../../style/Alquiler.scss';
-import GraficIngresosAlquileres from '../ingresosAlquiler/GraficIngresosAlquileres';
-import { useResponse } from '../../../hooks/useResponse';
-import Alerta from '../../utils/modal/validacion/Alerta';
-import { deleteApiContrato } from '../../../services/apiAlquileres';
-import { getProyectos } from '../../../redux/slice/Proyecto/thunks';
 
 const Alquileres = () => {
     const dispatch = useDispatch();
@@ -36,7 +37,6 @@ const Alquileres = () => {
     const { id } = useParams();
     const { user } = useUser();
     const { response } = useResponse();
-    const { ingresoAlquilerXMes, yearHere, monthHere } = useAlquileres();
     const { CalcMesesAlquiler, setAlquileres } = useGetAlquileresId(id);
 
     const proyectos = useSelector(state => state.proyectoRedux.proyectos);
@@ -46,7 +46,6 @@ const Alquileres = () => {
 
     const [renovarAlquiler, setRenovarAlquiler] = useState([]);
     const [actionContrato, setActionContrato] = useState();
-    //console.log(alquileres, mesAlquiler, totalAlquiler);
     const [showModalFormContrato, setShowModalFormContrato] = useState(false);
     const [showModalFormIngresoAlquiler, setShowModalFormIngresoAlquiler] = useState(false);
     const [showAlerta, setShowAlerta] = useState(false);
@@ -72,7 +71,7 @@ const Alquileres = () => {
 
         let estado = '';
         let pagado = true;
-        let min1Pagado = false; 
+        let min1Pagado = false;
 
         const desdeAM = moment(desde).format("YYYY-MM");
         const hastaAM = moment(hasta).format("YYYY-MM");
@@ -107,7 +106,7 @@ const Alquileres = () => {
                 dI.add(1, 'months');
             }
         });
-        
+
         arrayMesesAlquiler.forEach(alquiler => {
             if (!alquiler.pagado) {
                 pagado = false;
@@ -132,9 +131,9 @@ const Alquileres = () => {
     const deleteContrato = (alquiler, setDelete) => {
         setAlerta({
             titulo: 'Eliminar módulo',
-            mensaje: `¿Desea eliminar el alquiler del módulo ${alquiler.modulo ? 
-                    alquiler.modulo.nombre_modulo || `${alquiler.modulo.tipologia} - ${alquiler.modulo.id_modulo} - ${formatNumber(alquiler.modulo.ancho)} x ${formatNumber(alquiler.modulo.largo)} - ${alquiler.modulo.material_cerramiento}`
-                    : `OD - ${alquiler.modulo_doble.id_modulo_doble} - OS - ${alquiler.modulo_doble.id_modulo_uno} - OS - ${alquiler.modulo_doble.id_modulo_dos} `}? 
+            mensaje: `¿Desea eliminar el alquiler del módulo ${alquiler.modulo ?
+                alquiler.modulo.nombre_modulo || `${alquiler.modulo.tipologia} - ${alquiler.modulo.id_modulo} - ${formatNumber(alquiler.modulo.ancho)} x ${formatNumber(alquiler.modulo.largo)} - ${alquiler.modulo.material_cerramiento}`
+                : alquiler.modulo_doble && `OD - ${alquiler.modulo_doble.id_modulo_doble} - OS - ${alquiler.modulo_doble.id_modulo_uno} - OS - ${alquiler.modulo_doble.id_modulo_dos} `}? 
                     Recuerde que si lo elimina no podrá recuperarlo`,
             data: alquiler
         });
@@ -167,14 +166,7 @@ const Alquileres = () => {
         <Row>
             <Col xs={12} md={8} className="titulo-alquileres-vista">{id}</Col>
             <Row className='content-resumen-alquileres'>
-                {(user.rango === 'moderador') &&
-                    <Col md={3}>
-                        <button className="button-agregar" onClick={() => setShowModalFormIngresoAlquiler(true)} variant="dark">
-                            <Icons.Plus className="icon-button" size={19} /> Ingreso a un Alquiler
-                        </button>
-                    </Col>
-                }
-                {user.rango === 'admin' &&
+                {(user.rango === 'admin' || user.rango === 'moderador') &&
                     <>
                         <Col>
                             <button className="button-agregar" onClick={() => modalFormContrato('Nuevo')} variant="dark">
@@ -186,12 +178,14 @@ const Alquileres = () => {
                                 <Icons.Plus className="icon-button" size={19} /> Ingreso a un Alquiler
                             </button>
                         </Col>
-                        <Col className='text-resumen-alquileres'><b>Total:</b> {loadingProyectos ? <Spinner animation="border" variant="dark" size='sm' /> : proyecto && `$${formatNumber(proyecto.totalAlquiler)}`}</Col>
-                        <Col className='text-resumen-alquileres'><b>{formatTextMix(mesAnterior)}:</b> {loadingProyectos ? <Spinner animation="border" variant="dark" size='sm' /> : proyecto && `$${formatNumber(proyecto.totalAlquilerXMes[mesAnterior])}`}</Col>
-                        <Col className='text-resumen-alquileres'><b>{formatTextMix(mesActual)}:</b> {loadingProyectos ? <Spinner animation="border" variant="dark" size='sm' /> : proyecto && `$${formatNumber(proyecto.totalAlquilerXMes[mesActual])}`}</Col>
-                        <Col className='text-resumen-alquileres'><b>{formatTextMix(mesPosterior)}:</b> {loadingProyectos ? <Spinner animation="border" variant="dark" size='sm' /> : proyecto && `$${formatNumber(proyecto.totalAlquilerXMes[mesPosterior])}`}</Col>
                     </>
                 }
+                {user.rango === 'admin' && <>
+                    <Col className='text-resumen-alquileres'><b>Total:</b> {loadingProyectos ? <Spinner animation="border" variant="dark" size='sm' /> : proyecto && `$${formatNumber(proyecto.totalAlquiler)}`}</Col>
+                    <Col className='text-resumen-alquileres'><b>{formatTextMix(mesAnterior)}:</b> {loadingProyectos ? <Spinner animation="border" variant="dark" size='sm' /> : proyecto && `$${formatNumber(proyecto.totalAlquilerXMes[mesAnterior])}`}</Col>
+                    <Col className='text-resumen-alquileres'><b>{formatTextMix(mesActual)}:</b> {loadingProyectos ? <Spinner animation="border" variant="dark" size='sm' /> : proyecto && `$${formatNumber(proyecto.totalAlquilerXMes[mesActual])}`}</Col>
+                    <Col className='text-resumen-alquileres'><b>{formatTextMix(mesPosterior)}:</b> {loadingProyectos ? <Spinner animation="border" variant="dark" size='sm' /> : proyecto && `$${formatNumber(proyecto.totalAlquilerXMes[mesPosterior])}`}</Col>
+                </>}
             </Row>
         </Row>
         {loadingProyectos ?
@@ -222,7 +216,9 @@ const Alquileres = () => {
                                                     <b>
                                                         {alquiler.modulo ?
                                                             alquiler.modulo.nombre_modulo || `${alquiler.modulo.tipologia} - ${alquiler.modulo.id_modulo} - ${formatNumber(alquiler.modulo.ancho)} x ${formatNumber(alquiler.modulo.largo)} - ${alquiler.modulo.material_cerramiento}`
-                                                            : `OD - ${alquiler.modulo_doble.id_modulo_doble} - OS - ${alquiler.modulo_doble.id_modulo_uno} - OS - ${alquiler.modulo_doble.id_modulo_dos} `
+                                                            : alquiler.modulo_doble ? 
+                                                                `OD - ${alquiler.modulo_doble.id_modulo_doble} - OS - ${alquiler.modulo_doble.id_modulo_uno} - OS - ${alquiler.modulo_doble.id_modulo_dos} ` 
+                                                                : 'No existe módulo asignado'
                                                         }
                                                     </b>
                                                 </Col>
@@ -238,7 +234,7 @@ const Alquileres = () => {
                                                 {alquiler.ingreso_alquilers.length > 0 &&
                                                     <GraficIngresosAlquileres alquiler={alquiler} ingresoAlquiler={alquiler.ingreso_alquilers} />
                                                 }
-                                                {user.rango == 'admin' &&
+                                                {(user.rango == 'admin' || user.rango === 'moderador') &&
                                                     <Row className="border-top">
                                                         <Col xs={12} md={12}>
                                                             <p className="accordion-title-section">Acciones</p>
@@ -279,18 +275,20 @@ const Alquileres = () => {
                                                                 </Row>
                                                             </button>
                                                         </Col>
-                                                        <Col xs={6} md={6}>
-                                                            <button className="button-action" onClick={() => deleteContrato(alquiler)}>
-                                                                <Row>
-                                                                    <Col xs={1} md={1} className='icon-action'>
-                                                                        <Icons.TrashFill size={19} />
-                                                                    </Col>
-                                                                    <Col xs={10} md={10} className='text-action'>
-                                                                        Eliminar contrato
-                                                                    </Col>
-                                                                </Row>
-                                                            </button>
-                                                        </Col>
+                                                        {user.rango == 'admin' &&
+                                                            <Col xs={6} md={6}>
+                                                                <button className="button-action" onClick={() => deleteContrato(alquiler)}>
+                                                                    <Row>
+                                                                        <Col xs={1} md={1} className='icon-action'>
+                                                                            <Icons.TrashFill size={19} />
+                                                                        </Col>
+                                                                        <Col xs={10} md={10} className='text-action'>
+                                                                            Eliminar contrato
+                                                                        </Col>
+                                                                    </Row>
+                                                                </button>
+                                                            </Col>
+                                                        }
                                                     </Row>
                                                 }
                                             </Accordion.Body>

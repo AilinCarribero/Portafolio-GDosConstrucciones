@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Accordion, Row, Col, Button, Spinner, Form, FloatingLabel } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Accordion, Row, Col, Spinner, Form } from 'react-bootstrap';
 import Decimal from 'decimal.js-light';
 import { useSelector } from 'react-redux';
 
@@ -9,16 +8,14 @@ import ModalFormulario from '../../utils/modal/formularios/ModalFormulario';
 import AccordionCentroCosto from "./AccordionCentroCosto";
 
 //Hooks
-import { formatFecha, formatNumber } from '../../../hooks/useUtils';
 import { useUser } from '../../../hooks/useUser';
-import { useGetProyectos } from '../../../hooks/useProyectos';
 
 //Img-Icons
 import * as Icons from 'react-bootstrap-icons';
 
 const CentrosCostos = ({ proyectos, mostrar, setProyectos }) => {
     const { user } = useUser();
-
+    
     const loading = useSelector(state => state.proyectoRedux.loading);
 
     const [proyectosMostrar, setProyectosMostrar] = useState([]);
@@ -26,13 +23,6 @@ const CentrosCostos = ({ proyectos, mostrar, setProyectos }) => {
 
     const [showForm, setShowForm] = useState(false);
     const [formulario, setFormulario] = useState();
-
-    const [totales, setTotales] = useState({
-        egresos: 0,
-        egresosUSD: 0,
-        ingresos: 0,
-        ingresosUSD: 0,
-    })
 
     useEffect(() => {
         let auxEgresos, auxEgresosUSD, auxIngresos, auxIngresosUSD;
@@ -110,11 +100,6 @@ const CentrosCostos = ({ proyectos, mostrar, setProyectos }) => {
         <Row className='content-resumen-sec-buttons'>
             <Col xs={12} md={(user.rango == "admin" || user.rango == "moderador") ? 6 : 12}>
                 <Row className="conten-buttons-agregar">
-                    {/* <Col xs={6} sm={6} md={4}>
-                        <button className="button-agregar" onClick={() => setShowFormSelccion('egreso')} variant="dark" >
-                            <Icons.Plus className="icon-button" size={19} /> Egreso
-                        </button>
-                    </Col>*/}
                     {(user.rango == 'admin' || user.rango == "moderador") && <>
                         <Col xs={12} sm={6} md={4}>
                             <button className="button-agregar" onClick={() => setShowFormSelccion('proyecto')} variant="dark">
@@ -130,24 +115,8 @@ const CentrosCostos = ({ proyectos, mostrar, setProyectos }) => {
                             <Form.Control className='input-text-search' onChange={buscarProyecto} name="search" type="text" value={search} placeholder='Buscar' />
                         </Col>
                     </>}
-                    {/*{user.rango == 'admin' &&
-                            <Col xs={6} sm={6} md={4}>
-                                <button className="button-agregar" onClick={() => setShowFormSelccion('proyecto')} variant="dark">
-                                    <Icons.Plus className="icon-button" size={19} /> Proyecto
-                                </button>
-                            </Col>
-                        }
-                    </>*/}
                 </Row>
             </Col>
-            {/*(user.rango == "admin" || user.rango == "moderador") &&
-                <Col xs={12} md={6}>
-                    <Row>
-                        <Col xs={6} md={6} className='content-section'> Ingresos: {totales.ingresos ? formatNumber(totales.ingresos) : 0} </Col>
-                        <Col xs={6} md={6} className='content-section'> Egresos: {totales.egresos ? formatNumber(totales.egresos) : 0}</Col>
-                    </Row>
-                </Col>
-            */}
         </Row>
 
         {loading ?

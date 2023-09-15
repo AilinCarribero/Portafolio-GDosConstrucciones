@@ -1,26 +1,43 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Accordion, Row, Col, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import moment from 'moment';
 
 //Components
 import ModalFormulario from '../../utils/modal/formularios/ModalFormulario';
 import FormContrato from '../alquiler/FormContrato';
+import Alerta from '../../utils/modal/validacion/Alerta';
 
 //Hooks
-import { calcDifDias, formatFecha, formatNumber } from '../../../hooks/useUtils';
+import { ToastComponent, calcDifDias, formatFecha, formatNumber } from '../../../hooks/useUtils';
 import { useUser } from '../../../hooks/useUser';
 import { useGetAlquileresId } from '../../../hooks/useAlquileres';
+import { useResponse } from '../../../hooks/useResponse';
+
+//Redux
+import { useDispatch } from 'react-redux';
+import { getProyectos } from '../../../redux/slice/Proyecto/thunks';
+
+//Servise
+import { getApiDeleteProyectos } from '../../../services/apiProyectos';
 
 //Img-Icons
 import * as Icons from 'react-bootstrap-icons';
 
 const AccordionCentrosCostos = ({ proyecto, setProyectos }) => {
+    const dispatch = useDispatch();
     const { user } = useUser();
     const { setAlquileres } = useGetAlquileresId();
+    const { response } = useResponse();
+
+    const [alerta, setAlerta] = useState({
+        titulo: '',
+        mensaje: '',
+        data: ''
+    });
 
     const [showFormUpdate, setShowFormUpdate] = useState(false);
     const [showModalFormContrato, setShowModalFormContrato] = useState(false);
+    const [showAlerta, setShowAlerta] = useState(false);
 
     const [actionContrato, setActionContrato] = useState();
     const [idProyecto, setIdProyecto] = useState();
@@ -29,63 +46,43 @@ const AccordionCentrosCostos = ({ proyecto, setProyectos }) => {
         setShowFormUpdate(true);
     }
 
-    //Egresos totales de un proyecto determinado
-    const egresosProyecto = (PEgresos) => {
-        let auxEgresosProyecto = 0;
-
-        if (PEgresos) {
-            PEgresos.map(egreso => {
-                auxEgresosProyecto += egreso.valor_pago ? parseFloat(egreso.valor_pago) : 0;
-            })
-        }
-        return (auxEgresosProyecto)
-    }
-
-    //Egresos totales de un proyecto determinado en dolares
-    const egresosUSDProyecto = (PUSDEgresos) => {
-        let auxEgresosProyecto = 0;
-
-        if (PUSDEgresos) {
-            PUSDEgresos.map(egreso => {
-                auxEgresosProyecto += egreso.valor_usd ? parseFloat(egreso.valor_usd) : 0;
-            })
-        }
-        return (auxEgresosProyecto)
-    }
-
-    //Ingresos totales de un proyecto determinado
-    const ingresosProyecto = (PIngresos) => {
-        let auxIngresosProyecto = 0;
-
-        if (PIngresos) {
-            PIngresos.map(ingreso => {
-                auxIngresosProyecto += ingreso.valor_cobro ? parseFloat(ingreso.valor_cobro) : 0;
-            })
-        }
-        return (auxIngresosProyecto)
-    }
-
-    //Ingresos totales de un proyecto determinado en dolares
-    const ingresosUSDProyecto = (PUSDIngresos) => {
-        let auxIngresosProyecto = 0;
-
-        if (PUSDIngresos) {
-            PUSDIngresos.map(ingreso => {
-                auxIngresosProyecto += ingreso.valor_usd ? parseFloat(ingreso.valor_usd) : 0;
-            })
-        }
-        return (auxIngresosProyecto)
-    }
-
     const modalFormContrato = (action, id) => {
         setShowModalFormContrato(true);
         setIdProyecto(id)
         setActionContrato(action);
     }
 
+    const deleteProyecto = (id_proyecto, setDelete) => {
+        setAlerta({
+            titulo: 'Eliminar proyecto',
+            mensaje: `¿Desea eliminar el proyecto ${id_proyecto}? Recuerde que si lo elimina no podrá recuperarlo`,
+            data: id_proyecto
+        });
+
+        setShowAlerta(true);
+
+        if (setDelete) {
+            getApiDeleteProyectos(id_proyecto).then(resProyecto => {
+                const res = response(resProyecto);
+                if (res) {
+                    dispatch(getProyectos());
+                    ToastComponent('success', 'Se eliminó correctamente');
+                    setShowAlerta(false);
+                } else {
+                    ToastComponent('error', resProyecto.data.todoMal && resProyecto.data.todoMal);
+                }
+            }).catch(err => {
+                console.error(err);
+
+                ToastComponent('error', err.data.todoMal && err.data.todoMal);
+            })
+        }
+    }
+
     return (<>
         {showFormUpdate && <ModalFormulario formulario={'proyecto'} informacion={proyecto} show={showFormUpdate} setShow={setShowFormUpdate} updateNew={setProyectos} />}
         {showModalFormContrato && <FormContrato idProyecto={idProyecto} show={showModalFormContrato} setShow={setShowModalFormContrato} setAlquileres={setAlquileres} actionContrato={actionContrato} />}
+        {showAlerta && <Alerta titulo={alerta.titulo} mensaje={alerta.mensaje} show={showAlerta} setShow={setShowAlerta} submit={deleteProyecto} data={alerta.data} />}
 
         <Accordion.Item eventKey={proyecto.id_proyecto} className={proyecto.id_centro_costo == 1 || proyecto.id_centro_costo == 3 ? 'accordionCC' : 'content-accordion'}>
             <Accordion.Header>
@@ -106,7 +103,7 @@ const AccordionCentrosCostos = ({ proyecto, setProyectos }) => {
                     </OverlayTrigger>
                 }
 
-                <Col xs={5} md={5}>{proyecto.id_proyecto}</Col>
+                <Col xs={proyecto.alquilers.length > 0 && proyecto.id_estado != 3 ? 5 : 9} md={proyecto.alquilers.length > 0 && proyecto.id_estado != 3 ? 6 : 9}>{proyecto.id_proyecto}</Col>
                 {proyecto.fecha_f_proyecto && calcDifDias(new Date(), proyecto.fecha_f_proyecto) > 0 && <>
                     <Col xs={2} md={2} className={calcDifDias(new Date(), proyecto.fecha_f_proyecto) <= 15 ? "text-for-finish" : ""} >
                         Dias restantes: {calcDifDias(new Date(), proyecto.fecha_f_proyecto)}
@@ -117,9 +114,6 @@ const AccordionCentrosCostos = ({ proyecto, setProyectos }) => {
                         </Col>
                     }
                 </>}
-                {/*(user.rango == "admin" || user.rango == "moderador") && !proyecto.id_proyecto.includes('CCC') && !proyecto.id_proyecto.includes('CCE') &&
-                        <Col xs={4} md={3}> Resto: ${formatNumber(ingresosProyecto(proyecto.ingresos) - egresosProyecto(proyecto.egresos))} / USD${formatNumber(ingresosUSDProyecto(proyecto.ingresos) - egresosUSDProyecto(proyecto.egresos))}</Col>
-                    */}
             </Accordion.Header>
             <Accordion.Body>
                 <Row>
@@ -166,37 +160,13 @@ const AccordionCentrosCostos = ({ proyecto, setProyectos }) => {
                                 <Col xs={1} md={1}>
                                     {proyecto.alquilers.length > 0 && <Link to={`/alquileres/ingresos/${proyecto.id_proyecto}`}> <Icons.BoxArrowInRight className="icon-detalle" /> </Link>}
                                 </Col>
-                                <Col xs={11} md={11}><p>Ingresos</p></Col>
+                                <Col xs={11} md={11}><p>Ingresos por Alquiler</p></Col>
                             </Row>
                         </Col>
                     }
                 </Row>
                 <Row>
-                    {/*<Col xs={12} md={6}>
-                            <Row>
-                                <Col xs={1} md={1}>
-                                    <Link to={`/egresos/${proyecto.id_proyecto}`}> <Icons.BoxArrowInRight className="icon-detalle" /> </Link>
-                                </Col>
-                                <Col xs={11} md={11}><p> Egresos:</p>
-                                    <Col xs={6} md={6}><p>${formatNumber(egresosProyecto(proyecto.egresos))} </p></Col>
-                                    <Col xs={5} md={5}><p>USD${formatNumber(egresosUSDProyecto(proyecto.egresos))} </p></Col>
-                                </Col>
-                            </Row>
-                        </Col>
-                        {(user.rango == "admin" || user.rango == "moderador") &&
-                            <Col xs={12} md={6}>
-                                <Row>
-                                    <Col xs={1} md={1}>
-                                        <Link to={`/ingresos/${proyecto.id_proyecto}`}> <Icons.BoxArrowInRight className="icon-detalle" /> </Link>
-                                    </Col>
-                                    <Col xs={11} md={11}><p> Ingresos:</p>
-                                        <Col xs={6} md={6}><p>${formatNumber(ingresosProyecto(proyecto.ingresos))} </p></Col>
-                                        <Col xs={5} md={5}><p>USD${formatNumber(ingresosUSDProyecto(proyecto.ingresos))} </p></Col>
-                                    </Col>
-                                </Row>
-                            </Col>
-                        }*/}
-                    {user.rango == "admin" && proyecto.fecha_i_proyecto && <>
+                    {(user.rango == "admin" || user.rango == "moderador") && proyecto.fecha_i_proyecto && <>
                         <Col xs={12} md={6}>
                             <Row>
                                 <Col xs={1} md={1}></Col>
@@ -213,7 +183,7 @@ const AccordionCentrosCostos = ({ proyecto, setProyectos }) => {
                         }
                     </>}
                 </Row>
-                {user.rango == 'admin' &&
+                {(user.rango == 'admin' || user.rango == "moderador") &&
                     <Row className="border-top">
                         <Col xs={12} md={12}>
                             <p className="accordion-title-section">Acciones</p>
@@ -242,6 +212,18 @@ const AccordionCentrosCostos = ({ proyecto, setProyectos }) => {
                                 </Row>
                             </button>
                         </Col>
+                        {user.rango === 'admin' && <Col xs={12} md={3}>
+                            <button className="button-action" onClick={() => deleteProyecto(proyecto.id_proyecto)}>
+                                <Row>
+                                    <Col xs={1} md={1} className='icon-action'>
+                                        <Icons.TrashFill size={19} />
+                                    </Col>
+                                    <Col xs={10} md={10} className='text-action'>
+                                        Eliminar
+                                    </Col>
+                                </Row>
+                            </button>
+                        </Col>}
                     </Row>
                 }
             </Accordion.Body>

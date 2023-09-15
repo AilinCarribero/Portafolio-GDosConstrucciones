@@ -3,17 +3,26 @@ import ModalFormulario from '../../utils/modal/formularios/ModalFormulario';
 import { Card, Col, Form, Row, Spinner } from 'react-bootstrap';
 import { useUser } from '../../../hooks/useUser';
 
+//Redux
+import { useDispatch } from 'react-redux';
+import { getProyectos } from '../../../redux/slice/Proyecto/thunks';
+
+//Componentes
+import GraficTrazabilidadCliente from './GraficTrazabilidadCliente';
+
+//Hooks
+import { ToastComponent } from '../../../hooks/useUtils';
+import Alerta from '../../utils/modal/validacion/Alerta';
+import { useResponse } from '../../../hooks/useResponse';
+
+//Services
+import { getApiClientes, getApiDeleteCliente } from '../../../services/apiClientes';
+
 //Icons
 import * as Icons from 'react-bootstrap-icons';
 
 //Css
 import '../../../style/Cliente.scss';
-import { getApiClientes, getApiDeleteCliente } from '../../../services/apiClientes';
-import { ToastComponent } from '../../../hooks/useUtils';
-import Alerta from '../../utils/modal/validacion/Alerta';
-import { useResponse } from '../../../hooks/useResponse';
-import { useDispatch } from 'react-redux';
-import { getProyectos } from '../../../redux/slice/Proyecto/thunks';
 
 const Clientes = () => {
   const { user } = useUser();
@@ -126,7 +135,7 @@ const Clientes = () => {
     <Alerta titulo={alerta.titulo} mensaje={alerta.mensaje} show={showAlerta} setShow={setShowAlerta} submit={deleteCliente} data={alerta.data} />
 
     <Row className="conten-buttons-agregar">
-      {(user.rango == 'admin') && <>
+      {(user.rango == 'admin' || user.rango == 'moderador') && <>
         <Col xs={12} sm={6} md={3} lg={2}>
           <button className="button-agregar" onClick={() => showFormNewCliente()} variant="dark">
             <Icons.Plus className="icon-button" size={19} /> Nuevo Cliente
@@ -145,40 +154,52 @@ const Clientes = () => {
       :
       <Row className='conteiner-cards-clientes'>
         {clientes.map(cliente =>
-          <Col xs={12} sm={6} md={3} lg={2} key={cliente.id_cliente} className='col-card-cliente'>
+          <Col xs={12} sm={6} md={3} lg={3} key={cliente.id_cliente} className='col-card-cliente'>
             <Card className='card-content-cliente'>
               <Card.Body>
                 <Card.Title className='card-title-cliente'>{cliente.nombre}</Card.Title>
+                <Card.Text>Razon social: {cliente.razon_social ? cliente.razon_social : '-'} </Card.Text>
+                <Card.Text>Cuit/Cuil: {cliente.cuit_cuil ? cliente.cuit_cuil : '-'} </Card.Text>
                 <Card.Text>Dirección: {cliente.direccion ? cliente.direccion : '-'} </Card.Text>
                 <Card.Text>E-mail: {cliente.correo ? cliente.correo : '-'}</Card.Text>
                 <Card.Text>Teléfono: {(cliente.telefono && cliente.telefono != 0) ? cliente.telefono : '-'}</Card.Text>
+                {cliente.proyectos && cliente.proyectos.length > 0 &&
+                  <Row className='content-grafic-cliente'>
+                    <Card.Text>Trazabilidad: </Card.Text>
+                    <GraficTrazabilidadCliente proyectos={cliente.proyectos} />
+                  </Row>
+                }
               </Card.Body>
               <Card.Footer className='card-footer-cliente'>
                 <Row>
-                  <Col xs={12} md={6}>
-                    <button className="button-action" onClick={() => updateModalCliente(cliente)}>
-                      <Row>
-                        <Col xs={1} md={1} className='icon-action'>
-                          <Icons.PencilSquare size={19} />
-                        </Col>
-                        <Col xs={10} md={10} className='text-action'>
-                          Modificar
-                        </Col>
-                      </Row>
-                    </button>
-                  </Col>
-                  <Col xs={12} md={6}>
-                    <button className="button-action" onClick={() => deleteCliente(cliente)}>
-                      <Row>
-                        <Col xs={1} md={1} className='icon-action'>
-                          <Icons.TrashFill size={19} />
-                        </Col>
-                        <Col xs={10} md={10} className='text-action'>
-                          Eliminar
-                        </Col>
-                      </Row>
-                    </button>
-                  </Col>
+                  {(user.rango === 'admin' || user.rango === 'moderador') &&
+                    <Col xs={6} md={6}>
+                      <button className="button-action" onClick={() => updateModalCliente(cliente)}>
+                        <Row>
+                          <Col xs={1} md={1} className='icon-action'>
+                            <Icons.PencilSquare size={19} />
+                          </Col>
+                          <Col xs={10} md={10} className='text-action'>
+                            Modificar
+                          </Col>
+                        </Row>
+                      </button>
+                    </Col>
+                  }
+                  {user.rango === 'admin' && <>
+                    <Col xs={6} md={6}>
+                      <button className="button-action" onClick={() => deleteCliente(cliente)}>
+                        <Row>
+                          <Col xs={1} md={1} className='icon-action'>
+                            <Icons.TrashFill size={19} />
+                          </Col>
+                          <Col xs={10} md={10} className='text-action'>
+                            Eliminar
+                          </Col>
+                        </Row>
+                      </button>
+                    </Col>
+                  </>}
                 </Row>
               </Card.Footer>
             </Card>

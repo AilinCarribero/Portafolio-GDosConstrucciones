@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Accordion, Row, Col, Button, OverlayTrigger, Tooltip, Form, Spinner } from 'react-bootstrap';
-import ReactApexCharts from 'react-apexcharts';
 
 //Components
 import ModalFormulario from '../../utils/modal/formularios/ModalFormulario';
@@ -8,6 +7,7 @@ import ModalVenta from './ModalVenta';
 import UrlQr from '../../utils/modal/alerta/UrlQr';
 import Alerta from '../../utils/modal/validacion/Alerta';
 import ModalVinculacion from './ModalVinculacion';
+import GraficTrazabilidadModulo from './GraficTrazabilidadModulo';
 
 //Hooks
 import { formatFecha, formatNumber, ToastComponent } from '../../../hooks/useUtils';
@@ -28,12 +28,13 @@ import '../../../style/Modulos.scss';
 
 //Img-Icons
 import * as Icons from 'react-bootstrap-icons';
-import GraficTrazabilidadModulo from './GraficTrazabilidadModulo';
 
 const Modulos = () => {
     const { response } = useResponse();
     const { user } = useUser();
     const { modulos, setModulos } = useGetModulos();
+
+    const [modulosMostar, setModulosMostar] = useState([]);
 
     const dispatch = useDispatch();
 
@@ -62,6 +63,7 @@ const Modulos = () => {
     const [idModulo, setIdModulo] = useState();
     const [infoUpdate, setInfoUpdate] = useState([]);
     const [tokenQR, setTokenQR] = useState('');
+    const [search, setSearch] = useState();
 
     const [showForm, setShowForm] = useState(false);
     const [showModalVenta, setShowModalVenta] = useState(false);
@@ -76,7 +78,6 @@ const Modulos = () => {
             console.error(err);
         });
     }, [])
-
 
     useEffect(() => {
         let auxDisponibles = 0;
@@ -117,64 +118,9 @@ const Modulos = () => {
             vendidos: auxVendidos
         }));
 
+        setModulosMostar(modulos);
+
     }, [modulos])
-
-    /*Inicio de configuracion de grafica */
-    const options = {
-        chart: {
-            height: 10,
-            type: 'rangeBar'
-        },
-        plotOptions: {
-            bar: {
-                horizontal: true,
-                barHeight: '20%',
-                rangeBarGroupRows: true
-            }
-        },
-        colors: [
-            "#5E737E", "#536A9A", "#394349", "#23272A", "#23272A", "#558FB1",
-            "#365364", "#212631", , "#354057", "#707092",
-            "#444454", "#292931"
-        ],
-        fill: {
-            type: 'solid'
-        },
-        xaxis: {
-            type: 'datetime'
-        },
-        legend: {
-            position: 'right'
-        },
-        tooltip: {
-            theme: false,
-            custom: function (opts) {
-                const fromYear = formatFecha(opts.y1)
-                const toYear = formatFecha(opts.y2)
-                const values = opts.ctx.rangeBar.getTooltipValues(opts).seriesName;
-
-                return ('<div class="range-bar-tooltip"><div id="range-bar-tooltip-title">' + values + '</div> <div id="range-bar-tooltip-fecha">' + fromYear + ' - ' + toYear + ' </div></div>')
-            }
-        }
-    }
-
-    const formatDataTimeLine = (alquileres) => {
-        return alquileres.map(alquiler => {
-            return {
-                name: alquiler.id_proyecto,
-                data: [
-                    {
-                        x: ' ',
-                        y: [
-                            new Date(alquiler.fecha_d_alquiler).getTime(),
-                            new Date(alquiler.fecha_h_alquiler).getTime()
-                        ]
-                    }
-                ]
-            }
-        })
-    }
-    /* Finalizacion de config de grafica */
 
     const vender = async (data, id) => {
         id && setIdModulo(id);
@@ -278,6 +224,29 @@ const Modulos = () => {
         return text;
     }
 
+    const buscarModulo = (e) => {
+        const targetValue = e.target.value;
+
+        setSearch(targetValue);
+
+        if (targetValue) {
+            const modulosFilter = modulos.filter(modulo => {
+                //{modulo.tipologia} - ${modulo.id_modulo} - ${formatNumber(modulo.ancho)} x ${formatNumber(modulo.largo)} - ${modulo.material_cerramiento
+
+                if (modulo.tipologia) {
+                    if (modulo.tipologia.toLowerCase().includes(targetValue.toLowerCase()) || modulo.material_cerramiento.toLowerCase().includes(targetValue.toLowerCase())
+                        || modulo.id_modulo.toString().includes(targetValue) || modulo.ancho.toString().includes(targetValue) || modulo.largo.toString().includes(targetValue)) {
+                        return modulo;
+                    }
+                }
+            });
+
+            setModulosMostar(modulosFilter);
+        } else {
+            setModulosMostar(modulos);
+        }
+    }
+
     return (<>
         <ModalFormulario formulario={'modulo'} informacion={infoUpdate} show={showForm} setShow={setShowFormReset} updateNew={setModulos} />
         <ModalVenta titulo={infoModalVenta.titulo} show={showModalVenta} setShow={setShowModalVenta} submit={vender} />
@@ -287,46 +256,48 @@ const Modulos = () => {
 
         <Row className='content-resumen-sec-buttons'>
             <Row className="conten-buttons-agregar">
-                <Col xs={12} sm={3} md={2}>
+                <Col xs={12} sm={2} md={2}>
                     <Button className="button-agregar" onClick={() => setShowForm(!showForm)} variant="dark" >
                         <Icons.Plus className="icon-button" size={19} />
                         Agregar módulo
                     </Button>
                 </Col>
-                <Col xs={12} sm={3} md={2}>
+                <Col xs={12} sm={2} md={2}>
                     <Button className="button-agregar" onClick={() => setShowFormVincular(!showFormVincular)} variant="dark" >
                         <Icons.Plus className="icon-button" size={19} />
                         Vincular módulos
                     </Button>
                 </Col>
-                <Col xs={12} md={5} className="content-total-modulos-estados">
-                    <Row>
-                        <Col xs={12} md={4} className='content-section'>Total de Módulos: </Col>
-                        <OverlayTrigger placement="bottom" overlay={<Tooltip>Módulos en total.</Tooltip>} >
-                            <Col xs={3} md={2} className='content-total-estado' id="total"> {loading ? <Spinner animation="border" variant="light" size='sm' /> : cantModulos.total} </Col>
-                        </OverlayTrigger>
-                        <OverlayTrigger placement="bottom" overlay={<Tooltip>Módulos disponibles.</Tooltip>} >
-                            <Col xs={3} md={2} className='content-total-estado' id="disponible"> {loading ? <Spinner animation="border" variant="light" size='sm' /> : cantModulos.disponibles} </Col>
-                        </OverlayTrigger>
-                        <OverlayTrigger placement="bottom" overlay={<Tooltip>Módulos en espera.</Tooltip>} >
-                            <Col xs={3} md={2} className='content-total-estado' id="en-espera"> {loading ? <Spinner animation="border" variant="light" size='sm' /> : cantModulos.en_espera} </Col>
-                        </OverlayTrigger>
-                        <OverlayTrigger placement="bottom" overlay={<Tooltip>Módulos ocupados.</Tooltip>} >
-                            <Col xs={3} md={2} className='content-total-estado' id="ocupado"> {loading ? <Spinner animation="border" variant="light" size='sm' /> : cantModulos.ocupados} </Col>
-                        </OverlayTrigger>
-                        <OverlayTrigger placement="bottom" overlay={<Tooltip>Módulos vendidos.</Tooltip>} >
-                            <Col xs={3} md={2} className='content-total-estado' id="vendido"> {loading ? <Spinner animation="border" variant="light" size='sm' /> : cantModulos.vendidos} </Col>
-                        </OverlayTrigger>
-                    </Row>
-                </Col>
-                {user.rango == "admin" &&
-                    <Col xs={12} sm={3} className="content-token">
+                {user.rango !== "taller" &&
+                    <Col xs={12} sm={3} md={2} className="content-total-modulos-estados">
                         <Row>
-                            <Col xs={7} sm={7}>
-                                {showToken && <button onClick={(e) => handleCopy(e, tokenQR)}><h6>{tokenQR} <Icons.Files size="20px" className='icon-text-copy' /></h6></button>}
-                            </Col>
-                            <Col xs={5} sm={5}>
-                                <Form.Check type="switch" label="Ver token" onChange={handleChangeToken} name="show_token" checked={showToken} />
+                            <Col xs={12} md={5} className='content-section'>Total de Módulos: </Col>
+                            <OverlayTrigger placement="bottom" overlay={<Tooltip>Módulos en total.</Tooltip>} >
+                                <Col xs={3} md={2} className='content-total-estado' id="total"> <div>{loading ? <Spinner animation="border" variant="light" size='sm' /> : cantModulos.total}</div> </Col>
+                            </OverlayTrigger>
+                            <OverlayTrigger placement="bottom" overlay={<Tooltip>Módulos disponibles.</Tooltip>} >
+                                <Col xs={3} md={2} className='content-total-estado' id="disponible"> <div>{loading ? <Spinner animation="border" variant="light" size='sm' /> : cantModulos.disponibles}</div> </Col>
+                            </OverlayTrigger>
+                            <OverlayTrigger placement="bottom" overlay={<Tooltip>Módulos en espera.</Tooltip>} >
+                                <Col xs={3} md={2} className='content-total-estado' id="en-espera"> <div>{loading ? <Spinner animation="border" variant="light" size='sm' /> : cantModulos.en_espera}</div> </Col>
+                            </OverlayTrigger>
+                            <OverlayTrigger placement="bottom" overlay={<Tooltip>Módulos ocupados.</Tooltip>} >
+                                <Col xs={3} md={2} className='content-total-estado' id="ocupado"> <div>{loading ? <Spinner animation="border" variant="light" size='sm' /> : cantModulos.ocupados}</div> </Col>
+                            </OverlayTrigger>
+                            <OverlayTrigger placement="bottom" overlay={<Tooltip>Módulos vendidos.</Tooltip>} >
+                                <Col xs={3} md={2} className='content-total-estado' id="vendido"> <div>{loading ? <Spinner animation="border" variant="light" size='sm' /> : cantModulos.vendidos}</div> </Col>
+                            </OverlayTrigger>
+                        </Row>
+                    </Col>
+                }
+                <Col xs={12} sm={user.rango === "admin" ? 4 : user.rango === "taller" ? 8 : 5} className="content-buscar">
+                    <Form.Control className='input-text-search-modulo' onChange={buscarModulo} name="search" type="text" value={search} placeholder='Buscar' />
+                </Col>
+                {user.rango === "admin" &&
+                    <Col xs={12} sm={1} className="content-token">
+                        <Row>
+                            <Col xs={12} sm={12}>
+                                <Form.Check type="switch" label={showToken ? <button onClick={(e) => handleCopy(e, tokenQR)}><h6>{tokenQR} <Icons.Files size="20px" className='icon-text-copy' /></h6></button> : "Ver token"} onChange={handleChangeToken} name="show_token" checked={showToken} />
                             </Col>
                         </Row>
                     </Col>
@@ -343,12 +314,26 @@ const Modulos = () => {
                 <Row>
                     <Accordion>
                         {
-                            modulos && modulos.length > 0 &&
-                            modulos.map(modulo => (
+                            modulosMostar && modulosMostar.length > 0 &&
+                            modulosMostar.map(modulo => (
                                 <Col key={modulo.id_modulo} className="accordion-modulos">
                                     <Accordion.Item eventKey={modulo.id_modulo}>
                                         <Accordion.Header className="accordion-header-modulos">
                                             <Row>
+                                                {(user.rango == "admin" || user.rango == 'moderador') && modulo.estado != 2 &&
+                                                    <Col xs={3} md={3} className="content-buttons" >
+                                                        <Row>
+                                                            {user.rango == "admin" &&
+                                                                <Col xs={6} sm={6}>
+                                                                    <Icons.TrashFill size={20} className="button-delete" onClick={() => deleteModulo(modulo)} />
+                                                                </Col>
+                                                            }
+                                                            <Col xs={6} sm={6}>
+                                                                <Icons.CashCoin size={20} className="button-vender" onClick={() => vender(false, modulo.id_modulo)} />
+                                                            </Col>
+                                                        </Row>
+                                                    </Col>
+                                                }
                                                 {modulo.estado == 0 &&
                                                     <OverlayTrigger placement="right" overlay={<Tooltip>Disponible {modulo.vinculado && 'vinculado'}.</Tooltip>} >
                                                         <Col xs={1} md={1} id="disponible">
@@ -377,24 +362,12 @@ const Modulos = () => {
                                                         </Col>
                                                     </OverlayTrigger>
                                                 }
-                                                <Col xs={9} md={10} className="accordion-nombre-modulos">
+                                                <Col xs={6} md={6} className="accordion-nombre-modulos">
                                                     {!modulo.tipologia ?
                                                         modulo.nombre_modulo
                                                         : `${modulo.tipologia} - ${modulo.id_modulo} - ${formatNumber(modulo.ancho)} x ${formatNumber(modulo.largo)} - ${modulo.material_cerramiento} `
                                                     }
                                                 </Col>
-                                                {user.rango == "admin" && modulo.estado != 2 &&
-                                                    <Col className="content-buttons" >
-                                                        <Row>
-                                                            <Col xs={6} sm={6}>
-                                                                <Icons.CashCoin className="button-vender" onClick={() => vender(false, modulo.id_modulo)} />
-                                                            </Col>
-                                                            <Col xs={6} sm={6}>
-                                                                <Icons.TrashFill className="button-delete" onClick={() => deleteModulo(modulo)} />
-                                                            </Col>
-                                                        </Row>
-                                                    </Col>
-                                                }
                                             </Row>
                                         </Accordion.Header>
                                         <Accordion.Body className='accordion-body-modulos'>
@@ -508,6 +481,9 @@ const Modulos = () => {
                                                                     <button type='button' className='button-copy-modulo' onClick={(e) => handleCopy(e, modulo.url_qr)}>
                                                                         {modulo.url_qr} <Icons.Files size="25px" className='icon-text-copy' />
                                                                     </button>
+                                                                    <button type='button' className='button-copy-modulo' onClick={() => window.open(`${modulo.url_qr}`, "_blank")}>
+                                                                        <Icons.BoxArrowInUpRight size="25px" className='icon-text-copy' />
+                                                                    </button>
                                                                 </p>
                                                             </Col>
                                                         </Row>
@@ -527,7 +503,7 @@ const Modulos = () => {
                                                     </Col>
                                                 }
                                             </Row>
-                                            {modulo.alquilers.length > 0 &&
+                                            {(user.rango == 'admin' || user.rango == 'moderador') && modulo.alquilers.length > 0 &&
                                                 <Row>
                                                     <Col xs={12} md={12} >
                                                         <Row className="accordion-border-top">
@@ -537,7 +513,7 @@ const Modulos = () => {
                                                     <GraficTrazabilidadModulo alquileres={modulo.alquilers} />
                                                 </Row>
                                             }
-                                            {user.rango == 'admin' &&
+                                            {(user.rango == 'admin' || user.rango == 'moderador') &&
                                                 <Row className="border-top">
                                                     <Col xs={12} md={12}>
                                                         <p className="accordion-title-section">Acciones</p>

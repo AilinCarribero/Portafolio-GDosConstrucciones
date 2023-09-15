@@ -1,14 +1,13 @@
 import moment from 'moment';
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import { Col, Row, Spinner } from 'react-bootstrap';
-import { isMobile } from 'react-device-detect';
 
 //Redux
 import { useDispatch, useSelector } from 'react-redux';
+import { getCantModulos } from '../../../redux/slice/Modulo/thunks';
 
 //Hooks
 import { formatNameMes, formatNumber } from '../../../hooks/useUtils';
-import { getCantModulos } from '../../../redux/slice/Modulo/thunks';
 
 const ResumenContable = ({ Totales }) => {
     const dispatch = useDispatch();
@@ -25,30 +24,11 @@ const ResumenContable = ({ Totales }) => {
 
 
     useEffect(() => {
-      dispatch(getCantModulos());
+        dispatch(getCantModulos());
     }, [])
-    
+
     return (
         <Row className="content-resumen">
-            {/*<Col xs={12} md={4} className="content-section" >
-                Proyectos
-                <Row>
-                    <Col xs={6} md={6} >
-                        Costos:
-                    </Col>
-                    <Col xs={6} md={6} >
-                       {loadingProyectos ? <Spinner animation="border" variant="light" size='sm' /> : `$${formatNumber(Totales.costos)}`}
-                    </Col>
-                </Row>
-                <Row>
-                    <Col xs={6} md={6} >
-                        Venta:
-                    </Col>
-                    <Col xs={6} md={6} >
-                        {loadingProyectos ? <Spinner animation="border" variant="light" size='sm' /> : `$${formatNumber(Totales.ventas)}`}
-                    </Col>
-                </Row>
-            </Col>*/}
             <Col xs={12} md={6} className="content-section" >
                 Alquileres
                 <Row>
@@ -64,7 +44,7 @@ const ResumenContable = ({ Totales }) => {
                     </Col>
                 </Row>
                 <Row>
-                    <Col xs={6} md={6} >Mensual:</Col>
+                    <Col xs={6} md={6} >Total de {mesActual}:</Col>
                     <Col xs={6} md={6} >
                         {loadingProyectos ? <Spinner animation="border" variant="light" size='sm' /> : `$${formatNumber(alquilerXMes[mesActual])}`}
                     </Col>

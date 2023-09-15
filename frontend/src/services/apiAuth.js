@@ -16,3 +16,15 @@ export const getUser = async () => {
     const response = await axios.get(API+'auth/', servisTokenConfig);
     return response.data;
 }
+
+export const postApiEditUser = async (user) => {
+    const response = await axios.post(API+'auth/edit', user, servisTokenConfig );
+
+    return response;
+}
+
+export const getApiDeleteUser = async (id) => {
+    const response = await axios.get(`${API}auth/${id}`, servisTokenConfig);
+
+    return response;
+}

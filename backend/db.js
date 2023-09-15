@@ -24,7 +24,7 @@ const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, proces
     dialect: 'mysql',
     define: {
         freezeTableName: true,
-        alter: false, // cuando se realice un cambio en algun modelo o relacion pasar a true
+        alter: true, // cuando se realice un cambio en algun modelo o relacion pasar a true
         modelName: 'singularName'
     },
 });

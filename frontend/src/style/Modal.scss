@@ -40,6 +40,11 @@
 }
 
 .content-modal {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
     .content-modal-title {
         width: 100%;
     }

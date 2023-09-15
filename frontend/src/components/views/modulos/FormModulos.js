@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Card, Button, Row, FloatingLabel, Form, Col } from 'react-bootstrap';
+import { Card, Button, Row, FloatingLabel, Form, Col, Spinner } from 'react-bootstrap';
 
 //Components
 import { NumericFormat } from 'react-number-format';
@@ -12,7 +12,7 @@ import { setShowModalQr } from '../../../redux/slice/QR/qrSlice';
 import { insertModulos, setUpdate } from '../../../services/apiModulos';
 
 //Hooks
-import { desformatNumber, formatNumber, ToastComponent } from '../../../hooks/useUtils';
+import { desformatNumber, ToastComponent } from '../../../hooks/useUtils';
 import { useResponse } from '../../../hooks/useResponse';
 
 //Css
@@ -26,11 +26,9 @@ const FormModulos = ({ close, updateModulo, setUpdateModulo }) => {
     const { response } = useResponse();
 
     const newDate = new Date();
-    const año = newDate.getFullYear();
-    const mes = newDate.getMonth();
-    const dia = newDate.getDate();
 
     const [validated, setValidated] = useState(false);
+    const [showSpinner, setShowSpinner] = useState(false);
 
     const [modulo, setModulo] = useState({
         nombre_modulo: updateModulo.nombre_modulo ? updateModulo.nombre_modulo : '',
@@ -158,6 +156,8 @@ const FormModulos = ({ close, updateModulo, setUpdateModulo }) => {
         setValidated(true);
 
         if (form.checkValidity() === true) {
+            setShowSpinner(true);
+
             auxModulo = {
                 ...modulo,
                 costo: desformatNumber(modulo.costo),
@@ -214,15 +214,18 @@ const FormModulos = ({ close, updateModulo, setUpdateModulo }) => {
                         cliente: ''
                     });
                     setValidated(false);
+                    setShowSpinner(false);
                     dispatch(setShowModalQr({
                         url: resModulo.data.url_qr,
                         show: updateModulo && updateModulo.id_modulo ? false : true
                     }));
                     close();
                 } else {
+                    setShowSpinner(false);
                     ToastComponent('error', resModulo.data.todoMal && resModulo.data.todoMal);
                 }
             } catch (error) {
+                setShowSpinner(false);
                 console.error(error);
             }
         }
@@ -496,8 +499,8 @@ const FormModulos = ({ close, updateModulo, setUpdateModulo }) => {
                                     <option value="Vendido"> Vendido </option>
                                 </Form.Select>
                             </FloatingLabel>*/}
-                            <Button className="button-submit" variant="dark" type="submit">
-                                Guardar
+                            <Button className="button-submit" variant="dark" type="submit" disabled={showSpinner}>
+                                {showSpinner ? <Spinner animation="border" variant="light" size='sm' /> : "Guardar"}
                             </Button>
                         </Form>
                     </Card.Body>

@@ -12,7 +12,8 @@ export const proyectoSlice = createSlice({
         totalAlquieres: 0,
         totalVigente: 0,
         loading: false,
-        error: false
+        error: false,
+        menu: 'resumen',
     },
     reducers: {
         setProyectos: (state, action) => {
@@ -22,6 +23,9 @@ export const proyectoSlice = createSlice({
             state.totalVigente = action.payload.totalVigente;
 
             state.loading = false;
+        },
+        setMenu: (state, action) => {
+            state.menu = action.payload;
         },
         changeFiltros: (state, action) => {
             const newFiltro = action.payload;
@@ -205,6 +209,6 @@ export const proyectoSlice = createSlice({
     }
 })
 
-export const { setProyectos, changeFiltros, activeLoading, activeError, removeFiltros } = proyectoSlice.actions;
+export const { setProyectos, changeFiltros, activeLoading, activeError, removeFiltros, setMenu } = proyectoSlice.actions;
 
 export default proyectoSlice.reducer;

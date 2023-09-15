@@ -1,4 +1,4 @@
-@use 'Global.scss';
+@import 'Global.scss';
 
 .accordion-estado-modulos {
     @extend .state;
@@ -9,47 +9,75 @@
 
 #ocupado {
     @extend .accordion-estado-modulos;
-    background-color: #05be40;
+    background-color: $color-ocupado;
 }
 
 #disponible {
     @extend .accordion-estado-modulos;
-    background-color: #e4c203;
+    background-color: $color-disponible;
 }
 
 #vendido {
     @extend .accordion-estado-modulos;
-    background-color: #ce0000;
+    background-color: $color-finalizado;
 }
 
 #en-espera {
     @extend .accordion-estado-modulos;
-    background-color: #ff9100;
+    background-color: $color-pendiente;
 }
 
-.content-total-modulos-estados {
-    #total {
-        @extend .accordion-estado-modulos;
-        background-color: #353535;
-    }
-
-    .content-total-estado {
-        margin-top: 8px;
-    }
-}
-
-.content-token {
-    position: relative;
-    padding-top: 10px;
+.conten-buttons-agregar {
+    margin: 0 !important;
+    padding: 0 !important;
     margin: auto;
 
-    button {
-        border: transparent;
-        background-color: transparent;
+    .content-total-modulos-estados {
+        position: relative;
+        justify-content: center;
+        align-items: center;
 
-        .icon-text-copy {
-            margin-top: -7px;
+        #total {
+            @extend .accordion-estado-modulos;
+            background-color: #353535;
+        }
+
+        .content-total-estado {
+            margin-top: 8px;
+
+            div {
+                margin: auto;
+                text-align: center;
+            }
+        }
+    }
+
+    .content-token {
+        width: fit-content;
+        position: relative;
+        padding-top: 10px;
+        margin: 0 auto;
+
+        .form-check-input {}
+
+        .form-check-label {}
+
+        button {
             border: transparent;
+            background-color: transparent;
+
+            .icon-text-copy {
+                margin-top: -7px;
+                border: transparent;
+            }
+        }
+    }
+
+    .content-buscar {
+        padding-top: 3px;
+
+        .input-text-search-modulo {
+            display: flex;
         }
     }
 }
@@ -61,15 +89,34 @@
         margin: auto;
 
         .content-total-modulos-estados {
+            margin-bottom: 10px;
+
             .accordion-estado-modulos {
                 position: relative;
                 margin: auto;
             }
         }
 
+        .content-buscar {
+
+            .input-text-search-modulo {
+                display: flex;
+            }
+        }
+
         .content-token {
-            margin-top: 10px !important;
+            width: fit-content;
+            padding-top: 5px !important;
+            margin: auto;
             border-top: 2px solid #e4e4e4;
+
+            .form-check-input {
+                margin-top: 20px;
+            }
+
+            .form-check-label {
+                margin-top: 15px;
+            }
 
             button {
                 border: transparent;
@@ -97,33 +144,38 @@
 
 .accordion-modulos {
     position: relative;
+    width: 100%;
+    padding: 0;
+    margin: 0;
 
     .accordion-header-modulos {
         padding-left: 15px;
+        width: 100%;
+        padding: 0;
+        margin: 0;
 
         .icon-vinculado {
-            width: 20px;
-            height: 20px;
-            margin-left: 2px;
+            width: 100%;
+            height: 100%;
+            padding: 4px;
         }
 
         .accordion-nombre-modulos {
-            width: fit-content;
+            width: auto;
             padding: 0;
             margin: 0;
             margin-top: 3px;
+            padding-right: 10px;
+            padding-left: 10px;
         }
 
         .content-buttons {
-            position: absolute;
-            background-color: #ffffff;
-            right: 40px;
-            top: 15px;
-            width: 80px;
-            z-index: 4;
+            width: fit-content;
+            z-index: 2;
 
             .button-vender {
                 margin-top: 7px;
+                margin-right: 8px;
 
                 &:hover {
                     filter: drop-shadow(0 1px 1px #7e7e7e);
@@ -132,14 +184,18 @@
 
             .button-delete {
                 margin-top: 4px;
+                margin-right: 8px;
 
                 &:hover {
                     filter: drop-shadow(0 1px 1px #7e7e7e);
-                }}
+                }
+            }
         }
     }
 
     .accordion-body-modulos {
+        width: 100%;
+
         .col-12-accordion {
             margin-left: 4%;
 
@@ -191,8 +247,7 @@
     }
 
     .content-modal-body {
-        .content-modal-mensaje {
-        }
+        .content-modal-mensaje {}
 
         .content-modal-buttons {
             position: relative;

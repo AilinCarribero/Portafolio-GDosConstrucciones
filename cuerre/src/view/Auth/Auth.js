@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Grid, TextField } from '@mui/material';
+import { CircularProgress } from '@mui/joy';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { setAuth } from '../../services/config';
@@ -8,10 +9,11 @@ import { ToastComponent } from '../../components/ToastComponent';
 
 const Auth = () => {
     const navigate = useNavigate();
-    
+
     const { token } = useParams();
 
     const [password, setPassword] = useState('');
+    const [loading, setLoading] = useState(false);
 
     const handleChange = (e) => {
         const targetValue = e.target.value;
@@ -21,10 +23,13 @@ const Auth = () => {
 
     const handleClick = (e) => {
         e.preventDefault();
+        setLoading(true);
 
         setAuth(password);
 
         getApiModulo(token).then(res => {
+            setLoading(false);
+
             if (!res || res.status != 200) {
                 ToastComponent('error', 'El código es incorrecto');
                 console.error(res);
@@ -41,6 +46,8 @@ const Auth = () => {
                 }
             }
         }).catch(err => {
+            setLoading(false);
+
             ToastComponent('error', 'El código es incorrecto');
             console.error(err);
         });
@@ -57,7 +64,7 @@ const Auth = () => {
                         <TextField className='text-field' label="Código" variant="outlined" type="password" name="password" value={password} onChange={handleChange} />
                     </Grid>
                     <Grid item xs={12} sm={12}>
-                        <button type='submit' onClick={handleClick} >Ver información</button>
+                        <button type='submit' onClick={handleClick} >{loading ? <CircularProgress color="neutral" /> : 'Ver información'}</button>
                     </Grid>
                 </Grid>
             </form>

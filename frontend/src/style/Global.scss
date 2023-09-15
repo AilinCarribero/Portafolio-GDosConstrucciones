@@ -1,3 +1,56 @@
+$color-pendiente: #ff9100;
+$color-disponible: #058abe;
+$color-finalizado: #5B5E6B;
+$color-ocupado: #05be40;
+
+html {
+    overflow-x: hidden;
+    --scroll-behavior: smooth !important;
+    scroll-behavior: smooth !important;
+}
+
+body {
+    position: relative;
+    width: 100vw;
+    padding-left: 70px;
+    padding-right: 0;
+    margin-right: 0;
+
+    @media only screen and (hover: none) and (pointer: coarse) {
+        margin-left: 0;
+        padding-left: 0;
+    }
+}
+
+div {
+    position: relative;
+    margin: 0;
+    padding: 0;
+}
+
+/*scroll*/
+::-webkit-scrollbar {
+    width: 9px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #000000;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #ffffff;
+    border-radius: 10px;
+    border: 1px solid #000000;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    cursor: pointer;
+    background: #e4e4e4;
+}
+
 .card-form {
     position: relative;
     top: 10px;
@@ -59,66 +112,50 @@
     }
 }
 
-.accordion-border-top {
-    border-top: 1px solid rgb(223, 222, 222);
-    padding-top: 5px;
-}
-
-.accordion-title-section {
-    font-size: 15px;
-    font-weight: bold;
-    margin-bottom: 3px;
-}
-
 /*-------------------- Estados -----------------------*/
 .state {
+    position: relative;
+    display: flex;
     width: 28px;
     height: 28px;
     border-radius: 40px;
-    margin-right: 5px;
-    padding: 2px;
+    margin-right: 5px !important;
+}
+
+.state-icon-all {
+    color: white;
+    margin: auto;
+    
+    &:hover {
+        color: white;
+    }
 }
 
 .state-pendiente {
     @extend .state;
-    background-color: #ffc904;
+    background-color: $color-pendiente;
 
     .state-icon {
-        color: white;
-        margin-left: 3px;
-
-        &:hover {
-            color: white;
-        }
+        @extend .state-icon-all;
     }
 }
 
 .state-proceso {
     @extend .state;
-    background-color: #05be40;
+    background-color: $color-ocupado;
 
     .state-icon {
-        color: white;
-        margin-left: 3.5px;
-
-        &:hover {
-            color: white;
-        }
+        @extend .state-icon-all;
     }
 }
 
 .state-finish {
     @extend .state;
-    background-color: #5B5E6B;
+    background-color: $color-finalizado;
 
     .state-icon {
-        color: white;
-        margin-left: 2.2px;
-        margin-bottom: 1px;
-
-        &:hover {
-            color: white;
-        }
+        @extend .state-icon-all;
+        margin-right: 4.52px;
     }
 }
 
@@ -149,7 +186,7 @@
 
 #pago-pendiente {
     @extend .state-pago;
-    background-color: #c20000;
+    background-color: $color-pendiente;
 
     .state-icon {
         @extend .icon-pago;
@@ -158,7 +195,7 @@
 
 #pago-cancelado {
     @extend .state-pago;
-    background-color: #05be40;
+    background-color: $color-ocupado;
 
     .state-icon {
         @extend .icon-pago;
@@ -167,92 +204,14 @@
 
 #pago-parcial {
     @extend .state-pago;
-    background-color: #058abe;
+    background-color: $color-disponible;
 
     .state-icon {
         @extend .icon-pago;
     }
 }
 
-/*------------------- Resumenes -----------------------*/
-.content-resumen-sec-buttons {
-    width: 97.5%;
-    background-color: #dddcdc;
-    border: 1px solid white;
-    padding-bottom: 5px;
-    margin-left: 1.3vw;
-    color: #000000;
-    text-align: center;
-    font-size: 14px;
-
-    .content-section {
-        font-weight: 500;
-        padding-top: 11px;
-    }
-
-    .conten-buttons-agregar {
-        font-size: 14px;
-
-        .button-agregar {
-            width: 100%;
-            padding-top: 5px;
-            padding-bottom: 5px;
-            margin-top: 5px;
-            border-radius: 10px;
-            font-size: 14px;
-            border: solid 1px #ffffff;
-            background-color: #ffffff;
-            color: #000000;
-
-            .icon-button {
-                margin-bottom: 2px;
-                margin-right: 2px;
-                margin-left: -10px;
-            }
-
-            &:hover {
-                background-color: #b3b3b4;
-            }
-        }
-
-        .input-text-search {
-            width: 60vw;
-            margin-top: 4px;
-            border-radius: 10px;
-        }
-
-        @media only screen and (hover: none) and (pointer: coarse) {
-            .input-text-search {
-                width: 100%;
-            }
-        }
-    }
-}
-
 /*-------------------------Menu----------------------*/
-.menu-inicio {
-    background-color: #2E2E2E;
-    margin-top: 1px;
-    margin-bottom: 3px;
-
-    .menu-inicio-button-off {
-        border: transparent;
-        color: white;
-        width: 100%;
-        height: 100%;
-        text-align: center;
-        background-color: transparent;
-        padding: 10px 0;
-    }
-
-    .menu-inicio-button-active {
-        @extend .menu-inicio-button-off;
-        border-bottom: 3px solid #F2F2F2;
-        border-top: 3px solid #F2F2F2;
-        font-weight: bold;
-    }
-}
-
 a {
     text-decoration: none;
     color: black;
@@ -306,6 +265,32 @@ a {
 
 /*-------------------------Secciones---------------------------*/
 .separacion-seccion {
+    display: flex;
+    z-index: 0;
     border-top: 1px solid #000000;
     padding-top: 15px;
+
+    .b-titulo {
+        width: fit-content;
+        margin-right: 20px;
+    }
+
+    button {
+        width: fit-content;
+        border: transparent;
+        background-color: transparent;
+
+        svg {
+            margin-top: -3.5px;
+        }
+
+        &:hover {
+            filter: drop-shadow(1px 1px 1px #333333);
+        }
+    }
+
+    .content-detalles-ingresos {
+        padding-left: 50px;
+        padding-top: 10px;
+    }
 }

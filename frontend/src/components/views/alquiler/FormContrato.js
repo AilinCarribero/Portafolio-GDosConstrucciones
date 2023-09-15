@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import { Button, Form, Modal, Row, FloatingLabel, Col } from 'react-bootstrap'
+import React, { useState } from 'react'
+import { Button, Form, Modal, Row, FloatingLabel, Col, Spinner } from 'react-bootstrap'
 import { NumericFormat } from 'react-number-format';
 import Decimal from 'decimal.js-light';
 import { useParams } from 'react-router-dom';
@@ -12,7 +12,7 @@ import { getProyectos } from '../../../redux/slice/Proyecto/thunks';
 import ValidacionNewContrato from '../../utils/modal/validacion/ValidacionNewContrato';
 
 //Hooks
-import { calcCantMeses, calcDifMeses, desformatNumber, formatFechaISO, formatNumber, ToastComponent } from '../../../hooks/useUtils';
+import { calcCantMeses, desformatNumber, formatFechaISO, formatNumber, ToastComponent } from '../../../hooks/useUtils';
 import { useGetModulos } from '../../../hooks/useModulos';
 import { useResponse } from '../../../hooks/useResponse';
 
@@ -27,8 +27,7 @@ const FormContrato = ({ alquiler, show, setShow, setAlquileres, actionContrato, 
     const { response } = useResponse();
 
     const proyectos = useSelector(state => state.proyectoRedux.proyectos);
-    const proyecto = proyectos.find(id ? proyecto => proyecto.id_proyecto.trim() === id.trim() : proyecto.id_proyecto.trim() === idProyecto.trim());
-
+    const proyecto = proyectos.find(proyecto => id ? proyecto.id_proyecto.trim() === id.trim() : proyecto.id_proyecto.trim() === idProyecto.trim());
 
     const [newContrato, setNewContrato] = useState({
         id_alquiler: alquiler ? alquiler.id_alquiler : '',
@@ -36,7 +35,9 @@ const FormContrato = ({ alquiler, show, setShow, setAlquileres, actionContrato, 
         id_modulo_doble: alquiler ? alquiler.id_modulo_doble : '',
         alquiler: alquiler ? alquiler : '',
         proyecto: proyecto,
-        nombre_modulo: alquiler ? (alquiler.modulo ? alquiler.modulo.nombre_modulo || `${alquiler.modulo.tipologia} - ${alquiler.modulo.id_modulo} - ${formatNumber(alquiler.modulo.ancho)} x ${formatNumber(alquiler.modulo.largo)} - ${alquiler.modulo.material_cerramiento}` : `OD - ${alquiler.modulo_doble.id_modulo_doble} - OS - ${alquiler.modulo_doble.id_modulo_uno} - OS - ${alquiler.modulo_doble.id_modulo_dos} `) : '',
+        nombre_modulo: alquiler ? 
+            (alquiler.modulo ? alquiler.modulo.nombre_modulo || `${alquiler.modulo.tipologia} - ${alquiler.modulo.id_modulo} - ${formatNumber(alquiler.modulo.ancho)} x ${formatNumber(alquiler.modulo.largo)} - ${alquiler.modulo.material_cerramiento}` : (alquiler.modulo_doble ? `OD - ${alquiler.modulo_doble.id_modulo_doble} - OS - ${alquiler.modulo_doble.id_modulo_uno} - OS - ${alquiler.modulo_doble.id_modulo_dos} ` : '')) 
+            : '',
         id_proyecto: id || idProyecto,
         alquiler_total: proyecto.alquiler_total || 0,
         fecha_d_alquiler: alquiler ? formatFechaISO(alquiler.fecha_d_alquiler) : formatFechaISO(new Date()),
@@ -45,17 +46,10 @@ const FormContrato = ({ alquiler, show, setShow, setAlquileres, actionContrato, 
         ubicacion: alquiler ? (alquiler.modulo ? alquiler.modulo.ubicacion : '') : ''
     });
 
-    useEffect(() => {
-        if (proyecto) {
-            //console.log(proyecto)
-        }
-
-        return () => { }
-    }, [proyecto])
-
     //Variables para validacion
     const [validated, setValidated] = useState(false);
     const [showModalValidation, setShowModalValidation] = useState(false);
+    const [showSpinner, setShowSpinner] = useState(false);
 
     const handleClose = () => setShow(false);
 
@@ -115,6 +109,7 @@ const FormContrato = ({ alquiler, show, setShow, setAlquileres, actionContrato, 
 
         try {
             resNewContrato = await postNewRenovarUpdateContrato(newContrato);
+            setShowSpinner(true);
 
             const res = response(resNewContrato);
 
@@ -135,14 +130,17 @@ const FormContrato = ({ alquiler, show, setShow, setAlquileres, actionContrato, 
                 })
 
                 dispatch(getProyectos());
+                setShowSpinner(false);
                 setShow(false);
 
                 setAlquileres(resNewContrato.data);
             } else {
+                setShowSpinner(false);
                 ToastComponent('error', resNewContrato.data.todoMal && resNewContrato.data.todoMal);
             }
         } catch (error) {
             console.error(error);
+            setShowSpinner(false)
             ToastComponent('error');
         }
     }
@@ -182,11 +180,11 @@ const FormContrato = ({ alquiler, show, setShow, setAlquileres, actionContrato, 
             <Modal.Body className="content-modal-body">
                 <Row>
                     <Form noValidate validated={validated} onSubmit={handleValidacion}>
-                        {actionContrato !== 'Renovar' &&
+                        {(actionContrato !== 'Renovar' || (!newContrato.id_modulo && !newContrato.id_modulo_doble)) &&
                             <Row>
                                 <Col xs={12} sm={12}>
                                     <FloatingLabel label="Módulo">
-                                        <Form.Select onChange={handleChangeForm} name="id_modulo" value={newContrato.id_modulo}>
+                                        <Form.Select onChange={handleChangeForm} name="id_modulo" value={newContrato.id_modulo} required={newContrato.id_modulo_doble ? false : false}>
                                             <option value=""> </option>
                                             {modulos.length > 0 ?
                                                 modulos.map((modulo) => (
@@ -204,7 +202,7 @@ const FormContrato = ({ alquiler, show, setShow, setAlquileres, actionContrato, 
                                 </Col>
                                 <Col xs={12} sm={12}>
                                     <FloatingLabel label="Módulo Doble">
-                                        <Form.Select onChange={handleChangeForm} name="id_modulo_doble" value={newContrato.id_modulo_doble} >
+                                        <Form.Select onChange={handleChangeForm} name="id_modulo_doble" value={newContrato.id_modulo_doble} required={newContrato.id_modulo ? false : false}>
                                             <option value=""> </option>
                                             {modulosDobles.length > 0 ?
                                                 modulosDobles.map((moduloDoble) => (
@@ -229,7 +227,7 @@ const FormContrato = ({ alquiler, show, setShow, setAlquileres, actionContrato, 
                         <Row>
                             <Col xs={12} sm={12} >Fechas del contrato</Col>
                             <Col xs={12} sm={12} className="text-descripcion-agregar">
-                                Cantidad de meses: {calcCantMeses(newContrato.fecha_d_alquiler, newContrato.fecha_h_alquiler)}
+                                Cantidad de meses: {calcCantMeses(newContrato.fecha_d_alquiler, newContrato.fecha_h_alquiler) ? 0 : calcCantMeses(newContrato.fecha_d_alquiler, newContrato.fecha_h_alquiler)}
                             </Col>
                             <Col xs={12} sm={6}>
                                 <Form.Group className="mb-3">
@@ -270,8 +268,8 @@ const FormContrato = ({ alquiler, show, setShow, setAlquileres, actionContrato, 
                         }
 
                         <Row>
-                            <Button className="button-submit" variant="dark" type="submit">
-                                Guardar
+                            <Button className="button-submit" variant="dark" type="submit" disabled={showSpinner} >
+                                {showSpinner ? <Spinner animation="border" variant="light" size='sm' /> : "Guardar"}
                             </Button>
                         </Row>
                     </Form>

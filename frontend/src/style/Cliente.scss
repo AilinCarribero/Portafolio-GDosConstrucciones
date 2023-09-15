@@ -1,6 +1,7 @@
 .conten-buttons-agregar {
     font-size: 14px;
     margin-top: 15px !important;
+    padding-left: 30px;
 
     .button-agregar {
         width: 100%;
@@ -53,14 +54,22 @@
                 border-bottom: 1px #d4d4d4 solid;
             }
 
+            .content-grafic-cliente {
+                border-top: 1px solid #d4d4d4;
+                padding-top: 15px;
+                margin-top: 20px;
+            }
+
             .card-footer-cliente {
                 background-color: #ffffff;
                 padding-left: 0;
                 padding-right: 0;
+                padding-bottom: 20px;
 
                 .button-action {
-                    margin-left: 15px;
+                    padding-left: 20%;
                 }
+
             }
         }
     }

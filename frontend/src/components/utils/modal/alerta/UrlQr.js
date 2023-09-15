@@ -13,6 +13,7 @@ import * as Icons from 'react-bootstrap-icons';
 
 //Css
 import "../../../../style/Modal.scss";
+
 const UrlQr = () => {
     const dispatch = useDispatch();
 

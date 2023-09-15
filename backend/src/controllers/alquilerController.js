@@ -191,7 +191,7 @@ exports.updateNewRenovarContrato = async (req, res) => {
                     response.status = 200;
                     res.json(response);
                 }).catch(error => {
-                    err.todoMal = `Error al buscar los alquileres del proyecto ${updateProyecto.id_proyecto}`;
+                    error.todoMal = `Error al buscar los alquileres del proyecto ${updateProyecto.id_proyecto}`;
                     console.error(error);
                     res.json(error);
                 });
@@ -218,7 +218,7 @@ exports.updateNewRenovarContrato = async (req, res) => {
                     response.status = 200;
                     res.json(response);
                 }).catch(error => {
-                    err.todoMal = `Error al buscar los alquileres del proyecto ${updateProyecto.id_proyecto}`;
+                    error.todoMal = `Error al buscar los alquileres del proyecto ${updateProyecto.id_proyecto}`;
                     console.error(error);
                     res.json(error);
                 });

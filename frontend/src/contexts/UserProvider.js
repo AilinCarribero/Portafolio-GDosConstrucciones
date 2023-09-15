@@ -10,7 +10,7 @@ const UserProvider = ({children}) => {
 
     const stateValue = () => {
         const cookiesUser = Cookies.get('loggedAppUser');
-        console.log(cookiesUser)
+        //console.log(cookiesUser)
         if(cookiesUser == "existo"){
             const res = window.localStorage.getItem('loggedAppUser') ? JSON.parse(window.localStorage.getItem('loggedAppUser')) : [];
             return (res)

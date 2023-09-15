@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Button, Col, FloatingLabel, Form, Modal, Row } from 'react-bootstrap';
+import { Button, Col, FloatingLabel, Form, Modal, Row, Spinner } from 'react-bootstrap';
 
 //Hooks
 import { useResponse } from '../../../hooks/useResponse';
@@ -8,13 +8,12 @@ import { formatNumber, ToastComponent } from '../../../hooks/useUtils';
 //Service
 import { setApiVincularModulo } from '../../../services/apiModulos';
 
-//Img
-import * as Icons from 'react-bootstrap-icons';
-
 const ModalVinculacion = ({ show, setShow, modulos, setModulos }) => {
     const { response } = useResponse();
 
     const handleClose = () => setShow(false);
+
+    const [showSpinner, setShowSpinner] = useState(false);
 
     const [dataVinculacion, setDataVinculacion] = useState({
         id_modulo_uno: '',
@@ -35,6 +34,7 @@ const ModalVinculacion = ({ show, setShow, modulos, setModulos }) => {
         e.preventDefault();
 
         try {
+            setShowSpinner(true);
             const resVinculacion = await setApiVincularModulo(dataVinculacion);
 
             const res = response(resVinculacion);
@@ -47,12 +47,15 @@ const ModalVinculacion = ({ show, setShow, modulos, setModulos }) => {
                     id_modulo_dos: ''
                 })
 
+                setShowSpinner(false);
                 setModulos(resVinculacion.data.data)
                 setShow(false);
             } else {
+                setShowSpinner(false);
                 ToastComponent('error', resVinculacion.data.todoMal && resVinculacion.data.todoMal);
             }
         } catch (err) {
+            setShowSpinner(false);
             console.error(err);
             ToastComponent('error');
         }
@@ -104,7 +107,9 @@ const ModalVinculacion = ({ show, setShow, modulos, setModulos }) => {
                         </Col>
                     </Row>
                     <Row className="content-modal-buttons">
-                        <Button type='submit' variant="dark" >Vincular</Button>
+                        <Button type='submit' variant="dark" disabled={showSpinner}>
+                            {showSpinner ?  <Spinner animation="border" variant="light" size='sm' /> : "Vincular"}
+                        </Button>
                     </Row>
                 </Form>
             </Modal.Body>

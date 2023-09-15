@@ -2,7 +2,11 @@ const { Cliente, Proyecto } = require("../../db");
 
 exports.getClientes = (req, res) => {
     try {
-        Cliente.findAll().then(response => {
+        Cliente.findAll({
+            include: [{
+                model: Proyecto
+            }]
+        }).then(response => {
             res.json(response);
         }).catch(err => {
             console.error(err);
@@ -18,6 +22,8 @@ exports.getClientes = (req, res) => {
 exports.newCliente = (req, res) => {
     const data = {
         nombre: req.body.nombre || null,
+        razon_social: req.body.razon_social || null,
+        cuit_cuil: req.body.cuit_cuil || null,
         telefono: req.body.telefono || null,
         correo: req.body.correo || null,
         direccion: req.body.direccion || null
@@ -46,6 +52,8 @@ exports.newCliente = (req, res) => {
 exports.updateCliente = (req, res) => {
     const data = {
         nombre: req.body.nombre || null,
+        razon_social: req.body.razon_social || null,
+        cuit_cuil: req.body.cuit_cuil || null,
         telefono: req.body.telefono || null,
         correo: req.body.correo || null,
         direccion: req.body.direccion || null
@@ -83,7 +91,6 @@ exports.updateCliente = (req, res) => {
 
 exports.deleteCliente = (req, res) => {
     const id_cliente = req.params.id;
-    console.log(id_cliente)
     /* 
         Eliminar cliente
         Buscar e eliminar proyectos con id del cliente eliminado
@@ -94,15 +101,11 @@ exports.deleteCliente = (req, res) => {
             id_cliente: id_cliente
         }
     }).then(proyectos => {
-        console.log(proyectos)
-
         Cliente.destroy({
             where: {
                 id_cliente: id_cliente
             }
         }).then(cliente => {
-            console.log(cliente)
-    
             Cliente.findAll().then(response => {
                 res.json(response);
             }).catch(err => {

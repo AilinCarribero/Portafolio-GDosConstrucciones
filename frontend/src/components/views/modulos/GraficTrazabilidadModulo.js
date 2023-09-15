@@ -32,13 +32,14 @@ const GraficTrazabilidadModulo = ({alquileres}) => {/*Inicio de configuracion de
             position: 'right'
         },
         tooltip: {
-            theme: false,
+            enabled: true,
+            theme: 'dark',
             custom: function (opts) {
                 const fromYear = formatFecha(opts.y1)
                 const toYear = formatFecha(opts.y2)
-                const values = opts.ctx.rangeBar.getTooltipValues(opts).seriesName;
+                const values = opts.w.globals.seriesNames[opts.seriesIndex];
 
-                return ('<div class="range-bar-tooltip"><div id="range-bar-tooltip-title">' + values + '</div> <div id="range-bar-tooltip-fecha">' + fromYear + ' - ' + toYear + ' </div></div>')
+                return ('<div class="range-bar-tooltip"><div id="range-bar-tooltip-title">' + values + '</div> <div id="range-bar-tooltip-fecha">' + fromYear + ' al ' + toYear + ' </div></div>')
             }
         }
     }
@@ -52,7 +53,7 @@ const GraficTrazabilidadModulo = ({alquileres}) => {/*Inicio de configuracion de
                         x: ' ',
                         y: [
                             new Date(alquiler.fecha_d_alquiler).getTime(),
-                            new Date(alquiler.fecha_h_alquiler).getTime()
+                            new Date(alquiler.fecha_h_alquiler).getTime() || new Date().getTime()
                         ]
                     }
                 ]
@@ -60,9 +61,9 @@ const GraficTrazabilidadModulo = ({alquileres}) => {/*Inicio de configuracion de
         })
     }
     /* Finalizacion de config de grafica */
-    return (
-        <ReactApexChart options={options} series={formatDataTimeLine(alquileres)} type="rangeBar" height={140} />
-    )
+    return (<>
+        <ReactApexChart series={formatDataTimeLine(alquileres)} options={options} type="rangeBar" height={140} />
+    </>)
 }
 
 export default React.memo(GraficTrazabilidadModulo)
